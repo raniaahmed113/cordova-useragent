@@ -1,48 +1,28 @@
-angular.module('starter.controllers', [])
+angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
-  // Form data for the login modal
-  $scope.loginData = {};
+    .controller('AppCtrl', function($scope, $state, authService) {
+        $scope.logout = function() {
+            authService.doLogout();
+        };
+    })
 
-  // Create the login modal that we will use later
-  $ionicModal.fromTemplateUrl('templates/login.html', {
-    scope: $scope
-  }).then(function(modal) {
-    $scope.modal = modal;
-  });
+    .controller('LoginCtrl', function($scope, authService) {
+        $scope.loginData = {};
+        $scope.login = function() {
+            authService.doLogin();
+        };
+    })
 
-  // Triggered in the login modal to close it
-  $scope.closeLogin = function() {
-    $scope.modal.hide();
-  };
+    .controller('UsersCtrl', function($scope, User) {
+        /*$scope.newPerson = new Person({
+            "name": "Mick Johnson",
+            "email": "mick@example.com"
+        });
+        $scope.newPerson.$save();*/
 
-  // Open the login modal
-  $scope.login = function() {
-    $scope.modal.show();
-  };
+        $scope.users = User.query();
+    })
 
-  // Perform the login action when the user submits the login form
-  $scope.doLogin = function() {
-    console.log('Doing login', $scope.loginData);
-
-    // Simulate a login delay. Remove this and replace with your login
-    // code if using a login system
-    $timeout(function() {
-      $scope.closeLogin();
-    }, 1000);
-  };
-})
-
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
-})
-
-.controller('PlaylistCtrl', function($scope, $stateParams) {
-});
+    .controller('UserCtrl', function($scope, $stateParams, User) {
+        $scope.user = User.get({ id: $stateParams.id });
+    });
