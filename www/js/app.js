@@ -21,7 +21,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
 
     .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
         // Use HTML5 history API
-        //$locationProvider.html5Mode(true);
+        $locationProvider.html5Mode(true);
 
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
