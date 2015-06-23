@@ -9,7 +9,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     .controller('LoginCtrl', function($scope, authService) {
         $scope.loginData = {};
         $scope.login = function() {
-            authService.doLogin();
+            console.log($scope.loginData);
+            authService.doLogin($scope.loginData);
         };
     })
 

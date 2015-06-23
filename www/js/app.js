@@ -1,9 +1,5 @@
 angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'])
 
-    .constant('Config', {
-        hostApi: 'http://api.flirtas.dev:8585'
-    })
-
     .run(function($ionicPlatform) {
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
