@@ -16,7 +16,7 @@ angular.module('hotvibes.services', ['ionic'])
             params['client_secret'] = '';
 
             $http
-                .post('/api/auth', params)
+                .post('/api/auth/login', params)
                 .success(function(response, status, headers, config) {
                     console.log('Success!', response);
 
