@@ -5,7 +5,6 @@ angular.module('hotvibes.services', ['ionic'])
     })
 
     .service('authService', function($q, $http, $window, AuthConfig) {
-
         var accessToken, currentUserId;
 
         this.getAccessToken = function() {
@@ -32,8 +31,6 @@ angular.module('hotvibes.services', ['ionic'])
         };
 
         this.doLogin = function(args) {
-            var authService = this;
-
             $http
                 .post('/api/auth/login', {
                     username: args['username'],

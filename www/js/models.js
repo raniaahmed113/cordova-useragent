@@ -6,4 +6,8 @@ angular.module('hotvibes.models', ['ngResource'])
 
     .factory('Conversation', function($resource) {
         return $resource('/api/users/:ownerId/conversations/:withUserId');
+    })
+
+    .factory('Message', function($resource) {
+        return $resource('/api/users/:ownerId/conversations/:withUserId/messages');
     });

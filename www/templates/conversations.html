@@ -2,7 +2,7 @@
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="conversation in conversations" href="/conversations/{{conversation.id}}">
-        {{conversation.id}}
+        {{conversation.withUser.login}}
       </ion-item>
     </ion-list>
   </ion-content>

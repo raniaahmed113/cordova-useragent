@@ -49,9 +49,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
     })
 
-    .controller('ConversationCtrl', function($scope, $stateParams, Conversation, authService) {
-        $scope.conversation = Conversation.get({
+    .controller('ConversationCtrl', function($scope, $stateParams, Conversation, Message, authService) {
+        var params = {
             ownerId: authService.getCurrentUserId(),
             withUserId: $stateParams.id
-        });
+        };
+
+        $scope.conversation = Conversation.get(params); // FIXME: get from cache
+        $scope.messages = Message.query(params);
     });
