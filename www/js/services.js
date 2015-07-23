@@ -4,34 +4,63 @@ angular.module('hotvibes.services', ['ionic'])
         CLIENT_ID_MOBILE_APP: 1
     })
 
-    .service('authService', function($q, $http, AuthConfig) {
-        this.isUserLoggedIn = function() {
-            return false;
+    .service('authService', function($q, $http, $window, AuthConfig) {
+
+        var accessToken, currentUserId;
+
+        this.getAccessToken = function() {
+            if (accessToken == null) {
+                accessToken = $window.sessionStorage['accToken'];
+                currentUserId = $window.sessionStorage['userId'];
+            }
+
+            return accessToken;
         };
 
-        this.doLogin = function(credentialPair) {
-            params = credentialPair;
-            params['grant_type'] = 'password';
-            params['client_id'] = AuthConfig.CLIENT_ID_MOBILE_APP;
-            params['client_secret'] = '';
+        /**
+         * @returns {integer}
+         */
+        this.getCurrentUserId = function() {
+            return currentUserId;
+        };
+
+        /**
+         * @returns {boolean}
+         */
+        this.isUserLoggedIn = function() {
+            return this.getAccessToken() != null;
+        };
+
+        this.doLogin = function(args) {
+            var authService = this;
 
             $http
-                .post('/api/auth/login', params)
+                .post('/api/auth/login', {
+                    username: args['username'],
+                    password: args['password'],
+                    grant_type: 'password',
+                    client_id: AuthConfig.CLIENT_ID_MOBILE_APP,
+                    client_secret: ''
+                })
                 .success(function(response, status, headers, config) {
-                    console.log('Success!', response);
+                    accessToken = $window.sessionStorage['accToken'] = response['access_token'];
+                    currentUserId = $window.sessionStorage['userId'] = response['user_id'];
 
-                    // TODO: broadcast event
+                    if (args['onLoggedIn'] && typeof(args['onLoggedIn']) == 'function') {
+                        args['onLoggedIn'](response, status, headers, config);
+                    }
                 })
                 .error(function(response, status, headers, config) {
-                    console.log('Failed..', response);
+                    if (args['onError'] && typeof(args['onError']) == 'function') {
+                        args['onError'](response, status, headers, config);
+                    }
                 });
         };
 
         this.doLogout = function() {
-            // TODO: invalidate token on api, broadcast logout event
-        };
-
-        this.onLogout = function() {
-            // TODO: delete token from local storage
+            accessToken = currentUserId = null;
+            $window.sessionStorage.removeItem('accToken');
+            $window.sessionStorage.removeItem('userId');
+            $http.get('/api/auth/logout');
         };
     });

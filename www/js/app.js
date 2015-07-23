@@ -1,6 +1,10 @@
 angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'])
 
-    .run(function($ionicPlatform) {
+    .run(function($ionicPlatform, $http, authService) {
+        if (authService.isUserLoggedIn()) {
+            $http.defaults.headers.common['Authorization'] = 'Bearer ' + authService.getAccessToken();
+        }
+
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -67,6 +71,26 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                     'menuContent': {
                         templateUrl: "templates/user.html",
                         controller: 'UserCtrl'
+                    }
+                }
+            })
+
+            .state('inside.conversations', {
+                url: "/conversations",
+                views: {
+                    'menuContent': {
+                        templateUrl: "templates/conversations.html",
+                        controller: 'ConversationsCtrl'
+                    }
+                }
+            })
+
+            .state('inside.conversations-single', {
+                url: "/conversations/:id",
+                views: {
+                    'menuContent': {
+                        templateUrl: "templates/conversation.html",
+                        controller: 'ConversationCtrl'
                     }
                 }
             });
