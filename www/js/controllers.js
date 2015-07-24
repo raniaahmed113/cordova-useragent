@@ -1,13 +1,20 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function($scope, $state, authService) {
+    .controller('AppCtrl', function($scope, $state, AuthService) {
         $scope.logout = function() {
-            authService.doLogout();
-            $state.go('login');
+            AuthService.doLogout();
         };
+
+        $scope.$on('authTokenExpired', function(event, args) {
+            AuthService.doLogout();
+        });
+
+        $scope.$on('loggedOut', function(event, args) {
+            $state.go('login');
+        });
     })
 
-    .controller('LoginCtrl', function($scope, authService, $state, $ionicLoading) {
+    .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
         $scope.loginData = {};
         $scope.login = function() {
             var loginArgs = $scope.loginData;
@@ -17,13 +24,16 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $state.go('inside.users');
             };
 
-            loginArgs.onError = function() {
+            loginArgs.onError = function(response) {
                 $ionicLoading.hide();
-                alert('Fail!');
+                $ionicPopup.alert({
+                    title: 'Houston, we have problems',
+                    template: response.message
+                });
             };
 
             $ionicLoading.show({ template: 'Logging in..'});
-            authService.doLogin(loginArgs);
+            AuthService.doLogin(loginArgs);
         };
     })
 
@@ -43,15 +53,15 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
     })
 
-    .controller('ConversationsCtrl', function($scope, Conversation, authService) {
+    .controller('ConversationsCtrl', function($scope, Conversation, AuthService) {
         $scope.conversations = Conversation.query({
-            ownerId: authService.getCurrentUserId()
+            ownerId: AuthService.getCurrentUserId()
         });
     })
 
-    .controller('ConversationCtrl', function($scope, $stateParams, Conversation, Message, authService) {
+    .controller('ConversationCtrl', function($scope, $stateParams, Conversation, Message, AuthService) {
         var params = {
-            ownerId: authService.getCurrentUserId(),
+            ownerId: AuthService.getCurrentUserId(),
             withUserId: $stateParams.id
         };
 

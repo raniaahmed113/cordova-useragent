@@ -4,9 +4,25 @@ angular.module('hotvibes.services', ['ionic'])
         CLIENT_ID_MOBILE_APP: 1
     })
 
-    .service('authService', function($q, $http, $window, AuthConfig) {
-        var accessToken, currentUserId;
+    .service('AuthService', function($q, $window, $rootScope, $injector, AuthConfig) {
+        var accessToken,
+            currentUserId,
+            $_http;
 
+        /**
+         * @returns {$http}
+         */
+        function request() {
+            if (!$_http) {
+                $_http = $injector.get('$http');
+            }
+
+            return $_http;
+        }
+
+        /**
+         * @returns {string}
+         */
         this.getAccessToken = function() {
             if (accessToken == null) {
                 accessToken = $window.sessionStorage['accToken'];
@@ -31,7 +47,7 @@ angular.module('hotvibes.services', ['ionic'])
         };
 
         this.doLogin = function(args) {
-            $http
+            request()
                 .post('/api/auth/login', {
                     username: args['username'],
                     password: args['password'],
@@ -58,6 +74,24 @@ angular.module('hotvibes.services', ['ionic'])
             accessToken = currentUserId = null;
             $window.sessionStorage.removeItem('accToken');
             $window.sessionStorage.removeItem('userId');
-            $http.get('/api/auth/logout');
+            $rootScope.$broadcast('loggedOut');
+        };
+    })
+
+    .service('HttpInterceptor', function($rootScope, $q, AuthService) {
+        this.request = function(config) {
+            if (AuthService.isUserLoggedIn()) {
+                config.headers.Authorization = 'Bearer ' + AuthService.getAccessToken();
+            }
+
+            return config;
+        };
+
+        this.responseError = function(response) {
+            if (response.status === 401 /* Unauthorized */) {
+                $rootScope.$broadcast('authTokenExpired');
+            }
+
+            return $q.reject(response);
         };
     });

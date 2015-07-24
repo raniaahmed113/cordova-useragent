@@ -1,10 +1,6 @@
 angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'])
 
-    .run(function($ionicPlatform, $http, authService) {
-        if (authService.isUserLoggedIn()) {
-            $http.defaults.headers.common['Authorization'] = 'Bearer ' + authService.getAccessToken();
-        }
-
+    .run(function($ionicPlatform) {
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
             // for form inputs)
@@ -19,20 +15,23 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
         });
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
         // Use HTML5 history API
         $locationProvider.html5Mode(true);
 
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
+        // Add HTTP interceptor so we could read/write headers on each request
+        $httpProvider.interceptors.push('HttpInterceptor');
+
         $stateProvider
             .state('login', {
                 url: "/login",
                 templateUrl: "templates/login.html",
                 controller: 'LoginCtrl',
-                onEnter: function($state, authService) {
-                    if (authService.isUserLoggedIn()) {
+                onEnter: function($state, AuthService) {
+                    if (AuthService.isUserLoggedIn()) {
                         $state.go('inside.users');
                     }
                 }
@@ -48,8 +47,8 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 abstract: true,
                 templateUrl: "templates/menu.html",
                 controller: 'AppCtrl',
-                onEnter: function($state, authService) {
-                    if (!authService.isUserLoggedIn()) {
+                onEnter: function($state, AuthService) {
+                    if (!AuthService.isUserLoggedIn()) {
                         $state.go('login');
                     }
                 }

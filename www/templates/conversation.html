@@ -1,5 +1,10 @@
 <ion-view view-title="Conversation">
   <ion-content>
     <h1>Conversation with {{conversation.withUser.login}}</h1>
+      <ion-list>
+          <ion-item ng-repeat="message in messages">
+              {{message.text}}
+          </ion-item>
+      </ion-list>
   </ion-content>
 </ion-view>
