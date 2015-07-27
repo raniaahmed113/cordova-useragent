@@ -1,8 +1,10 @@
 <ion-view view-title="Users">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="user in users" href="#/users/{{user.id}}">
-        {{user.name}}
+      <ion-item class="item-thumbnail-left" ng-repeat="user in users" href="/users/{{user.id}}">
+          <img src="{{user.profilePhotoURL}}">
+          <h2>{{user.login}}</h2>
+          <p>{{user.age}}, {{user.cityName}}</p>
       </ion-item>
     </ion-list>
   </ion-content>
