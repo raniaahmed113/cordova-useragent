@@ -42,11 +42,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.users = User.query();
 
         $scope.loadMore = function() {
-
             User.query({ page: ++currPage}, function(response) {
                 $scope.users = $scope.users.concat(response.resource);
-                // FIXME: concat strips non-numeric keys
-
+                $scope.users.moreAvailable = response.resource.moreAvailable;
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             });
         };
