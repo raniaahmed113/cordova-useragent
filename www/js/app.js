@@ -15,7 +15,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
         });
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $resourceProvider) {
         // Use HTML5 history API
         $locationProvider.html5Mode(true);
 
@@ -24,6 +24,18 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
 
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
+
+        $resourceProvider.defaults.actions.query.interceptor = {
+            response: function(response) {
+                var urlNext = response.headers('X-Limit-PerPage'); // FIXME
+
+                if (urlNext) {
+                    response.resource.moreAvailable = true;
+                }
+
+                return response;
+            }
+        };
 
         $stateProvider
             .state('login', {

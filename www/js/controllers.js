@@ -5,11 +5,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             AuthService.doLogout();
         };
 
-        $scope.$on('authTokenExpired', function(event, args) {
+        $scope.$on('authTokenExpired', function() {
             AuthService.doLogout();
         });
 
-        $scope.$on('loggedOut', function(event, args) {
+        $scope.$on('loggedOut', function() {
             $state.go('login');
         });
     })
@@ -38,19 +38,30 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('UsersCtrl', function($scope, User) {
-        /*$scope.newPerson = new Person({
-            "name": "Mick Johnson",
-            "email": "mick@example.com"
-        });
-        $scope.newPerson.$save();*/
-
+        var currPage = 1;
         $scope.users = User.query();
+
+        $scope.loadMore = function() {
+
+            User.query({ page: ++currPage}, function(response) {
+                $scope.users = $scope.users.concat(response.resource);
+                // FIXME: concat strips non-numeric keys
+
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        };
     })
 
     .controller('UserCtrl', function($scope, $stateParams, User) {
         $scope.user = User.get({
             id: $stateParams.userId
         });
+
+        /*$scope.newPerson = new Person({
+            "name": "Mick Johnson",
+            "email": "mick@example.com"
+         });
+         $scope.newPerson.$save();*/
     })
 
     .controller('ConversationsCtrl', function($scope, Conversation, AuthService) {
