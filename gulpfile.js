@@ -50,3 +50,16 @@ gulp.task('git-check', function(done) {
   }
   done();
 });
+
+var preprocess = require('gulp-preprocess');
+gulp.task('dev', function() {
+  gulp.src('./const/config.js')
+      .pipe(preprocess({context: { ENV: 'DEVELOPMENT', DEBUG: true}}))
+      .pipe(gulp.dest('./www/js/'));
+});
+
+gulp.task('prod', function() {
+  gulp.src('./const/config.js')
+      .pipe(preprocess({context: { ENV: 'PRODUCTION'}}))
+      .pipe(gulp.dest('./www/js/'));
+});

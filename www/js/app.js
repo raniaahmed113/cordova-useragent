@@ -16,9 +16,6 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
     })
 
     .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $resourceProvider) {
-        // Use HTML5 history API
-        $locationProvider.html5Mode(true);
-
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
@@ -27,9 +24,9 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
 
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
-                var urlNext = response.headers('X-Limit-PerPage'); // FIXME
+                var limit = response.headers('X-Limit-PerPage'); // FIXME
 
-                if (urlNext) {
+                if (limit) {
                     response.resource.moreAvailable = true;
                 }
 

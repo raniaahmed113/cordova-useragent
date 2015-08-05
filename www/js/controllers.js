@@ -28,7 +28,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $ionicLoading.hide();
                 $ionicPopup.alert({
                     title: 'Houston, we have problems',
-                    template: response.message
+                    template: response && response.message ? response.message : 'Something unexpected happened. Please try again.'
                 });
             };
 
@@ -38,8 +38,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('UsersCtrl', function($scope, User) {
-        var currPage = 1;
-        $scope.users = User.query();
+        var currPage = 0;
+        $scope.users = [];
+        $scope.users.moreAvailable = true;
 
         $scope.loadMore = function() {
             User.query({ page: ++currPage}, function(response) {

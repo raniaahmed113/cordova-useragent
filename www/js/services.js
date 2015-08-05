@@ -1,24 +1,20 @@
-angular.module('hotvibes.services', ['ionic'])
+angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
-    .constant('AuthConfig', {
-        CLIENT_ID_MOBILE_APP: 1
-    })
+    .service('Api', function($injector) {
+        var $_http;
 
-    .service('AuthService', function($q, $window, $rootScope, $injector, AuthConfig) {
-        var accessToken,
-            currentUserId,
-            $_http;
-
-        /**
-         * @returns {$http}
-         */
-        function request() {
+        this.request = function() {
             if (!$_http) {
                 $_http = $injector.get('$http');
             }
 
             return $_http;
         }
+    })
+
+    .service('AuthService', function($q, $window, $rootScope, Config, Api) {
+        var accessToken,
+            currentUserId;
 
         /**
          * @returns {string}
@@ -33,9 +29,14 @@ angular.module('hotvibes.services', ['ionic'])
         };
 
         /**
-         * @returns {integer}
+         * @returns {int}
          */
         this.getCurrentUserId = function() {
+            if (currentUserId == null) {
+                currentUserId = $window.sessionStorage['userId'];
+                accessToken = $window.sessionStorage['accToken'];
+            }
+
             return currentUserId;
         };
 
@@ -47,12 +48,11 @@ angular.module('hotvibes.services', ['ionic'])
         };
 
         this.doLogin = function(args) {
-            request()
-                .post('/api/auth/login', {
+            Api.request().post(Config.API_URL_BASE + 'auth/login', {
                     username: args['username'],
                     password: args['password'],
                     grant_type: 'password',
-                    client_id: AuthConfig.CLIENT_ID_MOBILE_APP,
+                    client_id: Config.API_CLIENT_ID,
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
