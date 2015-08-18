@@ -1,7 +1,7 @@
 <ion-view view-title="Users">
     <ion-content>
-        <div class="list">
-            <a href="#/users/{{user.id}}" class="item item-thumbnail-left" ng-repeat="user in users">
+        <div class="row row-wrap">
+            <a ng-repeat="user in users" href="#/users/{{user.id}}" class="col col-33">
                 <img src="{{user.profilePhotoURL}}">
             </a>
         </div>

@@ -1,0 +1,8 @@
+.row-wrap {
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+
+  .col > img {
+    width: 100%;
+  }
+}
