@@ -1,6 +1,6 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function($scope, $state, AuthService) {
+    .controller('AppCtrl', function($scope, $state, $ionicHistory, AuthService) {
         $scope.logout = function() {
             AuthService.doLogout();
         };
@@ -11,6 +11,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.$on('loggedOut', function() {
             $state.go('login');
+            $ionicHistory.clearCache();
         });
     })
 
