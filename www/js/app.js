@@ -24,12 +24,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
 
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
-                var limit = response.headers('X-Limit-PerPage'); // FIXME
-
-                if (limit) {
-                    response.resource.moreAvailable = true;
-                }
-
+                response.resource.moreAvailable = (response.headers('X-Limit-MoreAvailable') ? true : false);
                 return response;
             }
         };
