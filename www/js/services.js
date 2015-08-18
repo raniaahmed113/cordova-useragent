@@ -21,8 +21,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
          */
         this.getAccessToken = function() {
             if (accessToken == null) {
-                accessToken = $window.sessionStorage['accToken'];
-                currentUserId = $window.sessionStorage['userId'];
+                accessToken = localStorage['accToken'];
+                currentUserId = localStorage['userId'];
             }
 
             return accessToken;
@@ -33,8 +33,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
          */
         this.getCurrentUserId = function() {
             if (currentUserId == null) {
-                currentUserId = $window.sessionStorage['userId'];
-                accessToken = $window.sessionStorage['accToken'];
+                currentUserId = localStorage['userId'];
+                accessToken = localStorage['accToken'];
             }
 
             return currentUserId;
@@ -56,8 +56,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
-                    accessToken = $window.sessionStorage['accToken'] = response['access_token'];
-                    currentUserId = $window.sessionStorage['userId'] = response['user_id'];
+                    accessToken = localStorage['accToken'] = response['access_token'];
+                    currentUserId = localStorage['userId'] = response['user_id'];
 
                     if (args['onLoggedIn'] && typeof(args['onLoggedIn']) == 'function') {
                         args['onLoggedIn'](response, status, headers, config);
@@ -72,8 +72,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
         this.doLogout = function() {
             accessToken = currentUserId = null;
-            $window.sessionStorage.removeItem('accToken');
-            $window.sessionStorage.removeItem('userId');
+            localStorage.removeItem('accToken');
+            localStorage.removeItem('userId');
             $rootScope.$broadcast('loggedOut');
         };
     })
