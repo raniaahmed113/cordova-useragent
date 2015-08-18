@@ -1,10 +1,11 @@
 <ion-view view-title="Conversations">
   <ion-content>
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="conversation in conversations" href="#/conversations/{{conversation.id}}" on-hold="showDetails($index)">
+      <ion-item class="item-avatar" ng-repeat="conversation in conversations" href="#/conversations/{{conversation.id}}">
           <img src="{{conversation.withUser.photo}}">
           <h2>{{conversation.withUser.login}}</h2>
           <p>{{conversation.lastMessage ? conversation.lastMessage.text : ''}}</p>
+          <ion-option-button class="button-assertive" ng-click="deleteItem($index)">Delete</ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>
