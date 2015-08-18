@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "app_id": "",
+  "name": "Flirtas.lt",
+  "app_id": "lt.flirtas.mobile",
   "gulpStartupTasks": [
     "sass",
     "watch"
