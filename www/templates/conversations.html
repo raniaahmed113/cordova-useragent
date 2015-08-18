@@ -1,7 +1,7 @@
 <ion-view view-title="Conversations">
   <ion-content>
     <ion-list>
-      <ion-item class="item-avatar" ng-repeat="conversation in conversations" href="/#conversations/{{conversation.id}}">
+      <ion-item class="item-avatar" ng-repeat="conversation in conversations" href="#/conversations/{{conversation.id}}">
           <img src="{{conversation.withUser.photo}}">
           <h2>{{conversation.withUser.login}}</h2>
           <p>{{conversation.lastMessage ? conversation.lastMessage.text : ''}}</p>
