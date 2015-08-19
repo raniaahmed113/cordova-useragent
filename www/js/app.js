@@ -1,27 +1,21 @@
 angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'])
 
-    .run(function($ionicPlatform) {
-        $ionicPlatform.ready(function() {
-            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-            // for form inputs)
-            if (window.cordova && window.cordova.plugins.Keyboard) {
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-            }
-
-            if (window.StatusBar) {
-                // org.apache.cordova.statusbar required
-                StatusBar.styleDefault();
-            }
-        });
-    })
-
-    .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $resourceProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider, $cacheFactoryProvider) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
 
+        var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 }),
+            parentGet = cache.get;
+
+        cache.get = function(key) {
+
+            return parentGet.apply(this, [ key ]);
+        };
+
+        $resourceProvider.defaults.actions.get.cache = cache;
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
                 response.resource.moreAvailable = (response.headers('X-Limit-MoreAvailable') ? true : false);
@@ -97,4 +91,18 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                     }
                 }
             });
+    })
+
+    .run(function($ionicPlatform) {
+        $ionicPlatform.ready(function() {
+            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
+            if (window.cordova && window.cordova.plugins.Keyboard) {
+                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            }
+
+            if (window.StatusBar) {
+                // org.apache.cordova.statusbar required
+                StatusBar.styleDefault();
+            }
+        });
     });
