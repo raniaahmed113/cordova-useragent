@@ -54,7 +54,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('UserCtrl', function($scope, $stateParams, User) {
         $scope.user = User.get({ id: $stateParams.userId });
-        console.log($scope.user);
 
         /*$scope.newPerson = new Person({
             "name": "Mick Johnson",
