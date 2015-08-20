@@ -1,4 +1,4 @@
-<ion-view view-title="Users">
+<ion-view view-title="{{title || 'People'}}">
     <ion-content>
         <div class="row row-wrap">
             <a ng-repeat="user in users" href="#/users/{{user.id}}" class="col col-33">

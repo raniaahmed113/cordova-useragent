@@ -86,6 +86,16 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 }
             })
 
+            .state('inside.guests', {
+                url: "/guests",
+                views: {
+                    'menuContent': {
+                        templateUrl: "templates/users.html",
+                        controller: 'GuestsCtrl'
+                    }
+                }
+            })
+
             .state('inside.conversations-single', {
                 url: "/conversations/:id",
                 views: {

@@ -54,12 +54,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('UserCtrl', function($scope, $stateParams, User) {
         $scope.user = User.get({ id: $stateParams.userId });
-
-        /*$scope.newPerson = new Person({
-            "name": "Mick Johnson",
-            "email": "mick@example.com"
-         });
-         $scope.newPerson.$save();*/
     })
 
     .controller('ConversationsCtrl', function($scope, $ionicActionSheet, Conversation, AuthService) {
@@ -80,4 +74,19 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.conversation = Conversation.get(params); // FIXME: get from cache
         $scope.messages = Message.query(params);
+    })
+
+    .controller('GuestsCtrl', function($scope, Guest, AuthService) {
+        var currPage = 0;
+        $scope.users = [];
+        $scope.users.moreAvailable = true;
+        $scope.title = 'Guests';
+
+        $scope.loadMore = function() {
+            Guest.query({ userId: AuthService.getCurrentUserId(), page: ++currPage}, function(response) {
+                $scope.users = $scope.users.concat(response.resource);
+                $scope.users.moreAvailable = response.resource.moreAvailable;
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        };
     });
