@@ -1,4 +1,4 @@
-angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'])
+angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'ion-autocomplete'])
 
     .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider, $cacheFactoryProvider) {
         // Setup default URL
@@ -62,6 +62,10 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                     'menuContent': {
                         templateUrl: "templates/users.html",
                         controller: 'UsersCtrl'
+                    },
+                    rightMenu: {
+                        templateUrl: "templates/users-filter.html",
+                        controller: 'UsersFilterCtrl'
                     }
                 }
             })
@@ -119,4 +123,10 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 StatusBar.styleDefault();
             }
         });
+    })
+
+    .filter('capitalizeFirst', function () {
+        return function(input) {
+            return input[0].toUpperCase() + input.substring(1);
+        }
     });

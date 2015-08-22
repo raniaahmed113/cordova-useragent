@@ -1,4 +1,7 @@
 <ion-view view-title="{{title || 'People'}}">
+    <ion-nav-buttons side="right">
+        <button class="button" ng-if="filter" ng-click="showFilter()"><i class="icon ion-search"></i></button>
+    </ion-nav-buttons>
     <ion-content>
         <div class="row row-wrap">
             <a ng-repeat="user in users" href="#/users/{{user.id}}" class="col col-33">

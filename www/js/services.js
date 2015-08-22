@@ -3,12 +3,51 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
     .service('Api', function($injector) {
         var $_http;
 
+        /**
+         * @returns {$http}
+         */
         this.request = function() {
             if (!$_http) {
                 $_http = $injector.get('$http');
             }
 
             return $_http;
+        };
+
+        /**
+         * @param filter
+         * @param prefix
+         * @returns {object}
+         */
+        this.formatFilter = function(filter, prefix) {
+            var output = {},
+                self = this;
+
+            if (prefix === undefined) {
+                prefix = '';
+            }
+
+            angular.forEach(filter, function(value, key) {
+                if (angular.isFunction(value)) {
+                    return;
+                }
+
+                if (prefix.length > 0) {
+                    key = key[0].toUpperCase() + key.substr(1);
+                }
+
+                if (angular.isArray(value)) {
+                    output[prefix + key] = value.join(',');
+
+                } else if (angular.isObject(value)) {
+                    angular.extend(output, self.formatFilter(value, prefix + key));
+
+                } else {
+                    output[prefix + key] = value;
+                }
+            });
+
+            return output;
         }
     })
 
@@ -26,6 +65,22 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             }
 
             return accessToken;
+        };
+
+        this.getCurrentUser = function() {
+            // FIXME
+            return {
+                id: currentUserId,
+                filter: {
+                    lookingFor: ['female'],
+                    age: {
+                        from: 18,
+                        to: 99
+                    },
+                    country: 'LT',
+                    city: 'Vilnius'
+                }
+            };
         };
 
         /**

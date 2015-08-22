@@ -13,6 +13,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $state.go('login');
             $ionicHistory.clearCache();
         });
+
+        $scope.currUser = AuthService.getCurrentUser();
     })
 
     .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
@@ -38,17 +40,75 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, User) {
-        var currPage = 0;
+    .controller('UsersCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User, AuthService) {
+        $scope.currPage = 0;
         $scope.users = [];
         $scope.users.moreAvailable = true;
+        $scope.filter = AuthService.getCurrentUser().filter;
 
-        $scope.loadMore = function() {
-            User.query({ page: ++currPage}, function(response) {
-                $scope.users = $scope.users.concat(response.resource);
+        var loadUsers = function() {
+            User.query(angular.extend({ page: $scope.currPage }, Api.formatFilter($scope.filter)), function(response) {
+                $scope.users = $scope.currPage == 1 ? response.resource : $scope.users.concat(response.resource);
                 $scope.users.moreAvailable = response.resource.moreAvailable;
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             });
+        };
+
+        $rootScope.$on('users.filterChanged', function(event, filter) {
+            $ionicScrollDelegate.scrollTop(true);
+            $scope.filter = filter;
+            $scope.currPage = 1;
+            loadUsers();
+        });
+
+        $scope.loadMore = function() {
+            $scope.currPage += 1;
+            loadUsers();
+        };
+
+        $scope.showFilter = function() {
+            $ionicSideMenuDelegate.toggleRight();
+        };
+    })
+
+    .controller('UsersFilterCtrl', function($scope, $rootScope, AuthService) {
+        $scope.filter = AuthService.getCurrentUser().filter;
+        $scope.$watch('filter', function(filter, oldFilter) {
+            if (filter === oldFilter) {
+                // Called due to initialization - ignore
+                return;
+            }
+
+            $rootScope.$broadcast('users.filterChanged', filter);
+            //AuthService.getCurrentUser().saveFilter(filter); // TODO
+
+        }, true);
+
+        $scope.countries = [
+            {
+                id: 'LT',
+                label: 'Lithuania'
+            }
+        ]; // FIXME: add full list of countries
+
+        var range = function(min, max, step) {
+            step = step || 1;
+            var input = [];
+            for (var i = min; i <= max; i += step) input.push(i);
+            return input;
+        };
+
+        $scope.ages = range(18, 99);
+        $scope.lookingFor = ['male', 'female'];
+        $scope.toggleSelection = function toggleSelection(type) {
+            var idx = $scope.filter.lookingFor.indexOf(type);
+
+            if (idx > -1) {
+                $scope.filter.lookingFor.splice(idx, 1);
+
+            } else {
+                $scope.filter.lookingFor.push(type);
+            }
         };
     })
 
@@ -84,7 +144,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.loadMore = function() {
             Guest.query({ userId: AuthService.getCurrentUserId(), page: ++currPage}, function(response) {
-                $scope.users = $scope.users.concat(response.resource);
+                $scope.users = $scope.users.concat(response.resource.map(function(data) {
+                    return data.guest;
+                }));
                 $scope.users.moreAvailable = response.resource.moreAvailable;
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             });
