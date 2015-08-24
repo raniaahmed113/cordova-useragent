@@ -7705,3 +7705,24 @@ a.button {
   flex-wrap: wrap; }
   .row-wrap .col > img {
     width: 100%; }
+
+ul.chat .message {
+  padding: 10px;
+  margin: 5px;
+  background-color: #11c1f3;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  border-radius: 5px;
+  max-width: 50%;
+  clear: both; }
+  ul.chat .message .status {
+    font-size: 85%;
+    font-weight: 300;
+    color: #404040; }
+  ul.chat .message.mine {
+    background-color: #f8f8f8;
+    text-align: right;
+    float: right; }
+  ul.chat .message.failed {
+    background-color: #ef473a; }

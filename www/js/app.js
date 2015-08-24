@@ -1,4 +1,4 @@
-angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'ion-autocomplete'])
+angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'ion-autocomplete', 'angularMoment'])
 
     .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider, $cacheFactoryProvider) {
         // Setup default URL

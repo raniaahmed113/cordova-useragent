@@ -3,6 +3,7 @@
   "private": "true",
   "devDependencies": {
     "ionic": "driftyco/ionic-bower#1.1.0",
-    "ion-autocomplete": "~0.2.3"
+    "ion-autocomplete": "~0.2.3",
+    "angular-moment": "~0.10.2"
   }
 }
