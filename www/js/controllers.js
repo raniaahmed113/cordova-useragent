@@ -40,35 +40,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User, AuthService) {
-        $scope.currPage = 0;
-        $scope.users = [];
-        $scope.users.moreAvailable = true;
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, Api, UserList, User, AuthService) {
         $scope.filter = AuthService.getCurrentUser().filter;
-
-        var loadUsers = function() {
-            User.query(angular.extend({ page: $scope.currPage }, Api.formatFilter($scope.filter)), function(response) {
-                $scope.users = $scope.currPage == 1 ? response.resource : $scope.users.concat(response.resource);
-                $scope.users.moreAvailable = response.resource.moreAvailable;
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
-        };
-
-        $rootScope.$on('users.filterChanged', function(event, filter) {
-            $ionicScrollDelegate.scrollTop(true);
-            $scope.filter = filter;
-            $scope.currPage = 1;
-            loadUsers();
-        });
-
-        $scope.loadMore = function() {
-            $scope.currPage += 1;
-            loadUsers();
-        };
-
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
+
+        UserList.load(User, $scope);
     })
 
     .controller('UsersFilterCtrl', function($scope, $rootScope, AuthService) {
@@ -136,19 +114,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.messages = Message.query(params);
     })
 
-    .controller('GuestsCtrl', function($scope, Guest, AuthService) {
-        var currPage = 0;
-        $scope.users = [];
-        $scope.users.moreAvailable = true;
+    .controller('GuestsCtrl', function($scope, Guest, UserList, AuthService) {
         $scope.title = 'Guests';
 
-        $scope.loadMore = function() {
-            Guest.query({ userId: AuthService.getCurrentUserId(), page: ++currPage}, function(response) {
-                $scope.users = $scope.users.concat(response.resource.map(function(data) {
-                    return data.guest;
-                }));
-                $scope.users.moreAvailable = response.resource.moreAvailable;
-                $scope.$broadcast('scroll.infiniteScrollComplete');
+        UserList.load(Guest, $scope, { userId: AuthService.getCurrentUserId() }, function(guests) {
+            return guests.map(function(data) {
+                return data['guest'];
             });
-        };
+        });
     });

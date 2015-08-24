@@ -149,4 +149,48 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
             return $q.reject(response);
         };
+    })
+
+    .service('UserList', function($rootScope, $ionicScrollDelegate, Api) {
+        this.load = function(Resource, $scope, params, transformResponse) {
+            $scope.currPage = 0;
+            $scope.users = [];
+            $scope.users.moreAvailable = true;
+
+            var loadUsers = function() {
+                var queryParams = { page: $scope.currPage };
+
+                if (params) {
+                    queryParams = angular.extend(queryParams, params);
+                }
+
+                if ($scope.filter) {
+                    queryParams = angular.extend(queryParams, Api.formatFilter($scope.filter));
+                }
+
+                Resource.query(queryParams, function(response) {
+                    var users = response.resource;
+
+                    if (angular.isFunction(transformResponse)) {
+                        users = transformResponse(users);
+                    }
+
+                    $scope.users = $scope.currPage == 1 ? users : $scope.users.concat(users);
+                    $scope.users.moreAvailable = response.resource.moreAvailable;
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                });
+            };
+
+            $rootScope.$on('users.filterChanged', function(event, filter) {
+                $ionicScrollDelegate.scrollTop(true);
+                $scope.filter = filter;
+                $scope.currPage = 1;
+                loadUsers();
+            });
+
+            $scope.loadMore = function() {
+                $scope.currPage += 1;
+                loadUsers();
+            };
+        }
     });
