@@ -1,10 +1,30 @@
-<ion-view view-title="Conversation">
-  <ion-content>
-    <h1>Conversation with {{conversation.withUser.login}}</h1>
-      <ion-list>
-          <ion-item ng-repeat="message in messages">
-              {{message.text}}
-          </ion-item>
-      </ion-list>
-  </ion-content>
+<ion-view>
+    <ion-nav-title>Chat with {{conversation.withUser.login}}</ion-nav-title>
+    <ion-content>
+        <ul class="list chat">
+            <div
+                    class="message"
+                    ng-repeat="message in messages"
+                    ng-class="{mine: message.id == currUserId, failed: message.error ? true : false}"
+                    ng-click="resend($index)">
+                {{message.text}}
+                <div class="status">
+                    <span ng-if="message.error">Failed. Tap to retry.</span>
+                    <span ng-if="!message.error">{{message.dateSent && (message.dateSent | amDurationFormat:'seconds') + ' ago' || "Sending.."}}</span>
+                </div>
+            </div>
+        </ul>
+    </ion-content>
+
+    <ion-footer-bar keyboard-attach class="bar-stable">
+        <form class="item-input-inset" ng-submit="sendMessage()" style="width: 100%">
+            <label class="item-input-wrapper">
+                <input
+                        type="text"
+                        placeholder="Type your message"
+                        ng-model="msgText" />
+            </label>
+            <button class="button button-clear" type="submit" ng-disabled="msgText.length < 1">Send</button>
+        </form>
+    </ion-footer-bar>
 </ion-view>

@@ -104,14 +104,49 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('ConversationCtrl', function($scope, $stateParams, Conversation, Message, AuthService) {
+    .controller('ConversationCtrl', function($scope, $stateParams, $ionicScrollDelegate, Conversation, Message, AuthService) {
         var params = {
             ownerId: AuthService.getCurrentUserId(),
             withUserId: $stateParams.id
         };
 
+        $scope.msgText = '';
+        $scope.currUserId = AuthService.getCurrentUserId();
         $scope.conversation = Conversation.get(params); // FIXME: get from cache
-        $scope.messages = Message.query(params);
+        $scope.messages = Message.query(params, function() {
+            $ionicScrollDelegate.scrollBottom(true);
+        });
+
+        $scope.sendMessage = function() {
+            var i = $scope.messages.push({
+                    id: $scope.currUserId,
+                    text: $scope.msgText,
+                    dateSent: null
+                })-1;
+
+            var msg = new Message();
+            msg.id = $scope.currUserId;
+            msg.text = $scope.msgText;
+            msg.$save(params, function() {
+                $scope.messages[i].dateSent = new Date().getMilliseconds()/1000;
+
+            }, function(error) {
+                $scope.messages[i].error = error.data.message;
+            });
+
+            $scope.msgText = '';
+            $ionicScrollDelegate.scrollBottom(true);
+        };
+
+        $scope.resend = function(messageIndex) {
+            if (!$scope.messages[messageIndex].error) {
+                return;
+            }
+
+            delete $scope.messages[messageIndex].error;
+
+            // TODO: resend
+        }
     })
 
     .controller('GuestsCtrl', function($scope, Guest, UserList, AuthService) {

@@ -1,8 +1,42 @@
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
 .row-wrap {
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 
   .col > img {
     width: 100%;
+  }
+}
+
+ul.chat {
+  .message {
+    padding: 10px;
+    margin: 5px;
+    background-color: $calm;
+    @include border-radius(5px);
+    max-width: 50%;
+    clear: both;
+
+    .status {
+      font-size: 85%;
+      font-weight: 300;
+      color: lighten(black, 25%);
+    }
+
+    &.mine {
+      background-color: $stable;
+      text-align: right;
+      float: right;
+    }
+
+    &.failed {
+      background-color: $assertive;
+    }
   }
 }
