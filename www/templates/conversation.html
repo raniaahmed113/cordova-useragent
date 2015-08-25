@@ -10,7 +10,7 @@
                 {{message.text}}
                 <div class="status">
                     <span ng-if="message.error">Failed. Tap to retry.</span>
-                    <span ng-if="!message.error">{{message.dateSent && (message.dateSent | amDurationFormat:'seconds') + ' ago' || "Sending.."}}</span>
+                    <span ng-if="!message.error">{{message.dateSent && (message.dateSent*1000 | amCalendar) || "Sending.."}}</span>
                 </div>
             </div>
         </ul>

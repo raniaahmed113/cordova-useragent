@@ -59,7 +59,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.users', {
                 url: "/users",
                 views: {
-                    'menuContent': {
+                    menuContent: {
                         templateUrl: "templates/users.html",
                         controller: 'UsersCtrl'
                     },
@@ -73,7 +73,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.users-single', {
                 url: "/users/:userId",
                 views: {
-                    'menuContent': {
+                    menuContent: {
                         templateUrl: "templates/user.html",
                         controller: 'UserCtrl'
                     }
@@ -83,19 +83,9 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.conversations', {
                 url: "/conversations",
                 views: {
-                    'menuContent': {
+                    menuContent: {
                         templateUrl: "templates/conversations.html",
                         controller: 'ConversationsCtrl'
-                    }
-                }
-            })
-
-            .state('inside.guests', {
-                url: "/guests",
-                views: {
-                    'menuContent': {
-                        templateUrl: "templates/users.html",
-                        controller: 'GuestsCtrl'
                     }
                 }
             })
@@ -103,9 +93,29 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.conversations-single', {
                 url: "/conversations/:id",
                 views: {
-                    'menuContent': {
+                    menuContent: {
                         templateUrl: "templates/conversation.html",
                         controller: 'ConversationCtrl'
+                    }
+                }
+            })
+
+            .state('inside.guests', {
+                url: "/guests",
+                views: {
+                    menuContent: {
+                        templateUrl: "templates/users.html",
+                        controller: 'GuestsCtrl'
+                    }
+                }
+            })
+
+            .state('inside.settings', {
+                url: "/settings",
+                views: {
+                    menuContent: {
+                        templateUrl: "templates/settings.html",
+                        controller: 'SettingsCtrl'
                     }
                 }
             });
@@ -128,5 +138,19 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
     .filter('capitalizeFirst', function () {
         return function(input) {
             return input[0].toUpperCase() + input.substring(1);
+        }
+    })
+
+    .filter('profilePhotoUrl', function() {
+        return function(photo, gender) {
+            if (photo && photo.url) {
+                return photo.url;
+            }
+
+            if (!gender || gender == 'male') {
+                gender = 'generic';
+            }
+
+            return 'img/person-' + gender + '.png';
         }
     });

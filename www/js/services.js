@@ -71,6 +71,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             // FIXME
             return {
                 id: currentUserId,
+                login: 'test123',
                 filter: {
                     lookingFor: ['female'],
                     age: {

@@ -40,3 +40,18 @@ ul.chat {
     }
   }
 }
+
+.item-conversation .ion-reply {
+  margin-right: 5px;
+}
+
+.bar-main-nav {
+  > a {
+    color: white;
+
+    > img {
+      width: 32px;
+      height: 32px;
+    }
+  }
+}

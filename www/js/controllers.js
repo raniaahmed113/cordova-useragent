@@ -14,6 +14,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicHistory.clearCache();
         });
 
+        $scope.rightMenuEnabled = $state.current.views.rightMenu;
+        $scope.$on('$stateChangeStart', function(event, state) {
+            $scope.rightMenuEnabled = state.views.rightMenu ? true : false;
+        });
+
         $scope.currUser = AuthService.getCurrentUser();
     })
 
@@ -94,17 +99,31 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.user = User.get({ id: $stateParams.userId });
     })
 
-    .controller('ConversationsCtrl', function($scope, $ionicActionSheet, Conversation, AuthService) {
-        $scope.conversations = Conversation.query({
-            ownerId: AuthService.getCurrentUserId()
-        });
+    .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation, AuthService) {
+        $scope.conversations = Conversation.query({ ownerId: AuthService.getCurrentUserId() });
         $scope.deleteItem = function(index) {
             $scope.conversations[index].$delete();
             $scope.conversations.splice(index, 1);
         };
+
+        $rootScope.$on('newMessage', function(event, message) {
+            $scope.conversations.$promise.then(function() {
+                var conversationId = message['conversationId'];
+
+                for (var i=0; i<$scope.conversations.length; i++) {
+                    // Find the right conversation in the list
+                    if ($scope.conversations[i].id != conversationId) {
+                        continue;
+                    }
+
+                    // Update the lastMessage info
+                    $scope.conversations[i].lastMessage = message;
+                }
+            });
+        });
     })
 
-    .controller('ConversationCtrl', function($scope, $stateParams, $ionicScrollDelegate, Conversation, Message, AuthService) {
+    .controller('ConversationCtrl', function($scope, $rootScope, $stateParams, $ionicScrollDelegate, Conversation, Message, AuthService) {
         var params = {
             ownerId: AuthService.getCurrentUserId(),
             withUserId: $stateParams.id
@@ -115,20 +134,26 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.conversation = Conversation.get(params); // FIXME: get from cache
         $scope.messages = Message.query(params, function() {
             $ionicScrollDelegate.scrollBottom(true);
+            // TODO: load more
+            // TODO: support for attachments
         });
 
         $scope.sendMessage = function() {
             var i = $scope.messages.push({
                     id: $scope.currUserId,
                     text: $scope.msgText,
-                    dateSent: null
+                    dateSent: null,
+                    conversationId: $scope.conversation.id
                 })-1;
 
             var msg = new Message();
             msg.id = $scope.currUserId;
             msg.text = $scope.msgText;
             msg.$save(params, function() {
-                $scope.messages[i].dateSent = new Date().getMilliseconds()/1000;
+                $scope.messages[i].dateSent = Math.round(Date.now() / 1000);
+                $rootScope.$broadcast('newMessage', $scope.messages[i]);
+
+                // TODO: update conversations last message cache
 
             }, function(error) {
                 $scope.messages[i].error = error.data.message;
@@ -157,4 +182,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return data['guest'];
             });
         });
+    })
+
+    .controller('SettingsCtrl', function($scope) {
+        // TODO: implement
     });

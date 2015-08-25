@@ -1,6 +1,6 @@
 <ion-view>
     <ion-nav-title>{{user.login}}, {{user.cityName}}</ion-nav-title>
     <ion-content style="text-align: center">
-        <img src="{{user.profilePhotoURL}}">
+        <img src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
     </ion-content>
 </ion-view>
