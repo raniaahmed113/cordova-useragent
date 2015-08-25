@@ -7726,3 +7726,12 @@ ul.chat .message {
     float: right; }
   ul.chat .message.failed {
     background-color: #ef473a; }
+
+.item-conversation .ion-reply {
+  margin-right: 5px; }
+
+.bar-main-nav > a {
+  color: white; }
+  .bar-main-nav > a > img {
+    width: 32px;
+    height: 32px; }
