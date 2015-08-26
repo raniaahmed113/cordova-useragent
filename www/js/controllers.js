@@ -125,7 +125,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('ConversationCtrl', function($scope, $rootScope, $stateParams, $ionicScrollDelegate, Conversation, Message, AuthService) {
         var params = {
-            ownerId: AuthService.getCurrentUserId(),
             withUserId: $stateParams.id
         };
 
@@ -177,7 +176,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     .controller('GuestsCtrl', function($scope, Guest, UserList, AuthService) {
         $scope.title = 'Guests';
 
-        UserList.load(Guest, $scope, { userId: AuthService.getCurrentUserId() }, function(guests) {
+        UserList.load(Guest, $scope, {}, function(guests) {
             return guests.map(function(data) {
                 return data['guest'];
             });

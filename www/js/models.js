@@ -5,13 +5,13 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('Guest', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:userId/guests', { userId: '@userId' });
+        return $resource(Config.API_URL_BASE + 'me/guests');
     })
 
     .factory('Conversation', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:ownerId/conversations/:withUserId', { ownerId: '@ownerId', withUserId: '@id' });
+        return $resource(Config.API_URL_BASE + 'me/conversations/:withUserId', { withUserId: '@id' });
     })
 
     .factory('Message', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:ownerId/conversations/:withUserId/messages');
+        return $resource(Config.API_URL_BASE + 'me/conversations/:withUserId/messages');
     });
