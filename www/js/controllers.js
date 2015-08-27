@@ -100,7 +100,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation, AuthService) {
-        $scope.conversations = Conversation.query({ ownerId: AuthService.getCurrentUserId() });
+        $scope.conversations = Conversation.query();
         $scope.deleteItem = function(index) {
             $scope.conversations[index].$delete();
             $scope.conversations.splice(index, 1);
