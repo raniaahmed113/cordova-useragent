@@ -95,7 +95,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         UserList.load(User, $scope, { photoSize: 'w128h129' });
     })
 
-    .controller('UserCtrl', function($scope, $stateParams, $ionicSlideBoxDelegate, User) {
+    .controller('UserCtrl', function($scope, $stateParams, $ionicSlideBoxDelegate, $ionicPlatform, User) {
         $scope.user = User.get({
             id: $stateParams.userId,
             profile: true,
@@ -106,6 +106,37 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.user.$promise.then(function() {
             $ionicSlideBoxDelegate.update();
         });
+
+        // FIXME
+        $scope.currentlyActiveTab = -1;
+        $ionicPlatform.registerBackButtonAction(function() {
+            if ($scope.currentlyActiveTab >= 0) {
+                $scope.currentlyActiveTab = -1;
+                return true;
+            }
+
+            return false;
+        }, 101, 'closeActiveTab');
+
+        $scope.tabs = [
+            { icon: 'images', title: 'Photos' },
+            { icon: 'person', title: 'About' },
+            { icon: 'heart', title: 'Actions' },
+            { icon: 'chatbubbles', title: 'Chat' }
+        ];
+        $scope.toggleTab = function(tabIndex) {
+            if ($scope.currentlyActiveTab >= 0) {
+                $scope.tabs[$scope.currentlyActiveTab].isActive = false;
+            }
+
+            if (tabIndex != $scope.currentlyActiveTab) {
+                $scope.tabs[tabIndex].isActive = true;
+                $scope.currentlyActiveTab = tabIndex;
+
+            } else {
+                $scope.currentlyActiveTab = -1;
+            }
+        };
 
         $scope.showUi = true;
         $scope.toggleOverlays = function() {

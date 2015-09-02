@@ -1,23 +1,37 @@
 <ion-view>
     <ion-nav-title>{{user.login}}, {{user.cityName}}</ion-nav-title>
     <ion-content scroll="false" class="profile">
-        <ion-slide-box show-pager="false" class="photos" on-tap="toggleOverlays()">
-            <ion-slide ng-repeat="photo in user.photos" class="photo">
-                <img src="{{photo.url}}"/>
-            </ion-slide>
-        </ion-slide-box>
-        <div class="overlay top" ng-show="showUi">
+        <div class="photos">
+            <ion-slide-box show-pager="false" on-tap="toggleOverlays()">
+                <ion-slide ng-repeat="photo in user.photos">
+                    <img src="{{photo.url}}"/>
+                </ion-slide>
+            </ion-slide-box>
 
+            <div class="overlay top" ng-show="showUi">
+
+            </div>
+
+            <div class="overlay bottom" ng-show="showUi">
+                <i class="icon ion-ios-location"></i> {{user.cityName}}
+                <p class="about">{{user.profile.about}}</p>
+            </div>
         </div>
-        <div class="overlay bottom" ng-show="showUi">
-            <i class="icon ion-ios-location"></i> {{user.cityName}}
-            <p class="about">{{user.profile.about}}</p>
+
+        <div class="tabs tabs-dark tabs-icon-top">
+            <a ng-repeat="tab in tabs" class="tab-item" ng-click="toggleTab($index)" ng-class="{active: tab.isActive}">
+                <i class="icon ion-{{tab.icon}}"></i> {{tab.title}}
+            </a>
         </div>
+
+        <ion-scroll class="tabs-content" ng-class="{open: currentlyActiveTab >= 0}">
+            <div ng-show="currentlyActiveTab == 0">
+                <h1>Photos</h1>
+            </div>
+
+            <div ng-show="currentlyActiveTab == 1">
+                <h1>About</h1>
+            </div>
+        </ion-scroll>
     </ion-content>
-    <ion-footer-bar class="tabs tabs-icon-top tabs-dark">
-        <a class="tab-item"><i class="icon ion-images"></i> Photos</a>
-        <a class="tab-item"><i class="icon ion-person"></i> About</a>
-        <a class="tab-item"><i class="icon ion-heart"></i> Actions</a>
-        <a class="tab-item"><i class="icon ion-chatbubbles"></i> Chat</a>
-    </ion-footer-bar>
 </ion-view>
