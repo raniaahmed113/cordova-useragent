@@ -5,6 +5,15 @@
   border-radius: $radius;
 }
 
+@mixin radial-gradient($from, $to) {
+  background-image: -moz-radial-gradient(center, circle cover, $from 0%, $to 100%);
+  background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, $from), color-stop(100%, $to));
+  background-image: -webkit-radial-gradient(center, circle cover, $from 0%, $to 100%);
+  background-image: -o-radial-gradient(center, circle cover, $from 0%, $to 100%);
+  background-image: -ms-radial-gradient(center, circle cover, $from 0%, $to 100%);
+  background-image: radial-gradient(center, circle cover, $from 0%, $to 100%);
+}
+
 .row-wrap {
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
@@ -52,6 +61,61 @@ ul.chat {
     > img {
       width: 32px;
       height: 32px;
+    }
+  }
+}
+
+.profile {
+  background-color: #656D7D;
+  @include radial-gradient(#656D7D, #1B1D24);
+
+  .photos {
+    height: 100%;
+
+    .photo {
+      position: relative;
+
+      > img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+
+  .overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    color: white;
+    min-height: 20px;
+    padding: 10px;
+    transition: 0.15s linear all;
+
+    &.ng-hide {
+      display: block !important;
+      opacity: 0;
+    }
+
+    &.top {
+      top: 0;
+    }
+
+    &.bottom {
+      bottom: 0;
+    }
+
+    .about {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      display: box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
+      box-orient: vertical;
     }
   }
 }

@@ -1,6 +1,23 @@
 <ion-view>
     <ion-nav-title>{{user.login}}, {{user.cityName}}</ion-nav-title>
-    <ion-content style="text-align: center">
-        <img src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
+    <ion-content scroll="false" class="profile">
+        <ion-slide-box show-pager="false" class="photos" on-tap="toggleOverlays()">
+            <ion-slide ng-repeat="photo in user.photos" class="photo">
+                <img src="{{photo.url}}"/>
+            </ion-slide>
+        </ion-slide-box>
+        <div class="overlay top" ng-show="showUi">
+
+        </div>
+        <div class="overlay bottom" ng-show="showUi">
+            <i class="icon ion-ios-location"></i> {{user.cityName}}
+            <p class="about">{{user.profile.about}}</p>
+        </div>
     </ion-content>
+    <ion-footer-bar class="tabs tabs-icon-top tabs-dark">
+        <a class="tab-item"><i class="icon ion-images"></i> Photos</a>
+        <a class="tab-item"><i class="icon ion-person"></i> About</a>
+        <a class="tab-item"><i class="icon ion-heart"></i> Actions</a>
+        <a class="tab-item"><i class="icon ion-chatbubbles"></i> Chat</a>
+    </ion-footer-bar>
 </ion-view>

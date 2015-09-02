@@ -45,15 +45,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, Api, UserList, User, AuthService) {
-        $scope.filter = AuthService.getCurrentUser().filter;
-        $scope.showFilter = function() {
-            $ionicSideMenuDelegate.toggleRight();
-        };
-
-        UserList.load(User, $scope);
-    })
-
     .controller('UsersFilterCtrl', function($scope, $rootScope, AuthService) {
         $scope.filter = AuthService.getCurrentUser().filter;
         $scope.$watch('filter', function(filter, oldFilter) {
@@ -95,8 +86,31 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UserCtrl', function($scope, $stateParams, User) {
-        $scope.user = User.get({ id: $stateParams.userId });
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, Api, UserList, User, AuthService) {
+        $scope.filter = AuthService.getCurrentUser().filter;
+        $scope.showFilter = function() {
+            $ionicSideMenuDelegate.toggleRight();
+        };
+
+        UserList.load(User, $scope, { photoSize: 'w128h129' });
+    })
+
+    .controller('UserCtrl', function($scope, $stateParams, $ionicSlideBoxDelegate, User) {
+        $scope.user = User.get({
+            id: $stateParams.userId,
+            profile: true,
+            photos: true,
+            albums: true
+        });
+
+        $scope.user.$promise.then(function() {
+            $ionicSlideBoxDelegate.update();
+        });
+
+        $scope.showUi = true;
+        $scope.toggleOverlays = function() {
+            $scope.showUi = !$scope.showUi;
+        }
     })
 
     .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation, AuthService) {
@@ -173,7 +187,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         }
     })
 
-    .controller('GuestsCtrl', function($scope, Guest, UserList, AuthService) {
+    .controller('GuestsCtrl', function($scope, Guest, UserList) {
         $scope.title = 'Guests';
 
         UserList.load(Guest, $scope, {}, function(guests) {
