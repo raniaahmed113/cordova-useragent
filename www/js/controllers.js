@@ -95,7 +95,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         UserList.load(User, $scope, { photoSize: 'w128h129' });
     })
 
-    .controller('UserCtrl', function($scope, $stateParams, $ionicSlideBoxDelegate, $ionicPlatform, User) {
+    .controller('UserCtrl', function($scope, $stateParams, $state, $ionicSlideBoxDelegate, $ionicPlatform, $ionicPopup, User, Request) {
         $scope.user = User.get({
             id: $stateParams.userId,
             profile: true,
@@ -107,44 +107,101 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicSlideBoxDelegate.update();
         });
 
-        // FIXME
-        $scope.currentlyActiveTab = -1;
-        $ionicPlatform.registerBackButtonAction(function() {
-            if ($scope.currentlyActiveTab >= 0) {
-                $scope.currentlyActiveTab = -1;
-                return true;
-            }
+        $scope.currentPhoto = null;
+        $scope.onPhotoChanged = function($index) {
+            $scope.currentPhoto = $scope.user.photos[$index];
+        };
 
-            return false;
-        }, 101, 'closeActiveTab');
+        $scope.prompt = {
+            message: null,
+            errors: {}
+        };
+        $scope.requestPhotoPermission = function() {
+            $ionicPopup.prompt({
+                title: 'Request unlock photo',
+                subTitle: 'Why should he/she unlock this photo for you?',
+                templateUrl: 'templates/popup_input_message.html',
+                scope: $scope,
+                buttons: [
+                    { text: 'Cancel' },
+                    {
+                        text: '<b>Send</b>',
+                        type: 'button-positive',
+                        onTap: function(event) {
+                            if (!$scope.prompt.message) {
+                                event.preventDefault();
+                                // TODO: show error
+                                return null;
+                            }
 
+                            return $scope.prompt.message;
+                        }
+                    }
+                ]
+
+            }).then(function(message) {
+                var request = new Request({
+                    type: 'file',
+                    nodeId: $scope.currentPhoto.id,
+                    toUserId: $scope.user.id,
+                    message: message
+                });
+
+                request.$save();
+            });
+        };
+
+        $scope.currentlyActiveTab = null;
         $scope.tabs = [
-            { icon: 'images', title: 'Photos' },
-            { icon: 'person', title: 'About' },
-            { icon: 'heart', title: 'Actions' },
-            { icon: 'chatbubbles', title: 'Chat' }
+            { id: 'photos', icon: 'images', title: 'Photos' },
+            { id: 'about', icon: 'person', title: 'About' },
+            { id: 'actions', icon: 'heart', title: 'Actions' },
+            { id: 'chat', icon: 'chatbubbles', title: 'Chat' }
         ];
-        $scope.toggleTab = function(tabIndex) {
-            if ($scope.currentlyActiveTab >= 0) {
-                $scope.tabs[$scope.currentlyActiveTab].isActive = false;
-            }
 
-            if (tabIndex != $scope.currentlyActiveTab) {
-                $scope.tabs[tabIndex].isActive = true;
-                $scope.currentlyActiveTab = tabIndex;
+        $scope.toggleTab = function(tab) {
+            if (tab != $scope.currentlyActiveTab) {
+                $state.go('inside.user.' + tab, {}, { location: $scope.currentlyActiveTab == null ? true : "replace"});
 
             } else {
-                $scope.currentlyActiveTab = -1;
+                history.back();
             }
         };
+
+        var onStateChanged = function(state) {
+            var matches = state.name.match(/^inside.user(?:\.(.*))?$/);
+            if (matches) {
+                $scope.currentlyActiveTab = matches[1] ? matches[1] : null;
+            }
+        };
+
+        onStateChanged($state.current);
+        $scope.$on('$stateChangeStart', function(event, state) {
+            onStateChanged(state);
+        });
 
         $scope.showUi = true;
         $scope.toggleOverlays = function() {
             $scope.showUi = !$scope.showUi;
-        }
+        };
     })
 
-    .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation, AuthService) {
+    .controller('UserPhotosCtrl', function($scope, $ionicSlideBoxDelegate) {
+        $scope.switchPhoto = function($index) {
+            $ionicSlideBoxDelegate.slide($index);
+            history.back();
+        };
+    })
+
+    .controller('UserAboutCtrl', function($scope, $stateParams) {
+
+    })
+
+    .controller('UserActionsCtrl', function($scope, $stateParams) {
+
+    })
+
+    .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation) {
         $scope.conversations = Conversation.query();
         $scope.deleteItem = function(index) {
             $scope.conversations[index].$delete();

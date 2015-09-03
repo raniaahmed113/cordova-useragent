@@ -14,4 +14,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('Message', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/conversations/:withUserId/messages');
+    })
+
+    .factory('Request', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/requests');
     });

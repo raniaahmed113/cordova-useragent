@@ -1,8 +1,11 @@
 <ion-view>
     <ion-nav-title>{{user.login}}, {{user.cityName}}</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button" ng-if="currentPhoto.isLocked" ng-click="requestPhotoPermission()"><i class="icon ion-unlocked"></i></button>
+    </ion-nav-buttons>
     <ion-content scroll="false" class="profile">
         <div class="photos">
-            <ion-slide-box show-pager="false" on-tap="toggleOverlays()">
+            <ion-slide-box show-pager="false" on-tap="toggleOverlays()" on-slide-changed="onPhotoChanged($index)">
                 <ion-slide ng-repeat="photo in user.photos">
                     <img src="{{photo.url}}"/>
                 </ion-slide>
@@ -18,20 +21,14 @@
             </div>
         </div>
 
-        <div class="tabs tabs-dark tabs-icon-top">
-            <a ng-repeat="tab in tabs" class="tab-item" ng-click="toggleTab($index)" ng-class="{active: tab.isActive}">
+        <div class="tabs tabs-dark tabs-icon-top tabs-striped tabs-top">
+            <a ng-repeat="tab in tabs" class="tab-item" ng-click="toggleTab(tab.id)" ng-class="{active: currentlyActiveTab == tab.id}">
                 <i class="icon ion-{{tab.icon}}"></i> {{tab.title}}
             </a>
         </div>
 
-        <ion-scroll class="tabs-content" ng-class="{open: currentlyActiveTab >= 0}">
-            <div ng-show="currentlyActiveTab == 0">
-                <h1>Photos</h1>
-            </div>
-
-            <div ng-show="currentlyActiveTab == 1">
-                <h1>About</h1>
-            </div>
-        </ion-scroll>
+        <div class="tabs-content" ng-class="{open: currentlyActiveTab != null}">
+            <ion-nav-view name="tabContent" />
+        </div>
     </ion-content>
 </ion-view>

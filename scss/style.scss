@@ -1,18 +1,34 @@
-@mixin radial-gradient($from, $to) {
-  background-image: -moz-radial-gradient(center, circle cover, $from 0%, $to 100%);
-  background-image: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, $from), color-stop(100%, $to));
-  background-image: -webkit-radial-gradient(center, circle cover, $from 0%, $to 100%);
-  background-image: -o-radial-gradient(center, circle cover, $from 0%, $to 100%);
-  background-image: -ms-radial-gradient(center, circle cover, $from 0%, $to 100%);
-  background-image: radial-gradient(center, circle cover, $from 0%, $to 100%);
-}
-
 .row-wrap {
   @include flex-wrap(wrap);
 
   .col > img {
     width: 100%;
   }
+}
+
+.title {
+  color: $gray;
+  font-size: $font-size-small;
+  font-weight: bold;
+}
+
+.list.list-details {
+  .item {
+    > * {
+      @extend .padding;
+    }
+
+    label {
+      @extend .title;
+    }
+  }
+}
+
+img.thumb {
+  max-width: 6em;
+  border: 2px solid white;
+  margin: 5px 0 0 5px;
+  @include box-shadow(0 0 5px black);
 }
 
 ul.chat {
@@ -60,6 +76,10 @@ ul.chat {
 .profile {
   @include display-flex();
   @include flex-direction(column);
+
+  .thumbs {
+    text-align: center;
+  }
 
   > .photos {
     position: relative;
@@ -130,6 +150,7 @@ ul.chat {
   > .tabs-content {
     @include transition(flex-grow 400ms ease-out);
     flex-grow: 0.001;
+    position: static;
 
     &.open {
       flex-grow: 50;

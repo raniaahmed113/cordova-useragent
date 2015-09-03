@@ -59,7 +59,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.users', {
                 url: "/users",
                 views: {
-                    menuContent: {
+                    main: {
                         templateUrl: "templates/users.html",
                         controller: 'UsersCtrl'
                     },
@@ -70,12 +70,52 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 }
             })
 
-            .state('inside.users-single', {
+            .state('inside.user', {
                 url: "/users/:userId",
                 views: {
-                    menuContent: {
+                    main: {
                         templateUrl: "templates/user.html",
                         controller: 'UserCtrl'
+                    }
+                }
+            })
+
+            .state('inside.user.photos', {
+                url: "/photos",
+                views: {
+                    tabContent: {
+                        templateUrl: "templates/user_photos.html",
+                        controller: 'UserPhotosCtrl'
+                    }
+                }
+            })
+
+            .state('inside.user.about', {
+                url: "/about",
+                views: {
+                    tabContent: {
+                        templateUrl: "templates/user_about.html",
+                        controller: 'UserAboutCtrl'
+                    }
+                }
+            })
+
+            .state('inside.user.actions', {
+                url: "/actions",
+                views: {
+                    tabContent: {
+                        templateUrl: "templates/user_actions.html",
+                        controller: 'UserActionsCtrl'
+                    }
+                }
+            })
+
+            .state('inside.user.chat', {
+                url: "/chat",
+                views: {
+                    tabContent: {
+                        templateUrl: "templates/user_chat.html",
+                        controller: 'UserChatCtrl'
                     }
                 }
             })
@@ -83,7 +123,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.conversations', {
                 url: "/conversations",
                 views: {
-                    menuContent: {
+                    main: {
                         templateUrl: "templates/conversations.html",
                         controller: 'ConversationsCtrl'
                     }
@@ -93,7 +133,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.conversations-single', {
                 url: "/conversations/:id",
                 views: {
-                    menuContent: {
+                    main: {
                         templateUrl: "templates/conversation.html",
                         controller: 'ConversationCtrl'
                     }
@@ -103,7 +143,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.guests', {
                 url: "/guests",
                 views: {
-                    menuContent: {
+                    main: {
                         templateUrl: "templates/users.html",
                         controller: 'GuestsCtrl'
                     }
@@ -113,7 +153,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             .state('inside.settings', {
                 url: "/settings",
                 views: {
-                    menuContent: {
+                    main: {
                         templateUrl: "templates/settings.html",
                         controller: 'SettingsCtrl'
                     }
