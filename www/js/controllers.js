@@ -86,7 +86,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, Api, UserList, User, AuthService) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, AuthService, UserList, User) {
         $scope.filter = AuthService.getCurrentUser().filter;
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
@@ -95,7 +95,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         UserList.load(User, $scope, { photoSize: 'w128h129' });
     })
 
-    .controller('UserCtrl', function($window, $rootScope, $scope, $state, $ionicSlideBoxDelegate, $ionicNavViewDelegate, $ionicNavBarDelegate, $ionicHistory, $ionicPlatform, $ionicPopup, User, Request) {
+    .controller('UserCtrl', function($window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request) {
         $scope.user = User.get({
             id: $state.params.userId,
             profile: true,
@@ -168,7 +168,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             // Clicking on the currently-active tab will close the tab
             if (tab == $scope.currentlyActiveTab) {
                 $window.history.back();
-                //$ionicHistory.goBack();
                 return;
             }
 
