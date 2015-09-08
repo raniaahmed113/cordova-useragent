@@ -1,8 +1,4 @@
 <ion-view>
-    <ion-nav-title>{{user.login}}, {{user.cityName}}</ion-nav-title>
-    <ion-nav-buttons side="right">
-        <button class="button" ng-if="currentPhoto.isLocked" ng-click="requestPhotoPermission()"><i class="icon ion-unlocked"></i></button>
-    </ion-nav-buttons>
     <ion-content scroll="false" class="profile">
         <div class="photos">
             <ion-slide-box show-pager="false" on-tap="toggleOverlays()" on-slide-changed="onPhotoChanged($index)">
@@ -11,8 +7,8 @@
                 </ion-slide>
             </ion-slide-box>
 
-            <div class="overlay top" ng-show="showUi">
-
+            <div class="overlay top" ng-show="showUi && user.photos.length > 0 && currentlyActiveTab == null">
+                <i class="icon ion-camera"></i> {{currentPhoto+1}} / {{user.photos.length}}
             </div>
 
             <div class="overlay bottom" ng-show="showUi">

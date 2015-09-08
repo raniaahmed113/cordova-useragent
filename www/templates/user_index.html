@@ -1,0 +1,6 @@
+<ion-view>
+    <ion-nav-title>{{user.login}}, {{user.cityName}}</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button" ng-if="user.photos[currentPhoto].isLocked" ng-click="requestPhotoPermission()"><i class="icon ion-unlocked"></i></button>
+    </ion-nav-buttons>
+</ion-view>

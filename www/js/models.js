@@ -8,6 +8,14 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/guests');
     })
 
+    .factory('Friend', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/friends');
+    })
+
+    .factory('BlockedUser', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/blocks');
+    })
+
     .factory('Conversation', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/conversations/:withUserId', { withUserId: '@id' });
     })

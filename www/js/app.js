@@ -19,7 +19,6 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                         return;
                     }
 
-                    //object = [200, JSON.stringify(object), response.headers(), 'OK'];
                     cache.put(response.config.url + '/' + object.id, object);
                 });
 
@@ -76,6 +75,10 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                     main: {
                         templateUrl: "templates/user.html",
                         controller: 'UserCtrl'
+                    },
+                    'tabContent@inside.user': {
+                        // Dirty hack to make nav bar work properly
+                        templateUrl: "templates/user_index.html"
                     }
                 }
             })
@@ -146,6 +149,26 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                     main: {
                         templateUrl: "templates/users.html",
                         controller: 'GuestsCtrl'
+                    }
+                }
+            })
+
+            .state('inside.friends', {
+                url: "/friends",
+                views: {
+                    main: {
+                        templateUrl: "templates/users.html",
+                        controller: 'FriendsCtrl'
+                    }
+                }
+            })
+
+            .state('inside.blockedUsers', {
+                url: "/blocklist",
+                views: {
+                    main: {
+                        templateUrl: "templates/users.html",
+                        controller: 'BlockedUsersCtrl'
                     }
                 }
             })

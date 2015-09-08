@@ -14,7 +14,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicHistory.clearCache();
         });
 
-        $scope.rightMenuEnabled = $state.current.views.rightMenu;
+        $scope.rightMenuEnabled = $state.current.views.rightMenu ? true : false;
         $scope.$on('$stateChangeStart', function(event, state) {
             $scope.rightMenuEnabled = state.views.rightMenu ? true : false;
         });
@@ -95,9 +95,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         UserList.load(User, $scope, { photoSize: 'w128h129' });
     })
 
-    .controller('UserCtrl', function($scope, $stateParams, $state, $ionicSlideBoxDelegate, $ionicPlatform, $ionicPopup, User, Request) {
+    .controller('UserCtrl', function($window, $rootScope, $scope, $state, $ionicSlideBoxDelegate, $ionicNavViewDelegate, $ionicNavBarDelegate, $ionicHistory, $ionicPlatform, $ionicPopup, User, Request) {
         $scope.user = User.get({
-            id: $stateParams.userId,
+            id: $state.params.userId,
             profile: true,
             photos: true,
             albums: true
@@ -107,16 +107,17 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicSlideBoxDelegate.update();
         });
 
-        $scope.currentPhoto = null;
+        $scope.currentPhoto = 0;
         $scope.onPhotoChanged = function($index) {
-            $scope.currentPhoto = $scope.user.photos[$index];
+            $scope.currentPhoto = $index;
         };
 
-        $scope.prompt = {
-            message: null,
-            errors: {}
-        };
         $scope.requestPhotoPermission = function() {
+            $scope.prompt = {
+                message: null,
+                errors: {}
+            };
+
             $ionicPopup.prompt({
                 title: 'Request unlock photo',
                 subTitle: 'Why should he/she unlock this photo for you?',
@@ -140,9 +141,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 ]
 
             }).then(function(message) {
+                if (!message) {
+                    return;
+                }
+
                 var request = new Request({
                     type: 'file',
-                    nodeId: $scope.currentPhoto.id,
+                    nodeId: $scope.user.photos[$scope.currentPhoto].id,
                     toUserId: $scope.user.id,
                     message: message
                 });
@@ -160,18 +165,30 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         ];
 
         $scope.toggleTab = function(tab) {
-            if (tab != $scope.currentlyActiveTab) {
-                $state.go('inside.user.' + tab, {}, { location: $scope.currentlyActiveTab == null ? true : "replace"});
+            // Clicking on the currently-active tab will close the tab
+            if (tab == $scope.currentlyActiveTab) {
+                $window.history.back();
+                //$ionicHistory.goBack();
+                return;
+            }
+
+            var location;
+            if ($scope.currentlyActiveTab == null) {
+                // Do not animate tab views when opening the tab contents menu
+                $ionicHistory.nextViewOptions({ disableAnimate: true });
+                location = true;
 
             } else {
-                history.back();
+                location = "replace";
             }
+
+            $state.go('inside.user.' + tab, {}, { location: location });
         };
 
         var onStateChanged = function(state) {
             var matches = state.name.match(/^inside.user(?:\.(.*))?$/);
             if (matches) {
-                $scope.currentlyActiveTab = matches[1] ? matches[1] : null;
+                $scope.currentlyActiveTab = matches[1] && matches[1] != 'index' ? matches[1] : null;
             }
         };
 
@@ -186,10 +203,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UserPhotosCtrl', function($scope, $ionicSlideBoxDelegate) {
+    .controller('UserPhotosCtrl', function($window, $scope, $ionicHistory, $ionicSlideBoxDelegate) {
         $scope.switchPhoto = function($index) {
             $ionicSlideBoxDelegate.slide($index);
-            history.back();
+            $window.history.back();
         };
     })
 
@@ -281,6 +298,26 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         UserList.load(Guest, $scope, {}, function(guests) {
             return guests.map(function(data) {
                 return data['guest'];
+            });
+        });
+    })
+
+    .controller('FriendsCtrl', function($scope, Friend, UserList) {
+        $scope.title = 'Friends';
+
+        UserList.load(Friend, $scope, {}, function(friends) {
+            return friends.map(function(data) {
+                return data['friend'];
+            });
+        });
+    })
+
+    .controller('BlockedUsersCtrl', function($scope, BlockedUser, UserList) {
+        $scope.title = 'Block-list';
+
+        UserList.load(BlockedUser, $scope, {}, function(blockedUsers) {
+            return blockedUsers.map(function(data) {
+                return data['blockedUser'];
             });
         });
     })
