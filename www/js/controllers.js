@@ -98,13 +98,17 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     .controller('UserCtrl', function($window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request) {
         $scope.user = User.get({
             id: $state.params.userId,
-            profile: true,
-            photos: true,
-            albums: true
+            include: "profile,galleryAlbums,photos"
         });
+
+        $scope.showUi = false;
+        $scope.toggleOverlays = function() {
+            $scope.showUi = !$scope.showUi;
+        };
 
         $scope.user.$promise.then(function() {
             $ionicSlideBoxDelegate.update();
+            $scope.showUi = true;
         });
 
         $scope.currentPhoto = 0;
@@ -112,7 +116,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.currentPhoto = $index;
         };
 
-        $scope.requestPhotoPermission = function() {
+        $scope.requestPhotoPermission = function($index) {
             $scope.prompt = {
                 message: null,
                 errors: {}
@@ -147,7 +151,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
                 var request = new Request({
                     type: 'file',
-                    nodeId: $scope.user.photos[$scope.currentPhoto].id,
+                    nodeId: $scope.user.photos[$index].id,
                     toUserId: $scope.user.id,
                     message: message
                 });
@@ -195,15 +199,15 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.$on('$stateChangeStart', function(event, state) {
             onStateChanged(state);
         });
-
-        $scope.showUi = true;
-        $scope.toggleOverlays = function() {
-            $scope.showUi = !$scope.showUi;
-        };
     })
 
     .controller('UserPhotosCtrl', function($window, $scope, $ionicHistory, $ionicSlideBoxDelegate) {
         $scope.switchPhoto = function($index) {
+            if ($scope.user.photos[$index].isLocked) {
+                $scope.requestPhotoPermission($index);
+                return;
+            }
+
             $ionicSlideBoxDelegate.slide($index);
             $window.history.back();
         };

@@ -7,20 +7,20 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
 
-        var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
+        /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
 
-        $resourceProvider.defaults.actions.get.cache = cache;
+        $resourceProvider.defaults.actions.get.cache = cache;*/
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
                 response.resource.moreAvailable = (response.headers('X-Limit-MoreAvailable') ? true : false);
 
-                angular.forEach(response.resource, function(object) {
+                /*angular.forEach(response.resource, function(object) {
                     if (!object.id) {
                         return;
                     }
 
                     cache.put(response.config.url + '/' + object.id, object);
-                });
+                });*/
 
                 return response;
             }
