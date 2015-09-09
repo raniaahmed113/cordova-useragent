@@ -1,3 +1,9 @@
+if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function(str) {
+        return this.slice(0, str.length) == str;
+    };
+}
+
 angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
     .service('Api', function($injector) {
@@ -134,10 +140,15 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('HttpInterceptor', function($rootScope, $q, AuthService) {
+    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config) {
         this.request = function(config) {
-            if (AuthService.isUserLoggedIn()) {
+            if (AuthService.isUserLoggedIn() && config.url.startsWith(Config.API_URL_BASE)) {
                 config.headers.Authorization = 'Bearer ' + AuthService.getAccessToken();
+
+                if (!config.headers.DPR) {
+                    config.headers.DPR = $window.devicePixelRatio;
+                    config.headers['Viewport-Width'] = $window.innerWidth;
+                }
             }
 
             return config;
