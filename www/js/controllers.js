@@ -16,7 +16,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.rightMenuEnabled = $state.current.views.rightMenu ? true : false;
         $scope.$on('$stateChangeStart', function(event, state) {
-            $scope.rightMenuEnabled = state.views.rightMenu ? true : false;
+            $scope.rightMenuEnabled = state.views && state.views.rightMenu ? true : false;
         });
 
         $scope.currUser = AuthService.getCurrentUser();
@@ -30,6 +30,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             loginArgs.onLoggedIn = function() {
                 $ionicLoading.hide();
                 $state.go('inside.users');
+                delete $scope.loginData.password;
             };
 
             loginArgs.onError = function(response) {
@@ -205,6 +206,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.switchPhoto = function($index) {
             if ($scope.user.photos[$index].isLocked) {
                 $scope.requestPhotoPermission($index);
+                return;
+            }
+
+            if ($index == $scope.currentPhoto) {
                 return;
             }
 

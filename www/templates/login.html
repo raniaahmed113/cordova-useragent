@@ -14,7 +14,11 @@
                     <input type="password" required ng-model="loginData.password">
                 </label>
                 <label class="item">
-                    <button class="button button-block button-positive" type="submit">Log in</button>
+                    <button type="submit"
+                            class="button button-block button-positive"
+                            ng-disabled="!loginData.username || !loginData.password">
+                        Log in
+                    </button>
                 </label>
             </div>
         </form>
