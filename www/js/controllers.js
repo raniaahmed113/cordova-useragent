@@ -93,7 +93,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicSideMenuDelegate.toggleRight();
         };
 
-        UserList.load(User, $scope, { photoSize: 'w128h129' });
+        UserList.load(User, $scope, { photoSize: 'w80h80' });
     })
 
     .controller('UserCtrl', function($window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request) {
