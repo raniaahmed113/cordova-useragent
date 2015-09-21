@@ -58,55 +58,32 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
     })
 
     .service('AuthService', function($q, $window, $rootScope, Config, Api) {
-        var accessToken,
-            currentUserId;
+        var currentUser;
+
+        this.loadData = function() {
+            var userData = localStorage['currentUser'];
+            currentUser = userData ? JSON.parse(userData) : null;
+        };
 
         /**
          * @returns {string}
          */
         this.getAccessToken = function() {
-            if (accessToken == null) {
-                accessToken = localStorage['accToken'];
-                currentUserId = localStorage['userId'];
-            }
-
-            return accessToken;
-        };
-
-        this.getCurrentUser = function() {
-            // FIXME
-            return {
-                id: currentUserId,
-                login: 'test123',
-                filter: {
-                    lookingFor: ['female'],
-                    age: {
-                        from: 18,
-                        to: 99
-                    },
-                    country: 'LT',
-                    city: 'Vilnius'
-                }
-            };
+            return currentUser ? currentUser.accessToken : null;
         };
 
         /**
-         * @returns {int}
+         * @returns {object}
          */
-        this.getCurrentUserId = function() {
-            if (currentUserId == null) {
-                currentUserId = localStorage['userId'];
-                accessToken = localStorage['accToken'];
-            }
-
-            return currentUserId;
+        this.getCurrentUser = function() {
+            return currentUser;
         };
 
         /**
          * @returns {boolean}
          */
         this.isUserLoggedIn = function() {
-            return this.getAccessToken() != null;
+            return currentUser != null;
         };
 
         this.doLogin = function(args) {
@@ -118,8 +95,10 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
-                    accessToken = localStorage['accToken'] = response['access_token'];
-                    currentUserId = localStorage['userId'] = response['user_id'];
+                    currentUser = response['user'];
+                    currentUser.accessToken = response['access_token'];
+
+                    localStorage['currentUser'] = JSON.stringify(currentUser);
 
                     if (args['onLoggedIn'] && typeof(args['onLoggedIn']) == 'function') {
                         args['onLoggedIn'](response, status, headers, config);
@@ -133,9 +112,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
 
         this.doLogout = function() {
-            accessToken = currentUserId = null;
-            localStorage.removeItem('accToken');
-            localStorage.removeItem('userId');
+            currentUser = null;
+            localStorage.removeItem('currentUser');
             $rootScope.$broadcast('loggedOut');
         };
     })

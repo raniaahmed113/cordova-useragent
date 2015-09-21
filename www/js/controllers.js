@@ -257,7 +257,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.msgText = '';
-        $scope.currUserId = AuthService.getCurrentUserId();
+        $scope.currUserId = AuthService.getCurrentUser().id;
         $scope.conversation = Conversation.get(params); // FIXME: get from cache
         $scope.messages = Message.query(params, function() {
             $ionicScrollDelegate.scrollBottom(true);

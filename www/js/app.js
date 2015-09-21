@@ -184,7 +184,9 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
             });
     })
 
-    .run(function($ionicPlatform) {
+    .run(function($ionicPlatform, AuthService) {
+        AuthService.loadData();
+
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
             if (window.cordova && window.cordova.plugins.Keyboard) {
