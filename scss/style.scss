@@ -64,11 +64,24 @@ ul.chat {
 
 .bar-main-nav {
   > a {
+    width: 100%;
     color: white;
+    text-decoration: initial;
+    position: relative;
 
     > img {
       width: 32px;
       height: 32px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    > i {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      margin-right: 5px;
     }
   }
 }
