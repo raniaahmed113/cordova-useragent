@@ -228,7 +228,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation) {
         $scope.conversations = Conversation.query();
-        $scope.deleteItem = function(index) {
+        $scope.deleteItem = function(item) {
+            var index = $scope.conversations.indexOf(item);
             $scope.conversations[index].$delete();
             $scope.conversations.splice(index, 1);
         };
