@@ -181,6 +181,47 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                         controller: 'SettingsCtrl'
                     }
                 }
+            })
+
+            .state('inside.quickie', {
+                abstract: true,
+                views: {
+                    main: {
+                        templateUrl: "templates/quickie.html",
+                        controller: 'QuickieCtrl'
+                    }
+                }
+            })
+
+            .state('inside.quickie.swipe', {
+                url: "/quickie",
+                views: {
+                    quickieSwipe: {
+                        templateUrl: "templates/quickie_swipe.html",
+                        controller: 'QuickieSwipeCtrl'
+                    }
+                }
+            })
+
+            .state('inside.quickie.listSaidYes', {
+                url: "/quickie/saidYes",
+                views: {
+                    quickieSaidYes: {
+                        templateUrl: "templates/quickie_list.html",
+                        controller: 'QuickieYesCtrl'
+                    }
+                }
+            })
+
+            .state('inside.quickie.listMatches', {
+                url: "/quickie/matches",
+                views: {
+                    quickieMatches: {
+                        templateUrl: "templates/quickie_list.html",
+                        controller: 'QuickieMatchesCtrl'
+                    }
+                }
+            })
             });
     })
 

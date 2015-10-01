@@ -1,3 +1,41 @@
+td-cards {
+  margin: 15px;
+  position: relative;
+  height: 100%;
+}
+
+td-card {
+  position: absolute;
+
+  img {
+    @include border-radius(15px);
+  }
+}
+
+.quickie-yes, .quickie-no {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  font-size: 2em;
+  font-weight: bold;
+  margin: 10px;
+  padding: 5px 15px;
+  border: 5px solid;
+  @include border-radius(15px);
+}
+
+.quickie-yes {
+  color: $balanced;
+  border-color: $balanced;
+  right: 0;
+}
+
+.quickie-no {
+  color: $assertive;
+  border-color: $assertive;
+  left: 0;
+}
+
 .row-wrap {
   @include flex-wrap(wrap);
 

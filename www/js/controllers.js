@@ -333,4 +333,55 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('SettingsCtrl', function($scope) {
         // TODO: implement
+    })
+
+    .controller('QuickieCtrl', function($scope, $ionicHistory, $state) {
+        $scope.vipRequired = false;
+
+        $scope.$on('vipRequired', function() {
+            $scope.vipRequired = true;
+            var currView = $ionicHistory.currentView();
+            console.log(currView, $state);
+        });
+    })
+
+    .controller('QuickieSwipeCtrl', function($scope, User, QuickieVote) {
+        $scope.users = User.query({
+            notVotedInQuickie: true,
+            photoSize: 'w330h330'
+        });
+
+        $scope.cardPos = 0;
+        $scope.onCardMove = function(progress) {
+            $scope.cardPos = progress;
+        };
+
+        $scope.onCardDestroyed = function($index) {
+            var user = $scope.users.splice($index, 1)[0];
+            var quickieVote = new QuickieVote({
+                voteForUserId: user.id,
+                vote: $scope.cardPos > 0 ? 'yes' : 'no'
+            });
+
+            $scope.cardPos = 0;
+            quickieVote.$save();
+        };
+    })
+
+    .controller('QuickieYesCtrl', function($scope, $state, QuickieVote) {
+        $scope.title = 'Wants to meet me';
+        $scope.votes = QuickieVote.query({
+            votedYesForMe: true,
+            include: 'voter.profilePhoto.url(size=w80h80)'
+        });
+    })
+
+    .controller('QuickieMatchesCtrl', function($scope, QuickieVote) {
+        $scope.title = 'My matches';
+        $scope.votes = QuickieVote.query({
+            votedYesForMe: true,
+            matched: true,
+            include: 'voter.profilePhoto.url(size=w80h80)'
+        });
+    })
     });
