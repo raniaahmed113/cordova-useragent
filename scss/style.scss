@@ -96,6 +96,17 @@ ul.chat {
   }
 }
 
+.item-notification .icon {
+  font-size: 2em;
+  float: left;
+  margin-right: 10px;
+  @extend .ion-person;
+}
+
+.item-notification.notification-commentWallPost .icon {
+  @extend .ion-reply;
+}
+
 .item-conversation .ion-reply {
   margin-right: 5px;
 }

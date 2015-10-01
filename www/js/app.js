@@ -222,6 +222,15 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                     }
                 }
             })
+
+            .state('inside.notifications', {
+                url: "/notifications",
+                views: {
+                    main: {
+                        templateUrl: "templates/notifications.html",
+                        controller: 'NotificationsCtrl'
+                    }
+                }
             });
     })
 

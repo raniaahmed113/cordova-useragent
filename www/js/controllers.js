@@ -384,4 +384,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             include: 'voter.profilePhoto.url(size=w80h80)'
         });
     })
+
+    .controller('NotificationsCtrl', function($scope, Notification) {
+        $scope.notifications = Notification.query();
+        $scope.loadMore = function() {
+            // TODO
+        };
     });

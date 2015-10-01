@@ -30,4 +30,27 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('Request', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/requests');
+    })
+
+    .factory('Notification', function($resource, Config) {
+        var model = $resource(Config.API_URL_BASE + 'me/notifications');
+
+        model.prototype.getBody = function() {
+            switch (this.type) {
+                case 'commentWallPost':
+                    return this.sender.login + ' has commented on your wall post.';
+
+                case 'addGift':
+                    return 'You have received a gift from ' + this.sender.login;
+
+                case 'friendAccept':
+                    return '<a href="#/users/' + this.sender.id + '">' + this.sender.login + '</a>' +
+                        ' has accepted your friendship request.';
+
+                default:
+                    return '...';
+            }
+        };
+
+        return model;
     });
