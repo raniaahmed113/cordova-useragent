@@ -66,13 +66,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
 
         /**
-         * @returns {string}
-         */
-        this.getAccessToken = function() {
-            return currentUser ? currentUser.accessToken : null;
-        };
-
-        /**
          * @returns {object}
          */
         this.getCurrentUser = function() {
@@ -118,14 +111,18 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config) {
+    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config, Error) {
         this.request = function(config) {
-            if (AuthService.isUserLoggedIn() && config.url.startsWith(Config.API_URL_BASE)) {
-                config.headers.Authorization = 'Bearer ' + AuthService.getAccessToken();
+            if (config.url.startsWith(Config.API_URL_BASE)) {
+                var currentUser = AuthService.getCurrentUser();
 
-                if (!config.headers.DPR) {
-                    config.headers.DPR = $window.devicePixelRatio;
-                    config.headers['Viewport-Width'] = $window.innerWidth;
+                if (currentUser != null) {
+                    config.headers.Authorization = 'Bearer ' + currentUser.accessToken;
+
+                    if (!config.headers.DPR) {
+                        config.headers.DPR = $window.devicePixelRatio;
+                        config.headers['Viewport-Width'] = $window.innerWidth;
+                    }
                 }
             }
 
@@ -133,8 +130,23 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
 
         this.responseError = function(response) {
-            if (response.status === 401 /* Unauthorized */) {
-                $rootScope.$broadcast('authTokenExpired');
+            switch (response.status) {
+                case 401: // Unauthorized
+                    $rootScope.$broadcast('authTokenExpired');
+                    break;
+
+                case 402: // Payment Required
+                    switch (response.data.code) {
+                        case Error.NOT_ENOUGH_CREDITS:
+                            $rootScope.$broadcast('notEnoughCredits');
+                            break;
+
+                        case Error.VIP_REQUIRED:
+                            $rootScope.$broadcast('vipRequired');
+                            break;
+                    }
+
+                    break;
             }
 
             return $q.reject(response);

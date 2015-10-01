@@ -52,12 +52,15 @@ td-card {
 
 .list.list-details {
   .item {
-    > * {
-      @extend .padding;
-    }
-
     label {
       @extend .title;
+      @extend .input-label;
+    }
+
+    > span {
+      flex: 1;
+      padding-right: 5px;
+      white-space: normal;
     }
   }
 }
@@ -66,6 +69,7 @@ img.thumb {
   max-width: 6em;
   border: 2px solid white;
   margin: 5px 0 0 5px;
+  vertical-align: top;
   @include box-shadow(0 0 5px black);
 }
 
@@ -136,18 +140,24 @@ ul.chat {
 }
 
 .profile {
+  @include transition(0.25s ease-out all);
   @include display-flex();
   @include flex-direction(column);
+  overflow: visible;
+
+  &.tabs-open {
+    @include translate3d(0, -90%, 0);
+  }
 
   .thumbs {
     text-align: center;
   }
 
-  > #photos {
+  > .photos {
+    height: 100%;
     position: relative;
     background-color: #656D7D;
     @include radial-gradient(#656D7D, #1B1D24);
-    @include flex(1, 0, auto);
 
     .slider {
       position: absolute;
@@ -158,11 +168,11 @@ ul.chat {
 
       .slider-slides {
         .slider-slide {
+          @include display-flex();
+          @include justify-content(center);
+          @include align-items(center);
+
           > img {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
             max-width: 100%;
             max-height: 100%;
           }
@@ -196,28 +206,20 @@ ul.chat {
       .about {
         overflow: hidden;
         text-overflow: ellipsis;
-        display: -webkit-box;
-        display: box;
-        -webkit-line-clamp: 3;
-        line-clamp: 3;
-        -webkit-box-orient: vertical;
-        box-orient: vertical;
+        @include line-clamp(3);
+        @include display-box();
+        @include box-orient(vertical);
       }
     }
   }
 
-  > .tabs {
+  .tabs {
     position: static;
-    @include flex(0, 0, auto);
+    top: auto;
+    @include flex(1, 0, auto);
   }
 
   > .tabs-content {
-    @include transition(flex-grow 400ms ease-out);
-    flex-grow: 0.001;
-    position: static;
-
-    &.open {
-      flex-grow: 50;
-    }
+    height: 90%;
   }
 }

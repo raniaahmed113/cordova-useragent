@@ -1,13 +1,13 @@
 <ion-view>
-    <ion-content scroll="false" class="profile">
-        <div id="photos">
+    <ion-content scroll="false" class="profile" ng-class="{'tabs-open': currentlyActiveTab != null}">
+        <div class="photos">
             <ion-slide-box show-pager="false" on-tap="toggleOverlays()" on-slide-changed="onPhotoChanged($index)">
                 <ion-slide ng-repeat="photo in user.photos">
                     <img ng-src="{{photo.url}}"/>
                 </ion-slide>
             </ion-slide-box>
 
-            <div class="overlay top" ng-show="showUi && currentlyActiveTab == null">
+            <div class="overlay top" ng-show="showUi">
                 <i class="icon ion-camera"></i> {{currentPhoto+1}} / {{user.photos.length}}
             </div>
 
@@ -23,8 +23,6 @@
             </a>
         </div>
 
-        <div class="tabs-content" ng-class="{open: currentlyActiveTab != null}">
-            <ion-nav-view name="tabContent" ></ion-nav-view>
-        </div>
+        <ion-nav-view name="tabContent" class="tabs-content"></ion-nav-view>
     </ion-content>
 </ion-view>

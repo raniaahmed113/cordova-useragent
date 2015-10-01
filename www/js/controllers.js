@@ -93,13 +93,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicSideMenuDelegate.toggleRight();
         };
 
-        UserList.load(User, $scope, { photoSize: 'w80h80' });
+        UserList.load(User, $scope, { photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */ });
     })
 
     .controller('UserCtrl', function($window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request) {
         $scope.user = User.get({
             id: $state.params.userId,
-            include: "profile,galleryAlbums,photos"
+            include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0)"
         });
 
         $scope.showUi = false;
@@ -172,6 +172,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.toggleTab = function(tab) {
             // Clicking on the currently-active tab will close the tab
             if (tab == $scope.currentlyActiveTab) {
+                // FIXME: check, if there's nowhere to go back -> create new state
                 $window.history.back();
                 return;
             }
@@ -218,11 +219,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UserAboutCtrl', function($scope, $stateParams) {
+    .controller('UserAboutCtrl', function($scope) {
 
     })
 
-    .controller('UserActionsCtrl', function($scope, $stateParams) {
+    .controller('UserActionsCtrl', function($scope) {
 
     })
 
@@ -304,7 +305,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     .controller('GuestsCtrl', function($scope, Guest, UserList) {
         $scope.title = 'Guests';
 
-        UserList.load(Guest, $scope, {}, function(guests) {
+        UserList.load(Guest, $scope, { include: 'guest.profilePhoto.url(size=w80h80)' }, function(guests) {
             return guests.map(function(data) {
                 return data['guest'];
             });
@@ -314,7 +315,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     .controller('FriendsCtrl', function($scope, Friend, UserList) {
         $scope.title = 'Friends';
 
-        UserList.load(Friend, $scope, {}, function(friends) {
+        UserList.load(Friend, $scope, { include: 'friend.profilePhoto.url(size=w80h80)' }, function(friends) {
             return friends.map(function(data) {
                 return data['friend'];
             });
@@ -324,7 +325,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     .controller('BlockedUsersCtrl', function($scope, BlockedUser, UserList) {
         $scope.title = 'Block-list';
 
-        UserList.load(BlockedUser, $scope, {}, function(blockedUsers) {
+        UserList.load(BlockedUser, $scope, { include: 'blockedUser.profilePhoto.url(size=w80h80)' }, function(blockedUsers) {
             return blockedUsers.map(function(data) {
                 return data['blockedUser'];
             });

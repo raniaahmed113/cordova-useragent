@@ -1,4 +1,9 @@
-angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'ion-autocomplete', 'angularMoment'])
+angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives', 'ion-autocomplete', 'angularMoment', 'ionic.contrib.ui.tinderCards'])
+
+    .constant('Error', {
+        NOT_ENOUGH_CREDITS: 101,
+        VIP_REQUIRED: 102
+    })
 
     .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider, $cacheFactoryProvider) {
         // Setup default URL
@@ -243,6 +248,11 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             }
 
+            // TODO:
+            /*$ionicPlatform.on('offline', function() {
+
+            });*/
+
             if (window.StatusBar) {
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
@@ -253,6 +263,20 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
     .filter('capitalizeFirst', function () {
         return function(input) {
             return input[0].toUpperCase() + input.substring(1);
+        }
+    })
+
+    .filter('concat', function () {
+        return function(inputArray, separator) {
+            if (!inputArray) {
+                return '';
+            }
+
+            if (!separator) {
+                separator = ', ';
+            }
+
+            return inputArray.join(separator);
         }
     })
 

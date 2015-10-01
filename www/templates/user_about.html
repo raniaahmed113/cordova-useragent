@@ -1,9 +1,71 @@
 <ion-view>
     <ion-nav-title>About &laquo; {{user.login}}</ion-nav-title>
-    <div class="list list-inset list-details">
-        <div class="item">
-            <label>Searching for</label>
-            <span>{{user.login}}</span>
+    <ion-content>
+        <div class="list list-inset list-details">
+            <div class="item item-divider">
+                {{user.login}}
+            </div>
+
+            <div class="item item-input">
+                <label>About</label>
+                <span class="item-note">{{user.profile.about}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Looking for</label>
+                <span>{{user.profile.lookingFor | concat}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Ideal partner</label>
+                <span>{{user.profile.idealPartner}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Height</label>
+                <span>{{user.profile.height}}cm</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Marital status</label>
+                <span>{{user.profile.maritalStatus[0]}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Purpose</label>
+                <span>{{user.profile.purpose | concat}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Languages</label>
+                <span>{{user.profile.languages | concat}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Drinks?</label>
+                <span>{{user.profile.doesDrink}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Smokes?</label>
+                <span>{{user.profile.doesSmoke}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Lives with</label>
+                <span>{{user.profile.livesWith}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Education</label>
+                <span>{{user.profile.education}}</span>
+            </div>
+
+            <div class="item item-input">
+                <label>Employment</label>
+                <span>{{user.profile.employment}}</span>
+                <span ng-if="user.profile.employmentIndustry">, {{user.profile.employmentIndustry}}</span>
+            </div>
         </div>
-    </div>
+    </ion-content>
 </ion-view>
