@@ -13,11 +13,12 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
         $httpProvider.interceptors.push('HttpInterceptor');
 
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
-
         $resourceProvider.defaults.actions.get.cache = cache;*/
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
-                response.resource.moreAvailable = (response.headers('X-Limit-MoreAvailable') ? true : false);
+                response.resource.$metadata = {
+                    moreAvailable: (response.headers('X-Limit-MoreAvailable') ? true : false)
+                };
 
                 /*angular.forEach(response.resource, function(object) {
                     if (!object.id) {
@@ -193,7 +194,6 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 views: {
                     main: {
                         templateUrl: "templates/quickie.html",
-                        controller: 'QuickieCtrl'
                     }
                 }
             })

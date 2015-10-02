@@ -1,6 +1,6 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function($scope, $state, $ionicHistory, AuthService) {
+    .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, AuthService) {
         $scope.logout = function() {
             AuthService.doLogout();
         };
@@ -20,6 +20,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
 
         $scope.currUser = AuthService.getCurrentUser();
+
+        /*$scope.$on('vipRequired', function(event, state) {
+            $ionicPopup.alert({
+                title: 'VIP only',
+                template: 'VIP status is required here.'
+            });
+        });*/
     })
 
     .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
@@ -37,7 +44,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $ionicLoading.hide();
                 $ionicPopup.alert({
                     title: 'Houston, we have problems',
-                    template: response && response.message ? response.message : 'Something unexpected happened. Please try again.'
+                    template: response && response.message
+                        ? response.message
+                        : 'Something unexpected happened. Please try again.'
                 });
             };
 
@@ -87,16 +96,36 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, AuthService, UserList, User) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, AuthService, User) {
         $scope.filter = AuthService.getCurrentUser().filter;
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
 
-        UserList.load(User, $scope, { photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */ });
+        var loadUsers = function() {
+            var params = {
+                photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */
+            };
+
+            if ($scope.filter) {
+                params = angular.extend(params, $scope.filter);
+            }
+
+            $scope.users = User.query(params);
+        };
+
+        $scope.$on('users.filterChanged', function(event, filter) {
+            $ionicScrollDelegate.scrollTop(true);
+            $scope.filter = filter;
+            loadUsers();
+        });
+
+        loadUsers();
     })
 
-    .controller('UserCtrl', function($window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request) {
+    .controller('UserCtrl', function(
+        $window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request
+    ) {
         $scope.user = User.get({
             id: $state.params.userId,
             include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0)"
@@ -252,7 +281,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
     })
 
-    .controller('ConversationCtrl', function($scope, $rootScope, $stateParams, $ionicScrollDelegate, Conversation, Message, AuthService) {
+    .controller('ConversationCtrl', function(
+        $scope, $rootScope, $stateParams, $ionicScrollDelegate,
+        Conversation, Message, AuthService
+    ) {
         var params = {
             withUserId: $stateParams.id
         };
@@ -298,52 +330,27 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             delete $scope.messages[messageIndex].error;
 
-            // TODO: resend
+            // FIXME: do resend
         }
     })
 
-    .controller('GuestsCtrl', function($scope, Guest, UserList) {
+    .controller('GuestsCtrl', function($scope, Guest) {
         $scope.title = 'Guests';
-
-        UserList.load(Guest, $scope, { include: 'guest.profilePhoto.url(size=w80h80)' }, function(guests) {
-            return guests.map(function(data) {
-                return data['guest'];
-            });
-        });
+        $scope.users = Guest.query({ include: 'guest.profilePhoto.url(size=w80h80)' });
     })
 
-    .controller('FriendsCtrl', function($scope, Friend, UserList) {
+    .controller('FriendsCtrl', function($scope, Friend) {
         $scope.title = 'Friends';
-
-        UserList.load(Friend, $scope, { include: 'friend.profilePhoto.url(size=w80h80)' }, function(friends) {
-            return friends.map(function(data) {
-                return data['friend'];
-            });
-        });
+        $scope.users = Friend.query({ include: 'friend.profilePhoto.url(size=w80h80)' });
     })
 
-    .controller('BlockedUsersCtrl', function($scope, BlockedUser, UserList) {
+    .controller('BlockedUsersCtrl', function($scope, BlockedUser) {
         $scope.title = 'Block-list';
-
-        UserList.load(BlockedUser, $scope, { include: 'blockedUser.profilePhoto.url(size=w80h80)' }, function(blockedUsers) {
-            return blockedUsers.map(function(data) {
-                return data['blockedUser'];
-            });
-        });
+        $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
     })
 
     .controller('SettingsCtrl', function($scope) {
         // TODO: implement
-    })
-
-    .controller('QuickieCtrl', function($scope, $ionicHistory, $state) {
-        $scope.vipRequired = false;
-
-        $scope.$on('vipRequired', function() {
-            $scope.vipRequired = true;
-            var currView = $ionicHistory.currentView();
-            console.log(currView, $state);
-        });
     })
 
     .controller('QuickieSwipeCtrl', function($scope, User, QuickieVote) {

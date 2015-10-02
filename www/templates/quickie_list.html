@@ -1,12 +1,13 @@
 <ion-view  view-title="{{title}}">
     <ion-content>
-        <ion-list>
-            <ion-item ng-repeat="vote in votes" class="item-avatar">
-                <img ng-src="{{vote.voter.profilePhoto | profilePhotoUrl:vote.voter.gender}}">
-                <h2>{{vote.voter.login}}</h2>
-                <p>...</p>
-            </ion-item>
-        </ion-list>
-        <msg-only-for-vip ng-if="vipRequired"></msg-only-for-vip>
+        <resource-collection list="votes">
+            <ion-list>
+                <ion-item ng-repeat="vote in votes" class="item-avatar">
+                    <img ng-src="{{vote.voter.profilePhoto | profilePhotoUrl:vote.voter.gender}}">
+                    <h2>{{vote.voter.login}}</h2>
+                    <p>...</p>
+                </ion-item>
+            </ion-list>
+        </resource-collection>
     </ion-content>
 </ion-view>

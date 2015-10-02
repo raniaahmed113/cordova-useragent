@@ -3,15 +3,12 @@
         <button class="button" ng-if="filter" ng-click="showFilter()"><i class="icon ion-search"></i></button>
     </ion-nav-buttons>
     <ion-content>
-        <div class="row row-wrap">
-            <a ng-repeat="user in users" href="#/users/{{user.id}}" class="user col col-25">
-                <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
-            </a>
-        </div>
-        <ion-infinite-scroll
-                ng-if="users.moreAvailable"
-                on-infinite="loadMore()"
-                distance="1%">
-        </ion-infinite-scroll>
+        <resource-collection list="users">
+            <div class="row row-wrap">
+                <a ng-repeat="user in users" href="#/users/{{user.id}}" class="user col col-25">
+                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
+                </a>
+            </div>
+        </resource-collection>
     </ion-content>
 </ion-view>

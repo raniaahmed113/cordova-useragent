@@ -1,0 +1,5 @@
+<div ng-transclude></div>
+<ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
+<div class="overlay-error" ng-if="error">
+    <h1>Error!</h1>
+</div>
