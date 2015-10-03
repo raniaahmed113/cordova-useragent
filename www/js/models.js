@@ -1,7 +1,24 @@
 angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('User', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:id', { id: '@id' });
+        var User = $resource(Config.API_URL_BASE + 'users/:id', { id: '@id' });
+
+        User.loadFromJson = function(jsonString) {
+            return User.valueOf(JSON.parse(jsonString));
+        };
+
+        User.valueOf = function(data) {
+            if (!data.id) {
+                throw "Invalid data provided";
+            }
+
+            var output = new User({ id: data.id });
+            angular.extend(output, data);
+            console.log(output);
+            return output;
+        };
+
+        return User;
     })
 
     .factory('QuickieVote', function($resource, Config) {

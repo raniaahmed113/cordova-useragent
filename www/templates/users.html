@@ -1,6 +1,6 @@
 <ion-view view-title="{{title || 'People'}}">
     <ion-nav-buttons side="right">
-        <button class="button" ng-if="filter" ng-click="showFilter()"><i class="icon ion-search"></i></button>
+        <button class="button" ng-if="showFilter" ng-click="showFilter()"><i class="icon ion-search"></i></button>
     </ion-nav-buttons>
     <ion-content>
         <resource-collection list="users">

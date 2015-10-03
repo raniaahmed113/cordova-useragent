@@ -57,12 +57,14 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         }
     })
 
-    .service('AuthService', function($q, $window, $rootScope, Config, Api) {
-        var currentUser;
+    .service('AuthService', function($q, $window, $rootScope, $injector, Config, Api) {
+        var currentUser = null;
 
         this.loadData = function() {
             var userData = localStorage['currentUser'];
-            currentUser = userData ? JSON.parse(userData) : null;
+            if (userData) {
+                currentUser = $injector.get('User').loadFromJson(userData);
+            }
         };
 
         /**
@@ -88,7 +90,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
-                    currentUser = response['user'];
+                    currentUser = $injector.get('User').valueOf(response['user']);
                     currentUser.accessToken = response['access_token'];
 
                     localStorage['currentUser'] = JSON.stringify(currentUser);

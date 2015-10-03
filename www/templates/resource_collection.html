@@ -3,3 +3,6 @@
 <div class="overlay-error" ng-if="error">
     <h1>Error!</h1>
 </div>
+<div class="overlay-empty" ng-if="!error && !list.$promise.$$state.pending && list.length < 1">
+    <h1>Nothing here</h1>
+</div>

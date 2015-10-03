@@ -1,15 +1,12 @@
 <ion-view title="Notifications">
     <ion-content>
-        <ion-list>
-            <ion-item ng-repeat="notification in notifications" class="item-notification" ng-class="'notification-' + notification.type">
-                <i class="icon"></i>
-                <p>{{notification.getBody()}}</p>
-            </ion-item>
-        </ion-list>
-        <ion-infinite-scroll
-                ng-if="notifications.moreAvailable"
-                on-infinite="loadMore()"
-                distance="1%">
-        </ion-infinite-scroll>
+        <resource-collection list="notifications">
+            <ion-list>
+                <ion-item ng-repeat="notification in notifications" class="item-notification" ng-class="'notification-' + notification.type">
+                    <i class="icon"></i>
+                    <p>{{notification.getBody()}}</p>
+                </ion-item>
+            </ion-list>
+        </resource-collection>
     </ion-content>
 </ion-view>

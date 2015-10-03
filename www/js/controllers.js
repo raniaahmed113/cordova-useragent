@@ -56,7 +56,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('UsersFilterCtrl', function($scope, $rootScope, AuthService) {
-        $scope.filter = AuthService.getCurrentUser().filter;
+        $scope.filter = AuthService.getCurrentUser().filter || {};
         $scope.$watch('filter', function(filter, oldFilter) {
             if (filter === oldFilter) {
                 // Called due to initialization - ignore
@@ -64,7 +64,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             }
 
             $rootScope.$broadcast('users.filterChanged', filter);
-            //AuthService.getCurrentUser().saveFilter(filter); // TODO
+
+            var currentUser = AuthService.getCurrentUser();
+            currentUser.filter = filter;
+            currentUser.$save(); // FIXME: save to localStorage as well
 
         }, true);
 
@@ -85,7 +88,15 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.ages = range(18, 99);
         $scope.lookingFor = ['male', 'female'];
         $scope.toggleSelection = function toggleSelection(type) {
-            var idx = $scope.filter.lookingFor.indexOf(type);
+            var idx;
+
+            if (!$scope.filter.lookingFor) {
+                idx = -1;
+                $scope.filter.lookingFor = [];
+
+            } else {
+                idx = $scope.filter.lookingFor.indexOf(type);
+            }
 
             if (idx > -1) {
                 $scope.filter.lookingFor.splice(idx, 1);
@@ -96,7 +107,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, AuthService, User) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, AuthService, User) {
         $scope.filter = AuthService.getCurrentUser().filter;
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
@@ -201,22 +212,28 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.toggleTab = function(tab) {
             // Clicking on the currently-active tab will close the tab
             if (tab == $scope.currentlyActiveTab) {
-                // FIXME: check, if there's nowhere to go back -> create new state
-                $window.history.back();
+                var viewHistory = $ionicHistory.viewHistory();
+                if (viewHistory.backView === null) {
+                    $state.go('inside.user', {}, { location: 'replace' });
+
+                } else {
+                    $window.history.back();
+                }
+
                 return;
             }
 
-            var location;
+            var transitionParams;
             if ($scope.currentlyActiveTab == null) {
                 // Do not animate tab views when opening the tab contents menu
                 $ionicHistory.nextViewOptions({ disableAnimate: true });
-                location = true;
+                transitionParams = { location: true };
 
             } else {
-                location = "replace";
+                transitionParams = { location: 'replace', disableBack: true }; // FIXME: disableBlack does not work as expected
             }
 
-            $state.go('inside.user.' + tab, {}, { location: location });
+            $state.go('inside.user.' + tab, {}, transitionParams);
         };
 
         var onStateChanged = function(state) {

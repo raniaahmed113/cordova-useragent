@@ -14,7 +14,7 @@ angular.module('hotvibes.directives', [])
 
                 var config;
                 var onError = function(error) {
-                    console.error('error!', error);
+                    console.error('error!', error); // FIXME
                     $scope.error = true;
                 };
 
@@ -61,7 +61,6 @@ angular.module('hotvibes.directives', [])
                     $scope.currPage++;
                     fetch();
                 };
-
             }
         };
     });
