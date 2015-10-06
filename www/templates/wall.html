@@ -1,0 +1,37 @@
+<ion-view title="Wall">
+    <ion-content>
+        <resource-collection list="posts">
+            <div class="list card" ng-repeat="post in posts">
+                <div class="item item-avatar">
+                    <img ng-src="{{post.author.profilePhoto | profilePhotoUrl:post.author.gender}}">
+                    <h2>{{post.author.login}}</h2>
+                    <p>{{post.created}}</p>
+                </div>
+
+                <div class="item item-body">
+                    <!--<img class="full-image" src="delorean.jpg">-->
+                    <p>{{post.body}}</p>
+                    <p>
+                        <a href="#" class="subdued">{{post.cntLikes}} Like</a>
+                        <a href="#" class="subdued">{{post.cntComments}} Comments</a>
+                    </p>
+                </div>
+
+                <div class="item tabs tabs-secondary tabs-icon-left">
+                    <a class="tab-item" href="#">
+                        <i class="icon ion-thumbsup"></i>
+                        Like
+                    </a>
+                    <a class="tab-item" href="#">
+                        <i class="icon ion-chatbox"></i>
+                        Comment
+                    </a>
+                    <a class="tab-item" href="#">
+                        <i class="icon ion-share"></i>
+                        Share
+                    </a>
+                </div>
+            </div>
+        </resource-collection>
+    </ion-content>
+</ion-view>

@@ -179,6 +179,16 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 }
             })
 
+            .state('inside.wall', {
+                url: "/wall",
+                views: {
+                    main: {
+                        templateUrl: "templates/wall.html",
+                        controller: 'WallCtrl'
+                    }
+                }
+            })
+
             .state('inside.settings', {
                 url: "/settings",
                 views: {

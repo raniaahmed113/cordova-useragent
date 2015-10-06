@@ -412,7 +412,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('NotificationsCtrl', function($scope, Notification) {
         $scope.notifications = Notification.query();
-        $scope.loadMore = function() {
-            // TODO
-        };
+    })
+
+    .controller('WallCtrl', function($scope, ChatRoomPost) {
+        $scope.posts = ChatRoomPost.query({
+            roomId: 1,
+            include: 'author.profilePhoto.url(size=w80h80)'
+        });
     });
