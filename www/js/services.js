@@ -60,7 +60,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
     .service('AuthService', function($q, $window, $rootScope, $injector, Config, Api) {
         var currentUser = null;
 
-        this.loadData = function() {
+        this.init = function() {
             var userData = localStorage['currentUser'];
             if (userData) {
                 currentUser = $injector.get('User').loadFromJson(userData);

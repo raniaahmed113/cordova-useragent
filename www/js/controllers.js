@@ -366,8 +366,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
     })
 
-    .controller('SettingsCtrl', function($scope) {
-        // TODO: implement
+    .controller('SettingsCtrl', function($scope, AuthService) {
+        $scope.currentUser = AuthService.getCurrentUser();
     })
 
     .controller('QuickieSwipeCtrl', function($scope, User, QuickieVote) {

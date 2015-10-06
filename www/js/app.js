@@ -5,7 +5,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
         VIP_REQUIRED: 102
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider, $cacheFactoryProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
@@ -250,7 +250,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
     })
 
     .run(function($ionicPlatform, AuthService) {
-        AuthService.loadData();
+        AuthService.init();
 
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
