@@ -414,9 +414,67 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.notifications = Notification.query();
     })
 
-    .controller('WallCtrl', function($scope, ChatRoomPost) {
+    .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, ChatRoomPost, AuthService) {
         $scope.posts = ChatRoomPost.query({
-            roomId: 1,
+            roomId: $stateParams.id,
             include: 'author.profilePhoto.url(size=w80h80)'
         });
+
+        $ionicModal
+            .fromTemplateUrl('templates/chat_room_post_new.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.modal = modal;
+                $scope.modal.newPost = {};
+            });
+
+        $scope.openPostComposer = function() {
+            $scope.modal.show();
+        };
+
+        $scope.closePostComposer = function() {
+            $scope.modal.hide();
+        };
+
+        $scope.submitPost = function() {
+            // Reset errors
+            $scope.errors = {};
+
+            var post = new ChatRoomPost();
+            post.body = $scope.modal.newPost.text;
+
+            $ionicLoading.show();
+            post.$save({ roomId: $stateParams.id }, function() {
+                // Success
+                $ionicLoading.hide();
+
+                post.created = Math.round(Date.now() / 1000);
+                post.author = AuthService.getCurrentUser();
+                $scope.posts.unshift(post);
+
+                $scope.modal.newPost = {};
+                $scope.closePostComposer();
+
+            }, function(response) {
+                // Error
+                $ionicLoading.hide();
+
+                if (
+                    response.status == 400 /* Bad Request*/
+                    && response.data.field
+                ) {
+                    $scope.errors[response.data.field] = response.data.message;
+
+                } else {
+                    $ionicPopup.alert({
+                        title: 'Houston, we have problems',
+                        template: response && response.data && response.data.message
+                            ? response.data.message
+                            : 'Something unexpected happened. Please try again.'
+                    });
+                }
+            });
+        };
     });

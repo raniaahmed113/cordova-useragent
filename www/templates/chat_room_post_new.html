@@ -1,0 +1,28 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-dark">
+        <h1 class="title">Write new post</h1>
+        <div class="buttons">
+            <button class="button" ng-click="closePostComposer()"><i class="icon ion-android-close"></i></button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <form class="list" ng-submit="submitPost()">
+            <label class="item item-input item-floating-label">
+                <span class="input-label">Text</span>
+                <textarea ng-model="modal.newPost.text" placeholder="Text" required></textarea>
+            </label>
+
+            <div class="item item-toggle">
+                Only friends can see this post
+                <label class="toggle toggle-positive">
+                    <input type="checkbox" ng-model="modal.newPost.onlyFriends">
+                    <span class="track"><span class="handle"></span></span>
+                </label>
+            </div>
+
+            <div class="padding">
+                <button type="submit" class="button button-block button-positive" ng-disabled="!modal.newPost.text">Submit</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-modal-view>

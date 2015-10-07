@@ -179,12 +179,12 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 }
             })
 
-            .state('inside.wall', {
-                url: "/wall",
+            .state('inside.chatRoom', {
+                url: "/chatRooms/:id",
                 views: {
                     main: {
-                        templateUrl: "templates/wall.html",
-                        controller: 'WallCtrl'
+                        templateUrl: "templates/chat_room.html",
+                        controller: 'ChatRoomCtrl'
                     }
                 }
             })
