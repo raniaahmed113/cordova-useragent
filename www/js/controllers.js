@@ -25,9 +25,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return;
             }
 
-            console.log('onCurrUserChanged');
             AuthService.setCurrentUser(newUser);
-        });
+
+        }, true);
     })
 
     .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
@@ -104,8 +104,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return;
             }
 
-            console.log('onFilterChanged');
-
             // Save the filter to the back-end
             newFilter.$update();
 
@@ -113,7 +111,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicScrollDelegate.scrollTop(true);
             loadUsers();
 
-            AuthService.setCurrentUser($scope.currUser); // FIXME: is this needed?
         }, true);
 
         var loadUsers = function() {
