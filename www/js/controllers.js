@@ -20,13 +20,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
 
         $scope.currUser = AuthService.getCurrentUser();
+        $scope.$watch('currUser', function(newUser, oldUser) {
+            if (newUser === oldUser) {
+                return;
+            }
 
-        /*$scope.$on('vipRequired', function(event, state) {
-            $ionicPopup.alert({
-                title: 'VIP only',
-                template: 'VIP status is required here.'
-            });
-        });*/
+            console.log('onCurrUserChanged');
+            AuthService.setCurrentUser(newUser);
+        });
     })
 
     .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
@@ -55,22 +56,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersFilterCtrl', function($scope, $rootScope, AuthService) {
-        $scope.filter = AuthService.getCurrentUser().filter || {};
-        $scope.$watch('filter', function(filter, oldFilter) {
-            if (filter === oldFilter) {
-                // Called due to initialization - ignore
-                return;
-            }
-
-            $rootScope.$broadcast('users.filterChanged', filter);
-
-            var currentUser = AuthService.getCurrentUser();
-            currentUser.filter = filter;
-            currentUser.$save(); // FIXME: save to localStorage as well
-
-        }, true);
-
+    .controller('UsersFilterCtrl', function($scope) {
         $scope.countries = [
             {
                 id: 'LT',
@@ -87,49 +73,60 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.ages = range(18, 99);
         $scope.lookingFor = ['male', 'female'];
-        $scope.toggleSelection = function toggleSelection(type) {
+        $scope.toggleLookingFor = function(type) {
             var idx;
 
-            if (!$scope.filter.lookingFor) {
+            if (!$scope.currUser.filter.lookingFor) {
                 idx = -1;
-                $scope.filter.lookingFor = [];
+                $scope.currUser.filter.lookingFor = [];
 
             } else {
-                idx = $scope.filter.lookingFor.indexOf(type);
+                idx = $scope.currUser.filter.lookingFor.indexOf(type);
             }
 
             if (idx > -1) {
-                $scope.filter.lookingFor.splice(idx, 1);
+                $scope.currUser.filter.lookingFor.splice(idx, 1);
 
             } else {
-                $scope.filter.lookingFor.push(type);
+                $scope.currUser.filter.lookingFor.push(type);
             }
         };
     })
 
     .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, AuthService, User) {
-        $scope.filter = AuthService.getCurrentUser().filter;
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
+
+        $scope.$watch('currUser.filter', function(newFilter, oldFilter) {
+            if (newFilter === oldFilter) {
+                // Called due to initialization - ignore
+                return;
+            }
+
+            console.log('onFilterChanged');
+
+            // Save the filter to the back-end
+            newFilter.$update();
+
+            // Search results filter has changed - re-fetch newly filtered results
+            $ionicScrollDelegate.scrollTop(true);
+            loadUsers();
+
+            AuthService.setCurrentUser($scope.currUser); // FIXME: is this needed?
+        }, true);
 
         var loadUsers = function() {
             var params = {
                 photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */
             };
 
-            if ($scope.filter) {
-                params = angular.extend(params, $scope.filter);
+            if ($scope.currUser.filter) {
+                params = angular.extend(params, $scope.currUser.filter); // FIXME: format the filter properly
             }
 
             $scope.users = User.query(params);
         };
-
-        $scope.$on('users.filterChanged', function(event, filter) {
-            $ionicScrollDelegate.scrollTop(true);
-            $scope.filter = filter;
-            loadUsers();
-        });
 
         loadUsers();
     })
@@ -367,7 +364,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('SettingsCtrl', function($scope, AuthService) {
-        $scope.currentUser = AuthService.getCurrentUser();
+
     })
 
     .controller('QuickieSwipeCtrl', function($scope, User, QuickieVote) {

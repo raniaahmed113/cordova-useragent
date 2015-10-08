@@ -1,3 +1,9 @@
+if (typeof String.prototype.startsWith != 'function') {
+    String.prototype.startsWith = function(str) {
+        return this.slice(0, str.length) == str;
+    };
+}
+
 angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives', 'ion-autocomplete', 'angularMoment', 'ionic.contrib.ui.tinderCards'])
 
     .constant('Error', {
@@ -14,6 +20,7 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
 
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
         $resourceProvider.defaults.actions.get.cache = cache;*/
+        $resourceProvider.defaults.actions.update = { method: 'PUT' };
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
                 response.resource.$metadata = {

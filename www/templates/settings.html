@@ -2,12 +2,12 @@
     <ion-content>
         <div class="list list-inset">
             <a class="item item-avatar item-icon-right" href="#/settings/profile">
-                <img ng-src="{{currentUser.profilePhoto | profilePhotoUrl:currentUser.gender}}">
-                <h2>{{currentUser.login}}</h2>
+                <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}">
+                <h2>{{currUser.login}}</h2>
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
             <a class="item item-icon-right" href="#/settings/aboutMe">
-                {{currentUser.profile.about || 'About me'}}
+                {{currUser.profile.about || 'About me'}}
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
         </div>
@@ -35,10 +35,21 @@
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
 
-            <a class="item item-icon-left item-icon-right" href="#/settings/invisibility">
+            <div class="item item-toggle item-icon-left">
                 <i class="icon ion-wand"></i> Invisibility
-                <i class="icon ion-ios-arrow-forward"></i>
-            </a>
+                <label class="toggle toggle-positive">
+                    <input type="checkbox" ng-disabled="!currUser.isVip">
+                    <span class="track"><span class="handle"></span></span>
+                </label>
+                <p class="wrap">
+                    Will hide you from the guest list of the member profiles you visit.
+                    <span ng-if="!currUser.isVip" class="royal">Only for VIP members</span>
+                </p>
+            </div>
+        </div>
+
+        <div class="padding">
+            <button class="button button-block button-dark" ng-click="logout()">Logout</button>
         </div>
 
     </ion-content>

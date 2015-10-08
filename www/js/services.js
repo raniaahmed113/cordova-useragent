@@ -1,9 +1,3 @@
-if (typeof String.prototype.startsWith != 'function') {
-    String.prototype.startsWith = function(str) {
-        return this.slice(0, str.length) == str;
-    };
-}
-
 angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
     .service('Api', function($injector) {
@@ -19,42 +13,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
             return $_http;
         };
-
-        /**
-         * @param filter
-         * @param prefix
-         * @returns {object}
-         */
-        this.formatFilter = function(filter, prefix) {
-            var output = {},
-                self = this;
-
-            if (prefix === undefined) {
-                prefix = '';
-            }
-
-            angular.forEach(filter, function(value, key) {
-                if (angular.isFunction(value)) {
-                    return;
-                }
-
-                if (prefix.length > 0) {
-                    key = key[0].toUpperCase() + key.substr(1);
-                }
-
-                if (angular.isArray(value)) {
-                    output[prefix + key] = value.join(',');
-
-                } else if (angular.isObject(value)) {
-                    angular.extend(output, self.formatFilter(value, prefix + key));
-
-                } else {
-                    output[prefix + key] = value;
-                }
-            });
-
-            return output;
-        }
     })
 
     .service('AuthService', function($q, $window, $rootScope, $injector, Config, Api) {
@@ -63,15 +21,39 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         this.init = function() {
             var userData = localStorage['currentUser'];
             if (userData) {
-                currentUser = $injector.get('User').loadFromJson(userData);
+                currentUser = $injector.get('User').valueOf(JSON.parse(userData));
             }
         };
 
         /**
-         * @returns {object}
+         * @returns {User}
          */
         this.getCurrentUser = function() {
             return currentUser;
+        };
+
+        /**
+         * @param {User} user
+         */
+        this.setCurrentUser = function(user) {
+            if (user.filter) {
+                if ('id' in user.filter) {
+                    delete user.filter.id;
+                }
+
+                var properties = [
+                    'ageMin', 'ageMax', 'aroundMe', 'realMembers',
+                    'withFacebook', 'withFotos', 'cityId', 'cityName', 'newMembers'
+                ];
+                for (var i in properties) {
+                    if (user.filter.hasOwnProperty(properties[i]) && !user.filter[properties[i]]) {
+                        delete user.filter[properties[i]];
+                    }
+                }
+            }
+
+            currentUser = user;
+            localStorage['currentUser'] = JSON.stringify(currentUser);
         };
 
         /**
@@ -82,6 +64,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
 
         this.doLogin = function(args) {
+            var self = this;
+
             Api.request().post(Config.API_URL_BASE + 'auth/login', {
                     username: args['username'],
                     password: args['password'],
@@ -90,10 +74,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
-                    currentUser = $injector.get('User').valueOf(response['user']);
-                    currentUser.accessToken = response['access_token'];
-
-                    localStorage['currentUser'] = JSON.stringify(currentUser);
+                    var user = $injector.get('User').valueOf(response['user']);
+                    user.accessToken = response['access_token'];
+                    self.setCurrentUser(user);
 
                     if (args['onLoggedIn'] && typeof(args['onLoggedIn']) == 'function') {
                         args['onLoggedIn'](response, status, headers, config);
