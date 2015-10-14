@@ -133,7 +133,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     ) {
         $scope.user = User.get({
             id: $state.params.userId,
-            include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0)"
+            include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0),gifts,isFriend,isFavorite,isBlocked"
         });
 
         $scope.showUi = false;
@@ -263,8 +263,80 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     })
 
-    .controller('UserActionsCtrl', function($scope) {
+    .controller('UserActionsCtrl', function(
+        $scope, $ionicModal, $ionicLoading, $ionicHistory,
+        Friend, Favorite, BlockedUser, Gift, UserGift
+    ) {
+        $ionicModal
+            .fromTemplateUrl('templates/send_gift.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.modal = modal;
+            });
 
+        $scope.showGifts = function() {
+            $scope.modal.show();
+        };
+
+        $scope.hideGifts = function() {
+            $scope.modal.hide();
+        };
+
+        $scope.gifts = Gift.query({ include: 'thumbUrl(size=w80h80)' });
+        $scope.sendGift = function(giftId) {
+            var gift = new UserGift({ giftId: giftId, userId: $scope.user.id });
+            gift.$save();
+
+            $scope.user.gifts.push(gift);
+            $scope.modal.hide();
+
+            $ionicLoading.show({ template: 'Gift sent', noBackdrop: true, duration: 1000 });
+        };
+
+        $scope.inviteDuel = function() {
+            // FIXME: implement
+        };
+
+        $scope.user.$promise.then(function() {
+            var properties = ['isFriend', 'isFavorite', 'isBlocked'];
+
+            for (var i=0; i < properties.length; i++) {
+                $scope.$watch('user.' + properties[i], function(newVal, oldVal) {
+                    if (newVal === oldVal) {
+                        return;
+                    }
+
+                    var relation;
+                    switch (this.exp) {
+                        case 'user.isFriend':
+                            relation = new Friend({ friendId: $scope.user.id });
+                            break;
+
+                        case 'user.isFavorite':
+                            relation = new Favorite({ favoriteId: $scope.user.id });
+                            break;
+
+                        case 'user.isBlocked':
+                            relation = new BlockedUser({ blockedUserId: $scope.user.id });
+                            break;
+
+                        default:
+                            return;
+                    }
+
+                    if (newVal) {
+                        relation.$save();
+
+                    } else {
+                        relation.$delete({ userId: $scope.user.id });
+                    }
+
+                    $ionicHistory.clearCache(); // FIXME: only clear a single view
+                });
+            }
+        });
     })
 
     .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation) {

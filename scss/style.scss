@@ -22,6 +22,11 @@ td-card {
   }
 }
 
+.button.gift {
+  margin: 10px 0 0 15px;
+
+}
+
 .quickie-yes, .quickie-no {
   display: block;
   position: absolute;
@@ -149,6 +154,22 @@ ul.chat {
       top: 50%;
       transform: translate(0, -50%);
       margin-right: 5px;
+    }
+  }
+}
+
+.user-actions .col > button {
+  @extend .button;
+  @extend .button-block;
+  padding: 25px 10px;
+  line-height: 22px;
+
+  .icon {
+    display: block;
+    vertical-align: baseline;
+
+    &::before {
+      font-size: 3em;
     }
   }
 }

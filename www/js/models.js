@@ -33,11 +33,15 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('Friend', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/friends');
+        return $resource(Config.API_URL_BASE + 'me/friends/:userId');
+    })
+
+    .factory('Favorite', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/favorites/:userId');
     })
 
     .factory('BlockedUser', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/blocks');
+        return $resource(Config.API_URL_BASE + 'me/blocks/:userId');
     })
 
     .factory('ChatRoom', function($resource, Config) {
@@ -58,6 +62,14 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('Request', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/requests');
+    })
+
+    .factory('Gift', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'dataSets/gifts');
+    })
+
+    .factory('UserGift', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'users/:userId/gifts', { userId: '@userId' });
     })
 
     .factory('Notification', function($resource, Config) {
