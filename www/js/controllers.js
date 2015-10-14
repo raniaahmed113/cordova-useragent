@@ -93,7 +93,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, AuthService, User) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, User) {
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
@@ -119,7 +119,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             };
 
             if ($scope.currUser.filter) {
-                params = angular.extend(params, $scope.currUser.filter); // FIXME: format the filter properly
+                //params = angular.extend(params, $scope.currUser.filter); // FIXME: format the filter properly
             }
 
             $scope.users = User.query(params);
@@ -439,7 +439,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
     })
 
-    .controller('SettingsCtrl', function($scope, AuthService) {
+    .controller('SettingsCtrl', function($scope) {
 
     })
 
@@ -542,7 +542,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.notifications = Notification.query();
     })
 
-    .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, ChatRoomPost, AuthService) {
+    .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, ChatRoomPost) {
         $scope.posts = ChatRoomPost.query({
             roomId: $stateParams.id,
             include: 'author.profilePhoto.url(size=w80h80)'
@@ -579,7 +579,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $ionicLoading.hide();
 
                 post.created = Math.round(Date.now() / 1000);
-                post.author = AuthService.getCurrentUser();
+                post.author = $scope.currUser;
                 $scope.posts.unshift(post);
 
                 $scope.modal.newPost = {};
