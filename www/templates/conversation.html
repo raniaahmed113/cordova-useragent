@@ -1,11 +1,11 @@
 <ion-view>
-    <ion-nav-title>Chat with {{conversation.withUser.login}}</ion-nav-title>
+    <ion-nav-title>{{pageTitle || 'Chat with ' + conversation.withUser.login}}</ion-nav-title>
     <ion-content>
         <ul class="list chat">
             <div
                     class="message"
                     ng-repeat="message in messages"
-                    ng-class="{mine: message.id == currUserId, failed: message.error ? true : false}"
+                    ng-class="{mine: message.id == $scope.currUser.id, failed: message.error ? true : false}"
                     ng-click="resend($index)">
                 {{message.text}}
                 <div class="status">
@@ -14,6 +14,10 @@
                 </div>
             </div>
         </ul>
+        <div ng-if="messages.$promise.resolve && messages.length < 1">
+            <h2>No messages yet</h2>
+            <h3>Write me something</h3>
+        </div>
     </ion-content>
 
     <ion-footer-bar keyboard-attach class="bar-stable">

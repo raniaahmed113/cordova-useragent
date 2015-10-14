@@ -130,8 +130,8 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 url: "/chat",
                 views: {
                     tabContent: {
-                        templateUrl: "templates/user_chat.html",
-                        controller: 'UserChatCtrl'
+                        templateUrl: "templates/conversation.html",
+                        controller: 'ConversationCtrl'
                     }
                 }
             })

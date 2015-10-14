@@ -294,15 +294,19 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('ConversationCtrl', function(
         $scope, $rootScope, $stateParams, $ionicScrollDelegate,
-        Conversation, Message, AuthService
+        Conversation, Message, User
     ) {
         var params = {
-            withUserId: $stateParams.id
+            withUserId: $stateParams.id || $stateParams.userId
         };
 
         $scope.msgText = '';
-        $scope.currUserId = AuthService.getCurrentUser().id;
-        $scope.conversation = Conversation.get(params); // FIXME: get from cache
+        $scope.conversation = Conversation.get(params, null, null, function(err) {
+            if (err.status == 404 /* Not Found */) {
+                // There is no conversation created yet
+                $scope.conversation.withUser = User.get({ id: params.withUserId }); // FIXME: get from cache
+            }
+        }); // FIXME: get from cache
         $scope.messages = Message.query(params, function() {
             $ionicScrollDelegate.scrollBottom(true);
             // TODO: load more
@@ -311,14 +315,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.sendMessage = function() {
             var i = $scope.messages.push({
-                    id: $scope.currUserId,
+                    id: $scope.currUser.id,
                     text: $scope.msgText,
                     dateSent: null,
                     conversationId: $scope.conversation.id
                 })-1;
 
             var msg = new Message();
-            msg.id = $scope.currUserId;
+            msg.id = $scope.currUser.id;
             msg.text = $scope.msgText;
             msg.$save(params, function() {
                 $scope.messages[i].dateSent = Math.round(Date.now() / 1000);
