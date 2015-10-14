@@ -443,6 +443,61 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     })
 
+    .controller('SettingsPhotosCtrl', function($scope, $stateParams, $ionicActionSheet, File, Album) {
+        if ($stateParams.albumId == 0) {
+            $scope.albums = Album.query({ include: 'thumbUrl(size=w80h80)' });
+            $scope.isMainAlbum = true;
+        }
+
+        $scope.photos = File.query({
+            albumId: $stateParams.albumId,
+            include: 'url(size=w80h80)'
+        });
+
+        var filePicker = document.getElementById('file-picker');
+
+        filePicker.addEventListener('change', function(event) {
+            var file = new File({
+                albumId: $stateParams.albumId,
+                file: event.target.files[0]
+            });
+
+            // Upload the file
+            file.$save();
+
+            // TODO: List the uploaded file
+        });
+
+        $scope.openFilePicker = function() {
+            ionic.trigger('click', { target: filePicker });
+        };
+
+        $scope.createAlbum = function() {
+            // TODO
+        };
+
+        $scope.photoOptions = function(photoIndex) {
+            var hideSheet = $ionicActionSheet.show({
+                buttons: [
+                    { text: 'Set as main' }
+                ],
+                destructiveText: 'Delete',
+                titleText: 'Photo',
+                cancelText: 'Cancel',
+                cancel: function() {
+                    // TODO
+                },
+                destructiveButtonClicked: function() {
+
+                },
+                buttonClicked: function(index) {
+                    // TODO
+                    return true;
+                }
+            });
+        };
+    })
+
     .controller('QuickieSwipeCtrl', function($scope, User, QuickieVote) {
         $scope.users = User.query({
             notVotedInQuickie: true,

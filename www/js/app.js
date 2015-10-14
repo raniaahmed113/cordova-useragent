@@ -206,6 +206,16 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 }
             })
 
+            .state('inside.settings-photos', {
+                url: "/settings/photos/:albumId",
+                views: {
+                    main: {
+                        templateUrl: "templates/settings_photos.html",
+                        controller: 'SettingsPhotosCtrl'
+                    }
+                }
+            })
+
             .state('inside.quickie', {
                 abstract: true,
                 views: {

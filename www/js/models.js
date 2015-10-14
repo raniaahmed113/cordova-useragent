@@ -36,6 +36,37 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/friends/:userId');
     })
 
+    .factory('Album', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/albums/:id', { id : '@id' });
+    })
+
+    .factory('File', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/albums/:albumId/files/:id', { albumId: '@albumId', id: '@id' }, {
+                save: {
+                    method: 'POST',
+
+                    // This will force the client to insert a proper Content-Type
+                    // Something like this: multipart/form-data; boundary=----WebKitFormBoundarycNG3Zs8MLDFUcqF0
+                    headers: { 'Content-Type': undefined },
+
+                    transformRequest: function(resource) {
+                        if (resource) {
+                            var data = new FormData();
+
+                            angular.forEach(resource, function(value, key) {
+                                data.append(key, value);
+                            });
+
+                            return data;
+                        }
+
+                        return resource;
+                    }
+                }
+            }
+        );
+    })
+
     .factory('Favorite', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/favorites/:userId');
     })
