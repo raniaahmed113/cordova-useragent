@@ -1,5 +1,12 @@
 resource-collection {
   display: block;
+
+  ion-spinner {
+    position: absolute;
+    left: 50%;
+    margin-top: 50%;
+  }
+}
 }
 
 .overlay-error {

@@ -423,16 +423,19 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('GuestsCtrl', function($scope, Guest) {
         $scope.title = 'Guests';
+        $scope.subProperty = 'guest';
         $scope.users = Guest.query({ include: 'guest.profilePhoto.url(size=w80h80)' });
     })
 
     .controller('FriendsCtrl', function($scope, Friend) {
         $scope.title = 'Friends';
+        $scope.subProperty = 'friend';
         $scope.users = Friend.query({ include: 'friend.profilePhoto.url(size=w80h80)' });
     })
 
     .controller('BlockedUsersCtrl', function($scope, BlockedUser) {
         $scope.title = 'Block-list';
+        $scope.subProperty = 'blockedUser';
         $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
     })
 

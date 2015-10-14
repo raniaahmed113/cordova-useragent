@@ -5,7 +5,8 @@ angular.module('hotvibes.directives', [])
             restrict: 'E',
             transclude: true,
             scope: {
-                list: '='
+                list: '=',
+                subProperty: '='
             },
             templateUrl: 'templates/resource_collection.html',
             controller: function($scope, $resource) {
@@ -18,8 +19,16 @@ angular.module('hotvibes.directives', [])
                     $scope.error = true;
                 };
 
-                $scope.list.$promise.then(function(response) {
+                $scope.list.$promise = $scope.list.$promise.then(function(response) {
                     config = response.config;
+
+                    if ($scope.subProperty) {
+                        for (i=0; i<response.resource.length; i++) {
+                            response.resource[i] = response.resource[i][$scope.subProperty];
+                        }
+
+                        return response;
+                    }
 
                 }, function(response) {
                     onError(response.data);
@@ -33,10 +42,6 @@ angular.module('hotvibes.directives', [])
 
                         function(response) {
                             var newEntries = response.resource;
-
-                            /*if (angular.isFunction(transformResponse)) {
-                                users = transformResponse(users);
-                            }*/
 
                             if ($scope.currPage == 1) {
                                 $scope.list = newEntries;
