@@ -4,7 +4,10 @@ if (typeof String.prototype.startsWith != 'function') {
     };
 }
 
-angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives', 'ion-autocomplete', 'angularMoment', 'ionic.contrib.ui.tinderCards'])
+angular.module('hotvibes', [
+    'ionic', 'ion-autocomplete', 'angularMoment', 'ionic.contrib.ui.tinderCards',
+    'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
+])
 
     .constant('Error', {
         NOT_ENOUGH_CREDITS: 101,
@@ -285,38 +288,4 @@ angular.module('hotvibes', ['ionic', 'hotvibes.controllers', 'hotvibes.services'
                 StatusBar.styleDefault();
             }
         });
-    })
-
-    .filter('capitalizeFirst', function () {
-        return function(input) {
-            return input[0].toUpperCase() + input.substring(1);
-        }
-    })
-
-    .filter('concat', function () {
-        return function(inputArray, separator) {
-            if (!inputArray) {
-                return '';
-            }
-
-            if (!separator) {
-                separator = ', ';
-            }
-
-            return inputArray.join(separator);
-        }
-    })
-
-    .filter('profilePhotoUrl', function() {
-        return function(photo, gender) {
-            if (photo && photo.url) {
-                return photo.url;
-            }
-
-            if (!gender || gender == 'male') {
-                gender = 'generic';
-            }
-
-            return 'img/person-' + gender + '.png';
-        }
     });
