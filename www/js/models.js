@@ -103,6 +103,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'users/:userId/gifts', { userId: '@userId' });
     })
 
+    .factory('DuelInvite', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'users/:userId/duelInvites', { userId: '@userId' });
+    })
+
     .factory('Notification', function($resource, Config) {
         var model = $resource(Config.API_URL_BASE + 'me/notifications');
 

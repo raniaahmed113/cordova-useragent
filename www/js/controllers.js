@@ -264,8 +264,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('UserActionsCtrl', function(
-        $scope, $ionicModal, $ionicLoading, $ionicHistory,
-        Friend, Favorite, BlockedUser, Gift, UserGift
+        $scope, $ionicModal, $ionicPopup, $ionicLoading, $ionicHistory,
+        Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite
     ) {
         $ionicModal
             .fromTemplateUrl('templates/send_gift.html', {
@@ -296,7 +296,57 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.inviteDuel = function() {
-            // FIXME: implement
+            $scope.duelPrompt = { reason: null };
+            $ionicPopup.prompt({
+                title: 'Invite to a duel',
+                subTitle: 'What are you duelling for?',
+                template: '<input type="text" placeholder="Reason for a duel" ng-model="duelPrompt.reason" required />',
+                scope: $scope,
+                buttons: [
+                    { text: 'Cancel' },
+                    {
+                        text: '<b>Send invite</b>',
+                        type: 'button-positive',
+                        onTap: function(event) {
+                            if (!$scope.duelPrompt.reason) {
+                                event.preventDefault();
+                                // TODO: show error
+                                return null;
+                            }
+
+                            return $scope.duelPrompt.reason;
+                        }
+                    }
+                ]
+            }).then(function(reason) {
+                if (!reason) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: 'Inviting..' });
+
+                var invite = new DuelInvite({
+                    userId: $scope.user.id,
+                    reason: reason
+                });
+
+                invite.$save().then(function() {
+                    // Success
+                    $ionicLoading.hide();
+                    $ionicLoading.show({ template: 'Invite sent', noBackdrop: true, duration: 1000 });
+
+                }, function(response) {
+                    // Error
+                    $ionicLoading.hide();
+
+                    $ionicPopup.alert({
+                        title: 'Houston, we have problems',
+                        template: response && response.data && response.data.message
+                            ? response.data.message
+                            : 'Something unexpected happened. Please try again.'
+                    });
+                });
+            });
         };
 
         $scope.user.$promise.then(function() {
