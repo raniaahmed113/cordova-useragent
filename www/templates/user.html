@@ -15,10 +15,21 @@
                 <i class="icon ion-ios-location"></i> {{user.cityName}}
                 <p class="about">{{user.profile.about}}</p>
             </div>
+
+            <ion-spinner class="overlay center" ng-if="user.$promise.$$state.status < 1"></ion-spinner>
+            <div class="overlay center error-sign" ng-if="blocked">
+                You may not see this profile because <strong>this member has blocked you</strong>
+                <i class="icon ion-android-hand"></i>
+            </div>
         </div>
 
         <div class="tabs tabs-dark tabs-icon-top tabs-striped tabs-top">
-            <a ng-repeat="tab in tabs" class="tab-item" ng-click="toggleTab(tab.id)" ng-class="{active: currentlyActiveTab == tab.id}">
+            <a class="tab-item"
+               ng-repeat="tab in tabs"
+               ng-disabled="user.$promise.$$state.status < 1 || blocked"
+               ng-click="toggleTab(tab.id)"
+               ng-class="{active: currentlyActiveTab == tab.id}"
+            >
                 <i class="icon ion-{{tab.icon}}"></i> {{tab.title}}
             </a>
         </div>

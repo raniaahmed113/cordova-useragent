@@ -96,7 +96,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config, Error) {
+    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config, ErrorCode) {
         this.request = function(config) {
             if (config.url.startsWith(Config.API_URL_BASE)) {
                 var currentUser = AuthService.getCurrentUser();
@@ -122,11 +122,11 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
                 case 402: // Payment Required
                     switch (response.data.code) {
-                        case Error.NOT_ENOUGH_CREDITS:
+                        case ErrorCode.NOT_ENOUGH_CREDITS:
                             $rootScope.$broadcast('notEnoughCredits');
                             break;
 
-                        case Error.VIP_REQUIRED:
+                        case ErrorCode.VIP_REQUIRED:
                             $rootScope.$broadcast('vipRequired');
                             break;
                     }

@@ -129,7 +129,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('UserCtrl', function(
-        $window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup, User, Request
+        $window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup,
+        User, Request, ErrorCode
     ) {
         $scope.user = User.get({
             id: $state.params.userId,
@@ -144,6 +145,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.user.$promise.then(function() {
             $ionicSlideBoxDelegate.update();
             $scope.showUi = true;
+
+        }, function(error) {
+            if (error && error.data && error.data.code == ErrorCode.MEMBER_HAS_BLOCKED_YOU) {
+                $scope.blocked = true;
+
+            } else {
+                // TODO
+            }
         });
 
         $scope.currentPhoto = 0;
@@ -419,7 +428,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         Conversation, Message, User
     ) {
         var params = {
-            withUserId: $stateParams.id || $stateParams.userId
+            withUserId: $stateParams.userId || $stateParams.id
         };
 
         $scope.msgText = '';

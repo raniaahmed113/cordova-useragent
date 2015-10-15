@@ -1,9 +1,13 @@
-<ion-spinner ng-show="list.$promise.$$state.status < 1"></ion-spinner>
 <div ng-transclude></div>
 <ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
-<div class="overlay-error" ng-if="error">
-    <h1>Error!</h1>
-</div>
-<div class="overlay-empty" ng-if="!error && list.$promise.$$state.status > 0 && list.length < 1">
-    <h1>Nothing here</h1>
+<div class="overlay center">
+    <ion-spinner ng-show="list.$promise.$$state.status < 1"></ion-spinner>
+    <div class="error-sign" ng-if="error">
+        Sorry, some nasty error prevented us from showing you this page
+        <i class="icon ion-close-circled"></i>
+    </div>
+    <div class="error-sign" ng-if="!error && list.$promise.$$state.status > 0 && list.length < 1">
+        Nothing here, so far
+        <i class="icon ion-ios-rainy"></i>
+    </div>
 </div>

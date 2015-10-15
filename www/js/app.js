@@ -9,9 +9,10 @@ angular.module('hotvibes', [
     'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
 
-    .constant('Error', {
+    .constant('ErrorCode', {
         NOT_ENOUGH_CREDITS: 101,
-        VIP_REQUIRED: 102
+        VIP_REQUIRED: 102,
+        MEMBER_HAS_BLOCKED_YOU: 104
     })
 
     .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/) {
