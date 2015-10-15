@@ -30,5 +30,13 @@
                 </button>
             </div>
         </div>
+        <div class="padding">
+            <button
+                    class="button button-block"
+                    ng-class="{'button-assertive': !user.isBlocked}"
+                    ng-click="user.isBlocked = !user.isBlocked">
+                {{user.isBlocked ? 'Unblock' : 'Block'}}
+            </button>
+        </div>
     </ion-content>
 </ion-view>
