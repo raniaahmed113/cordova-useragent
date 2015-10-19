@@ -204,18 +204,34 @@ angular.module('hotvibes', [
                 url: "/settings",
                 views: {
                     main: {
-                        templateUrl: "templates/settings.html",
-                        controller: 'SettingsCtrl'
+                        templateUrl: "templates/settings.html"
                     }
                 }
             })
 
-            .state('inside.settings-photos', {
-                url: "/settings/photos/:albumId",
+            .state('inside.settings-albums', {
+                url: "/settings/albums",
                 views: {
                     main: {
-                        templateUrl: "templates/settings_photos.html",
-                        controller: 'SettingsPhotosCtrl'
+                        templateUrl: "templates/settings_albums.html",
+                        controller: 'SettingsAlbumsCtrl'
+                    },
+                    'mainAlbum@inside.settings-albums' : {
+                        templateUrl: "templates/settings_album.html",
+                        controller: 'SettingsAlbumCtrl'
+                    }
+                },
+                params: {
+                    albumId: 0
+                }
+            })
+
+            .state('inside.settings-albums-single', {
+                url: "/settings/albums/:albumId",
+                views: {
+                    main: {
+                        templateUrl: "templates/settings_album.html",
+                        controller: 'SettingsAlbumCtrl'
                     }
                 }
             })
@@ -224,7 +240,7 @@ angular.module('hotvibes', [
                 abstract: true,
                 views: {
                     main: {
-                        templateUrl: "templates/quickie.html",
+                        templateUrl: "templates/quickie.html"
                     }
                 }
             })

@@ -1,0 +1,13 @@
+<ion-view>
+    <ion-nav-title>{{album.name}} &laquo; My albums</ion-nav-title>
+    <ion-nav-buttons side="right">
+        <button class="button icon ion-upload" ng-click="openFilePicker()"></button>&nbsp;
+        <button ng-if="album.id > 0" class="button icon ion-trash-b" ng-click="deleteAlbum()"></button>
+    </ion-nav-buttons>
+    <ion-content scroll="false">
+        <input type="file" accept="image/*" id="file-picker">
+        <div class="row row-wrap">
+            <img class="col col-25 thumb" ng-repeat="photo in album.photos" ng-src="{{photo.url}}" alt="" ng-click="photoOptions($index, $event)" />
+        </div>
+    </ion-content>
+</ion-view>

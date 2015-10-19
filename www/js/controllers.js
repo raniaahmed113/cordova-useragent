@@ -498,23 +498,72 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
     })
 
-    .controller('SettingsCtrl', function($scope) {
+    .controller('SettingsAlbumsCtrl', function($scope, $ionicPopover, $ionicPopup, $ionicLoading, Album) {
+        $scope.albums = Album.query({ include: 'thumbUrl(size=w80h80)' });
 
+        $scope.promptCreateAlbum = {
+            albumName: null
+        };
+
+        $scope.createAlbum = function() {
+            $ionicPopup.prompt({
+                title: 'Create album',
+                subTitle: 'What should be the name of the new album?',
+                template: '<input type="text" placeholder="Album title" ng-model="promptCreateAlbum.albumName" required />',
+                scope: $scope,
+                buttons: [
+                    { text: 'Cancel' },
+                    {
+                        text: '<b>Create</b>',
+                        type: 'button-positive',
+                        onTap: function(event) {
+                            if (!$scope.promptCreateAlbum.albumName) {
+                                event.preventDefault();
+                                // TODO: show error
+                                return null;
+                            }
+
+                            return $scope.promptCreateAlbum.albumName;
+                        }
+                    }
+                ]
+
+            }).then(function(name) {
+                if (!name) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: 'Creating an album..' });
+
+                var album = new Album({ name: name });
+                album.$save().then(function(response) {
+                    $ionicLoading.hide();
+
+                    album.id = response.id;
+                    $scope.albums.push(album);
+                }, $scope.onError);
+            });
+        };
     })
 
-    .controller('SettingsPhotosCtrl', function($scope, $stateParams, $ionicActionSheet, File, Album) {
-        if ($stateParams.albumId == 0) {
-            $scope.albums = Album.query({ include: 'thumbUrl(size=w80h80)' });
-            $scope.isMainAlbum = true;
-        }
-
-        $scope.photos = File.query({
-            albumId: $stateParams.albumId,
-            include: 'url(size=w80h80)'
+    .controller('SettingsAlbumCtrl', function($scope, $stateParams, $ionicHistory, $ionicPopover, Album) {
+        $scope.album = Album.get({
+            id: $stateParams.albumId,
+            include: 'photos.url(size=w80h80)'
         });
 
-        var filePicker = document.getElementById('file-picker');
+        $scope.photoOptions = function($index, $event) {
+            $ionicPopover.fromTemplateUrl('templates/popover_photo_options.html', {
+                scope: $scope
 
+            }).then(function(popover) {
+                popover.show($event);
+            });
+
+            // TODO: photo actions: delete, set as main, etc
+        };
+
+        var filePicker = document.getElementById('file-picker');
         filePicker.addEventListener('change', function(event) {
             var file = new File({
                 albumId: $stateParams.albumId,
@@ -523,37 +572,17 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             // Upload the file
             file.$save();
-
-            // TODO: List the uploaded file
         });
 
         $scope.openFilePicker = function() {
             ionic.trigger('click', { target: filePicker });
         };
 
-        $scope.createAlbum = function() {
-            // TODO
-        };
+        $scope.deleteAlbum = function() {
+            $scope.album.$delete();
+            $ionicHistory.goBack();
 
-        $scope.photoOptions = function(photoIndex) {
-            var hideSheet = $ionicActionSheet.show({
-                buttons: [
-                    { text: 'Set as main' }
-                ],
-                destructiveText: 'Delete',
-                titleText: 'Photo',
-                cancelText: 'Cancel',
-                cancel: function() {
-                    // TODO
-                },
-                destructiveButtonClicked: function() {
-
-                },
-                buttonClicked: function(index) {
-                    // TODO
-                    return true;
-                }
-            });
+            // TODO:
         };
     })
 

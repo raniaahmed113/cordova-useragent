@@ -102,7 +102,27 @@ td-card {
   }
 }
 
+.list .item.item-nav-view-container {
+  padding: 0;
+
+  .view-container {
+    position: static;
+
+    .pane {
+      position: static;
+
+      .scroll-content {
+        position: static;
+      }
+    }
+  }
+}
+
 img.thumb {
+  height: 100%;
+}
+
+img.framed {
   max-width: 6em;
   border: 2px solid white;
   margin: 5px 0 0 5px;
