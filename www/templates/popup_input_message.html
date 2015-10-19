@@ -1,0 +1,5 @@
+<input type="text" placeholder="Your message" ng-model="prompt.message" required />
+
+<div ng-messages="prompt.errors">
+    <div ng-message="required">First enter your message</div>
+</div>

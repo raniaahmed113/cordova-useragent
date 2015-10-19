@@ -1,0 +1,39 @@
+<ion-view>
+    <ion-content scroll="false" class="profile" ng-class="{'tabs-open': currentlyActiveTab != null}">
+        <div class="photos">
+            <ion-slide-box show-pager="false" on-tap="toggleOverlays()" on-slide-changed="onPhotoChanged($index)">
+                <ion-slide ng-repeat="photo in user.photos">
+                    <img ng-src="{{photo.url}}"/>
+                </ion-slide>
+            </ion-slide-box>
+
+            <div class="overlay top" ng-show="showUi">
+                <i class="icon ion-camera"></i> {{currentPhoto+1}} / {{user.photos.length}}
+            </div>
+
+            <div class="overlay bottom" ng-show="showUi">
+                <i class="icon ion-ios-location"></i> {{user.cityName}}
+                <p class="about">{{user.profile.about}}</p>
+            </div>
+
+            <ion-spinner class="overlay center" ng-if="user.$promise.$$state.status < 1"></ion-spinner>
+            <div class="overlay center error-sign" ng-if="blocked">
+                You may not see this profile because <strong>this member has blocked you</strong>
+                <i class="icon ion-android-hand"></i>
+            </div>
+        </div>
+
+        <div class="tabs tabs-dark tabs-icon-top tabs-striped tabs-top">
+            <a class="tab-item"
+               ng-repeat="tab in tabs"
+               ng-disabled="user.$promise.$$state.status < 1 || blocked"
+               ng-click="toggleTab(tab.id)"
+               ng-class="{active: currentlyActiveTab == tab.id}"
+            >
+                <i class="icon ion-{{tab.icon}}"></i> {{tab.title}}
+            </a>
+        </div>
+
+        <ion-nav-view name="tabContent" class="tabs-content"></ion-nav-view>
+    </ion-content>
+</ion-view>

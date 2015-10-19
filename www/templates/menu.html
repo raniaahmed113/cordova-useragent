@@ -1,36 +1,35 @@
 <ion-side-menus enable-menu-with-back-views="false">
-  <ion-side-menu-content>
-    <ion-nav-bar class="bar-stable">
-      <ion-nav-back-button>
-      </ion-nav-back-button>
+    <ion-side-menu-content>
+        <ion-nav-bar class="bar-stable" align-title="center">
+            <ion-nav-back-button></ion-nav-back-button>
+            <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
+        <ion-nav-view name="main"></ion-nav-view>
+    </ion-side-menu-content>
 
-      <ion-nav-buttons side="left">
-        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-        </button>
-      </ion-nav-buttons>
-    </ion-nav-bar>
-    <ion-nav-view name="menuContent"></ion-nav-view>
-  </ion-side-menu-content>
+    <ion-side-menu side="left">
+        <ion-header-bar class="bar-main-nav bar-dark">
+            <a href="#/settings" menu-close>
+                <img src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" /> {{currUser.login}} <i class="icon ion-ios-gear"></i>
+            </a>
+        </ion-header-bar>
+        <ion-content>
+            <ion-list>
+                <ion-item menu-close href="#/conversations"><i class="icon ion-email"></i> Messages</ion-item>
+                <ion-item menu-close href="#/users"><i class="icon ion-ios-people"></i> People</ion-item>
+                <ion-item menu-close href="#/quickie"><i class="icon ion-thumbsup"></i> Matching</ion-item>
+                <ion-item menu-close href="#/guests"><i class="icon ion-eye"></i> Guests</ion-item>
+                <ion-item menu-close href="#/chatRooms/1"><i class="icon ion-chatboxes"></i> Wall</ion-item>
+                <ion-item menu-close href="#/friends"><i class="icon ion-person-stalker"></i> Friends</ion-item>
+                <ion-item menu-close href="#/blocklist"><i class="icon ion-minus-circled"></i> Block-list</ion-item>
+                <ion-item menu-close href="#/notifications"><i class="icon ion-alert-circled"></i> Notifications</ion-item>
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
 
-  <ion-side-menu side="left">
-    <ion-header-bar class="bar-stable">
-      <h1 class="title">Left</h1>
-    </ion-header-bar>
-    <ion-content>
-      <ion-list>
-        <ion-item menu-close ng-click="login()">
-          Login
-        </ion-item>
-        <ion-item menu-close href="#/app/search">
-          Search
-        </ion-item>
-        <ion-item menu-close href="#/app/browse">
-          Browse
-        </ion-item>
-        <ion-item menu-close href="#/app/playlists">
-          Playlists
-        </ion-item>
-      </ion-list>
-    </ion-content>
-  </ion-side-menu>
+    <ion-side-menu side="right" is-enabled="rightMenuEnabled">
+        <ion-nav-view name="rightMenu"></ion-nav-view>
+    </ion-side-menu>
 </ion-side-menus>

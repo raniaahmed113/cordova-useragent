@@ -1,0 +1,42 @@
+<ion-view>
+    <ion-nav-title>Actions &laquo; {{user.login}}</ion-nav-title>
+    <ion-content>
+        <div class="row row-wrap user-actions">
+            <div class="col col-50">
+                <button ng-click="user.isFriend = !user.isFriend">
+                    <i class="icon ion-person"></i>
+                    {{user.isFriend ? 'Remove from friends' : 'Add to friends'}}
+                </button>
+            </div>
+
+            <div class="col col-50">
+                <button ng-click="showGifts()">
+                    <i class="icon ion-trophy"></i>
+                    Send a gift
+                </button>
+            </div>
+
+            <div class="col col-50">
+                <button ng-click="user.isFavorite = !user.isFavorite">
+                    <i class="icon ion-star"></i>
+                    {{user.isFavorite ? 'Remove from favorites' : 'Add to favorites'}}
+                </button>
+            </div>
+
+            <div class="col col-50">
+                <button ng-click="inviteDuel()">
+                    <i class="icon ion-podium"></i>
+                    Invite to a duel
+                </button>
+            </div>
+        </div>
+        <div class="padding">
+            <button
+                    class="button button-block"
+                    ng-class="{'button-assertive': !user.isBlocked}"
+                    ng-click="user.isBlocked = !user.isBlocked">
+                {{user.isBlocked ? 'Unblock' : 'Block'}}
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

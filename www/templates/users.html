@@ -1,0 +1,14 @@
+<ion-view view-title="{{title || 'People'}}">
+    <ion-nav-buttons side="right">
+        <button class="button" ng-if="showFilter" ng-click="showFilter()"><i class="icon ion-search"></i></button>
+    </ion-nav-buttons>
+    <ion-content>
+        <resource-collection list="users" sub-property="subProperty">
+            <div class="row row-wrap">
+                <a ng-repeat="user in users" href="#/users/{{user.id}}" class="user col col-25">
+                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
+                </a>
+            </div>
+        </resource-collection>
+    </ion-content>
+</ion-view>

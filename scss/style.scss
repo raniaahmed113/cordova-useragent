@@ -1,0 +1,309 @@
+resource-collection {
+  display: block;
+
+  .overlay.center {
+    margin-top: 50%;
+  }
+}
+
+#file-picker {
+  display: none;
+}
+
+.overlay.center {
+  text-align: center;
+}
+
+.error-sign {
+  display: inline-block;
+  font-size: 1.5em;
+  text-align: center;
+  max-width: 75%;
+
+  .icon {
+    display: block;
+    margin-top: 10px;
+
+    &::before {
+      font-size: 3em;
+    }
+  }
+}
+
+td-cards {
+  margin: 15px;
+  position: relative;
+  height: 100%;
+}
+
+td-card {
+  position: absolute;
+
+  img {
+    @include border-radius(15px);
+  }
+}
+
+.button.gift {
+  margin: 10px 0 0 15px;
+
+}
+
+.quickie-yes, .quickie-no {
+  display: block;
+  position: absolute;
+  bottom: 0;
+  font-size: 2em;
+  font-weight: bold;
+  margin: 10px;
+  padding: 5px 15px;
+  border: 5px solid;
+  @include border-radius(15px);
+}
+
+.quickie-yes {
+  color: $balanced;
+  border-color: $balanced;
+  right: 0;
+}
+
+.quickie-no {
+  color: $assertive;
+  border-color: $assertive;
+  left: 0;
+}
+
+.row-wrap {
+  @include flex-wrap(wrap);
+
+  .col > img {
+    width: 100%;
+  }
+}
+
+.title {
+  color: $gray;
+  font-size: $font-size-small;
+  font-weight: bold;
+}
+
+.list.list-details {
+  .item {
+    label {
+      @extend .title;
+      @extend .input-label;
+    }
+
+    > span {
+      flex: 1;
+      padding-right: 5px;
+      white-space: normal;
+    }
+  }
+}
+
+.list .item.item-nav-view-container {
+  padding: 0;
+
+  .view-container {
+    position: static;
+
+    .pane {
+      position: static;
+
+      .scroll-content {
+        position: static;
+      }
+    }
+  }
+}
+
+img.thumb {
+  height: 100%;
+}
+
+img.framed {
+  max-width: 6em;
+  border: 2px solid white;
+  margin: 5px 0 0 5px;
+  vertical-align: top;
+  @include box-shadow(0 0 5px black);
+}
+
+ul.chat {
+  .message {
+    padding: 10px;
+    margin: 5px;
+    background-color: $calm;
+    @include border-radius(5px);
+    max-width: 50%;
+    clear: both;
+
+    .status {
+      font-size: 85%;
+      font-weight: 300;
+      color: lighten(black, 25%);
+    }
+
+    &.mine {
+      background-color: $stable;
+      text-align: right;
+      float: right;
+    }
+
+    &.failed {
+      background-color: $assertive;
+    }
+  }
+}
+
+.item p.wrap {
+  white-space: normal;
+}
+
+.item-notification .icon {
+  font-size: 2em;
+  float: left;
+  margin-right: 10px;
+  @extend .ion-person;
+}
+
+.item-notification.notification-commentWallPost .icon {
+  @extend .ion-reply;
+}
+
+.item-conversation .ion-reply {
+  margin-right: 5px;
+}
+
+.bar-main-nav {
+  > a {
+    width: 100%;
+    color: white;
+    text-decoration: initial;
+    position: relative;
+
+    > img {
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    > i {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translate(0, -50%);
+      margin-right: 5px;
+    }
+  }
+}
+
+.user-actions .col > button {
+  @extend .button;
+  @extend .button-block;
+  padding: 25px 10px;
+  line-height: 22px;
+
+  .icon {
+    display: block;
+    vertical-align: baseline;
+
+    &::before {
+      font-size: 3em;
+    }
+  }
+}
+
+.profile {
+  @include transition(0.25s ease-out all);
+  @include display-flex();
+  @include flex-direction(column);
+  overflow: visible;
+
+  &.tabs-open {
+    @include translate3d(0, -90%, 0);
+  }
+
+  .thumbs {
+    text-align: center;
+  }
+
+  > .photos {
+    height: 100%;
+    position: relative;
+    background-color: #656D7D;
+    @include radial-gradient(#656D7D, #1B1D24);
+
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+
+      .slider-slides {
+        .slider-slide {
+          @include display-flex();
+          @include justify-content(center);
+          @include align-items(center);
+
+          > img {
+            max-width: 100%;
+            max-height: 100%;
+          }
+        }
+      }
+    }
+
+    .overlay {
+      position: absolute;
+      z-index: 10;
+      color: white;
+      min-height: 20px;
+      padding: 10px;
+      @include transition(0.15s linear all);
+
+      &.ng-hide {
+        display: block !important;
+        opacity: 0;
+      }
+
+      &.top {
+        top: 0;
+        right: 0;
+      }
+
+      &.bottom {
+        bottom: 0;
+        left: 0;
+      }
+
+      &.center {
+        top: 50%;
+        left: 50%;
+        @include translate(-50%, -50%);
+        width: 75%;
+      }
+
+      .about {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @include line-clamp(3);
+        @include display-box();
+        @include box-orient(vertical);
+      }
+    }
+  }
+
+  .tabs {
+    position: static;
+    top: auto;
+    @include flex(1, 0, auto);
+  }
+
+  > .tabs-content {
+    height: 90%;
+  }
+}

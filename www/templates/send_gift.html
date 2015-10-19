@@ -1,0 +1,14 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-dark">
+        <h1 class="title">Send a gift</h1>
+        <div class="buttons">
+            <button class="button" ng-click="hideGifts()"><i class="icon ion-android-close"></i></button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <a href="#" class="button gift" ng-repeat="gift in gifts" ng-click="sendGift(gift.id)">
+            <img ng-src="{{gift.thumbUrl}}" alt="">
+            <div><i class="icon ion-social-usd"></i> {{gift.price}}</div>
+        </a>
+    </ion-content>
+</ion-modal-view>

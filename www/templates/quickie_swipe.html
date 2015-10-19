@@ -1,0 +1,12 @@
+<ion-view title="Quickie">
+    <ion-content scroll="false">
+        <td-cards>
+            <td-card ng-repeat="user in users" on-destroy="onCardDestroyed($index)"
+                     on-partial-swipe="onCardMove(amt)">
+                <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" alt="" />
+            </td-card>
+        </td-cards>
+        <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}">YES!</label>
+        <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}">NO..</label>
+    </ion-content>
+</ion-view>

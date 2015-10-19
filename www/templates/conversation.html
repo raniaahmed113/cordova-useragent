@@ -1,0 +1,34 @@
+<ion-view>
+    <ion-nav-title>{{pageTitle || 'Chat with ' + conversation.withUser.login}}</ion-nav-title>
+    <ion-content>
+        <ul class="list chat">
+            <div
+                    class="message"
+                    ng-repeat="message in messages"
+                    ng-class="{mine: message.id == currUser.id, failed: message.error ? true : false}"
+                    ng-click="resend($index)">
+                {{message.text}}
+                <div class="status">
+                    <span ng-if="message.error">Failed. Tap to retry.</span>
+                    <span ng-if="!message.error">{{message.dateSent && (message.dateSent*1000 | amCalendar) || "Sending.."}}</span>
+                </div>
+            </div>
+        </ul>
+        <div ng-if="messages.$promise.resolve && messages.length < 1">
+            <h2>No messages yet</h2>
+            <h3>Write me something</h3>
+        </div>
+    </ion-content>
+
+    <ion-footer-bar keyboard-attach class="bar-stable">
+        <form class="item-input-inset" ng-submit="sendMessage()" style="width: 100%">
+            <label class="item-input-wrapper">
+                <input
+                        type="text"
+                        placeholder="Type your message"
+                        ng-model="msgText" />
+            </label>
+            <button class="button button-clear" type="submit" ng-disabled="msgText.length < 1">Send</button>
+        </form>
+    </ion-footer-bar>
+</ion-view>

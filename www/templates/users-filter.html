@@ -1,0 +1,56 @@
+<ion-header-bar class="bar-dark">
+    <h1 class="title">Find people</h1>
+</ion-header-bar>
+<ion-content>
+    <div class="list">
+        <ion-checkbox
+                ng-checked="currUser.filter.online"
+                ng-click="currUser.filter.online = !currUser.filter.online">
+            Online only
+        </ion-checkbox>
+
+        <div class="item item-divider">Gender</div>
+        <ion-checkbox
+                ng-repeat="type in lookingFor"
+                ng-checked="currUser.filter.lookingFor.indexOf(type) > -1"
+                ng-click="toggleLookingFor(type)">
+            {{type | capitalizeFirst}}
+        </ion-checkbox>
+
+        <div class="item item-divider">Age</div>
+        <div class="item item-input item-select">
+            <span class="input-label">From</span>
+            <select ng-model="currUser.filter.age.from">
+                <option
+                        ng-repeat="i in ages"
+                        ng-hide="i > currUser.filter.age.to"
+                        ng-selected="currUser.filter.age.from == i"
+                        value="{{i}}">
+                    {{i}}
+                </option>
+            </select>
+        </div>
+
+        <div class="item item-input item-select">
+            <span class="input-label">To</span>
+            <select ng-model="currUser.filter.age.to">
+                <option
+                        ng-repeat="i in ages"
+                        ng-hide="i < currUser.filter.age.from"
+                        ng-selected="currUser.filter.age.to == i"
+                        value="{{i}}">
+                    {{i}}
+                </option>
+            </select>
+        </div>
+
+        <div class="item item-divider">Location</div>
+        <div class="item item-input item-select">
+            <span class="input-label">Country</span>
+            <select
+                    ng-model="currUser.filter.country"
+                    ng-options="country.id as country.label for country in countries">
+            </select>
+        </div>
+    </div>
+</ion-content>
