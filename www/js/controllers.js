@@ -1,6 +1,6 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, AuthService) {
+    .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $ionicLoading, AuthService) {
         $scope.logout = function() {
             AuthService.doLogout();
         };
@@ -28,6 +28,16 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             AuthService.setCurrentUser(newUser);
 
         }, true);
+
+        $scope.onError = function(response) {
+            $ionicLoading.hide();
+            $ionicPopup.alert({
+                title: 'Houston, we have problems',
+                template: response && response.data && response.data.message
+                    ? response.data.message
+                    : 'Something unexpected happened. Please try again.'
+            });
+        };
     })
 
     .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
@@ -344,17 +354,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     $ionicLoading.hide();
                     $ionicLoading.show({ template: 'Invite sent', noBackdrop: true, duration: 1000 });
 
-                }, function(response) {
-                    // Error
-                    $ionicLoading.hide();
-
-                    $ionicPopup.alert({
-                        title: 'Houston, we have problems',
-                        template: response && response.data && response.data.message
-                            ? response.data.message
-                            : 'Something unexpected happened. Please try again.'
-                    });
-                });
+                }, $scope.onError);
             });
         };
 
