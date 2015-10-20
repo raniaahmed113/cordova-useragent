@@ -40,7 +40,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/albums/:id', { id : '@id' });
     })
 
-    .factory('File', function($resource, Config) {
+    .factory('MediaFile', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/albums/:albumId/files/:id', { albumId: '@albumId', id: '@id' }, {
                 save: {
                     method: 'POST',

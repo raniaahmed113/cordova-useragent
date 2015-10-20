@@ -6,6 +6,7 @@ angular.module('hotvibes.directives', [])
             transclude: true,
             scope: {
                 list: '=',
+                promise: '=',
                 subProperty: '='
             },
             templateUrl: 'templates/resource_collection.html',
@@ -19,7 +20,11 @@ angular.module('hotvibes.directives', [])
                     $scope.error = true;
                 };
 
-                $scope.list.$promise = $scope.list.$promise.then(function(response) {
+                if (!$scope.promise) {
+                    $scope.promise = $scope.list.$promise;
+                }
+
+                $scope.promise = $scope.promise.then(function(response) {
                     config = response.config;
 
                     if ($scope.subProperty) {

@@ -29,10 +29,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         }, true);
 
-        $scope.onError = function(response) {
+        $scope.onError = function(response, params) {
             $ionicLoading.hide();
             $ionicPopup.alert({
-                title: 'Houston, we have problems',
+                title: params && params.title || 'Houston, we have problems',
                 template: response && response.data && response.data.message
                     ? response.data.message
                     : 'Something unexpected happened. Please try again.'
@@ -536,20 +536,23 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $ionicLoading.show({ template: 'Creating an album..' });
 
                 var album = new Album({ name: name });
-                album.$save().then(function(response) {
-                    $ionicLoading.hide();
-
-                    album.id = response.id;
+                album.$save().then(function() {
                     $scope.albums.push(album);
+                    $ionicLoading.hide();
                 }, $scope.onError);
             });
         };
     })
 
-    .controller('SettingsAlbumCtrl', function($scope, $stateParams, $ionicHistory, $ionicPopover, File, Album) {
+    .controller('SettingsAlbumCtrl', function(
+        $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
+        MediaFile, Album, Rule
+    ) {
+        var thumbParams = 'size=w80h80';
+
         $scope.album = Album.get({
             id: $stateParams.albumId,
-            include: 'photos.url(size=w80h80)'
+            include: 'photos.url(' + thumbParams + ')'
         });
 
         $scope.photoOptions = function($index, $event) {
@@ -563,18 +566,51 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             // TODO: photo actions: delete, set as main, etc
         };
 
-        var filePicker = document.getElementById('file-picker');
-        filePicker.addEventListener('change', function(event) {
-            var file = new File({
-                albumId: $stateParams.albumId,
-                file: event.target.files[0]
+        var filePicker;
+
+        $scope.$on('$ionicView.afterEnter', function() {
+            filePicker = document.querySelector('ion-view[nav-view="active"] #file-picker');
+            filePicker.removeEventListener('change');
+            filePicker.addEventListener('change', function(event) {
+                $ionicLoading.show({ template: 'Uploading..' });
+
+                var file = new MediaFile({
+                    albumId: $stateParams.albumId,
+                    file: event.target.files[0]
+                });
+
+                // Upload the file
+                file.$save().then(function(response) {
+                    $ionicLoading.hide();
+
+                    // Display the newly uploaded file
+                    $scope.album.photos.push(
+                        MediaFile.get({
+                            albumId: $stateParams.albumId,
+                            id: response.id,
+                            include: 'url(' + thumbParams + ')'
+                        })
+                    );
+
+                }, function(error) {
+                    $ionicLoading.hide();
+
+                    if (
+                        error.status == 400
+                        && error.data.rule
+                        && error.data.rule.type == Rule.MIN_VALUE
+                        && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
+                    ) {
+                        error.data.message = 'The image is too small: ' + (
+                                error.data.rule.field == 'width'
+                                    ? 'Min. width is ' + error.data.rule.value + ' pixels'
+                                    : 'Min. height is ' + error.data.rule.value + ' pixels'
+                            );
+                    }
+
+                    $scope.onError(error);
+                });
             });
-
-            // Upload the file
-            file.$save().then(function(response) {
-                // Success
-
-            }, $scope.onError);
         });
 
         $scope.openFilePicker = function() {
@@ -583,9 +619,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.deleteAlbum = function() {
             $scope.album.$delete();
-            $ionicHistory.goBack();
+            //$rootScope.$broadcast('');
+            // FIXME: notify albums list about deleted element
 
-            // FIXME
+            $ionicHistory.goBack();
         };
     })
 

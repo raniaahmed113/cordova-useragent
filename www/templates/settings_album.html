@@ -5,8 +5,8 @@
         <button ng-if="album.id > 0" class="button icon ion-trash-b" ng-click="deleteAlbum()"></button>
     </ion-nav-buttons>
     <ion-content scroll="false">
-        <input type="file" accept="image/*" id="file-picker">
-        <resource-collection list="album">
+        <input type="file" accept="image/*" id="file-picker" />
+        <resource-collection promise="album.$promise" list="album.photos">
             <div class="row row-wrap">
                 <img class="col col-25 thumb" ng-repeat="photo in album.photos" ng-src="{{photo.url}}" alt="" ng-click="photoOptions($index, $event)" />
             </div>

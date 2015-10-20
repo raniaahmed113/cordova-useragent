@@ -15,6 +15,10 @@ angular.module('hotvibes', [
         MEMBER_HAS_BLOCKED_YOU: 104
     })
 
+    .constant('Rule', {
+        MIN_VALUE: 'minValue'
+    })
+
     .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
