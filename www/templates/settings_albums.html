@@ -1,5 +1,5 @@
 <ion-view view-title="{{title || 'Photos & albums'}}">
-    <ion-content>
+    <ion-content class="center-vertical-disabled">
         <div class="list">
             <div class="item item-divider">Photos</div>
             <div class="item item-nav-view-container">
@@ -10,11 +10,13 @@
                 Albums
                 <button class="button icon ion-plus" ng-click="createAlbum()"></button>
             </div>
-            <a class="item item-thumbnail-left" href="#/settings/photos/{{album.id}}" ng-repeat="album in albums">
-                <img ng-src="{{album.thumbUrl || 'img/person-generic.png'}}">
-                <h2>{{album.name}}</h2>
-                <p>{{album.cntPhotos || '0'}} photos</p>
-            </a>
+            <resource-collection list="albums">
+                <a class="item item-thumbnail-left" href="#/settings/albums/{{album.id}}" ng-repeat="album in albums">
+                    <img ng-src="{{album.thumbUrl || 'img/person-generic.png'}}">
+                    <h2>{{album.name}}</h2>
+                    <p>{{album.cntPhotos || '0'}} photos</p>
+                </a>
+            </resource-collection>
         </div>
     </ion-content>
 </ion-view>

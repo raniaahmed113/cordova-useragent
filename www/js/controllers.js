@@ -546,7 +546,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('SettingsAlbumCtrl', function($scope, $stateParams, $ionicHistory, $ionicPopover, Album) {
+    .controller('SettingsAlbumCtrl', function($scope, $stateParams, $ionicHistory, $ionicPopover, File, Album) {
         $scope.album = Album.get({
             id: $stateParams.albumId,
             include: 'photos.url(size=w80h80)'
@@ -571,7 +571,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             });
 
             // Upload the file
-            file.$save();
+            file.$save().then(function(response) {
+                // Success
+
+            }, $scope.onError);
         });
 
         $scope.openFilePicker = function() {
@@ -582,7 +585,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.album.$delete();
             $ionicHistory.goBack();
 
-            // TODO:
+            // FIXME
         };
     })
 

@@ -6,6 +6,11 @@ resource-collection {
   }
 }
 
+.center-vertical-disabled .overlay.center {
+  margin-top: 0 !important;
+  padding: 10px 20px;
+}
+
 #file-picker {
   display: none;
 }
