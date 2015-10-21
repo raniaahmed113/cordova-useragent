@@ -67,6 +67,7 @@ angular.module('hotvibes', [
 
             .state('inside', {
                 abstract: true,
+                cache: false,
                 templateUrl: "templates/menu.html",
                 controller: 'AppCtrl',
                 onEnter: function($state, AuthService) {
