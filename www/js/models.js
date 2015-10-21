@@ -4,7 +4,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         var User = $resource(Config.API_URL_BASE + 'users/:id', { id: '@id' });
 
         User.valueOf = function(data) {
-            if (!data.id) {
+            if (!data || !data.id) {
                 throw "Invalid data provided";
             }
 

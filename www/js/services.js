@@ -20,7 +20,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
         this.init = function() {
             var userData = localStorage['currentUser'];
-            if (userData) {
+            if (userData && userData != 'null') {
                 currentUser = $injector.get('User').valueOf(JSON.parse(userData));
             }
         };
@@ -36,24 +36,30 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
          * @param {User} user
          */
         this.setCurrentUser = function(user) {
-            if (user.filter) {
-                if ('id' in user.filter) {
-                    delete user.filter.id;
-                }
+            if (user == null) {
+                localStorage.removeItem('currentUser');
 
-                var properties = [
-                    'ageMin', 'ageMax', 'aroundMe', 'realMembers',
-                    'withFacebook', 'withFotos', 'cityId', 'cityName', 'newMembers'
-                ];
-                for (var i in properties) {
-                    if (user.filter.hasOwnProperty(properties[i]) && !user.filter[properties[i]]) {
-                        delete user.filter[properties[i]];
+            } else {
+                if (user.filter) {
+                    if ('id' in user.filter) {
+                        delete user.filter.id;
+                    }
+
+                    var properties = [
+                        'ageMin', 'ageMax', 'aroundMe', 'realMembers',
+                        'withFacebook', 'withFotos', 'cityId', 'cityName', 'newMembers'
+                    ];
+                    for (var i in properties) {
+                        if (user.filter.hasOwnProperty(properties[i]) && !user.filter[properties[i]]) {
+                            delete user.filter[properties[i]];
+                        }
                     }
                 }
+
+                localStorage['currentUser'] = JSON.stringify(user);
             }
 
             currentUser = user;
-            localStorage['currentUser'] = JSON.stringify(currentUser);
         };
 
         /**
@@ -87,12 +93,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                         args['onError'](response, status, headers, config);
                     }
                 });
-        };
-
-        this.doLogout = function() {
-            currentUser = null;
-            localStorage.removeItem('currentUser');
-            $rootScope.$broadcast('loggedOut');
         };
     })
 

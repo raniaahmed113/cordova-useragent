@@ -7,7 +7,6 @@ var enableUserDeletion = function($scope) {
         $event.preventDefault();
 
         var userToDelete = $scope.users.splice($index, 1)[0];
-        console.log(userToDelete);
         userToDelete.$delete();
     }
 };
@@ -16,16 +15,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $ionicLoading, AuthService) {
         $scope.logout = function() {
-            AuthService.doLogout();
+            AuthService.setCurrentUser(null);
+            $state.go('login');
+            $ionicHistory.clearCache();
         };
 
         $scope.$on('authTokenExpired', function() {
-            AuthService.doLogout();
-        });
-
-        $scope.$on('loggedOut', function() {
-            $state.go('login');
-            $ionicHistory.clearCache();
+            $scope.logout();
         });
 
         $scope.rightMenuEnabled = $state.current.views.rightMenu ? true : false;
