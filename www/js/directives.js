@@ -27,9 +27,9 @@ angular.module('hotvibes.directives', [])
                 $scope.promise = $scope.promise.then(function(response) {
                     config = response.config;
 
-                    var Resource = $resource(config.url + '/:id', { id: '@id'});
-
                     if ($scope.subProperty) {
+                        var Resource = $resource(config.url + '/:id', { id: '@id'});
+
                         for (i=0; i<response.resource.length; i++) {
                             response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
                         }
@@ -48,24 +48,21 @@ angular.module('hotvibes.directives', [])
                         config.params,
 
                         function(response) {
-                            var newEntries = response.resource;
+                            var lastIndex = $scope.currPage == 1 ? 0 : $scope.list.length;
 
-                            if ($scope.currPage == 1) {
-                                $scope.list = newEntries;
-
-                            } else {
-                                $scope.list = $scope.list.concat(newEntries);
-                                $scope.list.$metadata = {
-                                    moreAvailable: newEntries.$metadata.moreAvailable
-                                };
+                            // Append/overwrite rows
+                            for (var i=0; i<response.resource.length; i++) {
+                                $scope.list[lastIndex + i] = response.resource[i];
                             }
 
+                            // Overwrite meta-data
+                            $scope.list.$metadata = response.resource.$metadata;
+
+                            // Broadcast that our infinite-scroll load is now complete
                             $scope.$broadcast('scroll.infiniteScrollComplete');
                         },
 
-                        function(error) {
-                            onError(error);
-                        }
+                        onError
                     );
                 };
 
