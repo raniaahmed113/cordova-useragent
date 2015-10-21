@@ -50,7 +50,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('LoginCtrl', function($scope, AuthService, $state, $ionicLoading, $ionicPopup) {
+    .controller('LoginCtrl', function($scope, $state, $ionicModal, $ionicLoading, $ionicPopup, AuthService) {
         $scope.loginData = {};
         $scope.login = function() {
             var loginArgs = $scope.loginData;
@@ -74,6 +74,26 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicLoading.show({ template: 'Logging in..'});
             AuthService.doLogin(loginArgs);
         };
+
+        $scope.registration = {
+            data: {},
+
+            submit: function() {
+                // Validate data
+
+                // Submit request
+                AuthService.doRegister(this.data);
+            }
+        };
+
+        $ionicModal
+            .fromTemplateUrl('templates/register.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.registration.modal = modal;
+            });
     })
 
     .controller('UsersFilterCtrl', function($scope) {

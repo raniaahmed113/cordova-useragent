@@ -59,12 +59,6 @@ angular.module('hotvibes', [
                 }
             })
 
-            .state('register', {
-                url: "/register",
-                templateUrl: "templates/register.html",
-                controller: 'RegisterCtrl'
-            })
-
             .state('inside', {
                 abstract: true,
                 cache: false,
