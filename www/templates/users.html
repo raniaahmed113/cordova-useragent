@@ -1,12 +1,16 @@
 <ion-view view-title="{{title || 'People'}}">
     <ion-nav-buttons side="right">
-        <button class="button" ng-if="showFilter" ng-click="showFilter()"><i class="icon ion-search"></i></button>
+        <div ng-show="users.length > 0">
+            <button class="button icon ion-search" ng-if="showFilter" ng-click="showFilter()"></button>
+            <button class="button icon ion-trash-b" ng-class="{'active': deleteMode}" ng-if="deleteMode !== undefined" ng-click="toggleDeleteMode()"></button>
+        </div>
     </ion-nav-buttons>
     <ion-content>
         <resource-collection list="users" sub-property="subProperty">
             <div class="row row-wrap">
-                <a ng-repeat="user in users" href="#/users/{{user.id}}" class="user col col-25">
+                <a ng-repeat="user in users" href="#/users/{{user.id}}" ng-click="deleteMode ? delete($event, $index) : true" class="user col col-25">
                     <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
+                    <i class="icon ion-close-circled" ng-show="deleteMode"></i>
                 </a>
             </div>
         </resource-collection>

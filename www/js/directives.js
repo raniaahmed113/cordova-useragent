@@ -27,9 +27,11 @@ angular.module('hotvibes.directives', [])
                 $scope.promise = $scope.promise.then(function(response) {
                     config = response.config;
 
+                    var Resource = $resource(config.url + '/:id', { id: '@id'});
+
                     if ($scope.subProperty) {
                         for (i=0; i<response.resource.length; i++) {
-                            response.resource[i] = response.resource[i][$scope.subProperty];
+                            response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
                         }
 
                         return response;
