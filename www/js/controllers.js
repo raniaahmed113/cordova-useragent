@@ -10,7 +10,6 @@ var enableUserDeletion = function($scope) {
         console.log(userToDelete);
         userToDelete.$delete();
     }
-    console.log($scope.users);
 };
 
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
@@ -690,10 +689,20 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, ChatRoomPost) {
-        $scope.posts = ChatRoomPost.query({
-            roomId: $stateParams.id,
-            include: 'author.profilePhoto.url(size=w80h80)'
-        });
+        var loadPosts = function() {
+            return ChatRoomPost.query({
+                roomId: $stateParams.id,
+                include: 'author.profilePhoto.url(size=w80h80)'
+            });
+        };
+
+        $scope.posts = loadPosts();
+        $scope.doRefresh = function() {
+            loadPosts().$promise.then(function(result) {
+                $scope.posts = result.resource;
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        };
 
         $ionicModal
             .fromTemplateUrl('templates/chat_room_post_new.html', {
