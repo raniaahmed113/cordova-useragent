@@ -1,0 +1,60 @@
+<ion-view title="Profile &laquo; Settings">
+    <ion-content>
+        <form ng-fab-form name="profileForm" ng-submit="save()" novalidate class="list list-inset">
+            <label class="item item-input">
+                <span class="input-label">Username</span>
+                <input type="text" value="{{currUser.login}}" disabled />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">Birthday</span>
+                <input type="text" value="{{currUser.birthday}}" disabled />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">Country</span>
+                <input type="text" ng-model="profile.country" />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">City</span>
+                <input type="text" ng-model="profile.cityName" />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">Phone number</span>
+                <input type="tel" ng-model="profile.phone" />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">E-mail</span>
+                <input type="email" ng-model="profile.email" />
+            </label>
+
+            <div class="padding">
+                <button class="button button-block button-positive" type="submit" ng-disabled="profileForm.$pristine">Save changes</button>
+            </div>
+        </form>
+
+        <form ng-fab-form name="passwordForm" ng-submit="changePassword()" class="list list-inset">
+            <label class="item item-input">
+                <span class="input-label">Old password</span>
+                <input type="password" ng-model="password.old" required />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">New password</span>
+                <input type="password" ng-model="password.new" required />
+            </label>
+
+            <label class="item item-input">
+                <span class="input-label">Confirm new password</span>
+                <input type="password" name="confirm" ng-model="password.confirm" ng-fab-match="password.new" required />
+            </label>
+
+            <div class="padding">
+                <button class="button button-block button-positive" type="submit" ng-disabled="passwordForm.$invalid">Change password</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

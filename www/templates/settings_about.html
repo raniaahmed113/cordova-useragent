@@ -1,0 +1,64 @@
+<ion-view title="About me &laquo; Settings">
+    <ion-content>
+        <form ng-fab-form name="aboutMeForm" ng-submit="save()" novalidate>
+            <div class="list list-inset">
+                <div class="item item-divider">My personal info</div>
+
+                <label class="item item-input">
+                    <span class="input-label">Height</span>
+                    <input type="number" ng-model="aboutMe.height" required />
+                </label>
+
+                <label ng-repeat="selectable in selectables" class="item item-input item-select">
+                    <span class="input-label">{{selectable.label}}</span>
+                    <select ng-model="aboutMe[selectable.id]">
+                        <option ng-repeat="option in selectable.options" value="{{option.id}}">{{option.label}}</option>
+                    </select>
+                </label>
+            </div>
+
+            <ul class="list list-inset">
+                <li class="item item-divider">Looking for</li>
+
+                <li class="item item-checkbox">
+                    <label class="checkbox"><input type="checkbox" ng-model="aboutMe.lookingFor[0]"></label>
+                    Male
+                </li>
+
+                <li class="item item-checkbox">
+                    <label class="checkbox"><input type="checkbox" ng-model="aboutMe.lookingFor[1]"></label>
+                    Female
+                </li>
+            </ul>
+
+            <ul class="list list-inset">
+                <li class="item item-divider">Purpose</li>
+
+                <li ng-repeat="purpose in purposes" class="item item-checkbox">
+                    <label class="checkbox"><input type="checkbox" ng-model="aboutMe.purpose[purpose.id]"></label>
+                    {{purpose.label}}
+                </li>
+            </ul>
+
+            <div class="list list-inset">
+                <div class="item item-divider">About me</div>
+                <label class="item item-input">
+                    <textarea rows="4" ng-model="aboutMe.description"></textarea>
+                </label>
+            </div>
+
+            <div class="list list-inset">
+                <div class="item item-divider">My perfect match should be..</div>
+                <label class="item item-input">
+                    <textarea rows="4" ng-model="aboutMe.perfectMatch"></textarea>
+                </label>
+            </div>
+
+            <div class="padding">
+                <button class="button button-block button-positive" type="submit" ng-disabled="aboutMeForm.$invalid">
+                    Save changes
+                </button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

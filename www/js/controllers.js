@@ -539,6 +539,47 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         enableUserDeletion($scope);
     })
 
+    .controller('SettingsProfileCtrl', function($scope, $ionicLoading) {
+        $scope.profile = {
+            cityName: $scope.currUser.cityName,
+            country: $scope.currUser.country,
+            //phone: $scope.currUser.profile.phoneNumber,
+            email: $scope.currUser.email
+        };
+        $scope.save = function() {
+            // TODO
+            $ionicLoading.show();
+        };
+
+        $scope.password = {};
+        $scope.changePassword = function() {
+
+        };
+    })
+
+    .controller('SettingsAboutCtrl', function($scope, $ionicLoading) {
+        $scope.selectables = [
+            {id: 'maritalStatus', label: 'Marital status', options: []},
+            {id: 'living', label: 'Living with', options: []},
+            {id: 'smoking', label: 'Smoking', options: []},
+            {id: 'drinking', label: 'Drinking', options: []},
+            {id: 'education', label: 'Education', options: []}
+        ];
+
+        $scope.purposes = [
+            {id: 'dating', label: 'Real dates'},
+            {id: 'sex', label: 'Sex'},
+            {id: 'chat', label: 'Chatting'},
+            {id: 'relationship', label: 'Serious relationship'},
+            {id: 'marriage', label: 'Marriage'}
+        ];
+
+        $scope.save = function() {
+            // TODO
+            $ionicLoading.show();
+        };
+    })
+
     .controller('SettingsAlbumsCtrl', function($scope, $ionicPopover, $ionicPopup, $ionicLoading, Album) {
         $scope.albums = Album.query({ include: 'thumbUrl(size=w80h80)' });
 

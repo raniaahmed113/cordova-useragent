@@ -218,6 +218,26 @@ angular.module('hotvibes', [
                 }
             })
 
+            .state('inside.settings-profile', {
+                url: "/settings/profile",
+                views: {
+                    main: {
+                        templateUrl: "templates/settings_profile.html",
+                        controller: 'SettingsProfileCtrl'
+                    }
+                }
+            })
+
+            .state('inside.settings-about', {
+                url: "/settings/aboutMe",
+                views: {
+                    main: {
+                        templateUrl: "templates/settings_about.html",
+                        controller: 'SettingsAboutCtrl'
+                    }
+                }
+            })
+
             .state('inside.settings-albums', {
                 url: "/settings/albums",
                 views: {
