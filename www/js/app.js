@@ -5,7 +5,7 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 
 angular.module('hotvibes', [
-    'ionic', 'ion-autocomplete', 'angularMoment', 'ionic.contrib.ui.tinderCards',
+    'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards',
     'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
 
@@ -19,7 +19,7 @@ angular.module('hotvibes', [
         MIN_VALUE: 'minValue'
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/) {
+    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
@@ -46,6 +46,16 @@ angular.module('hotvibes', [
                 return response;
             }
         };
+
+        ngFabFormProvider.setInsertErrorTplFn(function(compiledAlert, el, attrs) {
+            var label = el.parent()[0].getElementsByClassName('input-label');
+            if (label) {
+                label[0].appendChild(compiledAlert);
+
+            } else {
+                el.after(compiledAlert);
+            }
+        });
 
         $stateProvider
             .state('login', {
