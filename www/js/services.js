@@ -20,7 +20,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
         this.init = function() {
             var userData = localStorage['currentUser'];
-            if (userData && userData != 'null') {
+            if (userData && userData[0] == '{') {
                 currentUser = $injector.get('User').valueOf(JSON.parse(userData));
             }
         };

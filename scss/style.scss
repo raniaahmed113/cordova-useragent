@@ -218,7 +218,6 @@ ul.chat {
     width: 100%;height: 100%;
     font-size: 2.5em;
     color: $assertive;
-    background-color: transparentize($dark, 0.7);
 
     @include display-flex();
     @include justify-content(center);

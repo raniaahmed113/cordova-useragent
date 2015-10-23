@@ -794,35 +794,40 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             post.body = $scope.modal.newPost.text;
 
             $ionicLoading.show();
-            post.$save({ roomId: $stateParams.id }, function() {
-                // Success
-                $ionicLoading.hide();
+            post.$save({
+                    roomId: $stateParams.id
+                },
+                function() {
+                    // Success
+                    $ionicLoading.hide();
 
-                post.created = Math.round(Date.now() / 1000);
-                post.author = $scope.currUser;
-                $scope.posts.unshift(post);
+                    post.created = Math.round(Date.now() / 1000);
+                    post.author = $scope.currUser;
+                    $scope.posts.unshift(post);
 
-                $scope.modal.newPost = {};
-                $scope.closePostComposer();
+                    $scope.modal.newPost = {};
+                    $scope.closePostComposer();
 
-            }, function(response) {
-                // Error
-                $ionicLoading.hide();
+                },
+                function(response) {
+                    // Error
+                    $ionicLoading.hide();
 
-                if (
-                    response.status == 400 /* Bad Request*/
-                    && response.data.field
-                ) {
-                    $scope.errors[response.data.field] = response.data.message;
+                    if (
+                        response.status == 400 /* Bad Request*/
+                        && response.data.field
+                    ) {
+                        $scope.errors[response.data.field] = response.data.message;
 
-                } else {
-                    $ionicPopup.alert({
-                        title: 'Houston, we have problems',
-                        template: response && response.data && response.data.message
-                            ? response.data.message
-                            : 'Something unexpected happened. Please try again.'
-                    });
+                    } else {
+                        $ionicPopup.alert({
+                            title: 'Houston, we have problems',
+                            template: response && response.data && response.data.message
+                                ? response.data.message
+                                : 'Something unexpected happened. Please try again.'
+                        });
+                    }
                 }
-            });
+            );
         };
     });
