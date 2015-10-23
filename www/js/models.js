@@ -99,6 +99,16 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'dataSets/gifts');
     })
 
+    .factory('Country', function() {
+        return {
+            query: function() {
+                return [
+                    {id: 'LT', label: 'Lithuania'} // FIXME: read from a bundled .json file
+                ];
+            }
+        };
+    })
+
     .factory('UserGift', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'users/:userId/gifts', { userId: '@userId' });
     })

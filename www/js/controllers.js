@@ -50,7 +50,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('LoginCtrl', function($scope, $state, $ionicModal, $ionicLoading, $ionicPopup, AuthService) {
+    .controller('LoginCtrl', function($scope, $state, $ionicModal, $ionicLoading, $ionicPopup, AuthService, Country) {
         $scope.loginData = {};
         $scope.login = function() {
             var loginArgs = $scope.loginData;
@@ -75,14 +75,21 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             AuthService.doLogin(loginArgs);
         };
 
+        $scope.countries = Country.query();
         $scope.registration = {
             data: {},
 
             submit: function() {
-                // Validate data
+                $ionicLoading.show();
 
                 // Submit request
-                AuthService.doRegister(this.data);
+                AuthService.submitRegistration(this.data)
+                    .success(function(response, status, headers, config) {
+                        $ionicLoading.hide();
+
+                    }).error(function(response, status, headers, config) {
+                        $ionicLoading.hide();
+                    });
             }
         };
 

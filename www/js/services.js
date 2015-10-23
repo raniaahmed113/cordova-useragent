@@ -94,6 +94,10 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     }
                 });
         };
+
+        this.submitRegistration = function(data) {
+            return Api.request().post(Config.API_URL_BASE + 'auth/register', data);
+        };
     })
 
     .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config, ErrorCode) {
