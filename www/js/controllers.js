@@ -280,7 +280,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 transitionParams = { location: true };
 
             } else {
-                transitionParams = { location: 'replace', disableBack: true }; // FIXME: disableBlack does not work as expected
+                $ionicHistory.currentView($ionicHistory.backView()); // FIXME: remove this dirty hack once location: replace works as it should
+                transitionParams = { location: 'replace', disableBack: true };
             }
 
             $state.go('inside.user.' + tab, {}, transitionParams);
