@@ -10,36 +10,49 @@ angular.module('hotvibes.directives', [])
                 subProperty: '='
             },
             templateUrl: 'templates/resource_collection.html',
-            controller: function($scope, $resource) {
+            controller: function($scope, $resource, ErrorCode) {
                 $scope.error = false;
                 $scope.currPage = 1;
 
                 var config;
-                var onError = function(error) {
-                    console.error('error!', error); // FIXME
-                    $scope.error = true;
+                var onError = function(response) {
+                    console.error('error!', response); // FIXME
+
+                    switch (response.data.code) {
+                        case ErrorCode.VIP_REQUIRED:
+                            $scope.error = {
+                                icon: 'ion-star',
+                                message: 'Only for VIP members'
+                            };
+                            break;
+
+                        default:
+                            $scope.error = true;
+                            break;
+                    }
                 };
 
                 if (!$scope.promise) {
                     $scope.promise = $scope.list.$promise;
                 }
 
-                $scope.promise = $scope.promise.then(function(response) {
-                    config = response.config;
+                $scope.promise = $scope.promise.then(
+                    function(response) {
+                        config = response.config;
 
-                    if ($scope.subProperty) {
-                        var Resource = $resource(config.url + '/:id', { id: '@id'});
+                        if ($scope.subProperty) {
+                            var Resource = $resource(config.url + '/:id', { id: '@id'});
 
-                        for (i=0; i<response.resource.length; i++) {
-                            response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
+                            for (i=0; i<response.resource.length; i++) {
+                                response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
+                            }
+
+                            return response;
                         }
+                    },
 
-                        return response;
-                    }
-
-                }, function(response) {
-                    onError(response.data);
-                });
+                    onError
+                );
 
                 var fetch = function() {
                     config.params.page = $scope.currPage;
