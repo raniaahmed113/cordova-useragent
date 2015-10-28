@@ -18,7 +18,7 @@
         </ion-checkbox>
 
         <div class="item item-divider">Age</div>
-        <div class="item item-input item-select">
+        <label class="item item-input item-select">
             <span class="input-label">From</span>
             <select ng-model="currUser.filter.age.from">
                 <option
@@ -29,9 +29,9 @@
                     {{i}}
                 </option>
             </select>
-        </div>
+        </label>
 
-        <div class="item item-input item-select">
+        <label class="item item-input item-select">
             <span class="input-label">To</span>
             <select ng-model="currUser.filter.age.to">
                 <option
@@ -42,15 +42,15 @@
                     {{i}}
                 </option>
             </select>
-        </div>
+        </label>
 
         <div class="item item-divider">Location</div>
-        <div class="item item-input item-select">
+        <label class="item item-input item-select">
             <span class="input-label">Country</span>
             <select
                     ng-model="currUser.filter.country"
                     ng-options="country.id as country.label for country in countries">
             </select>
-        </div>
+        </label>
     </div>
 </ion-content>
