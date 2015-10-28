@@ -342,11 +342,20 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.gifts = Gift.query({ include: 'thumbUrl(size=w80h80)' });
-        $scope.sendGift = function(giftId) {
-            var gift = new UserGift({ giftId: giftId, userId: $scope.user.id });
-            gift.$save();
+        $scope.sendGift = function(gift) {
+            var giftSent = new UserGift({ giftId: gift.id, userId: $scope.user.id });
 
-            $scope.user.gifts.push(gift);
+            giftSent.$save().then(
+                function() {
+                    // FIXME: these kinds of profile changes should come via server-->client event stream
+                    $scope.currUser.credits -= gift.price;
+                },
+                function() {
+                    // FIXME: handle error, like not enough credits
+                }
+            );
+
+            $scope.user.gifts.push(giftSent);
             $scope.modal.hide();
 
             $ionicLoading.show({ template: 'Gift sent', noBackdrop: true, duration: 1000 });

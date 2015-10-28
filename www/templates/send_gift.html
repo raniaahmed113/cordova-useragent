@@ -5,10 +5,13 @@
             <button class="button" ng-click="hideGifts()"><i class="icon ion-android-close"></i></button>
         </div>
     </ion-header-bar>
+    <ion-header-bar class="bar-dark bar-subheader">
+        <h3 class="title">Currently you have <b class="energized">{{currUser.credits}}</b> credits</h3>
+    </ion-header-bar>
     <ion-content>
-        <a href="#" class="button gift" ng-repeat="gift in gifts" ng-click="sendGift(gift.id)">
-            <img ng-src="{{gift.thumbUrl}}" alt="">
+        <button class="button gift" ng-repeat="gift in gifts" ng-click="sendGift(gift)" ng-disabled="gift.price > currUser.credits">
+            <img ng-src="{{gift.thumbUrl}}" alt="" />
             <div><i class="icon ion-social-usd"></i> {{gift.price}}</div>
-        </a>
+        </button>
     </ion-content>
 </ion-modal-view>
