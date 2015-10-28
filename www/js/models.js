@@ -103,10 +103,18 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return {
             query: function() {
                 return [
-                    {id: 'LT', label: 'Lithuania'} // FIXME: read from a bundled .json file
+                    {id: 'LT', label: 'Lithuania'},
+                    {id: 'LV', label: 'Latvia'},
+                    {id: 'PL', label: 'Poland'},
+                    {id: 'HR', label: 'Croatia'},
+                    {id: 'UK', label: 'United Kingdom'}
                 ];
             }
         };
+    })
+
+    .factory('City', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'dataSets/cities');
     })
 
     .factory('UserGift', function($resource, Config) {

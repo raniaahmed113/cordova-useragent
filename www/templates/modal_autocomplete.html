@@ -1,0 +1,15 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-dark item-input-inset">
+        <label class="item-input-wrapper">
+            <i class="icon ion-ios-search-strong placeholder-icon"></i>
+            <input type="search" autofocus placeholder="Search" ng-change="modal.search()" ng-model="modal.input" ng-model-options="{ debounce: 700 }" />
+        </label>
+        <button class="button icon ion-android-close" ng-click="modal.hide()"></button>
+    </ion-header-bar>
+    <ion-content>
+        <ul class="list">
+            <ion-spinner ng-show="modal.searching"></ion-spinner>
+            <li ng-click="modal.onItemSelected($index)" class="item" ng-repeat="row in modal.rows">{{row.label}}</li>
+        </ul>
+    </ion-content>
+</ion-modal-view>

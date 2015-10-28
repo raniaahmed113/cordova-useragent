@@ -1,6 +1,6 @@
 <ion-view title="Profile &laquo; Settings">
     <ion-content>
-        <form ng-fab-form name="profileForm" ng-submit="save()" novalidate class="list list-inset">
+        <form ng-fab-form name="profile.form" ng-submit="save()" novalidate class="list list-inset">
             <label class="item item-input">
                 <span class="input-label">Username</span>
                 <input type="text" value="{{currUser.login}}" disabled />
@@ -11,15 +11,20 @@
                 <input type="text" value="{{currUser.birthday}}" disabled />
             </label>
 
-            <label class="item item-input">
+            <label class="item item-input item-select">
                 <span class="input-label">Country</span>
-                <input type="text" ng-model="profile.country" />
+                <select ng-model="profile.country">
+                    <option ng-repeat="country in countries" value="{{country.id}}">{{country.label}}</option>
+                </select>
             </label>
 
-            <label class="item item-input">
+            <div class="item item-input-inset item-button-right">
                 <span class="input-label">City</span>
-                <input type="text" ng-model="profile.cityName" />
-            </label>
+                <input type="text" name="city" ng-model="profile.cityName" disabled />
+                <button type="button" class="button button-small" ng-click="modal.show()">
+                    Edit
+                </button>
+            </div>
 
             <label class="item item-input">
                 <span class="input-label">Phone number</span>
@@ -32,7 +37,10 @@
             </label>
 
             <div class="padding">
-                <button class="button button-block button-positive" type="submit" ng-disabled="profileForm.$pristine">Save changes</button>
+                <p class="center">Your phone number and e-mail address are not shown to other members.</p>
+                <button class="button button-block button-positive" type="submit" ng-disabled="profile.form.$pristine">
+                    Save changes
+                </button>
             </div>
         </form>
 
@@ -53,7 +61,9 @@
             </label>
 
             <div class="padding">
-                <button class="button button-block button-positive" type="submit" ng-disabled="passwordForm.$invalid">Change password</button>
+                <button class="button button-block button-positive" type="submit" ng-disabled="passwordForm.$invalid">
+                    Change password
+                </button>
             </div>
         </form>
     </ion-content>

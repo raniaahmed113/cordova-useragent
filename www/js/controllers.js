@@ -549,7 +549,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         enableUserDeletion($scope);
     })
 
-    .controller('SettingsProfileCtrl', function($scope, $ionicLoading) {
+    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, Country, City) {
         $scope.profile = {
             cityName: $scope.currUser.cityName,
             country: $scope.currUser.country,
@@ -558,12 +558,51 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
         $scope.save = function() {
             // TODO
+            console.log('onSubmit');
             $ionicLoading.show();
         };
 
+        $scope.countries = Country.query();
+
+        $ionicModal
+            .fromTemplateUrl('templates/modal_autocomplete.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                modal.search = function() {
+                    $scope.modal.searching = true;
+
+                    City.query({
+                        country: $scope.profile.country,
+                        name: $scope.modal.input
+
+                    }).$promise.then(
+                        function(response) {
+                            $scope.modal.rows = response.resource.map(function(city) {
+                                return {label: city.name}
+                            });
+                        },
+
+                        $scope.onError
+
+                    ).finally(function() {
+                        $scope.modal.searching = false;
+                    });
+                };
+
+                modal.onItemSelected = function($index) {
+                    $scope.profile.cityName = $scope.modal.rows[$index]['label'];
+                    $scope.profile.form.city.$setDirty();
+                    modal.hide();
+                };
+
+                $scope.modal = modal;
+            });
+
         $scope.password = {};
         $scope.changePassword = function() {
-
+            // TODO
         };
     })
 
@@ -628,10 +667,16 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $ionicLoading.show({ template: 'Creating an album..' });
 
                 var album = new Album({ name: name });
-                album.$save().then(function() {
-                    $scope.albums.push(album);
+                album.$save().then(
+                    function() {
+                        $scope.albums.push(album);
+                    },
+
+                    $scope.onError
+
+                ).finally(function() {
                     $ionicLoading.hide();
-                }, $scope.onError);
+                });
             });
         };
     })
@@ -673,8 +718,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
                 // Upload the file
                 file.$save().then(function(response) {
-                    $ionicLoading.hide();
-
                     // Display the newly uploaded file
                     $scope.album.photos.push(
                         MediaFile.get({
@@ -685,8 +728,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     );
 
                 }, function(error) {
-                    $ionicLoading.hide();
-
                     if (
                         error.status == 400
                         && error.data.rule
@@ -701,6 +742,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     }
 
                     $scope.onError(error);
+
+                }).finally(function() {
+                    $ionicLoading.hide();
                 });
             });
         });

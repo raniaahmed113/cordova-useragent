@@ -218,6 +218,16 @@ angular.module('hotvibes', [
                 }
             })
 
+            .state('inside.settings-credits', {
+                url: "/settings/credits",
+                views: {
+                    main: {
+                        templateUrl: "templates/settings_credits.html"/*,
+                        controller: 'SettingsProfileCtrl'*/
+                    }
+                }
+            })
+
             .state('inside.settings-profile', {
                 url: "/settings/profile",
                 views: {
