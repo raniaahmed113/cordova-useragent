@@ -1,7 +1,11 @@
 angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('User', function($resource, Config, Filter) {
-        var User = $resource(Config.API_URL_BASE + 'users/:id', { id: '@id' });
+        var User = $resource(
+            Config.API_URL_BASE + 'users/:id',
+            { id: '@id' },
+            { update: { method: 'PATCH' }}
+        );
 
         User.valueOf = function(data) {
             if (!data || !data.id) {

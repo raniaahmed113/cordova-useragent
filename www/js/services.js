@@ -109,7 +109,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     config.headers.Authorization = 'Bearer ' + currentUser.accessToken;
 
                     if (!config.headers.DPR) {
-                        config.headers.DPR = $window.devicePixelRatio;
+                        config.headers['DPR'] = $window.devicePixelRatio;
                         config.headers['Viewport-Width'] = $window.innerWidth;
                     }
                 }

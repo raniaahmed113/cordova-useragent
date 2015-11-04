@@ -4,6 +4,17 @@ if (typeof String.prototype.startsWith != 'function') {
     };
 }
 
+Array.prototype.toggleElement = function(element) {
+    var index = this.indexOf(element);
+
+    if (index > -1) {
+        this.splice(index, 1);
+
+    } else {
+        this.push(element);
+    }
+};
+
 angular.module('hotvibes', [
     'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards',
     'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'

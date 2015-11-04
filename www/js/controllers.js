@@ -103,13 +103,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             });
     })
 
-    .controller('UsersFilterCtrl', function($scope) {
-        $scope.countries = [
-            {
-                id: 'LT',
-                label: 'Lithuania'
-            }
-        ]; // FIXME: add full list of countries
+    .controller('UsersFilterCtrl', function($scope, Country) {
+        console.log($scope.currUser.filter);
+        $scope.countries = Country.query();
 
         var range = function(min, max, step) {
             step = step || 1;
@@ -120,22 +116,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.ages = range(18, 99);
         $scope.lookingFor = ['male', 'female'];
-        $scope.toggleLookingFor = function(type) {
-            var idx;
-
-            if (!$scope.currUser.filter.lookingFor) {
-                idx = -1;
-                $scope.currUser.filter.lookingFor = [];
+        $scope.toggleGender = function($index) {
+            if ($scope.currUser.filter.gender[$index]) {
+                $scope.currUser.filter.gender.splice($index, 1);
 
             } else {
-                idx = $scope.currUser.filter.lookingFor.indexOf(type);
-            }
-
-            if (idx > -1) {
-                $scope.currUser.filter.lookingFor.splice(idx, 1);
-
-            } else {
-                $scope.currUser.filter.lookingFor.push(type);
+                $scope.currUser.filter.gender[$index] = $scope.lookingFor[$index];
             }
         };
     })
@@ -151,12 +137,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return;
             }
 
-            // Save the filter to the back-end
-            newFilter.$update();
-
             // Search results filter has changed - re-fetch newly filtered results
             $ionicScrollDelegate.scrollTop(true);
             loadUsers();
+
+            // Save the filter to the back-end
+            newFilter.$update();
 
         }, true);
 
@@ -165,9 +151,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */
             };
 
-            if ($scope.currUser.filter) {
-                //params = angular.extend(params, $scope.currUser.filter); // FIXME: format the filter properly
-            }
+            /*if ($scope.currUser.filter) {
+                params = angular.extend(params, $scope.currUser.filter); // FIXME: format the filter properly
+            }*/
 
             $scope.users = User.query(params);
         };
@@ -602,7 +588,22 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.password = {};
         $scope.changePassword = function() {
-            // TODO
+            $ionicLoading.show({ template: 'Changing password..' });
+
+            $scope.currUser.$update({
+                password: $scope.password.new
+
+            }).then(
+                function() {
+
+                },
+                function() {
+
+                }
+
+            ).finally(function() {
+                $ionicLoading.hide();
+            });
         };
     })
 
