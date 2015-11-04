@@ -123,19 +123,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case 401: // Unauthorized
                     $rootScope.$broadcast('authTokenExpired');
                     break;
-
-                case 402: // Payment Required
-                    switch (response.data.code) {
-                        case ErrorCode.NOT_ENOUGH_CREDITS:
-                            $rootScope.$broadcast('notEnoughCredits');
-                            break;
-
-                        case ErrorCode.VIP_REQUIRED:
-                            $rootScope.$broadcast('vipRequired');
-                            break;
-                    }
-
-                    break;
             }
 
             return $q.reject(response);
