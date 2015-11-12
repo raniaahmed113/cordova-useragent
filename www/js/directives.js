@@ -16,19 +16,17 @@ angular.module('hotvibes.directives', [])
 
                 var config;
                 var onError = function(response) {
-                    console.error('error!', response); // FIXME
+                    $scope.error = true;
 
-                    switch (response.data.code) {
-                        case ErrorCode.VIP_REQUIRED:
-                            $scope.error = {
-                                icon: 'ion-star',
-                                message: 'Only for VIP members'
-                            };
-                            break;
-
-                        default:
-                            $scope.error = true;
-                            break;
+                    if (response.data && response.data.code) {
+                        switch (response.data.code) {
+                            case ErrorCode.VIP_REQUIRED:
+                                $scope.error = {
+                                    icon: 'ion-star',
+                                    message: 'Only for VIP members'
+                                };
+                                break;
+                        }
                     }
                 };
 

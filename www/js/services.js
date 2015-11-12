@@ -15,7 +15,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('AuthService', function($q, $window, $rootScope, $injector, Config, Api) {
+    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, Config, Api) {
         var currentUser = null;
 
         this.init = function() {
@@ -96,7 +96,14 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
 
         this.submitRegistration = function(data) {
-            return Api.request().post(Config.API_URL_BASE + 'auth/register', data);
+            // Do a copy so we don't modify binded values
+            var params = angular.copy(data);
+
+            if (params.birthday instanceof Date) {
+                params.birthday = $filter('date')(params.birthday, 'yyyy-MM-dd');
+            }
+
+            return Api.request().post(Config.API_URL_BASE + 'auth/register', params);
         };
     })
 

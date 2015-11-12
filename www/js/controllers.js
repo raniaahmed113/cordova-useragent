@@ -57,8 +57,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             loginArgs.onLoggedIn = function() {
                 $ionicLoading.hide();
-                $state.go('inside.users');
-                delete $scope.loginData.password;
+                $state.go('inside.users').then(function() {
+                    delete $scope.loginData.password;
+                });
             };
 
             loginArgs.onError = function(response) {
@@ -77,7 +78,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.countries = Country.query();
         $scope.registration = {
-            data: {},
+            data: {}, // FIXME: pre-fill country & email?
 
             submit: function() {
                 $ionicLoading.show();
@@ -87,8 +88,33 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     .success(function(response, status, headers, config) {
                         $ionicLoading.hide();
 
+                        // Success! Let's login now
+                        $scope.loginData = {
+                            username: $scope.registration.data.nickName,
+                            password: $scope.registration.data.password
+                        };
+                        $scope.registration.modal.hide().then(function() {
+                            $scope.registration.data = {};
+                        });
+                        $scope.login();
+
                     }).error(function(response, status, headers, config) {
                         $ionicLoading.hide();
+
+                        if (status == 400 /* Bad Request*/ && response.rule && response.rule.field) {
+                            var field = $scope.registration.form['registration.data.' + response.rule.field];
+                            field.errorMessage = response.message;
+                            field.$validators.serverError = function() { return true; }; // This will reset 'serverError' when value changes
+                            field.$setValidity('serverError', false);
+
+                        } else {
+                            $ionicPopup.alert({
+                                title: 'Houston, we have problems',
+                                template: response && response.message
+                                    ? response.message
+                                    : 'Something unexpected happened. Please try again.'
+                            });
+                        }
                     });
             }
         };
@@ -104,7 +130,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('UsersFilterCtrl', function($scope, Country) {
-        console.log($scope.currUser.filter);
         $scope.countries = Country.query();
 
         var range = function(min, max, step) {
@@ -117,12 +142,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.ages = range(18, 99);
         $scope.lookingFor = ['male', 'female'];
         $scope.toggleGender = function($index) {
-            if ($scope.currUser.filter.gender[$index]) {
-                $scope.currUser.filter.gender.splice($index, 1);
-
-            } else {
-                $scope.currUser.filter.gender[$index] = $scope.lookingFor[$index];
-            }
+            $scope.currUser.filter.gender.toggleElement($scope.lookingFor[$index]);
         };
     })
 
@@ -184,7 +204,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $scope.blocked = true;
 
             } else {
-                // TODO
+                // TODO: display the error
             }
         });
 
@@ -266,7 +286,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 transitionParams = { location: true };
 
             } else {
-                $ionicHistory.currentView($ionicHistory.backView()); // FIXME: remove this dirty hack once location: replace works as it should
+                $ionicHistory.currentView($ionicHistory.backView()); // FIXME: remove this dirty hack once 'location: replace' works as it should
                 transitionParams = { location: 'replace', disableBack: true };
             }
 
@@ -433,6 +453,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation) {
         $scope.conversations = Conversation.query();
+
         $scope.deleteItem = function(item) {
             var index = $scope.conversations.indexOf(item);
             $scope.conversations[index].$delete();
@@ -543,7 +564,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             email: $scope.currUser.email
         };
         $scope.save = function() {
-            // TODO
+            // TODO: implement
             console.log('onSubmit');
             $ionicLoading.show();
         };
@@ -625,7 +646,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         ];
 
         $scope.save = function() {
-            // TODO
+            // TODO: implement
             $ionicLoading.show();
         };
     })

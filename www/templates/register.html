@@ -6,7 +6,7 @@
         </div>
     </ion-header-bar>
     <ion-content>
-        <form novalidate class="list" name="registerForm" ng-submit="registration.submit()">
+        <form novalidate class="list" name="registration.form" ng-submit="registration.submit()">
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Nick name</span>
                 <input type="text" ng-model="registration.data.nickName" required />
@@ -44,7 +44,7 @@
                 <button
                         type="submit"
                         class="button button-block button-positive"
-                        ng-disabled="registerForm.$invalid"
+                        ng-disabled="registration.form.$invalid"
                 >
                     Submit
                 </button>

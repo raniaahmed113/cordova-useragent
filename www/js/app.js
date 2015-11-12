@@ -58,6 +58,10 @@ angular.module('hotvibes', [
             }
         };
 
+        ngFabFormProvider.extendConfig({
+            validationsTemplate: 'templates/validation-messages.html'
+        });
+
         ngFabFormProvider.setInsertErrorTplFn(function(compiledAlert, el, attrs) {
             var label = el.parent()[0].getElementsByClassName('input-label');
             if (label) {
@@ -345,7 +349,7 @@ angular.module('hotvibes', [
                 cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
             }
 
-            // TODO:
+            // TODO: show some message when device goes offline
             /*$ionicPlatform.on('offline', function() {
 
             });*/
