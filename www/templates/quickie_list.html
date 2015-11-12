@@ -4,7 +4,7 @@
             <ion-list>
                 <ion-item ng-repeat="vote in votes" class="item-avatar">
                     <img ng-src="{{vote.voter.profilePhoto | profilePhotoUrl:vote.voter.gender}}">
-                    <h2>{{vote.voter.login}}</h2>
+                    <h2>{{vote.voter.nickName}}</h2>
                     <p>...</p>
                 </ion-item>
             </ion-list>

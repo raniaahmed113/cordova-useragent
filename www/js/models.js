@@ -135,13 +135,13 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         model.prototype.getBody = function() {
             switch (this.type) {
                 case 'commentWallPost':
-                    return this.sender.login + ' has commented on your wall post.';
+                    return this.sender.nickName + ' has commented on your wall post.';
 
                 case 'addGift':
-                    return 'You have received a gift from ' + this.sender.login;
+                    return 'You have received a gift from ' + this.sender.nickName;
 
                 case 'friendAccept':
-                    return '<a href="#/users/' + this.sender.id + '">' + this.sender.login + '</a>' +
+                    return '<a href="#/users/' + this.sender.id + '">' + this.sender.nickName + '</a>' +
                         ' has accepted your friendship request.';
 
                 default:

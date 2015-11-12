@@ -1,5 +1,5 @@
 <ion-view class="thumbs">
-    <ion-nav-title>Photos &laquo; {{user.login}}</ion-nav-title>
+    <ion-nav-title>Photos &laquo; {{user.nickName}}</ion-nav-title>
 
     <div class="mainPhotos">
         <img ng-repeat="photo in user.photos" ng-src="{{photo.url}}" ng-click="switchPhoto($index)" class="framed" />
