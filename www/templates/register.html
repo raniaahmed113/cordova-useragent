@@ -9,7 +9,7 @@
         <form novalidate class="list" name="registration.form" ng-submit="registration.submit()">
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Nick name</span>
-                <input type="text" ng-model="registration.data.nickName" required />
+                <input type="text" ng-model="registration.data.nickName" required autocomplete="nickname" />
             </label>
 
             <label class="item item-input item-stacked-label">
@@ -19,12 +19,12 @@
 
             <label class="item item-input item-stacked-label">
                 <span class="input-label">E-mail address</span>
-                <input type="email" ng-model="registration.data.email" placeholder="me@domain.com" required />
+                <input type="email" ng-model="registration.data.email" placeholder="me@domain.com" required autocomplete="email" />
             </label>
 
             <label class="item item-input item-stacked-label">
                 <span class="input-label">Date of birth</span>
-                <input type="date" ng-model="registration.data.birthday" required />
+                <input type="date" ng-model="registration.data.birthday" required autocomplete="birthday" />
             </label>
 
             <label class="item item-input item-select item-stacked-label">
