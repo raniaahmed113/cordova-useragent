@@ -16,7 +16,7 @@ Array.prototype.toggleElement = function(element) {
 };
 
 angular.module('hotvibes', [
-    'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards',
+    'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
     'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
 
@@ -30,12 +30,19 @@ angular.module('hotvibes', [
         MIN_VALUE: 'minValue'
     })
 
-    .config(function($stateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
+    .config(function($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
+
+        // FIXME: set preferred language based on config
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'i18n/',
+            suffix: '.json'
+        });
+        $translateProvider.preferredLanguage('lt');
 
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
         $resourceProvider.defaults.actions.get.cache = cache;*/

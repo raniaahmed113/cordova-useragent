@@ -7,6 +7,7 @@
     "angular-moment": "~0.10.2"
   },
   "dependencies": {
-    "ng-fab-form": "~1.2.11"
+    "ng-fab-form": "~1.2.11",
+    "angular-translate-loader-static-files": "~2.8.1"
   }
 }

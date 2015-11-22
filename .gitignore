@@ -7,3 +7,5 @@ plugins/
 .idea
 www/css
 www/lib
+tmp
+www/i18n
