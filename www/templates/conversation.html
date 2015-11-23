@@ -1,22 +1,29 @@
 <ion-view>
-    <ion-nav-title>{{pageTitle || 'Chat with ' + conversation.withUser.nickName}}</ion-nav-title>
+    <ion-nav-title>
+        {{ 'Conversation with %s' | translate | sprintf:conversation.withUser.nickName }}
+    </ion-nav-title>
     <ion-content>
         <ul class="list chat">
             <div
-                    class="message"
-                    ng-repeat="message in messages"
-                    ng-class="{mine: message.id == currUser.id, failed: message.error ? true : false}"
-                    ng-click="resend($index)">
+                class="message"
+                ng-repeat="message in messages"
+                ng-class="{mine: message.id == currUser.id, failed: message.error ? true : false}"
+                ng-click="resend($index)">
+
                 {{message.text}}
+
                 <div class="status">
-                    <span ng-if="message.error">Failed. Tap to retry.</span>
-                    <span ng-if="!message.error">{{message.dateSent && (message.dateSent*1000 | amCalendar) || "Sending.."}}</span>
+                    <span ng-if="message.error" translate>Failed. Tap to retry.</span>
+                    <span ng-if="!message.error">
+                        <span ng-if="!message.dateSent" translate>Sending..</span>
+                        <span ng-if="message.dateSent">{{message.dateSent*1000 | amCalendar}}</span>
+                    </span>
                 </div>
             </div>
         </ul>
         <div ng-if="messages.$promise.resolve && messages.length < 1">
-            <h2>No messages yet</h2>
-            <h3>Write me something</h3>
+            <h2 translate>None yet</h2>
+            <h3 translate>Send a message. Get to know each other</h3>
         </div>
     </ion-content>
 
@@ -25,10 +32,12 @@
             <label class="item-input-wrapper">
                 <input
                         type="text"
-                        placeholder="Type your message"
+                        placeholder="{{'Your message' | translate}}"
                         ng-model="msgText" />
             </label>
-            <button class="button button-clear" type="submit" ng-disabled="msgText.length < 1">Send</button>
+            <button class="button button-clear" type="submit" ng-disabled="msgText.length < 1" translate>
+                Send
+            </button>
         </form>
     </ion-footer-bar>
 </ion-view>

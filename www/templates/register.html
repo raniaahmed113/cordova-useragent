@@ -1,6 +1,6 @@
 <ion-modal-view>
     <ion-header-bar class="bar-dark">
-        <h1 class="title">Create new profile</h1>
+        <h1 class="title" translate>Registration</h1>
         <div class="buttons">
             <button class="button" ng-click="registration.modal.hide()"><i class="icon ion-android-close"></i></button>
         </div>
@@ -8,36 +8,40 @@
     <ion-content>
         <form novalidate class="list" name="registration.form" ng-submit="registration.submit()">
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Nick name</span>
+                <span class="input-label" translate>Your login</span>
                 <input type="text" ng-model="registration.data.nickName" required autocomplete="nickname" />
             </label>
 
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Password</span>
+                <span class="input-label" translate>Password</span>
                 <input type="password" ng-model="registration.data.password" required />
             </label>
 
             <label class="item item-input item-stacked-label">
-                <span class="input-label">E-mail address</span>
+                <span class="input-label" translate>Your email</span>
                 <input type="email" ng-model="registration.data.email" placeholder="me@domain.com" required autocomplete="email" />
             </label>
 
             <label class="item item-input item-stacked-label">
-                <span class="input-label">Date of birth</span>
+                <span class="input-label" translate>Your birthday</span>
                 <input type="date" ng-model="registration.data.birthday" required autocomplete="birthday" />
             </label>
 
             <label class="item item-input item-select item-stacked-label">
-                <span class="input-label">Country</span>
+                <span class="input-label" translate>Your country</span>
                 <select ng-model="registration.data.country" required>
-                    <option ng-repeat="country in countries" value="{{country.id}}">{{country.label}}</option>
+                    <option ng-repeat="country in countries" value="{{country.id}}">{{country.label | translate}}</option>
                 </select>
             </label>
 
-            <div class="item item-divider">Gender</div>
+            <div class="item item-divider" translate>Your gender</div>
             <label class="item item-radio">
-                <ion-radio ng-model="registration.data.gender" ng-value="'male'">Male</ion-radio>
-                <ion-radio ng-model="registration.data.gender" ng-value="'female'">Female</ion-radio>
+                <ion-radio ng-model="registration.data.gender" ng-value="'male'">
+                    <span translate>a man</span>
+                </ion-radio>
+                <ion-radio ng-model="registration.data.gender" ng-value="'female'">
+                    <span translate>a woman</span>
+                </ion-radio>
             </label>
 
             <div class="padding">
@@ -45,8 +49,9 @@
                         type="submit"
                         class="button button-block button-positive"
                         ng-disabled="registration.form.$invalid"
+                        translate
                 >
-                    Submit
+                    Register
                 </button>
             </div>
         </form>

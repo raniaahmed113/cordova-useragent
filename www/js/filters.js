@@ -20,6 +20,20 @@ angular.module('hotvibes.filters', [])
         }
     })
 
+    .filter('sprintf', function() {
+        function parse(str, args) {
+            var i = 0;
+            return str.replace(/%s/g, function() { return args[i++] || '';});
+        }
+
+        return function() {
+            return parse(
+                Array.prototype.slice.call(arguments, 0,1)[0],
+                Array.prototype.slice.call(arguments, 1)
+            );
+        };
+    })
+
     .filter('profilePhotoUrl', function() {
         return function(photo, gender) {
             if (photo && photo.url) {

@@ -107,11 +107,11 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return {
             query: function() {
                 return [
-                    {id: 'LT', label: 'Lithuania'},
-                    {id: 'LV', label: 'Latvia'},
-                    {id: 'PL', label: 'Poland'},
-                    {id: 'HR', label: 'Croatia'},
-                    {id: 'UK', label: 'United Kingdom'}
+                    {id: 'LT', label: __('Lithuania')},
+                    {id: 'LV', label: __('Latvia')},
+                    {id: 'PL', label: __('Poland')},
+                    {id: 'HR', label: __('Croatia/Hrvatska')},
+                    {id: 'UK', label: __('United Kingdom')}
                 ];
             }
         };

@@ -13,8 +13,9 @@
                 <label class="item">
                     <button type="submit"
                             class="button button-block button-positive"
-                            ng-disabled="!loginData.username || !loginData.password">
-                        Log in
+                            ng-disabled="!loginData.username || !loginData.password"
+                            translate>
+                        Login
                     </button>
                 </label>
             </div>
@@ -22,8 +23,8 @@
     </ion-content>
     <ion-footer-bar>
         <button class="button button-large button-full button-assertive center" ng-click="registration.modal.show()">
-            Don't yet have a profile?
-            Create one here
+            <span translate>Don't have an account yet?</span>
+            <span translate>Register</span>
         </button>
     </ion-footer-bar>
 </ion-view>

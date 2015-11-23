@@ -15,6 +15,16 @@ Array.prototype.toggleElement = function(element) {
     }
 };
 
+/**
+ * This is simply used as an annotation for the 'gulp translate' task to extract keywords from .js files
+ *
+ * @param {string} input
+ * @returns {string}
+ */
+function __(input) {
+    return input;
+}
+
 angular.module('hotvibes', [
     'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
     'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
@@ -38,6 +48,7 @@ angular.module('hotvibes', [
         $httpProvider.interceptors.push('HttpInterceptor');
 
         // FIXME: set preferred language based on config
+        $translateProvider.useSanitizeValueStrategy(null);
         $translateProvider.useStaticFilesLoader({
             prefix: 'i18n/',
             suffix: '.json'

@@ -19,19 +19,19 @@ var config = {
     pathScss: [
         './scss/**/*.scss'
     ],
-    pathHtml: [
-        './www/templates/**/*.html'
-    ]
+    pathHtml: './www/templates/**/*.html',
+    pathJs: './www/js/*.js'
+
 };
 
 gulp.task('translate-extract', function() {
-    return gulp.src(config.pathHtml)
-        .pipe(gettext.extract('all.po'))
+    return gulp.src([ config.pathHtml, config.pathJs ])
+        .pipe(gettext.extract('all.po', {markerName: '__'}))
         .pipe(gulp.dest('./tmp/i18n/'));
 });
 
 gulp.task('translate', ['translate-extract'], function() {
-    var locales = ['en_US', 'lt_LT']; // FIXME: read list of locales from config
+    var locales = ['en_US', 'lt_LT', 'lv_LV', 'pl_PL', 'hr_HR']; // FIXME: read list of locales from config
     var deferred = q.defer();
     var finished = 0;
 

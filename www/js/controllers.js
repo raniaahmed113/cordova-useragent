@@ -65,14 +65,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             loginArgs.onError = function(response) {
                 $ionicLoading.hide();
                 $ionicPopup.alert({
-                    title: 'Houston, we have problems',
+                    title: '<span translate>' + __("Something's wrong") + '</span>',
                     template: response && response.message
                         ? response.message
-                        : 'Something unexpected happened. Please try again.'
+                        : '<span translate>' + __("We're sorry, but something went wrong. Please try again later.") + '</span>'
                 });
             };
 
-            $ionicLoading.show({ template: 'Logging in..'});
+            $ionicLoading.show({ template: '<span translate>' + __('Please wait') + '</span>..'});
             AuthService.doLogin(loginArgs);
         };
 
