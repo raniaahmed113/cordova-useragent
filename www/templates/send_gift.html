@@ -1,12 +1,17 @@
 <ion-modal-view>
     <ion-header-bar class="bar-dark">
-        <h1 class="title">Send a gift</h1>
+        <h1 class="title" translate>Send him a gift</h1>
         <div class="buttons">
             <button class="button" ng-click="hideGifts()"><i class="icon ion-android-close"></i></button>
         </div>
     </ion-header-bar>
     <ion-header-bar class="bar-dark bar-subheader">
-        <h3 class="title">Currently you have <b class="energized">{{currUser.credits}}</b> credits</h3>
+        <h3 class="title"
+            translate="You have %u credit"
+            translate-plural="You have %u credits"
+            translate-n="currUser.credits"
+            translate-values="{_before: '<span class=\'energized\'>', _after: '</span>'}">
+        </h3>
     </ion-header-bar>
     <ion-content>
         <button class="button gift" ng-repeat="gift in gifts" ng-click="sendGift(gift)" ng-disabled="gift.price > currUser.credits">

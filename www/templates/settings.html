@@ -1,4 +1,4 @@
-<ion-view title="Settings">
+<ion-view title="{{'Settings' | translate}}">
     <ion-content>
         <div class="list list-inset">
             <a class="item item-avatar item-icon-right" href="#/settings/profile">
@@ -7,49 +7,52 @@
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
             <a class="item item-icon-right" href="#/settings/aboutMe">
-                {{currUser.profile.about || 'About me'}}
+                {{currUser.profile.about}}
+                <span translate ng-if="!currUser.profile.about">About me</span>
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
         </div>
 
         <div class="list list-inset">
             <a class="item item-icon-left item-icon-right" href="#/settings/albums">
-                <i class="icon ion-camera"></i> Photos & albums
+                <i class="icon ion-camera"></i> <span translate>My Pictures</span>
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
 
             <a class="item item-icon-left item-icon-right" href="#/settings/credits">
-                <i class="icon ion-card"></i> Credits
+                <i class="icon ion-card"></i> <span translate>My Credits</span>
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
 
             <a class="item item-icon-left item-icon-right" href="#/settings/realMember">
-                <i class="icon ion-checkmark-circled"></i> Real member
+                <i class="icon ion-checkmark-circled"></i> <span translate>Real member</span>
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
         </div>
 
         <div class="list list-inset">
             <a class="item item-icon-left item-icon-right" href="#/settings/vip">
-                <i class="icon ion-star"></i> {{currUser.isVip ? 'Extend my' : 'Purchase'}} VIP membership
+                <i class="icon ion-star"></i>
+                <span translate ng-if="currUser.isVip">Extend my VIP membership</span>
+                <span translate ng-if="!currUser.isVip">Buy VIP membership</span>
                 <i class="icon ion-ios-arrow-forward"></i>
             </a>
 
             <div class="item item-toggle item-icon-left">
-                <i class="icon ion-wand"></i> Invisibility
+                <i class="icon ion-wand"></i> <span translate>Invisibility</span>
                 <label class="toggle toggle-positive">
                     <input type="checkbox" ng-disabled="!currUser.isVip" ng-model="currUser.isInvisible" />
                     <span class="track"><span class="handle"></span></span>
                 </label>
                 <p class="wrap">
-                    Will hide you from the guest list of the member profiles you visit.
-                    <span ng-if="!currUser.isVip" class="royal">Only for VIP members</span>
+                    <span translate>By selecting YES you will become invisible to all members. Your profile will NOT be displayed anywhere on the web page.</span>
+                    <span ng-if="!currUser.isVip" class="royal" translate>Available only for VIP members</span>
                 </p>
             </div>
         </div>
 
         <div class="padding">
-            <button class="button button-block button-dark" ng-click="logout()">Logout</button>
+            <button class="button button-block button-dark" ng-click="logout()" translate>Logout</button>
         </div>
 
     </ion-content>

@@ -1,20 +1,20 @@
-<ion-view view-title="{{title || 'Photos & albums'}}">
+<ion-view view-title="{{title || ('My Pictures' | translate)}}">
     <ion-content class="center-vertical-disabled">
         <div class="list">
-            <div class="item item-divider">Photos</div>
+            <div class="item item-divider" translate>MainPictures</div>
             <div class="item item-nav-view-container">
                 <ion-nav-view name="mainAlbum"></ion-nav-view>
             </div>
 
             <div class="item item-divider item-button-right">
-                Albums
+                <span translate>My Albums</span>
                 <button class="button icon ion-plus" ng-click="createAlbum()"></button>
             </div>
             <resource-collection list="albums">
                 <a class="item item-thumbnail-left" href="#/settings/albums/{{album.id}}" ng-repeat="album in albums">
                     <img ng-src="{{album.thumbUrl || 'img/person-generic.png'}}">
                     <h2>{{album.name}}</h2>
-                    <p>{{album.cntPhotos || '0'}} photos</p>
+                    <p translate="%u photo" translate-plural="%u photos" translate-n="album.cntPhotos"></p>
                 </a>
             </resource-collection>
         </div>

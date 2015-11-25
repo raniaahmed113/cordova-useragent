@@ -1,6 +1,6 @@
 <ion-view>
     <ion-nav-title>
-        {{ 'Conversation with %s' | translate:{name: conversation.withUser.nickName} }}
+        <span translate translate-values="{name: conversation.withUser.nickName}">Conversation with %s</span>
     </ion-nav-title>
     <ion-content>
         <ul class="list chat">

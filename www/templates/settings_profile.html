@@ -1,68 +1,68 @@
-<ion-view title="Profile &laquo; Settings">
+<ion-view title="{{'User Settings' | translate}}">
     <ion-content>
         <form ng-fab-form name="profile.form" ng-submit="save()" novalidate class="list list-inset">
             <label class="item item-input">
-                <span class="input-label">Username</span>
+                <span class="input-label" translate>Username</span>
                 <input type="text" value="{{currUser.login}}" disabled />
             </label>
 
             <label class="item item-input">
-                <span class="input-label">Birthday</span>
+                <span class="input-label" translate>Your birthday</span>
                 <input type="text" value="{{currUser.birthday}}" disabled />
             </label>
 
             <label class="item item-input item-select">
-                <span class="input-label">Country</span>
+                <span class="input-label" translate>Your country</span>
                 <select ng-model="profile.country">
                     <option ng-repeat="country in countries" value="{{country.id}}">{{country.label}}</option>
                 </select>
             </label>
 
             <div class="item item-input-inset item-button-right">
-                <span class="input-label">City</span>
+                <span class="input-label" translate>City</span>
                 <input type="text" name="city" ng-model="profile.cityName" disabled />
-                <button type="button" class="button button-small" ng-click="modal.show()">
-                    Edit
+                <button type="button" class="button button-small" ng-click="modal.show()" translate>
+                    Change
                 </button>
             </div>
 
             <label class="item item-input">
-                <span class="input-label">Phone number</span>
+                <span class="input-label" translate>Phone number</span>
                 <input type="tel" ng-model="profile.phone" />
             </label>
 
             <label class="item item-input">
-                <span class="input-label">E-mail</span>
+                <span class="input-label" translate>Your email</span>
                 <input type="email" ng-model="profile.email" />
             </label>
 
             <div class="padding">
-                <p class="center">Your phone number and e-mail address are not shown to other members.</p>
-                <button class="button button-block button-positive" type="submit" ng-disabled="profile.form.$pristine">
-                    Save changes
+                <p class="center" translate>Your phone number and e-mail address are not shown to other members.</p>
+                <button class="button button-block button-positive" type="submit" ng-disabled="profile.form.$pristine" translate>
+                    Save
                 </button>
             </div>
         </form>
 
         <form ng-fab-form name="passwordForm" ng-submit="changePassword()" class="list list-inset">
             <label class="item item-input">
-                <span class="input-label">Old password</span>
+                <span class="input-label" translate>Old Password</span>
                 <input type="password" ng-model="password.old" required />
             </label>
 
             <label class="item item-input">
-                <span class="input-label">New password</span>
+                <span class="input-label" translate>Password</span>
                 <input type="password" ng-model="password.new" required />
             </label>
 
             <label class="item item-input">
-                <span class="input-label">Confirm new password</span>
+                <span class="input-label" translate>Confirm Password</span>
                 <input type="password" name="confirm" ng-model="password.confirm" ng-fab-match="password.new" required />
             </label>
 
             <div class="padding">
-                <button class="button button-block button-positive" type="submit" ng-disabled="passwordForm.$invalid">
-                    Change password
+                <button class="button button-block button-positive" type="submit" ng-disabled="passwordForm.$invalid" translate>
+                    Change Password
                 </button>
             </div>
         </form>

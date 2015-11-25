@@ -3,11 +3,11 @@
 <div class="overlay center">
     <ion-spinner ng-show="promise.$$state.status < 1"></ion-spinner>
     <div class="error-sign" ng-if="error">
-        {{error.message || 'Sorry, some nasty error prevented us from showing you this page'}}
+        {{error.message || ('Sorry, some nasty error prevented us from showing you this page' | translate)}}
         <i class="icon {{error.icon || 'ion-close-circled'}}"></i>
     </div>
     <div class="error-sign" ng-if="!error && promise.$$state.status > 0 && list.length < 1">
-        Nothing here, so far
+        <span translate>Nothing here, so far</span>
         <i class="icon ion-ios-rainy"></i>
     </div>
 </div>

@@ -1,11 +1,11 @@
-<ion-view title="About me &laquo; Settings">
+<ion-view title="{{'About me' | translate}} &laquo; {{'Settings' | translate}}">
     <ion-content>
         <form ng-fab-form name="aboutMeForm" ng-submit="save()" novalidate>
             <div class="list list-inset">
-                <div class="item item-divider">My personal info</div>
+                <div class="item item-divider" translate>My Profile</div>
 
                 <label class="item item-input">
-                    <span class="input-label">Height</span>
+                    <span class="input-label" translate>Height</span>
                     <input type="number" ng-model="aboutMe.height" required />
                 </label>
 
@@ -18,21 +18,21 @@
             </div>
 
             <ul class="list list-inset">
-                <li class="item item-divider">Looking for</li>
+                <li class="item item-divider" translate>Looking for:</li>
 
                 <li class="item item-checkbox">
                     <label class="checkbox"><input type="checkbox" ng-model="aboutMe.lookingFor[0]"></label>
-                    Male
+                    <span translate>Looking for male</span>
                 </li>
 
                 <li class="item item-checkbox">
                     <label class="checkbox"><input type="checkbox" ng-model="aboutMe.lookingFor[1]"></label>
-                    Female
+                    <span translate>Looking for female</span>
                 </li>
             </ul>
 
             <ul class="list list-inset">
-                <li class="item item-divider">Purpose</li>
+                <li class="item item-divider" translate>Purpose:</li>
 
                 <li ng-repeat="purpose in purposes" class="item item-checkbox">
                     <label class="checkbox"><input type="checkbox" ng-model="aboutMe.purpose[purpose.id]"></label>
@@ -41,22 +41,22 @@
             </ul>
 
             <div class="list list-inset">
-                <div class="item item-divider">About me</div>
+                <div class="item item-divider" translate>About me:</div>
                 <label class="item item-input">
-                    <textarea rows="4" ng-model="aboutMe.description"></textarea>
+                    <textarea rows="4" ng-model="aboutMe.description" placeholder="{{'Įrašyk pora sakinių apie save' | translate}}"></textarea>
                 </label>
             </div>
 
             <div class="list list-inset">
-                <div class="item item-divider">My perfect match should be..</div>
+                <div class="item item-divider" translate>Ideal man/woman:</div>
                 <label class="item item-input">
-                    <textarea rows="4" ng-model="aboutMe.perfectMatch"></textarea>
+                    <textarea rows="4" ng-model="aboutMe.perfectMatch" placeholder="{{'Koks tau yra idealus partneris?' | translate}}"></textarea>
                 </label>
             </div>
 
             <div class="padding">
-                <button class="button button-block button-positive" type="submit" ng-disabled="aboutMeForm.$invalid">
-                    Save changes
+                <button class="button button-block button-positive" type="submit" ng-disabled="aboutMeForm.$invalid" translate>
+                    Save
                 </button>
             </div>
         </form>

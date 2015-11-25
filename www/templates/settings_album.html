@@ -1,5 +1,7 @@
 <ion-view>
-    <ion-nav-title>{{album.id ? album.name + ' &laquo; My albums' : 'My photos'}}</ion-nav-title>
+    <ion-nav-title>
+        {{album.id ? album.name + ' &laquo; ' + ('My Albums' | translate) : ('My Pictures' | translate)}}
+    </ion-nav-title>
     <ion-nav-buttons side="right">
         <button class="button icon ion-upload" ng-click="openFilePicker()"></button>&nbsp;
         <button ng-if="album.id > 0" class="button icon ion-trash-b" ng-click="deleteAlbum()"></button>

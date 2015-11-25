@@ -8,8 +8,8 @@ angular.module('hotvibes.filters', [])
 
     .filter('concat', function() {
         return function(inputArray, separator) {
-            if (!inputArray) {
-                return '';
+            if (!inputArray || !angular.isArray(inputArray)) {
+                return inputArray;
             }
 
             if (!separator) {
@@ -32,4 +32,20 @@ angular.module('hotvibes.filters', [])
 
             return 'img/person-' + gender + '.png';
         }
+    })
+
+    .filter('translateProfileVal', function(DataMap, $translate) {
+        var translateProfileVal = function(value, mapId) {
+            if (angular.isArray(value)) {
+                return value.map(function(element) {
+                    return translateProfileVal(element, mapId);
+                });
+            }
+
+            return DataMap[mapId][value]
+                ? $translate.instant(DataMap[mapId][value])
+                : value;
+        };
+
+        return translateProfileVal;
     });

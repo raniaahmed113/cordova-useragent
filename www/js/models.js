@@ -103,7 +103,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'dataSets/gifts');
     })
 
-    .factory('Country', function() {
+    .factory('Country', function(__) {
         return {
             query: function() {
                 return [
@@ -150,4 +150,99 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         };
 
         return model;
+    })
+
+    .factory('__', function($translate) {
+        return $translate.instant;
+    })
+
+    .factory('DataMap', function(__) {
+        return {
+            lookingFor: {
+                male: __('Looking for male'),
+                female: __('Looking for female')
+            },
+
+            maritalStatus: {
+                single: __('Single'),
+                taken: __('I have somone'),
+                undecided: __('Secrete')
+            },
+
+            purpose: {
+                dating: __('Real dates'),
+                sex: __('S&M'),
+                onlineChat: __('Online chat'),
+                relationship: __('Normal relationships'),
+                marriage: __('Mariage'),
+                friendship: __('Socializing'),
+                any: __('Any Dating')
+            },
+
+            doesDrink: {
+                no: __('DD'),
+                occasionally: __('Ocasionly'),
+                frequently: __('Often')
+            },
+
+            doesSmoke: {
+                no: __('DS'),
+                occasionally: __('Sometimes'),
+                frequently: __('ED')
+            },
+
+            livesWith: {
+                parents: __('With parents'),
+                roommates: __('With roommates'),
+                noone: __('Alone'),
+                partner: __('With a partner')
+            },
+
+            education: {
+                atSchool: __('Studying at school'),
+                middleSchool: __('High school graduate'),
+                studying: __('Studying at college/university'),
+                higher: __('College graduate'),
+                bachelorsDegree: __("Bachelor degree"),
+                mastersDegree: __("Master of Arts degree"),
+                doctorsDegree: __("Doctoral degree")
+            },
+
+            employment: {
+                unemployed: __('Unemployed'),
+                selfEmployed: __('Self employed'),
+                employed: __('Hired worker')
+            },
+
+            language: {
+                en: __('English'),
+                lt: __('Lietuvių'),
+                lv: __('Latviešu'),
+                et: __('Eesti'),
+                pl: __('Polski'),
+                ru: __('Русский'),
+                es: __('Español'),
+                pt: __('Português'),
+                fr: __('Français'),
+                de: __('Deutsch'),
+                it: __('Italiano'),
+                nl: __('Nederlands'),
+                no: __('Norsk'),
+                cs: __('Česky'),
+                da: __('Dansk'),
+                hr: __('Hrvatski'),
+                ku: __('Kurdî'),
+                la: __('Latina'),
+                ro: __('Română'),
+                sl: __('Slovenčina'),
+                sk: __('Slovak'),
+                fi: __('Suomi'),
+                sv: __('Svenska'),
+                el: __('Türkçe'),
+                be: __('Беларуская'),
+                uk: __('Українська'),
+                bg: __('Български'),
+                mk: __('Македонски')
+            }
+        };
     });

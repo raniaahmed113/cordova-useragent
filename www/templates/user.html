@@ -18,7 +18,7 @@
 
             <ion-spinner class="overlay center" ng-if="user.$promise.$$state.status < 1"></ion-spinner>
             <div class="overlay center error-sign" ng-if="blocked">
-                You may not see this profile because <strong>this member has blocked you</strong>
+                <span translate="You are block by %s" translate-values="{name: user.nickName, _before: '<b>', _after: '</b>'}"></span>
                 <i class="icon ion-android-hand"></i>
             </div>
         </div>

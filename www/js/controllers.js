@@ -50,7 +50,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('LoginCtrl', function($scope, $state, $ionicModal, $ionicLoading, $ionicPopup, AuthService, Country) {
+    .controller('LoginCtrl', function(__, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, AuthService, Country) {
         $scope.loginData = {};
         $scope.login = function() {
             var loginArgs = $scope.loginData;
@@ -65,14 +65,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             loginArgs.onError = function(response) {
                 $ionicLoading.hide();
                 $ionicPopup.alert({
-                    title: '<span translate>' + __("Something's wrong") + '</span>',
+                    title: __("Something's wrong"),
                     template: response && response.message
                         ? response.message
-                        : '<span translate>' + __("We're sorry, but something went wrong. Please try again later.") + '</span>'
+                        : __("We're sorry, but something went wrong. Please try again later.")
                 });
             };
 
-            $ionicLoading.show({ template: '<span translate>' + __('Please wait') + '</span>..'});
+            $ionicLoading.show({ template: __('Please wait') + '..'});
             AuthService.doLogin(loginArgs);
         };
 
@@ -183,7 +183,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('UserCtrl', function(
         $window, $scope, $state, $ionicSlideBoxDelegate, $ionicHistory, $ionicPopup,
-        User, Request, ErrorCode
+        __, User, Request, ErrorCode
     ) {
         $scope.user = User.get({
             id: $state.params.userId,
@@ -259,10 +259,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.currentlyActiveTab = null;
         $scope.tabs = [
-            { id: 'photos', icon: 'images', title: 'Photos' },
-            { id: 'about', icon: 'person', title: 'About' },
-            { id: 'actions', icon: 'heart', title: 'Actions' },
-            { id: 'chat', icon: 'chatbubbles', title: 'Chat' }
+            { id: 'photos', icon: 'images', title: __('Pictures') },
+            { id: 'about', icon: 'person', title: __('About me') },
+            { id: 'actions', icon: 'heart', title: __('Want to...') },
+            { id: 'chat', icon: 'chatbubbles', title: __('Chat') }
         ];
 
         $scope.toggleTab = function(tab) {
@@ -616,7 +616,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             }).then(
                 function() {
-
+                    // TODO: implement password changes
                 },
                 function() {
 
@@ -628,21 +628,21 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('SettingsAboutCtrl', function($scope, $ionicLoading) {
+    .controller('SettingsAboutCtrl', function($scope, $ionicLoading, __) {
         $scope.selectables = [
-            {id: 'maritalStatus', label: 'Marital status', options: []},
-            {id: 'living', label: 'Living with', options: []},
-            {id: 'smoking', label: 'Smoking', options: []},
-            {id: 'drinking', label: 'Drinking', options: []},
-            {id: 'education', label: 'Education', options: []}
+            {id: 'maritalStatus', label: __('Status:'), options: []},
+            {id: 'living', label: __('Living'), options: []},
+            {id: 'smoking', label: __('Smoking'), options: []},
+            {id: 'drinking', label: __('Drinking'), options: []},
+            {id: 'education', label: __('Education'), options: []}
         ];
 
         $scope.purposes = [
-            {id: 'dating', label: 'Real dates'},
-            {id: 'sex', label: 'Sex'},
-            {id: 'chat', label: 'Chatting'},
-            {id: 'relationship', label: 'Serious relationship'},
-            {id: 'marriage', label: 'Marriage'}
+            {id: 'dating', label: __('Real dates')},
+            {id: 'sex', label: __('S&M')},
+            {id: 'chat', label: __('Online chat')},
+            {id: 'relationship', label: __('Normal relationships')},
+            {id: 'marriage', label: __('Mariage')}
         ];
 
         $scope.save = function() {

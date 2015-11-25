@@ -2,7 +2,12 @@
     <ion-header-bar class="bar-dark item-input-inset">
         <label class="item-input-wrapper">
             <i class="icon ion-ios-search-strong placeholder-icon"></i>
-            <input type="search" autofocus placeholder="Search" ng-change="modal.search()" ng-model="modal.input" ng-model-options="{ debounce: 700 }" />
+            <input type="search"
+                   autofocus
+                   placeholder="{{'Search' | translate}}"
+                   ng-change="modal.search()"
+                   ng-model="modal.input"
+                   ng-model-options="{ debounce: 700 }" />
         </label>
         <button class="button icon ion-android-close" ng-click="modal.hide()"></button>
     </ion-header-bar>
