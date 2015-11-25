@@ -1,25 +1,31 @@
 <ion-header-bar class="bar-dark">
-    <h1 class="title">Find people</h1>
+    <h1 class="title" translate>Filter</h1>
 </ion-header-bar>
 <ion-content>
     <div class="list">
         <ion-checkbox
                 ng-checked="currUser.filter.onlyOnline"
                 ng-click="currUser.filter.onlyOnline = !currUser.filter.onlyOnline">
-            Online only
+            <span translate>Online only</span>
         </ion-checkbox>
 
-        <div class="item item-divider">Gender</div>
         <ion-checkbox
-                ng-repeat="type in lookingFor"
+                ng-checked="currUser.filter.onlyNew"
+                ng-click="currUser.filter.onlyNew = !currUser.filter.onlyNew">
+            <span translate>New members</span>
+        </ion-checkbox>
+
+        <div class="item item-divider" translate>Sex</div>
+        <ion-checkbox
+                ng-repeat="type in genders"
                 ng-checked="currUser.filter.gender.indexOf(type) > -1"
                 ng-click="currUser.filter.gender.toggleElement(type)">
-            {{type | capitalizeFirst}}
+            {{type | translateProfileVal:'gender'}}
         </ion-checkbox>
 
-        <div class="item item-divider">Age</div>
+        <div class="item item-divider" translate>Age</div>
         <label class="item item-input item-select">
-            <span class="input-label">From</span>
+            <span class="input-label" translate>from</span>
             <select ng-model="currUser.filter.ageMin">
                 <option
                         ng-repeat="i in ages"
@@ -32,7 +38,7 @@
         </label>
 
         <label class="item item-input item-select">
-            <span class="input-label">To</span>
+            <span class="input-label" translate>to</span>
             <select ng-model="currUser.filter.ageMax">
                 <option
                         ng-repeat="i in ages"
@@ -44,9 +50,9 @@
             </select>
         </label>
 
-        <div class="item item-divider">Location</div>
+        <div class="item item-divider" translate>Location</div>
         <label class="item item-input item-select">
-            <span class="input-label">Country</span>
+            <span class="input-label" translate>Country</span>
             <select
                     ng-model="currUser.filter.country"
                     ng-options="country.id as country.label for country in countries">

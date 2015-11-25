@@ -1,32 +1,34 @@
 <ion-view>
-    <ion-nav-title>Actions &laquo; {{user.nickName}}</ion-nav-title>
+    <ion-nav-title translate>Want to...</ion-nav-title>
     <ion-content>
         <div class="row row-wrap user-actions">
             <div class="col col-50">
                 <button ng-click="user.isFriend = !user.isFriend">
                     <i class="icon ion-person"></i>
-                    {{user.isFriend ? 'Remove from friends' : 'Add to friends'}}
+                    <span ng-if="user.isFriend" translate>Remove from friends</span>
+                    <span ng-if="!user.isFriend" translate>Add friend</span>
                 </button>
             </div>
 
             <div class="col col-50">
                 <button ng-click="showGifts()">
                     <i class="icon ion-trophy"></i>
-                    Send a gift
+                    <span translate>Send him a gift</span>
                 </button>
             </div>
 
             <div class="col col-50">
                 <button ng-click="user.isFavorite = !user.isFavorite">
                     <i class="icon ion-star"></i>
-                    {{user.isFavorite ? 'Remove from favorites' : 'Add to favorites'}}
+                    <span ng-if="user.isFavorite" translate>Remove from favorites</span>
+                    <span ng-if="!user.isFavorite" translate>Add To Favorites</span>
                 </button>
             </div>
 
             <div class="col col-50">
                 <button ng-click="inviteDuel()">
                     <i class="icon ion-podium"></i>
-                    Invite to a duel
+                    <span translate>Kviesti i dvikova</span>
                 </button>
             </div>
         </div>
@@ -35,7 +37,8 @@
                     class="button button-block"
                     ng-class="{'button-assertive': !user.isBlocked}"
                     ng-click="user.isBlocked = !user.isBlocked">
-                {{user.isBlocked ? 'Unblock' : 'Block'}}
+                <span ng-if="user.isBlocked" translate>Unblock User</span>
+                <span ng-if="!user.isBlocked" translate>Add to BlackList</span>
             </button>
         </div>
     </ion-content>

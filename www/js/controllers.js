@@ -13,7 +13,7 @@ var enableUserDeletion = function($scope) {
 
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $ionicLoading, AuthService) {
+    .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $ionicLoading, __, AuthService) {
         $scope.logout = function() {
             AuthService.setCurrentUser(null);
             $state.go('login');
@@ -42,10 +42,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.onError = function(response, params) {
             $ionicLoading.hide();
             $ionicPopup.alert({
-                title: params && params.title || 'Houston, we have problems',
+                title: params && params.title || __("Something's wrong"),
                 template: response && response.data && response.data.message
                     ? response.data.message
-                    : 'Something unexpected happened. Please try again.'
+                    : __("We're sorry, but something went wrong. Please try again later.")
             });
         };
     })
@@ -109,10 +109,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
                         } else {
                             $ionicPopup.alert({
-                                title: 'Houston, we have problems',
+                                title: __("Something's wrong"),
                                 template: response && response.message
                                     ? response.message
-                                    : 'Something unexpected happened. Please try again.'
+                                    : __("We're sorry, but something went wrong. Please try again later.")
                             });
                         }
                     });
@@ -129,7 +129,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             });
     })
 
-    .controller('UsersFilterCtrl', function($scope, Country) {
+    .controller('UsersFilterCtrl', function($scope, __, Country) {
         $scope.countries = Country.query();
 
         var range = function(min, max, step) {
@@ -140,9 +140,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.ages = range(18, 99);
-        $scope.lookingFor = ['male', 'female'];
+        $scope.genders = ['male', 'female'];
         $scope.toggleGender = function($index) {
-            $scope.currUser.filter.gender.toggleElement($scope.lookingFor[$index]);
+            $scope.currUser.filter.gender.toggleElement($scope.genders[$index]);
         };
     })
 
@@ -220,14 +220,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             };
 
             $ionicPopup.prompt({
-                title: 'Request unlock photo',
-                subTitle: 'Why should he/she unlock this photo for you?',
+                title: __('Unlock photo!'),
+                subTitle: __('Reason for unlock') + ':',
                 templateUrl: 'templates/popup_input_message.html',
                 scope: $scope,
                 buttons: [
-                    { text: 'Cancel' },
+                    { text: __('Cancel') },
                     {
-                        text: '<b>Send</b>',
+                        text: '<b>' + __('Send') + '</b>',
                         type: 'button-positive',
                         onTap: function(event) {
                             if (!$scope.prompt.message) {
@@ -328,7 +328,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('UserActionsCtrl', function(
         $scope, $ionicModal, $ionicPopup, $ionicLoading, $ionicHistory,
-        Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite
+        __, Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite
     ) {
         $ionicModal
             .fromTemplateUrl('templates/send_gift.html', {
@@ -370,14 +370,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.inviteDuel = function() {
             $scope.duelPrompt = { reason: null };
             $ionicPopup.prompt({
-                title: 'Invite to a duel',
-                subTitle: 'What are you duelling for?',
-                template: '<input type="text" placeholder="Reason for a duel" ng-model="duelPrompt.reason" required />',
+                title: __('Kviesti i dvikova'),
+                subTitle: __('Nori pagaliau issiaiskinti ar esi grazesnis uz kuri nors nari? Issirink sriti kurioje nori rungtyniauti ir pakviesk ji i Dvikova. Jusu dvikova vyks 3 dienas ir vartotojai nuspres kuris vertas buti nugaletoju.'),
+                template: '<input type="text" placeholder="' + __('Duel reason') + '" ng-model="duelPrompt.reason" required />',
                 scope: $scope,
                 buttons: [
-                    { text: 'Cancel' },
+                    { text: __('Cancel') },
                     {
-                        text: '<b>Send invite</b>',
+                        text: '<b>' + __('Send') + '</b>',
                         type: 'button-positive',
                         onTap: function(event) {
                             if (!$scope.duelPrompt.reason) {
@@ -395,7 +395,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     return;
                 }
 
-                $ionicLoading.show({ template: 'Inviting..' });
+                $ionicLoading.show({ template: __('Please wait') + '..' });
 
                 var invite = new DuelInvite({
                     userId: $scope.user.id,
@@ -405,7 +405,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 invite.$save().then(function() {
                     // Success
                     $ionicLoading.hide();
-                    $ionicLoading.show({ template: 'Invite sent', noBackdrop: true, duration: 1000 });
+                    $ionicLoading.show({
+                        template: __('Invite sent'),
+                        noBackdrop: true,
+                        duration: 1000
+                    });
 
                 }, $scope.onError);
             });
@@ -534,22 +538,22 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         }
     })
 
-    .controller('GuestsCtrl', function($scope, Guest) {
-        $scope.title = 'Guests';
+    .controller('GuestsCtrl', function($scope, __, Guest) {
+        $scope.title = __('Guests');
         $scope.subProperty = 'guest';
         $scope.users = Guest.query({ include: 'guest.profilePhoto.url(size=w80h80)' });
     })
 
-    .controller('FriendsCtrl', function($scope, Friend) {
-        $scope.title = 'Friends';
+    .controller('FriendsCtrl', function($scope, __, Friend) {
+        $scope.title = __('Friends');
         $scope.subProperty = 'friend';
         $scope.users = Friend.query({ include: 'friend.profilePhoto.url(size=w80h80)' });
 
         enableUserDeletion($scope);
     })
 
-    .controller('BlockedUsersCtrl', function($scope, BlockedUser) {
-        $scope.title = 'Block-list';
+    .controller('BlockedUsersCtrl', function($scope, __, BlockedUser) {
+        $scope.title = __('My BlackList');
         $scope.subProperty = 'blockedUser';
         $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
 
@@ -609,7 +613,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.password = {};
         $scope.changePassword = function() {
-            $ionicLoading.show({ template: 'Changing password..' });
+            $ionicLoading.show({ template: __('Please wait') + '..' });
 
             $scope.currUser.$update({
                 password: $scope.password.new
@@ -651,7 +655,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('SettingsAlbumsCtrl', function($scope, $ionicPopover, $ionicPopup, $ionicLoading, Album) {
+    .controller('SettingsAlbumsCtrl', function($scope, $ionicPopover, $ionicPopup, $ionicLoading, __, Album) {
         $scope.albums = Album.query({ include: 'thumbUrl(size=w80h80)' });
 
         $scope.promptCreateAlbum = {
@@ -660,14 +664,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.createAlbum = function() {
             $ionicPopup.prompt({
-                title: 'Create album',
-                subTitle: 'What should be the name of the new album?',
-                template: '<input type="text" placeholder="Album title" ng-model="promptCreateAlbum.albumName" required />',
+                title: __('Add New Album'),
+                subTitle: __('Enter album name'),
+                template: '<input type="text" ng-model="promptCreateAlbum.albumName" required />',
                 scope: $scope,
                 buttons: [
-                    { text: 'Cancel' },
+                    { text: __('Cancel') },
                     {
-                        text: '<b>Create</b>',
+                        text: '<b>' + __('Create') + '</b>',
                         type: 'button-positive',
                         onTap: function(event) {
                             if (!$scope.promptCreateAlbum.albumName) {
@@ -686,7 +690,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     return;
                 }
 
-                $ionicLoading.show({ template: 'Creating an album..' });
+                $ionicLoading.show({ template: __('Please wait') + '..' });
 
                 var album = new Album({ name: name });
                 album.$save().then(
@@ -705,7 +709,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('SettingsAlbumCtrl', function(
         $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
-        MediaFile, Album, Rule
+        __, MediaFile, Album, Rule
     ) {
         var thumbParams = 'size=w80h80';
 
@@ -731,7 +735,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             filePicker = document.querySelector('ion-view[nav-view="active"] #file-picker');
             filePicker.removeEventListener('change');
             filePicker.addEventListener('change', function(event) {
-                $ionicLoading.show({ template: 'Uploading..' });
+                $ionicLoading.show({ template: __('Uploading') + '..' });
 
                 var file = new MediaFile({
                     albumId: $stateParams.albumId,
@@ -756,11 +760,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                         && error.data.rule.type == Rule.MIN_VALUE
                         && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
                     ) {
-                        error.data.message = 'The image is too small: ' + (
-                                error.data.rule.field == 'width'
-                                    ? 'Min. width is ' + error.data.rule.value + ' pixels'
-                                    : 'Min. height is ' + error.data.rule.value + ' pixels'
-                            );
+                        error.data.message = __('Incorrenct image dimensions');
                     }
 
                     $scope.onError(error);
@@ -807,16 +807,16 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('QuickieYesCtrl', function($scope, $state, QuickieVote) {
-        $scope.title = 'Wants to meet me';
+    .controller('QuickieYesCtrl', function($scope, $state, __, QuickieVote) {
+        $scope.title = __('Who said YES to me');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
             include: 'voter.profilePhoto.url(size=w80h80)'
         });
     })
 
-    .controller('QuickieMatchesCtrl', function($scope, QuickieVote) {
-        $scope.title = 'My matches';
+    .controller('QuickieMatchesCtrl', function($scope, __, QuickieVote) {
+        $scope.title = __('My Matches');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
             matched: true,
@@ -828,7 +828,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.notifications = Notification.query();
     })
 
-    .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, ChatRoomPost) {
+    .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, __, ChatRoomPost) {
         var loadPosts = function() {
             return ChatRoomPost.query({
                 roomId: $stateParams.id,
@@ -897,10 +897,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
                     } else {
                         $ionicPopup.alert({
-                            title: 'Houston, we have problems',
+                            title: __("Something's wrong"),
                             template: response && response.data && response.data.message
                                 ? response.data.message
-                                : 'Something unexpected happened. Please try again.'
+                                : __("We're sorry, but something went wrong. Please try again later.")
                         });
                     }
                 }

@@ -30,7 +30,7 @@ angular.module('hotvibes', [
         MIN_VALUE: 'minValue'
     })
 
-    .factory('sprintfInterpolator', function() {
+    .factory('SprintfInterpolator', function() {
         return {
             setLocale: function(locale) {},
 
@@ -67,16 +67,21 @@ angular.module('hotvibes', [
         };
     })
 
-    .config(function($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
+    .config(function($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
 
+        // Dirty hack to annotate the keyword to be picked-up by the translation extractor
+        // Since we can't use services at configuration stage
+        var __ = function(i) { return i; };
+        $ionicConfigProvider.backButton.text('<span translate>' + __('Back') + '</span>');
+
         // FIXME: set preferred language based on config
         $translateProvider.useSanitizeValueStrategy(null);
-        $translateProvider.useInterpolation('sprintfInterpolator');
+        $translateProvider.useInterpolation('SprintfInterpolator');
         $translateProvider.useStaticFilesLoader({
             prefix: 'i18n/',
             suffix: '.json'
@@ -403,8 +408,21 @@ angular.module('hotvibes', [
             });
     })
 
-    .run(function($ionicPlatform, AuthService) {
+    .run(function($ionicPlatform, $translate, amMoment, AuthService) {
         AuthService.init();
+
+        $translate.onReady(function() {
+            var localeId = $translate.use();
+            var localeFileUrl = '/lib/moment/locale/' + localeId + '.js';
+
+            var script = document.createElement('script');
+            script.setAttribute('type', 'text/javascript');
+            script.setAttribute('src', localeFileUrl);
+            script.onload = function() {
+                amMoment.changeLocale(localeId);
+            };
+            document.getElementsByTagName("head")[0].appendChild(script);
+        });
 
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)

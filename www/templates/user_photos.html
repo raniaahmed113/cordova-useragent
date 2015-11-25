@@ -1,13 +1,16 @@
 <ion-view class="thumbs">
-    <ion-nav-title>Photos &laquo; {{user.nickName}}</ion-nav-title>
+    <ion-nav-title translate>Pictures</ion-nav-title>
 
     <div class="mainPhotos">
-        <img ng-repeat="photo in user.photos" ng-src="{{photo.url}}" ng-click="switchPhoto($index)" class="framed" />
+        <img ng-repeat="photo in user.photos"
+             ng-src="{{photo.url}}"
+             ng-click="switchPhoto($index)"
+             class="framed" />
     </div>
 
     <div class="albums">
         <a href="#" ng-repeat="album in user.galleryAlbums">
-            <img ng-src="{{album.thumbUrl}}" alt="">
+            <img ng-src="{{album.thumbUrl}}" alt="" />
         </a>
     </div>
 </ion-view>

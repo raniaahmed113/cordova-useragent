@@ -158,6 +158,11 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('DataMap', function(__) {
         return {
+            gender: {
+                male: __('Man'),
+                female: __('Female')
+            },
+
             lookingFor: {
                 male: __('Looking for male'),
                 female: __('Looking for female')
