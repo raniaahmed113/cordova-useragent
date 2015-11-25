@@ -413,6 +413,10 @@ angular.module('hotvibes', [
 
         $translate.onReady(function() {
             var localeId = $translate.use();
+            if (localeId == 'en') {
+                localeId = 'en-gb';
+            }
+
             var localeFileUrl = '/lib/moment/locale/' + localeId + '.js';
 
             var script = document.createElement('script');
