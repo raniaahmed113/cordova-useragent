@@ -31,7 +31,7 @@ gulp.task('translate-extract', function() {
 });
 
 gulp.task('translate', ['translate-extract'], function() {
-    var locales = ['en_US', 'lt_LT', 'lv_LV', 'pl_PL', 'hr_HR']; // FIXME: read list of locales from config
+    var locales = ['lt_LT'/*, 'en_US', 'lv_LV', 'pl_PL', 'hr_HR'*/]; // FIXME: read list of locales from config
     var deferred = q.defer();
     var finished = 0;
 

@@ -1,13 +1,13 @@
 {
   "name": "Flirtas.lt",
   "private": "true",
-  "devDependencies": {
+  "dependencies": {
     "ionic": "driftyco/ionic-bower#1.1.0",
     "ion-autocomplete": "~0.2.3",
-    "angular-moment": "~0.10.2"
-  },
-  "dependencies": {
+    "angular-moment": "~0.10.2",
     "ng-fab-form": "~1.2.11",
-    "angular-translate-loader-static-files": "~2.8.1"
+    "angular-translate-custom": "git@git.vertex.lt:bower-packages/angular-translate-custom.git",
+    "ionic-ion-tinder-cards": "*",
+    "angular-resource": "~1.4.8"
   }
 }

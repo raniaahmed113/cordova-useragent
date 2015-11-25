@@ -40,6 +40,30 @@ angular.module('hotvibes', [
         MIN_VALUE: 'minValue'
     })
 
+    .factory('sprintfInterpolator', function() {
+        return {
+            setLocale: function(locale) {},
+
+            getInterpolationIdentifier: function() {
+                return 'sprintf';
+            },
+
+            interpolate: function(string, interpolateParams) {
+                if (!interpolateParams || interpolateParams.length < 1) {
+                    return string;
+                }
+
+                var i = 0;
+                var keys = Object.keys(interpolateParams);
+                return string.replace(/%u|%s/g, function() {
+                    return keys.length > i && !angular.isUndefined(interpolateParams[keys[i]])
+                        ? interpolateParams[keys[i++]]
+                        : '';
+                });
+            }
+        };
+    })
+
     .config(function($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
@@ -49,9 +73,27 @@ angular.module('hotvibes', [
 
         // FIXME: set preferred language based on config
         $translateProvider.useSanitizeValueStrategy(null);
+        $translateProvider.useInterpolation('sprintfInterpolator');
         $translateProvider.useStaticFilesLoader({
             prefix: 'i18n/',
             suffix: '.json'
+        });
+        $translateProvider.pluralForms({
+            en: function(n) {
+                return n != 1 ? 1 : 0;
+            },
+            lt: function(n) {
+                return n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;
+            },
+            lv: function(n) {
+                return n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;
+            },
+            pl: function(n) {
+                return n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
+            },
+            hr: function(n) {
+                return n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
+            }
         });
         $translateProvider.preferredLanguage('lt');
 

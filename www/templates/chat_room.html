@@ -15,23 +15,18 @@
                 <div class="item item-body">
                     <p>{{post.body}}</p>
                     <p>
-                        <a href="#" class="subdued">{{post.cntLikes}} Likes</a>
-                        <a href="#" class="subdued">{{post.cntComments}} Comments</a>
+                        <a href="#" class="subdued" translate="%u comment" translate-plural="%u comments" translate-n="post.cntComments"></a>
                     </p>
                 </div>
 
                 <div class="item tabs tabs-secondary tabs-icon-left">
                     <a class="tab-item" href="#">
-                        <i class="icon ion-thumbsup"></i>
-                        Like
-                    </a>
-                    <a class="tab-item" href="#">
                         <i class="icon ion-chatbox"></i>
-                        Comment
+                        <span translate>Replay Shout</span>
                     </a>
                     <a class="tab-item" href="#">
-                        <i class="icon ion-share"></i>
-                        Share
+                        <i class="icon ion-alert-circled"></i>
+                        <span translate>Improper post</span>
                     </a>
                 </div>
             </div>

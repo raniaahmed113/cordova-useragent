@@ -1,6 +1,6 @@
 <ion-view>
     <ion-nav-title>
-        {{ 'Conversation with %s' | translate | sprintf:conversation.withUser.nickName }}
+        {{ 'Conversation with %s' | translate:{name: conversation.withUser.nickName} }}
     </ion-nav-title>
     <ion-content>
         <ul class="list chat">
