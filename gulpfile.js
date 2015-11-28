@@ -9,10 +9,7 @@ var gulp = require('gulp'),
     fs = require('fs'),
     request = require('request'),
     gettext = require('gulp-angular-gettext'),
-    buffer = require('vinyl-buffer'),
     source = require('vinyl-source-stream'),
-    merge = require('merge-stream'),
-    upload = require('gulp-upload'),
     q = require('q'),
     buildVariants = require('./variants.json');
 
