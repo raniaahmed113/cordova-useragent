@@ -879,6 +879,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
                     post.created = Math.round(Date.now() / 1000);
                     post.author = $scope.currUser;
+                    post.cntComments = 0;
+
                     $scope.posts.unshift(post);
 
                     $scope.modal.newPost = {};
