@@ -1,0 +1,56 @@
+{
+  "lt.vertex.flirtas": {
+    "name": "Flirtas.lt",
+    "desc": "Pažintys internete",
+    "author": {
+      "href": "http://flirtas.alfa.lt/",
+      "email": "support@flirtas.lt"
+    },
+    "languages": ["lt"],
+    "apiClientId": 1
+  },
+
+  "lt.vertex.flirts": {
+    "name": "Flirts.lv",
+    "desc": "Pažintys internete",
+    "author": {
+      "href": "http://www.flirts.lv/",
+      "email": "support@flirts.lv"
+    },
+    "languages": ["lv", "ru"],
+    "apiClientId": 2
+  },
+
+  "lt.vertex.flirtak": {
+    "name": "Flirtak.pl",
+    "desc": "Pažintys internete",
+    "author": {
+      "href": "http://www.flirtak.pl/",
+      "email": "support@flirtak.pl"
+    },
+    "languages": ["pl"],
+    "apiClientId": 3
+  },
+
+  "lt.vertex.flertik": {
+    "name": "Flertik.hr",
+    "desc": "Pažintys internete",
+    "author": {
+      "href": "http://www.flertik.hr/",
+      "email": "support@flertik.hr"
+    },
+    "languages": ["hr"],
+    "apiClientId": 4
+  },
+
+  "me.vertex.hotvibes": {
+    "name": "HotVibes.com",
+    "desc": "Pažintys internete",
+    "author": {
+      "href": "http://www.hotvibes.com/",
+      "email": "support@hotvibes.com"
+    },
+    "languages": ["en"],
+    "apiClientId": 5
+  }
+}

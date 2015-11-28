@@ -17,7 +17,7 @@ Array.prototype.toggleElement = function(element) {
 
 angular.module('hotvibes', [
     'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
-    'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
+    'hotvibes.config', 'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
 
     .constant('ErrorCode', {
@@ -67,7 +67,11 @@ angular.module('hotvibes', [
         };
     })
 
-    .config(function($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider, $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/, ngFabFormProvider) {
+    .config(function(
+        $stateProvider, $translateProvider, $urlRouterProvider, $httpProvider,
+        $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/,
+        ngFabFormProvider, Config
+    ) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
 
@@ -79,7 +83,6 @@ angular.module('hotvibes', [
         var __ = function(i) { return i; };
         $ionicConfigProvider.backButton.text('<span translate>' + __('Back') + '</span>');
 
-        // FIXME: set preferred language based on config
         $translateProvider.useSanitizeValueStrategy(null);
         $translateProvider.useInterpolation('SprintfInterpolator');
         $translateProvider.useStaticFilesLoader({
@@ -99,11 +102,25 @@ angular.module('hotvibes', [
             pl: function(n) {
                 return n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
             },
+            ru: function(n) {
+                return n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
+            },
             hr: function(n) {
                 return n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
             }
         });
-        $translateProvider.preferredLanguage('lt');
+
+        /*var resolvePreferredLocale = function() {
+            if (Config.LANGUAGES.length == 1) {
+                return Config.LANGUAGES[0];
+            }
+
+            return localStorage['selectedLocale'] || 'en';
+        };
+
+        $translateProvider.preferredLanguage(
+            resolvePreferredLocale()
+        );*/
 
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
         $resourceProvider.defaults.actions.get.cache = cache;*/
@@ -408,25 +425,55 @@ angular.module('hotvibes', [
             });
     })
 
-    .run(function($ionicPlatform, $translate, amMoment, AuthService) {
+    .run(function($ionicPlatform, $ionicModal, $translate, $rootScope, amMoment, AuthService, Config, DataMap) {
         AuthService.init();
 
-        $translate.onReady(function() {
-            var localeId = $translate.use();
-            if (localeId == 'en') {
-                localeId = 'en-gb';
-            }
+        var setLanguage = function(lang) {
+            $translate.use(lang);
 
-            var localeFileUrl = '/lib/moment/locale/' + localeId + '.js';
+            if (lang == 'en') {
+                lang = 'en-gb';
+            }
 
             var script = document.createElement('script');
             script.setAttribute('type', 'text/javascript');
-            script.setAttribute('src', localeFileUrl);
+            script.setAttribute('src', '/lib/moment/locale/' + lang + '.js');
             script.onload = function() {
-                amMoment.changeLocale(localeId);
+                amMoment.changeLocale(lang);
             };
             document.getElementsByTagName("head")[0].appendChild(script);
-        });
+        };
+
+        if (Config.LANGUAGES.length === 1) {
+            setLanguage(Config.LANGUAGES[0]);
+
+        } else if (localStorage['selectedLocale']) {
+            setLanguage(localStorage['selectedLocale']);
+
+        } else {
+            var modalScope = $rootScope.$new();
+            modalScope.changeLang = function(localeId) {
+                localStorage['selectedLocale'] = localeId;
+                setLanguage(localeId);
+                modalScope.modal.hide();
+            };
+            modalScope.languages = Config.LANGUAGES.map(function(lang) {
+                return {
+                    id: lang,
+                    title: DataMap.language[lang]
+                }
+            });
+
+            $ionicModal
+                .fromTemplateUrl('templates/select_language.html', {
+                    scope: modalScope,
+                    animation: 'slide-in-up'
+                })
+                .then(function(modal) {
+                    modalScope.modal = modal;
+                    modal.show();
+                });
+        }
 
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)

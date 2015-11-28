@@ -13,7 +13,8 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     merge = require('merge-stream'),
     upload = require('gulp-upload'),
-    q = require('q');
+    q = require('q'),
+    buildVariants = require('./variants.json');
 
 var config = {
     pathScss: [
@@ -21,19 +22,115 @@ var config = {
     ],
     pathHtml: './www/templates/**/*.html',
     pathJs: './www/js/*.js'
-
 };
+
+var switchFlavor = function(projectId, appVersion) {
+    var cfg = buildVariants[projectId];
+
+    if (!appVersion) {
+        appVersion = '3.0.0';
+    }
+
+    // Compile config file for Angular
+    fs.writeFileSync(
+        './www/js/config.js',
+
+        fs.readFileSync('./config.tpl.js', { encoding: 'utf8' })
+            .replace(/\$apiClientId/, cfg.apiClientId)
+            .replace(/\$languages/, JSON.stringify(cfg.languages))
+    );
+
+    // Compile config file for Cordova
+    fs.writeFileSync(
+        './config.xml',
+
+        fs.readFileSync('./config.tpl.xml', { encoding: 'utf8' })
+            .replace(/{\$projectId}/, projectId)
+            .replace(/{\$version}/, appVersion)
+            .replace(/{\$appName}/g, cfg.name)
+            .replace(/{\$appDesc}/, cfg.desc)
+            .replace(/{\$emailSupport}/, cfg.author.email)
+            .replace(/{\$url}/, cfg.author.href)
+    );
+};
+
+gulp.task('lt', function() {
+    switchFlavor('lt.vertex.flirtas');
+});
+
+gulp.task('lv', function() {
+    switchFlavor('lt.vertex.flirts');
+});
+
+gulp.task('pl', function() {
+    switchFlavor('lt.vertex.flirtak');
+});
+
+gulp.task('hr', function() {
+    switchFlavor('lt.vertex.flertik');
+});
+
+gulp.task('en', function() {
+    switchFlavor('me.vertex.hotvibes');
+});
+
+gulp.task('assemble', function() {
+    var latestGitVersionTag = sh.exec('git describe --abbrev=0', { silent: true }).output,
+        versionData = latestGitVersionTag.match(/^v?(\d+)\.(\d+)(\.\d+)?/),
+        versionMajor = parseInt(versionData[1]),
+        versionMinor = parseInt(versionData[2]),
+        versionPatch = versionData[3] ? parseInt(versionData[3]) : 0;
+
+    // Create dirs for release
+    sh.mkdir('-p', 'tmp/release/android');
+    sh.mkdir('-p', 'tmp/release/ios');
+
+    Object.keys(buildVariants).forEach(function(projectId) {
+        var cfg = buildVariants[projectId],
+            majorVersion = (projectId == 'me.vertex.hotvibes' ? versionMajor+1 : versionMajor),
+            appVersion = majorVersion + '.' + versionMinor + '.' + versionPatch,
+            appFileName = projectId +'-v' + appVersion;
+
+        switchFlavor(projectId, appVersion);
+
+        // Compile the distributables:
+        // 1. Android
+        gutil.log('Assembling ' + gutil.colors.red(appFileName) + '..\n');
+
+        if (sh.exec('ionic build android --release').code !== 0) {
+            throw "Failed building Android version of " + appFileName;
+        }
+
+        fs.createReadStream('./platforms/android/build/outputs/apk/android-release-unsigned.apk')
+            // TODO: sign the .apk
+            .pipe(fs.createWriteStream('./tmp/release/android/' + appFileName + '.apk'));
+
+        // 2. iOS
+        if (
+            sh.exec('ionic build ios --device').code !== 0
+            || sh.exec(
+                'xcrun -sdk iphoneos' +
+                ' PackageApplication "platforms/ios/build/device/' + cfg.name + '.app"' +
+                ' -o "tmp/release/ios/' + appFileName + '.ipa"'
+            ).code !== 0
+        ) {
+            throw "Failed building iOS version of " + appFileName;
+        }
+    });
+});
 
 gulp.task('translate-extract', function() {
     return gulp.src([ config.pathHtml, config.pathJs ])
-        .pipe(gettext.extract('all.po', {markerName: '__'}))
+        .pipe(gettext.extract('all.po', { markerName: '__' }))
         .pipe(gulp.dest('./tmp/i18n/'));
 });
 
 gulp.task('translate', ['translate-extract'], function() {
-    var locales = ['lt_LT', 'en_US', 'lv_LV', 'pl_PL', 'hr_HR']; // FIXME: read list of locales from config
+    var locales = ['lt_LT', 'en_US', 'lv_LV', 'ru_RU', 'pl_PL', 'hr_HR'];
     var deferred = q.defer();
     var finished = 0;
+
+    sh.mkdir('-p', 'www/i18n/');
 
     locales.forEach(function(loc) {
         fs.createReadStream('./tmp/i18n/all.po')
