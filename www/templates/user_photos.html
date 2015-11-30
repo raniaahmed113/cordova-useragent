@@ -2,6 +2,7 @@
     <ion-nav-title translate>Pictures</ion-nav-title>
 
     <div class="mainPhotos">
+        <h4 ng-if="user.photos.length < 1" translate="<i>%s</i> have no photos" translate-values="{name: user.nickName}"></h4>
         <img ng-repeat="photo in user.photos"
              ng-src="{{photo.url}}"
              ng-click="switchPhoto($index)"
