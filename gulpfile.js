@@ -49,6 +49,39 @@ var switchFlavor = function(projectId, appVersion) {
             .replace(/{\$emailSupport}/, cfg.author.email)
             .replace(/{\$url}/, cfg.author.href)
     );
+
+    fs.writeFileSync(
+        './current.json',
+
+        JSON.stringify({
+            projectId: projectId,
+            appName: cfg.name,
+            version: appVersion
+        })
+    );
+};
+
+var assembleAndroid = function(appFileName) {
+    if (sh.exec('ionic build android --release').code !== 0) {
+        throw "Failed building Android version of " + appFileName;
+    }
+
+    fs.createReadStream('./platforms/android/build/outputs/apk/android-release-unsigned.apk')
+        // TODO: sign the .apk
+        .pipe(fs.createWriteStream('./tmp/release/android/' + appFileName + '.apk'));
+};
+
+var assembleIos = function(appFileName) {
+    if (
+        sh.exec('ionic build ios --release --device').code !== 0/*
+     || sh.exec(
+     'xcrun -sdk iphoneos' +
+     ' PackageApplication "platforms/ios/build/device/' + cfg.name + '.app"' +
+     ' -o "tmp/release/ios/' + appFileName + '.ipa"'
+     ).code !== 0*/
+    ) {
+        throw "Failed building iOS version of " + appFileName;
+    }
 };
 
 gulp.task('lt', function() {
@@ -73,7 +106,7 @@ gulp.task('en', function() {
 
 gulp.task('assemble', function() {
     var latestGitVersionTag = sh.exec('git describe --abbrev=0', { silent: true }).output,
-        versionData = latestGitVersionTag.match(/^v?(\d+)\.(\d+)(\.\d+)?/),
+        versionData = latestGitVersionTag.match(/^v?(\d+)\.(\d+)(?:\.(\d+))?/),
         versionMajor = parseInt(versionData[1]),
         versionMinor = parseInt(versionData[2]),
         versionPatch = versionData[3] ? parseInt(versionData[3]) : 0;
@@ -86,34 +119,29 @@ gulp.task('assemble', function() {
         var cfg = buildVariants[projectId],
             majorVersion = (projectId == 'me.vertex.hotvibes' ? versionMajor+1 : versionMajor),
             appVersion = majorVersion + '.' + versionMinor + '.' + versionPatch,
-            appFileName = projectId +'-v' + appVersion;
+            appFileName = projectId + '-v' + appVersion;
 
         switchFlavor(projectId, appVersion);
 
         // Compile the distributables:
-        // 1. Android
         gutil.log('Assembling ' + gutil.colors.red(appFileName) + '..\n');
-
-        if (sh.exec('ionic build android --release').code !== 0) {
-            throw "Failed building Android version of " + appFileName;
-        }
-
-        fs.createReadStream('./platforms/android/build/outputs/apk/android-release-unsigned.apk')
-            // TODO: sign the .apk
-            .pipe(fs.createWriteStream('./tmp/release/android/' + appFileName + '.apk'));
-
-        // 2. iOS
-        if (
-            sh.exec('ionic build ios --device').code !== 0
-            || sh.exec(
-                'xcrun -sdk iphoneos' +
-                ' PackageApplication "platforms/ios/build/device/' + cfg.name + '.app"' +
-                ' -o "tmp/release/ios/' + appFileName + '.ipa"'
-            ).code !== 0
-        ) {
-            throw "Failed building iOS version of " + appFileName;
-        }
+        assembleAndroid(appFileName);
+        assembleIos(appFileName);
     });
+});
+
+gulp.task('assemble-android', function() {
+    var currentVariant = require('./current.json'),
+        appFileName = currentVariant.projectId + '-v' + currentVariant.version;
+
+    assembleAndroid(appFileName);
+});
+
+gulp.task('assemble-ios', function() {
+    var currentVariant = require('./current.json'),
+        appFileName = currentVariant.projectId + '-v' + currentVariant.version;
+
+    assembleIos(appFileName);
 });
 
 gulp.task('translate-extract', function() {
@@ -171,7 +199,7 @@ gulp.task('watch', function () {
     gulp.watch(config.pathScss, ['sass']);
 });
 
-gulp.task('install', ['git-check'], function () {
+gulp.task('install', ['git-check', 'translate', 'lt'], function () {
     return bower.commands.install()
         .on('log', function (data) {
             gutil.log('bower', gutil.colors.cyan(data.id), data.message);
@@ -189,17 +217,4 @@ gulp.task('git-check', function (done) {
         process.exit(1);
     }
     done();
-});
-
-var preprocess = require('gulp-preprocess');
-gulp.task('dev', function () {
-    gulp.src('./const/config.js')
-        .pipe(preprocess({context: {ENV: 'DEVELOPMENT', DEBUG: true}}))
-        .pipe(gulp.dest('./www/js/'));
-});
-
-gulp.task('prod', function () {
-    gulp.src('./const/config.js')
-        .pipe(preprocess({context: {ENV: 'PRODUCTION'}}))
-        .pipe(gulp.dest('./www/js/'));
 });
