@@ -369,7 +369,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.user.gifts.push(giftSent);
             $scope.modal.hide();
 
-            $ionicLoading.show({ template: 'Gift sent', noBackdrop: true, duration: 1000 });
+            $ionicLoading.show({
+                template: __('Gift was sent'),
+                noBackdrop: true,
+                duration: 1000
+            });
         };
 
         $scope.inviteDuel = function() {
