@@ -107,11 +107,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config, ErrorCode) {
+    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config) {
         this.request = function(config) {
             if (config.url.startsWith(Config.API_URL_BASE)) {
-                config.headers['X-Client-Id'] = Config.API_CLIENT_ID;
-
                 var currentUser = AuthService.getCurrentUser();
                 if (currentUser != null) {
                     config.headers.Authorization = 'Bearer ' + currentUser.accessToken;

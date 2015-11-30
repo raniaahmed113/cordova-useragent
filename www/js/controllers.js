@@ -50,7 +50,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('LoginCtrl', function(__, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, AuthService, Country) {
+    .controller('LoginCtrl', function(
+        $scope, $state, $ionicModal, $ionicLoading, $ionicPopup,
+        __, AuthService, Country, Config
+    ) {
         $scope.loginData = {};
         $scope.login = function() {
             var loginArgs = $scope.loginData;
@@ -78,7 +81,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.countries = Country.query();
         $scope.registration = {
-            data: {}, // FIXME: pre-fill country & email?
+            data: {
+                clientId: Config.API_CLIENT_ID
+            }, // FIXME: pre-fill country & email?
 
             submit: function() {
                 $ionicLoading.show();
