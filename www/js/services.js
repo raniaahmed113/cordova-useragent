@@ -13,6 +13,27 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
             return $_http;
         };
+
+        this.formatFilter = function(filter) {
+            var output = {};
+
+            angular.forEach(filter, function(value, key) {
+                if (typeof value === 'boolean') {
+                    if (!value) {
+                        return;
+                    }
+
+                    value = 1;
+
+                } else if (angular.isArray(value)) {
+                    value = value.join(',');
+                }
+
+                output[key] = value;
+            });
+
+            return output;
+        };
     })
 
     .service('AuthService', function($q, $window, $rootScope, $filter, $injector, Config, Api) {
@@ -80,7 +101,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
-                    var user = $injector.get('User').valueOf(response['user']);
+                    var user = $injector.get('User').valueOf(response.user);
                     user.accessToken = response['access_token'];
                     self.setCurrentUser(user);
 

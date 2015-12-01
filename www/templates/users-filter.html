@@ -4,14 +4,14 @@
 <ion-content>
     <div class="list">
         <ion-checkbox
-                ng-checked="currUser.filter.onlyOnline"
-                ng-click="currUser.filter.onlyOnline = !currUser.filter.onlyOnline">
+                ng-checked="currUser.filter.isOnline"
+                ng-click="currUser.filter.isOnline = !currUser.filter.isOnline">
             <span translate>Online only</span>
         </ion-checkbox>
 
         <ion-checkbox
-                ng-checked="currUser.filter.onlyNew"
-                ng-click="currUser.filter.onlyNew = !currUser.filter.onlyNew">
+                ng-checked="currUser.filter.isNewMember"
+                ng-click="currUser.filter.isNewMember = !currUser.filter.isNewMember">
             <span translate>New members</span>
         </ion-checkbox>
 

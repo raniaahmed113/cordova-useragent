@@ -1,9 +1,7 @@
 <ion-view view-title="{{title || ('Members' | translate)}}">
     <ion-nav-buttons side="right">
-        <div ng-show="users.length > 0">
-            <button class="button icon ion-search" ng-if="showFilter" ng-click="showFilter()"></button>
-            <button class="button icon ion-trash-b" ng-class="{'active': deleteMode}" ng-if="deleteMode !== undefined" ng-click="toggleDeleteMode()"></button>
-        </div>
+        <button class="button icon ion-search" ng-if="showFilter" ng-click="showFilter()"></button>
+        <button class="button icon ion-trash-b" ng-class="{'active': deleteMode}" ng-if="deleteMode !== undefined" ng-click="toggleDeleteMode()"></button>
     </ion-nav-buttons>
     <ion-content>
         <resource-collection list="users" sub-property="subProperty">

@@ -151,7 +151,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, User) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User) {
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
@@ -176,9 +176,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */
             };
 
-            /*if ($scope.currUser.filter) {
-                params = angular.extend(params, $scope.currUser.filter); // FIXME: format the filter properly
-            }*/
+            if ($scope.currUser.filter) {
+                params = angular.extend(params, Api.formatFilter($scope.currUser.filter));
+            }
 
             $scope.users = User.query(params);
         };
