@@ -149,7 +149,7 @@ angular.module('hotvibes', [
 
         ngFabFormProvider.setInsertErrorTplFn(function(compiledAlert, el, attrs) {
             var label = el.parent()[0].getElementsByClassName('input-label');
-            if (label) {
+            if (label[0]) {
                 label[0].appendChild(compiledAlert);
 
             } else {
