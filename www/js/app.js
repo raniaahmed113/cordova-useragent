@@ -110,18 +110,6 @@ angular.module('hotvibes', [
             }
         });
 
-        /*var resolvePreferredLocale = function() {
-            if (Config.LANGUAGES.length == 1) {
-                return Config.LANGUAGES[0];
-            }
-
-            return localStorage['selectedLocale'] || 'en';
-        };
-
-        $translateProvider.preferredLanguage(
-            resolvePreferredLocale()
-        );*/
-
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
         $resourceProvider.defaults.actions.get.cache = cache;*/
         $resourceProvider.defaults.actions.update = { method: 'PUT' };
