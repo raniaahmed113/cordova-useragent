@@ -12,6 +12,10 @@ input + .validation {
   white-space: normal;
 }
 
+.item.disabled, .item[disabled] {
+  @extend .tab-item.disabled;
+}
+
 resource-collection {
   display: block;
 

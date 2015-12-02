@@ -2,10 +2,13 @@
     <ion-content>
         <resource-collection list="votes">
             <ion-list>
-                <ion-item ng-repeat="vote in votes" class="item-avatar" ng-href="#/users/{{vote.voterId}}">
+                <ion-item ng-repeat="vote in votes" class="item item-avatar" ng-disabled="!vote.voter" ng-href="#/users/{{vote.voterId}}">
                     <img ng-src="{{vote.voter.profilePhoto | profilePhotoUrl:vote.voter.gender}}">
-                    <h2>{{vote.voter.nickName}}</h2>
-                    <p></p>
+                    <h2>
+                        {{vote.voter.nickName}}
+                        <span translate ng-if="!vote.voter">User has deleted his profile</span>
+                    </h2>
+                    <p>{{vote.dateCreated*1000 | amCalendar}}</p>
                 </ion-item>
             </ion-list>
         </resource-collection>
