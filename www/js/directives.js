@@ -31,13 +31,13 @@ angular.module('hotvibes.directives', [])
                     }
                 };
 
-                if (!$scope.promise) {
-                    $scope.promise = $scope.list.$promise;
-                }
+                if ($scope.subProperty) {
+                    if (!$scope.promise) {
+                        $scope.promise = $scope.list.$promise;
+                    }
 
-                $scope.promise = $scope.promise.then(
-                    function(response) {
-                        if ($scope.subProperty) {
+                    $scope.promise = $scope.promise.then(
+                        function(response) {
                             var Resource = $resource(response.config.url + '/:id', { id: '@id'});
 
                             for (var i=0; i<response.resource.length; i++) {
@@ -45,11 +45,11 @@ angular.module('hotvibes.directives', [])
                             }
 
                             return response;
-                        }
-                    },
+                        },
 
-                    onError
-                );
+                        onError
+                    );
+                }
 
                 var fetch = function() {
                     var config = $scope.list.$promise.$$state.value.config;

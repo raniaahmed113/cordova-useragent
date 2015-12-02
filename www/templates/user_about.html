@@ -63,8 +63,9 @@
 
             <div class="item item-input">
                 <label translate>Work</label>
-                <span>{{user.profile.employment | translateProfileVal:'employment'}}</span>
-                <span ng-if="user.profile.employmentIndustry">, {{user.profile.employmentIndustry}}</span>
+                <span>
+                    {{user.profile.employment | translateProfileVal:'employment'}}<span ng-if="user.profile.employmentIndustry">, {{user.profile.employmentIndustry}}</span>
+                </span>
             </div>
         </div>
     </ion-content>
