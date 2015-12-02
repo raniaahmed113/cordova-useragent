@@ -11,10 +11,11 @@ angular.module('hotvibes.directives', [])
             },
             templateUrl: 'templates/resource_collection.html',
             controller: function($scope, $resource, ErrorCode) {
-                $scope.error = false;
-                $scope.currPage = 1;
+                $scope.$watch('list', function() {
+                    $scope.error = false;
+                    $scope.currPage = 1;
+                });
 
-                var config;
                 var onError = function(response) {
                     $scope.error = true;
 
@@ -36,12 +37,10 @@ angular.module('hotvibes.directives', [])
 
                 $scope.promise = $scope.promise.then(
                     function(response) {
-                        config = response.config;
-
                         if ($scope.subProperty) {
-                            var Resource = $resource(config.url + '/:id', { id: '@id'});
+                            var Resource = $resource(response.config.url + '/:id', { id: '@id'});
 
-                            for (i=0; i<response.resource.length; i++) {
+                            for (var i=0; i<response.resource.length; i++) {
                                 response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
                             }
 
@@ -53,6 +52,7 @@ angular.module('hotvibes.directives', [])
                 );
 
                 var fetch = function() {
+                    var config = $scope.list.$promise.$$state.value.config;
                     config.params.page = $scope.currPage;
 
                     $resource(config.url).query(

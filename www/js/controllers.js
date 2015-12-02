@@ -134,7 +134,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             });
     })
 
-    .controller('UsersFilterCtrl', function($scope, __, Country) {
+    .controller('UsersFilterCtrl', function($scope, __, Country, CityPicker) {
         $scope.countries = Country.query();
 
         var range = function(min, max, step) {
@@ -149,6 +149,21 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.toggleGender = function($index) {
             $scope.currUser.filter.gender.toggleElement($scope.genders[$index]);
         };
+
+        new CityPicker({
+            getCountry: function() {
+                return $scope.currUser.filter.country;
+            },
+            onCitySelected: function(city) {
+                $scope.currUser.filter.cityId = city.id;
+                $scope.currUser.filter.cityName = city.label;
+            }
+        }).then(
+            function(modal) {
+                $scope.cityPicker = modal;
+            },
+            $scope.onError
+        );
     })
 
     .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User) {
@@ -159,6 +174,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.$watch('currUser.filter', function(newFilter, oldFilter) {
             if (newFilter === oldFilter) {
                 // Called due to initialization - ignore
+                return;
+            }
+
+            if (newFilter.cityId && newFilter.country != oldFilter.country) {
+                // Country has changed - let's reset the chosen city too
+                newFilter.cityId = newFilter.cityName = null;
                 return;
             }
 
@@ -192,7 +213,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     ) {
         $scope.user = User.get({
             id: $state.params.userId,
-            include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0),gifts,isFriend,isFavorite,isBlocked"
+            include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0),gifts,isFriend,isFavorite,isBlocked,age"
         });
 
         $scope.showUi = false;
@@ -569,7 +590,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         enableUserDeletion($scope);
     })
 
-    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, Country, City) {
+    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, __, Country, CityPicker) {
         $scope.profile = {
             cityName: $scope.currUser.cityName,
             country: $scope.currUser.country,
@@ -584,41 +605,20 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.countries = Country.query();
 
-        $ionicModal
-            .fromTemplateUrl('templates/modal_autocomplete.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            })
-            .then(function(modal) {
-                modal.search = function() {
-                    $scope.modal.searching = true;
-
-                    City.query({
-                        country: $scope.profile.country,
-                        name: $scope.modal.input
-
-                    }).$promise.then(
-                        function(response) {
-                            $scope.modal.rows = response.resource.map(function(city) {
-                                return {label: city.name}
-                            });
-                        },
-
-                        $scope.onError
-
-                    ).finally(function() {
-                        $scope.modal.searching = false;
-                    });
-                };
-
-                modal.onItemSelected = function($index) {
-                    $scope.profile.cityName = $scope.modal.rows[$index]['label'];
-                    $scope.profile.form.city.$setDirty();
-                    modal.hide();
-                };
-
+        new CityPicker({
+            getCountry: function() {
+                return $scope.profile.country;
+            },
+            onCitySelected: function(city) {
+                $scope.profile.cityName = city.label;
+                $scope.profile.form.city.$setDirty();
+            }
+        }).then(
+            function(modal) {
                 $scope.modal = modal;
-            });
+            },
+            $scope.onError
+        );
 
         $scope.password = {};
         $scope.changePassword = function() {

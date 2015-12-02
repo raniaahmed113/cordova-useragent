@@ -5,16 +5,16 @@
             <input type="search"
                    autofocus
                    placeholder="{{'Search' | translate}}"
-                   ng-change="modal.search()"
-                   ng-model="modal.input"
+                   ng-change="search()"
+                   ng-model="input.searchQuery"
                    ng-model-options="{ debounce: 700 }" />
         </label>
-        <button class="button icon ion-android-close" ng-click="modal.hide()"></button>
+        <button class="button icon ion-android-close" ng-click="closeModal()"></button>
     </ion-header-bar>
     <ion-content>
         <ul class="list">
-            <ion-spinner ng-show="modal.searching"></ion-spinner>
-            <li ng-click="modal.onItemSelected($index)" class="item" ng-repeat="row in modal.rows">{{row.label}}</li>
+            <ion-spinner ng-show="searching"></ion-spinner>
+            <li ng-click="onItemSelected($index)" class="item" ng-repeat="row in rows">{{row.label}}</li>
         </ul>
     </ion-content>
 </ion-modal-view>

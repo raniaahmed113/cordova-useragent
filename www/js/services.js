@@ -18,6 +18,10 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             var output = {};
 
             angular.forEach(filter, function(value, key) {
+                if (key == 'type' || key == '$resolved') {
+                    return;
+                }
+
                 if (typeof value === 'boolean') {
                     if (!value) {
                         return;

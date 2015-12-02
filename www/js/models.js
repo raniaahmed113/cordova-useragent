@@ -156,6 +156,69 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $translate.instant;
     })
 
+    .factory('CityPicker', function($q, $ionicModal, $rootScope, City) {
+        return function(params) {
+            var deferred = $q.defer(),
+                $scope = $rootScope.$new(true),
+                modalWindow;
+
+            $scope.input = {};
+            $scope.closeModal = function() {
+                modalWindow.hide();
+            };
+            $scope.search = function() {
+                if (!$scope.input.searchQuery) {
+                    return;
+                }
+
+                $scope.searching = true;
+
+                City.query({
+                    country: params.getCountry(),
+                    name: $scope.input.searchQuery
+
+                }).$promise.then(
+                    function(response) {
+                        $scope.rows = response.resource.map(function(city) {
+                            return {
+                                id: city.id,
+                                label: city.name
+                            }
+                        });
+                    },
+                    function(error) {
+                        // TODO
+                    }
+
+                ).finally(function() {
+                    $scope.searching = false;
+                });
+            };
+
+            $scope.onItemSelected = function($index) {
+                params.onCitySelected($scope.rows[$index]);
+                modalWindow.hide();
+                $scope.input.searchQuery = '';
+                $scope.rows = [];
+            };
+
+            $ionicModal
+                .fromTemplateUrl('templates/modal_autocomplete.html', {
+                    scope: $scope,
+                    animation: 'slide-in-up'
+                })
+                .then(
+                    function(modal) {
+                        modalWindow = modal;
+                        deferred.resolve(modal);
+                    },
+                    deferred.reject
+                );
+
+            return deferred.promise;
+        };
+    })
+
     .factory('DataMap', function(__) {
         return {
             gender: {
