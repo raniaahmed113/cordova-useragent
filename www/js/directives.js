@@ -10,10 +10,36 @@ angular.module('hotvibes.directives', [])
                 subProperty: '='
             },
             templateUrl: 'templates/resource_collection.html',
-            controller: function($scope, $resource, ErrorCode) {
+            controller: function($scope, $resource, $q, ErrorCode) {
                 $scope.$watch('list', function() {
                     $scope.error = false;
                     $scope.currPage = 1;
+
+                    if ($scope.subProperty) {
+                        if (!$scope.promise) {
+                            $scope.promise = $scope.list.$promise;
+                        }
+
+                        var deferred = $q.defer();
+                        $scope.promise.then(
+                            function(response) {
+                                var Resource = $resource(response.config.url + '/:id', { id: '@id'});
+
+                                for (var i=0; i<response.resource.length; i++) {
+                                    response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
+                                }
+
+                                deferred.resolve(response);
+                            },
+
+                            function(error) {
+                                onError(error);
+                                deferred.reject(error);
+                            }
+                        );
+
+                        $scope.promise = deferred.promise;
+                    }
                 });
 
                 var onError = function(response) {
@@ -31,26 +57,6 @@ angular.module('hotvibes.directives', [])
                     }
                 };
 
-                if ($scope.subProperty) {
-                    if (!$scope.promise) {
-                        $scope.promise = $scope.list.$promise;
-                    }
-
-                    $scope.promise = $scope.promise.then(
-                        function(response) {
-                            var Resource = $resource(response.config.url + '/:id', { id: '@id'});
-
-                            for (var i=0; i<response.resource.length; i++) {
-                                response.resource[i] = new Resource(response.resource[i][$scope.subProperty]);
-                            }
-
-                            return response;
-                        },
-
-                        onError
-                    );
-                }
-
                 var fetch = function() {
                     var config = $scope.list.$promise.$$state.value.config;
                     config.params.page = $scope.currPage;
@@ -63,7 +69,7 @@ angular.module('hotvibes.directives', [])
 
                             // Append/overwrite rows
                             for (var i=0; i<response.resource.length; i++) {
-                                $scope.list[lastIndex + i] = response.resource[i];
+                                $scope.list[lastIndex + i] = $scope.subProperty ? response.resource[i][$scope.subProperty] : response.resource[i];
                             }
 
                             // Overwrite meta-data

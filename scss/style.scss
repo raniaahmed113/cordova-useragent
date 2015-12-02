@@ -65,7 +65,6 @@ td-card {
 
 .button.gift {
   margin: 10px 0 0 15px;
-
 }
 
 .quickie-yes, .quickie-no {
@@ -221,6 +220,11 @@ ul.chat {
 
 .col.user {
   position: relative;
+
+  > img {
+    min-height: 78px;
+    background-color: $stable;
+  }
 
   .icon {
     position: absolute;top: 0;left: 0;
