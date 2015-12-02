@@ -226,11 +226,34 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.showUi = true;
 
         }, function(error) {
-            if (error && error.data && error.data.code == ErrorCode.MEMBER_HAS_BLOCKED_YOU) {
-                $scope.blocked = true;
+            $scope.error = true;
 
-            } else {
-                // TODO: display the error
+            if (!error || !error.data) {
+                // Show some generic error
+                $scope.errUnknown = true;
+                return;
+            }
+
+            switch (error.status) {
+                case 400:
+                    switch (error.data.code) {
+                        case ErrorCode.MEMBER_HAS_BLOCKED_YOU:
+                            $scope.blocked = true;
+                            break;
+
+                        default:
+                            $scope.errUnknown = true;
+                            break;
+                    }
+                    break;
+
+                case 404:
+                    $scope.noSuchProfile = true;
+                    break;
+
+                default:
+                    $scope.errUnknown = true;
+                    break;
             }
         });
 

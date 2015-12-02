@@ -17,10 +17,17 @@
             </div>
 
             <ion-spinner class="overlay center" ng-if="user.$promise.$$state.status < 1"></ion-spinner>
+
+            <div class="overlay center error-sign" ng-if="noSuchProfile">
+                <span translate>Member not found</span>
+                <i class="icon ion-close-circled"></i>
+            </div>
+
             <div class="overlay center error-sign" ng-if="blocked">
                 <span translate="You are block by %s" translate-values="{name: user.nickName, _before: '<b>', _after: '</b>'}"></span>
                 <i class="icon ion-android-hand"></i>
             </div>
+
             <div class="overlay center error-sign" ng-if="user.photos.length < 1">
                 <span translate="<i>%s</i> have no photos" translate-values="{name: user.nickName}"></span>
                 <i class="icon ion-image"></i>
@@ -30,7 +37,7 @@
         <div class="tabs tabs-dark tabs-icon-top tabs-striped tabs-top">
             <a class="tab-item"
                ng-repeat="tab in tabs"
-               ng-disabled="user.$promise.$$state.status < 1 || blocked"
+               ng-disabled="user.$promise.$$state.status < 1 || error"
                ng-click="toggleTab(tab.id)"
                ng-class="{active: currentlyActiveTab == tab.id}"
             >
