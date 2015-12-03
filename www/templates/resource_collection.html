@@ -3,7 +3,7 @@
 <div class="overlay center">
     <ion-spinner ng-show="!list.$resolved"></ion-spinner>
     <div class="error-sign" ng-if="error">
-        <span ng-if="!error.message" translate>Sorry, some nasty error prevented us from showing you this page</span>
+        <span translate>Sorry, some nasty error prevented us from showing you this page</span>
         <i class="icon {{error.icon || 'ion-close-circled'}}"></i>
     </div>
     <div class="error-sign" ng-if="!error && list.$resolved && list.length < 1">

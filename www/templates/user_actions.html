@@ -3,10 +3,11 @@
     <ion-content>
         <div class="row row-wrap user-actions">
             <div class="col col-50">
-                <button ng-click="user.isFriend = !user.isFriend">
+                <button ng-click="user.isFriend ? user.isFriend = false : sendFriendInvite()" ng-disabled="user.isInvitedToFriends">
                     <i class="icon ion-person"></i>
                     <span ng-if="user.isFriend" translate>Remove from friends</span>
                     <span ng-if="!user.isFriend" translate>Add friend</span>
+                    <span ng-if="user.isInvitedToFriends" class="royal" translate>Invite sent</span>
                 </button>
             </div>
 
@@ -26,9 +27,10 @@
             </div>
 
             <div class="col col-50">
-                <button ng-click="inviteDuel()">
+                <button ng-click="inviteDuel()" ng-disabled="user.invitedToDuel">
                     <i class="icon ion-podium"></i>
                     <span translate>Kviesti i dvikova</span>
+                    <span ng-if="user.invitedToDuel" class="royal" translate>Invite sent</span>
                 </button>
             </div>
         </div>

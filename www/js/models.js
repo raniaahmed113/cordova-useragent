@@ -129,7 +129,11 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'users/:userId/duelInvites', { userId: '@userId' });
     })
 
-    .factory('Notification', function($resource, Config) {
+    .factory('FriendInvite', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'users/:userId/friendRequests', { userId: '@recipientId' });
+    })
+
+    /*.factory('Notification', function($resource, Config) {
         var model = $resource(Config.API_URL_BASE + 'me/notifications');
 
         model.prototype.getBody = function() {
@@ -150,7 +154,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         };
 
         return model;
-    })
+    })*/
 
     .factory('__', function($translate) {
         return $translate.instant;

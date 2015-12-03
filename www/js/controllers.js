@@ -158,12 +158,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $scope.currUser.filter.cityId = city.id;
                 $scope.currUser.filter.cityName = city.label;
             }
-        }).then(
-            function(modal) {
-                $scope.cityPicker = modal;
-            },
-            $scope.onError
-        );
+        }).then(function(modal) {
+            $scope.cityPicker = modal;
+        });
     })
 
     .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User) {
@@ -213,7 +210,17 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     ) {
         $scope.user = User.get({
             id: $state.params.userId,
-            include: "profile,galleryAlbums,photos.url(size=w" + $window.innerWidth + "h0),gifts,isFriend,isFavorite,isBlocked,age"
+            include: [
+                "profile",
+                "galleryAlbums",
+                "photos.url(size=w" + $window.innerWidth + "h0)",
+                "gifts",
+                "isFriend",
+                "isInvitedToFriends",
+                "isFavorite",
+                "isBlocked",
+                "age"
+            ].join(",")
         });
 
         $scope.showUi = false;
@@ -377,7 +384,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('UserActionsCtrl', function(
         $scope, $ionicModal, $ionicPopup, $ionicLoading, $ionicHistory,
-        __, Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite
+        __, Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite, FriendInvite
     ) {
         $ionicModal
             .fromTemplateUrl('templates/send_gift.html', {
@@ -468,6 +475,33 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             });
         };
 
+        $scope.sendFriendInvite = function() {
+            $ionicPopup.confirm({
+                title: __('Add friend'),
+                template: __('Invite %s to your friends list?').replace(/%s/, $scope.user.nickName),
+                buttons: [
+                    { text: __('Cancel') },
+                    { text: __('Send'), type: 'button-positive', onTap: function() { return true; } }
+                ]
+
+            }).then(function(accepted) {
+                if (!accepted) {
+                    return;
+                }
+
+                var invite = new FriendInvite({
+                    recipientId: $scope.user.id
+                });
+                invite.$save();
+
+                $ionicLoading.show({
+                    template: __('Invite sent'),
+                    noBackdrop: true,
+                    duration: 1000
+                });
+            });
+        };
+
         $scope.user.$promise.then(function() {
             var properties = ['isFriend', 'isFavorite', 'isBlocked'];
 
@@ -480,6 +514,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     var relation;
                     switch (this.exp) {
                         case 'user.isFriend':
+                            if (newVal) {
+                                // Do nothing - may not become friends without sending an invite first
+                                return;
+                            }
+
                             relation = new Friend({ friendId: $scope.user.id });
                             break;
 
@@ -636,12 +675,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 $scope.profile.cityName = city.label;
                 $scope.profile.form.city.$setDirty();
             }
-        }).then(
-            function(modal) {
-                $scope.modal = modal;
-            },
-            $scope.onError
-        );
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
 
         $scope.password = {};
         $scope.changePassword = function() {
