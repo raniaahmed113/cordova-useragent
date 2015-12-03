@@ -71,14 +71,14 @@ var assembleAndroid = function(appFileName) {
         .pipe(fs.createWriteStream('./tmp/release/android/' + appFileName + '.apk'));
 };
 
-var assembleIos = function(appFileName) {
+var assembleIos = function(appFileName, projectName) {
     if (
-        sh.exec('ionic build ios --release --device').code !== 0/*
-     || sh.exec(
-     'xcrun -sdk iphoneos' +
-     ' PackageApplication "platforms/ios/build/device/' + cfg.name + '.app"' +
-     ' -o "tmp/release/ios/' + appFileName + '.ipa"'
-     ).code !== 0*/
+        sh.exec('ionic build ios --release --device').code !== 0
+         || sh.exec(
+             'xcrun -sdk iphoneos' +
+             ' PackageApplication "platforms/ios/build/device/' + projectName + '.app"' +
+             ' -o "tmp/release/ios/' + appFileName + '.ipa"'
+         ).code !== 0
     ) {
         throw "Failed building iOS version of " + appFileName;
     }
@@ -116,8 +116,7 @@ gulp.task('assemble', function() {
     sh.mkdir('-p', 'tmp/release/ios');
 
     Object.keys(buildVariants).forEach(function(projectId) {
-        var cfg = buildVariants[projectId],
-            majorVersion = (projectId == 'me.vertex.hotvibes' ? versionMajor+1 : versionMajor),
+        var majorVersion = (projectId == 'me.vertex.hotvibes' ? versionMajor+1 : versionMajor),
             appVersion = majorVersion + '.' + versionMinor + '.' + versionPatch,
             appFileName = projectId + '-v' + appVersion;
 
@@ -141,7 +140,7 @@ gulp.task('assemble-ios', function() {
     var currentVariant = require('./current.json'),
         appFileName = currentVariant.projectId + '-v' + currentVariant.version;
 
-    assembleIos(appFileName);
+    assembleIos(appFileName, currentVariant.appName);
 });
 
 gulp.task('translate-extract', function() {
@@ -165,7 +164,15 @@ gulp.task('translate', ['translate-extract'], function() {
                 headers: {
                     'Lc-Debug': '9K^Sa7Rslu@Q31vzCW3E%cYEflU*4ZBd'
                 }
-            }, function() {
+            }, function(err, res) {
+                if (!res.statusCode) {
+                    console.error(loc + ': Failed.', err, res);
+                }
+
+                if (res.statusCode != 200) {
+                    console.error(loc + ': Failed. Back-end returned: ' + res.statusCode + ' ' + res.statusMessage);
+                }
+
                 gutil.log(loc + ': done');
                 finished++;
 
@@ -199,7 +206,7 @@ gulp.task('watch', function () {
     gulp.watch(config.pathScss, ['sass']);
 });
 
-gulp.task('install', ['git-check', 'translate', 'lt'], function () {
+gulp.task('install', ['git-check'], function () {
     return bower.commands.install()
         .on('log', function (data) {
             gutil.log('bower', gutil.colors.cyan(data.id), data.message);
