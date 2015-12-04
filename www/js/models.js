@@ -129,10 +129,6 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'users/:userId/duelInvites', { userId: '@userId' });
     })
 
-    .factory('FriendInvite', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:userId/friendRequests', { userId: '@recipientId' });
-    })
-
     /*.factory('Notification', function($resource, Config) {
         var model = $resource(Config.API_URL_BASE + 'me/notifications');
 

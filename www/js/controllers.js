@@ -391,7 +391,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('UserActionsCtrl', function(
         $scope, $ionicModal, $ionicPopup, $ionicLoading, $ionicHistory,
-        __, Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite, FriendInvite
+        __, Friend, Favorite, BlockedUser, Gift, UserGift, DuelInvite, Request
     ) {
         $ionicModal
             .fromTemplateUrl('templates/send_gift.html', {
@@ -496,8 +496,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     return;
                 }
 
-                var invite = new FriendInvite({
-                    recipientId: $scope.user.id
+                var invite = new Request({
+                    type: "friend",
+                    toUserId: $scope.user.id
                 });
                 invite.$save();
 
