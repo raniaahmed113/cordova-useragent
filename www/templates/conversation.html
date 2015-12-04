@@ -5,7 +5,7 @@
             <div
                 class="message"
                 ng-repeat="message in messages"
-                ng-class="{mine: message.id == currUser.id, failed: message.error ? true : false}"
+                ng-class="{'item-positive': message.isNew, mine: message.id == currUser.id, failed: message.error ? true : false}"
                 ng-click="resend($index)">
 
                 {{message.text}}

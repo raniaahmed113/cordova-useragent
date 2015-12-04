@@ -5,31 +5,27 @@
             <button class="button" ng-click="registration.modal.hide()"><i class="icon ion-android-close"></i></button>
         </div>
     </ion-header-bar>
-    <ion-content>
+    <ion-content class="landing">
         <form novalidate class="list" name="registration.form" ng-submit="registration.submit()">
-            <label class="item item-input item-stacked-label">
-                <span class="input-label" translate>Your login</span>
-                <input type="text" ng-model="registration.data.nickName" required autocomplete="nickname" />
+            <label class="item item-input item-stacked-label-padded">
+                <input type="text" ng-model="registration.data.nickName" class="input" required autocomplete="nickname" placeholder="{{'Your login' | translate}}" />
             </label>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label" translate>Password</span>
-                <input type="password" ng-model="registration.data.password" required />
+            <label class="item item-input item-stacked-label-padded">
+                <input type="password" ng-model="registration.data.password" class="input" required placeholder="{{'Password' | translate}}" />
             </label>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label" translate>Your email</span>
-                <input type="email" ng-model="registration.data.email" placeholder="me@domain.com" required autocomplete="email" />
+            <label class="item item-input item-stacked-label-padded">
+                <input type="email" ng-model="registration.data.email" class="input" required autocomplete="email" placeholder="{{'Email' | translate}}" />
             </label>
 
-            <label class="item item-input item-stacked-label">
-                <span class="input-label" translate>Your birthday</span>
-                <input type="date" ng-model="registration.data.birthday" required autocomplete="birthday" />
+            <label class="item item-input item-stacked-label-padded">
+                <input type="date" ng-model="registration.data.birthday" class="input" required autocomplete="birthday" placeholder="{{'Birthday' | translate}}"/>
             </label>
 
-            <label class="item item-input item-select item-stacked-label">
+            <label class="item item-input item-select item-stacked-label-padded">
                 <span class="input-label" translate>Your country</span>
-                <select ng-model="registration.data.country" required>
+                <select ng-model="registration.data.country" class="input" required>
                     <option ng-repeat="country in countries" value="{{country.id}}">{{country.label}}</option>
                 </select>
             </label>
@@ -43,7 +39,7 @@
                     <span translate>a woman</span>
                 </ion-radio>
             </label>
-
+            <div class="rules center">{{'By registering you accept'}} <a href="">{{'rules and regulations'}}</a></div>
             <div class="padding">
                 <button
                         type="submit"

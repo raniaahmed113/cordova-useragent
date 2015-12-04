@@ -2,9 +2,155 @@
   text-align: center;
 }
 
+.pane, .view {
+  background-color:#E7E7E7;
+}
+
+.landing.pane, .landing.scroll-content {
+  background-image: url(/img/bg.jpg);
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+
+.center-vertical {
+  height: 100%;
+  @include display-flex();
+  @include flex-direction(column);
+  @include justify-content(center);
+}
+
+.landing {
+  .logo {
+    width:100%;
+    padding:0px 70px;
+    position:absolute;
+    top:0;
+  }
+
+  .item {
+    border: none;
+    background: transparent;
+  }
+
+  .bar {
+    background:transparent;
+    padding:0px;
+  }
+
+  .bar-footer {
+    bottom:66px;
+  }
+
+  .bar .button {
+    @include border-radius(0px);
+    background:rgba(0, 0, 0, 0.5);
+    border:none;
+    border-top:1px solid $light;
+    height:100px;
+    font-weight:700;
+  }
+
+  .bar .button .reg{
+    font-size:18px;
+    font-weight:800;
+    display:block;
+    text-transform: uppercase;
+  }
+
+  input.input {
+    background: $light;
+    @include border-radius(5px 5px 5px 5px);
+    margin: 10px 17px 10px 0px;
+    padding: 10px;
+    height: 45px;
+  }
+
+  .rules {
+    color:$light;
+    margin:10px 15px 0px 15px;
+    font-weight:bold;
+    font-size:12px;
+    text-align: left;
+  }
+  .rules a{
+    color:$calm;
+    text-decoration: none;
+  }
+}
+
+.settings {
+  color:$text;
+
+  .nickname {
+    line-height:40px;
+    color:$text;
+  }
+  .icon.ion-ios-arrow-forward {
+    color:$text;
+  }
+  .item {
+    font-size:14px;
+  }
+  i.icon {
+    font-size:25px;
+  }
+  .input-label {
+    font-size:12px;
+    font-weight:bold;
+    color:$text;
+  }
+}
+.credits {
+  h4 {
+    color:$text-dark;
+    font-weight:normal;
+  }
+}
+
+ion-list.list-dark, .list.list-dark {
+  .item, .item-content {
+    background: #424242;
+    color: $light;
+  }
+
+  ion-item, .item {
+    border: 1px solid #3E3E3E;
+  }
+}
+
+.main-menu {
+  background:#3B3B3B;
+}
+.menu-left,  .menu-right{
+  border-right:2px solid #373737;
+}
+.menu .bar-header {
+  border-bottom:2px solid #373737;
+}
+.list-inset .item {
+  border-color: darken($stable, 15%);
+}
+.item.item-divider {
+  background:#e7e7e7;
+  padding-left:3px;
+  border:none;
+  color:$text;
+  text-transform: uppercase;
+  font-size:13px;
+}
+.item.item-divider.item-button-right {
+  padding-bottom:10px;
+}
+
 input + .validation {
   color: $assertive;
   font-size: 14px;
+}
+
+.item-stacked-label-padded {
+  @extend .item-stacked-label;
+  padding-right: 16px;
 }
 
 .item-stacked-label .input-label .validation {
@@ -70,29 +216,30 @@ td-card {
 .button.gift {
   margin: 10px 0 0 15px;
 }
+.quickie {
+  .quickie-yes, .quickie-no {
+    display: block;
+    position: absolute;
+    top: 20px;
+    font-size: 2em;
+    font-weight: bold;
+    margin: 10px;
+    padding: 5px 15px;
+    border: 5px solid;
+    @include border-radius(15px);
+  }
 
-.quickie-yes, .quickie-no {
-  display: block;
-  position: absolute;
-  bottom: 0;
-  font-size: 2em;
-  font-weight: bold;
-  margin: 10px;
-  padding: 5px 15px;
-  border: 5px solid;
-  @include border-radius(15px);
-}
+  .quickie-yes {
+    color: $balanced;
+    border-color: $balanced;
+    left: 0;
+  }
 
-.quickie-yes {
-  color: $balanced;
-  border-color: $balanced;
-  right: 0;
-}
-
-.quickie-no {
-  color: $assertive;
-  border-color: $assertive;
-  left: 0;
+  .quickie-no {
+    color: $assertive;
+    border-color: $assertive;
+    right: 0;
+  }
 }
 
 .row-wrap {
@@ -154,23 +301,27 @@ img.framed {
 
 ul.chat {
   .message {
+    @extend .item.item-dark;
     padding: 10px;
     margin: 5px;
-    background-color: $calm;
-    @include border-radius(5px);
+    @include border-radius(10px);
     max-width: 50%;
     clear: both;
 
     .status {
       font-size: 85%;
       font-weight: 300;
-      color: lighten(black, 25%);
+      color: darken(white, 25%);
     }
 
     &.mine {
-      background-color: $stable;
+      @extend .item.item-light;
       text-align: right;
       float: right;
+
+      .status {
+        color: lighten(black, 25%);
+      }
     }
 
     &.failed {
@@ -273,8 +424,15 @@ ul.chat {
     @include translate3d(0, -90%, 0);
   }
 
+  .item>span {
+    font-size:12px;
+  }
   .thumbs {
     text-align: center;
+  }
+
+  .tabs-striped.tabs-dark .tab-item.active {
+    border-color: $assertive;
   }
 
   > .photos {
@@ -353,4 +511,15 @@ ul.chat {
   > .tabs-content {
     height: 90%;
   }
+}
+
+.button.button-transparent {
+  border-color: #111;
+  background: rgba(0, 0, 0, 0.5);
+  color: $light;
+}
+
+.button {
+  font-weight:bold;
+  @include border-radius(5px);
 }

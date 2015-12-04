@@ -1,12 +1,14 @@
 <ion-view title="{{'Quickie' | translate}}">
-    <ion-content scroll="false">
+    <ion-content scroll="false" class="quickie">
         <td-cards>
             <td-card ng-repeat="user in users" on-destroy="onCardDestroyed($index)"
                      on-partial-swipe="onCardMove(amt)">
                 <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" alt="" />
+                <span ng-if="$index != 0">
+                    <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
+                    <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
+                </span>
             </td-card>
         </td-cards>
-        <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
-        <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
     </ion-content>
 </ion-view>

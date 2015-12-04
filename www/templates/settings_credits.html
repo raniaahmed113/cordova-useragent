@@ -1,5 +1,8 @@
-<ion-view title="{{'My Credits' | translate}}">
-    <ion-content>
-        <h4 class="center" translate="You have %u credit" translate-plural="You have %u credits" translate-n="currUser.credits" translate-values="{_before: '<span class=\'balanced\'>', _after: '</span>'}"></h4>
+<ion-view title="{{'My Credits' | translate}}" xmlns="http://www.w3.org/1999/html">
+    <ion-content class="credits">
+        <h4 class="center" translate="You credit balance is:"></h4>
+            <h1 class="center">
+                <i class="icon ion-ios-speedometer"></i> {{currUser.credits}}
+            </h1>
     </ion-content>
 </ion-view>
