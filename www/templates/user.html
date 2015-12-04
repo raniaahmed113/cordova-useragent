@@ -18,6 +18,11 @@
 
             <ion-spinner class="overlay center" ng-if="user.$promise.$$state.status < 1"></ion-spinner>
 
+            <div class="overlay center error-sign" ng-if="errUnknown">
+                <span translate>Sorry, some nasty error prevented us from showing you this page</span>
+                <i class="icon ion-close-circled"></i>
+            </div>
+
             <div class="overlay center error-sign" ng-if="noSuchProfile">
                 <span translate>Member not found</span>
                 <i class="icon ion-close-circled"></i>
