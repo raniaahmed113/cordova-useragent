@@ -5,6 +5,7 @@
                 <ion-item class="item-avatar item-conversation"
                           ng-repeat="conversation in conversations | orderBy:'-lastMessage.dateSent'"
                           href="#/conversations/{{conversation.id}}"
+                          ng-class="{'item-positive': conversation.isUnread}"
                         >
                     <img ng-src="{{conversation.withUser.profilePhoto | profilePhotoUrl:conversation.withUser.gender}}">
                     <h2>{{conversation.withUser.nickName}}</h2>

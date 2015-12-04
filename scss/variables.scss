@@ -4,9 +4,6 @@ in ionic's _variables.scss file.
 
 For example, you might change some of the default colors:
 
-$light:                           #fff !default;
-$stable:                          #f8f8f8 !default;
-$positive:                        #387ef5 !default;
 $calm:                            #11c1f3 !default;
 $balanced:                        #33cd5f !default;
 $energized:                       #ffc900 !default;
@@ -16,3 +13,11 @@ $dark:                            #444 !default;
 */
 
 $gray: #999;
+$dark: #444;
+$positive: #62AC34;
+$stable: #f8f8f8;
+$light: #fff;
+$assertive: #FB0139;
+
+$text: #999;
+$text-dark: #737373;

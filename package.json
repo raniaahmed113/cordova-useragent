@@ -14,6 +14,7 @@
     "gulp-angular-gettext": "^2.1.0",
     "gulp-buffer": "0.0.2",
     "gulp-remote-src": "^0.4.0",
+    "gulp-sass": "^2.1.0",
     "gulp-util": "^2.2.14",
     "q": "^1.4.1",
     "request": "^2.67.0",
