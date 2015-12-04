@@ -1,14 +1,21 @@
 var enableUserDeletion = function($scope) {
-    $scope.deleteMode = false;
-    $scope.toggleDeleteMode = function() {
-        $scope.deleteMode = !$scope.deleteMode;
-    };
-    $scope.delete = function($event, $index) {
-        $event.preventDefault();
+    $scope.users.$promise.then(function() {
+        if ($scope.users.length < 1) {
+            return;
+        }
 
-        var userToDelete = $scope.users.splice($index, 1)[0];
-        userToDelete.$delete();
-    }
+        // User list has loaded
+        $scope.deleteMode = false;
+        $scope.toggleDeleteMode = function() {
+            $scope.deleteMode = !$scope.deleteMode;
+        };
+        $scope.delete = function($event, $index) {
+            $event.preventDefault();
+
+            var userToDelete = $scope.users.splice($index, 1)[0];
+            userToDelete.$delete();
+        }
+    });
 };
 
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
