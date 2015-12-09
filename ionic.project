@@ -1,6 +1,5 @@
 {
   "name": "Flirtas.lt",
-  "app_id": "lt.flirtas.mobile",
   "gulpStartupTasks": [
     "sass",
     "watch"
@@ -8,5 +7,6 @@
   "watchPatterns": [
     "www/**/*",
     "!www/lib/**/*"
-  ]
+  ],
+  "app_id": "b0637dc2"
 }

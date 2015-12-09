@@ -16,14 +16,21 @@ Array.prototype.toggleElement = function(element) {
 };
 
 angular.module('hotvibes', [
-    'ionic', 'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
+    'ionic','ionic.service.core',  'ionic.service.push',
+    'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
     'hotvibes.config', 'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
 
     .constant('ErrorCode', {
+        INVALID_CREDENTIALS: 100,
         NOT_ENOUGH_CREDITS: 101,
         VIP_REQUIRED: 102,
-        MEMBER_HAS_BLOCKED_YOU: 104
+        MEMBER_HAS_BLOCKED_YOU: 104,
+        INVITE_ALREADY_SENT: 105,
+        CANT_PERFORM_ACTION_ON_SELF: 106,
+        TEXT_TOO_SHORT: 107,
+        MUST_WAIT_FOR_REPLY: 108
+
     })
 
     .constant('Rule', {
@@ -70,7 +77,7 @@ angular.module('hotvibes', [
     .config(function(
         $stateProvider, $translateProvider, $urlRouterProvider, $httpProvider,
         $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/,
-        ngFabFormProvider, Config
+        ngFabFormProvider
     ) {
         // Setup default URL
         $urlRouterProvider.otherwise('/users');
@@ -425,7 +432,7 @@ angular.module('hotvibes', [
 
             var script = document.createElement('script');
             script.setAttribute('type', 'text/javascript');
-            script.setAttribute('src', '/lib/moment/locale/' + lang + '.js');
+            script.setAttribute('src', 'lib/moment/locale/' + lang + '.js');
             script.onload = function() {
                 amMoment.changeLocale(lang);
             };

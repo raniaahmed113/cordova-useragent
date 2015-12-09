@@ -20,7 +20,10 @@ var enableUserDeletion = function($scope) {
 
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function($scope, $state, $ionicHistory, $ionicPopup, $ionicLoading, __, AuthService) {
+    .controller('AppCtrl', function(
+        $rootScope, $scope, $state, $ionicUser, $ionicPush, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading,
+        __, AuthService, Config, PushNotificationHandler, Api
+    ) {
         $scope.logout = function() {
             AuthService.setCurrentUser(null);
             $state.go('login');
@@ -36,7 +39,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.rightMenuEnabled = state.views && state.views.rightMenu ? true : false;
         });
 
+        // Load the currently-logged-in user instance from the localStorage
         $scope.currUser = AuthService.getCurrentUser();
+
+        // Start listening for changes to currUser instance: update localStorage on every change
         $scope.$watch('currUser', function(newUser, oldUser) {
             if (newUser === oldUser) {
                 return;
@@ -46,12 +52,43 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         }, true);
 
+        // Start listening for push notifications
+        $ionicPlatform.ready(function() {
+            if (!window.cordova) {
+                return;
+            }
+
+            var user = $ionicUser.current();
+            var userId = (Config.IS_LIVE_DB ? "" : "dev-") + $scope.currUser.id;
+
+            if (user.id != userId) {
+                if (!user.isFresh()) {
+                    user = new $ionicUser();
+                }
+
+                user.id = userId;
+            }
+
+            $ionicPush.init({
+                debug: false,
+                onNotification: function(notification) {
+                    PushNotificationHandler.handle(notification);
+                },
+                onRegister: function(data) {
+                    user.addPushToken(data.token);
+                    user.save();
+                }
+            });
+
+            $ionicPush.register();
+        });
+
         $scope.onError = function(response, params) {
             $ionicLoading.hide();
             $ionicPopup.alert({
                 title: params && params.title || __("Something's wrong"),
-                template: response && response.data && response.data.message
-                    ? response.data.message
+                template: response && response.data
+                    ? Api.translateErrorCode(response.data.code)
                     : __("We're sorry, but something went wrong. Please try again later.")
             });
         };
@@ -59,7 +96,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('LoginCtrl', function(
         $scope, $state, $ionicModal, $ionicLoading, $ionicPopup,
-        __, AuthService, Country, Config
+        __, AuthService, Country, Config, Api
     ) {
         $scope.loginData = {};
         $scope.login = function() {
@@ -72,13 +109,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 });
             };
 
-            loginArgs.onError = function(response) {
+            loginArgs.onError = function(error) {
                 $ionicLoading.hide();
                 $ionicPopup.alert({
                     title: __("Something's wrong"),
-                    template: response && response.message
-                        ? response.message
-                        : __("We're sorry, but something went wrong. Please try again later.")
+                    template: Api.translateErrorCode(error.code)
                 });
             };
 
@@ -122,9 +157,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                         } else {
                             $ionicPopup.alert({
                                 title: __("Something's wrong"),
-                                template: response && response.message
-                                    ? response.message
-                                    : __("We're sorry, but something went wrong. Please try again later.")
+                                template: Api.translateErrorCode(response.code)
                             });
                         }
                     });
@@ -576,14 +609,15 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
                     // Update the lastMessage info
                     $scope.conversations[i].lastMessage = message;
+                    break;
                 }
             });
         });
     })
 
     .controller('ConversationCtrl', function(
-        $scope, $rootScope, $stateParams, $ionicScrollDelegate,
-        Conversation, Message, User
+        $scope, $rootScope, $stateParams, $ionicScrollDelegate, $ionicPopup,
+        __, Conversation, Message, User, Api
     ) {
         var params = {
             withUserId: $stateParams.userId || $stateParams.id
@@ -602,29 +636,45 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             // TODO: support for attachments
         });
 
-        $scope.sendMessage = function() {
-            var i = $scope.messages.push({
+        $scope.$on('newMessage', function(event, msg) {
+            $scope.messages.push(msg);
+            $ionicScrollDelegate.scrollBottom(true);
+        });
+
+        $scope.sendMessage = function(msg) {
+            if (!msg) {
+                msg = new Message({
                     id: $scope.currUser.id,
                     text: $scope.msgText,
                     dateSent: null,
                     conversationId: $scope.conversation.id
-                })-1;
+                });
 
-            var msg = new Message();
-            msg.id = $scope.currUser.id;
-            msg.text = $scope.msgText;
+                $rootScope.$broadcast('newMessage', msg);
+
+                // Clear message input after sending
+                $scope.msgText = '';
+            }
+
             msg.$save(params, function() {
-                $scope.messages[i].dateSent = Math.round(Date.now() / 1000);
-                $rootScope.$broadcast('newMessage', $scope.messages[i]);
-
-                // TODO: update conversations last message cache
+                msg.dateSent = Math.round(Date.now() / 1000);
 
             }, function(error) {
-                $scope.messages[i].error = error.data.message;
-            });
+                console.log(error);
+                var allowTryAgain = error.status == 0 || error.status == 500;
 
-            $scope.msgText = '';
-            $ionicScrollDelegate.scrollBottom(true);
+                if (allowTryAgain) {
+                    msg.error = Api.translateErrorCode(error.data ? error.data.code : null);
+
+                } else {
+                    $ionicPopup.alert({
+                        title: __("Something's wrong"),
+                        template: error.data
+                            ? Api.translateErrorCode(error.data.code)
+                            : __("We're sorry, but something went wrong. Please try again later.")
+                    });
+                }
+            });
         };
 
         $scope.resend = function(messageIndex) {
@@ -632,9 +682,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return;
             }
 
+            // Clear the error flag
             delete $scope.messages[messageIndex].error;
 
-            // FIXME: do resend
+            // Send again
+            $scope.sendMessage($scope.messages[messageIndex]);
         }
     })
 
@@ -904,7 +956,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.notifications = Notification.query();
     })
 
-    .controller('ChatRoomCtrl', function($scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup, __, ChatRoomPost) {
+    .controller('ChatRoomCtrl', function(
+        $scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup,
+        __, Api, ChatRoomPost
+    ) {
         var loadPosts = function() {
             return ChatRoomPost.query({
                 roomId: $stateParams.id,
@@ -976,8 +1031,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                     } else {
                         $ionicPopup.alert({
                             title: __("Something's wrong"),
-                            template: response && response.data && response.data.message
-                                ? response.data.message
+                            template: response.data
+                                ? Api.translateErrorCode(response.data.code)
                                 : __("We're sorry, but something went wrong. Please try again later.")
                         });
                     }

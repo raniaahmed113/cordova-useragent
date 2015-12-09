@@ -8,6 +8,10 @@
     "ng-fab-form": "~1.2.11",
     "angular-translate-custom": "git@git.vertex.lt:bower-packages/angular-translate-custom.git",
     "ionic-ion-tinder-cards": "*",
-    "angular-resource": "~1.4.8"
+    "angular-resource": "~1.4.8",
+    "ionic-platform-web-client": "~0.2.1"
+  },
+  "devDependencies": {
+
   }
 }

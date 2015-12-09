@@ -1,6 +1,6 @@
 angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
-    .service('Api', function($injector) {
+    .service('Api', function($injector, ErrorCode, __) {
         var $_http;
 
         /**
@@ -12,6 +12,38 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             }
 
             return $_http;
+        };
+
+        this.translateErrorCode = function(code) {
+            switch (code) {
+                case ErrorCode.INVALID_CREDENTIALS:
+                    return __("Invalid username or password");
+
+                case ErrorCode.NOT_ENOUGH_CREDITS:
+                    return __("Sorry, you dont have enough x");
+
+                case ErrorCode.VIP_REQUIRED:
+                    return __("Available only for VIP members");
+
+                case ErrorCode.MEMBER_HAS_BLOCKED_YOU:
+                    return __("You are blocked by this member");
+
+                case ErrorCode.MUST_WAIT_FOR_REPLY:
+                    return __("You can't send a file unless a member replyed to your message.");
+
+                case ErrorCode.INVITE_ALREADY_SENT:
+                    return __("Already invited");
+
+                case ErrorCode.CANT_PERFORM_ACTION_ON_SELF:
+                    return __("Fatal error. You cannot do this :(");
+
+                case ErrorCode.TEXT_TOO_SHORT:
+                    return __("Please enter some text first.");
+
+                default:
+                    // TODO: log to analytics: unknown err code
+                    return __("We're sorry, but something went wrong. Please try again later.");
+            }
         };
 
         this.formatFilter = function(filter) {
@@ -40,7 +72,38 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, Config, Api) {
+    .service('PushNotificationHandler', function($rootScope, $state) {
+
+        this.handle = function(notification) {
+            if (!notification._payload || !notification._payload._type) {
+                // Malformed notification received - do nothing
+                return;
+            }
+
+            if (notification.app.asleep) {
+                // If we receive this as a result of user clicking on the notification while the app is in the background..
+                // .. redirect to a relevant page
+
+                switch (notification._payload._type) {
+                    case 'newMessage':
+                        $state.go('inside.conversations-single', { id: notification._payload.conversationId });
+                        break;
+                }
+            }/* else {
+                console.log($state);
+
+                $ionicLoading.show({
+                    template: notification.text,
+                    noBackdrop: true,
+                    duration: 1000
+                });
+            }*/
+
+            $rootScope.$broadcast(notification._payload._type, notification._payload);
+        };
+    })
+
+    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, $ionicUser, Config, Api) {
         var currentUser = null;
 
         this.init = function() {
@@ -132,17 +195,24 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('HttpInterceptor', function($rootScope, $window, $q, AuthService, Config) {
+    .service('HttpInterceptor', function($rootScope, $window, $q, $translate, AuthService, Config) {
         this.request = function(config) {
             if (config.url.startsWith(Config.API_URL_BASE)) {
                 var currentUser = AuthService.getCurrentUser();
-                if (currentUser != null) {
-                    config.headers.Authorization = 'Bearer ' + currentUser.accessToken;
 
-                    if (!config.headers.DPR) {
+                config.headers['Accept-Language'] = $translate.use();
+
+                if (currentUser != null) {
+                    config.headers['Authorization'] = 'Bearer ' + currentUser.accessToken;
+
+                    if (!config.headers['DPR']) {
                         config.headers['DPR'] = $window.devicePixelRatio;
                         config.headers['Viewport-Width'] = $window.innerWidth;
                     }
+                }
+
+                if (Config.XDEBUG) {
+                    config.url = config.url + (config.url.indexOf('?') > -1 ? '&' : '?') + "XDEBUG_SESSION_START=PHPSTORM";
                 }
             }
 
