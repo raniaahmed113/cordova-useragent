@@ -1,10 +1,15 @@
+@media (-webkit-min-device-pixel-ratio: 1) {
+  .landing {
+    background-image: url(/img/bg.jpg);
+  }
+}
 @media (-webkit-min-device-pixel-ratio: 1.5) {
-  .landing.pane, .landing.scroll-content {
+  .landing {
     background-image: url(/img/bg2x.jpg);
   }
 }
 @media (-webkit-min-device-pixel-ratio: 2.5) {
-  .landing.pane, .landing.scroll-content {
+  .landing {
     background-image: url(/img/bg3x.jpg);
   }
 }
