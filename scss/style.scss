@@ -28,6 +28,9 @@ ion-list.list-dark, .list.list-dark {
   ion-item, .item {
     border: 1px solid #3E3E3E;
   }
+  .item-content {
+    @extend .item-dark;
+  }
 }
 
 .main-menu {
@@ -272,7 +275,10 @@ ul.chat {
   margin-right: 5px;
 }
 .item-input {
-  padding: 20px 16px 0px 16px;
+   padding: 20px 16px 0px 16px;
+ }
+.item-input.item-select {
+  padding: 5px;
 }
 
 .bar-main-nav {

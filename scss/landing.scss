@@ -1,11 +1,12 @@
 .landing {
-  .pane, .scroll-content {
+  .pane{
     background-image: url(/img/bg.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
   }
-  
   .logo {
     width:100%;
     padding:0px 70px;
@@ -21,7 +22,8 @@
   .item.fb {
     float:right;
     width:80px;
-    margin-left:-12px;
+    margin-left:-5px;
+    margin-right: 5px;
   }
   .item.fb button {
     font-size:30px;
