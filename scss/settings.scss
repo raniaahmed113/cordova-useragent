@@ -1,0 +1,22 @@
+.settings {
+  color:$text;
+
+  .nickname {
+    line-height:40px;
+    color:$text;
+  }
+  .icon.ion-ios-arrow-forward {
+    color:$text;
+  }
+  .item {
+    font-size:14px;
+  }
+  i.icon {
+    font-size:25px;
+  }
+  .input-label {
+    font-size:12px;
+    font-weight:bold;
+    color:$text;
+  }
+}

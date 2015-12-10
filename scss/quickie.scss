@@ -1,0 +1,87 @@
+.quickie {
+  .quickie-yes, .quickie-no {
+    display: block;
+    position: absolute;
+    top: 20px;
+    font-size: 2em;
+    font-weight: bold;
+    margin: 10px;
+    padding: 5px 15px;
+    border: 5px solid;
+    @include border-radius(15px);
+  }
+
+  .quickie-yes {
+    color: $balanced;
+    border-color: $balanced;
+    left: 0;
+  }
+
+  .quickie-no {
+    color: $assertive;
+    border-color: $assertive;
+    right: 0;
+  }
+
+  .navigation {
+    position:absolute;
+    bottom:35px;
+    left:0;
+    right:0;
+    margin-left:auto;
+    margin-right:auto;
+    width: 255px;
+  }
+  .navigation button{
+    background:transparent;
+    @include border-radius(60px);
+    font-size:50px;
+    padding: 5px 21px;
+    display:inline-block;
+  }
+  .navigation span {
+    display:inline-block;
+  }
+
+  .navigation .small {
+    width:40px;
+    margin:10px 10px;
+    height: 60px;
+  }
+  .navigation .small button {
+    font-size:25px;
+    padding: 0px 8px;
+  }
+  .navigation .small button.user {
+    position:absolute;
+    top:0;
+    color: $dark;
+    border:3px solid $dark;
+  }
+  .navigation .small button.user:active{
+    background: lighten($dark, 20%);
+  }
+  .navigation .small button.sms {
+    position:absolute;
+    bottom:0;
+    color: $positive;
+    border:3px solid $positive;
+  }
+  .navigation .small button.sms:active{
+    background: lighten($positive, 20%);
+  }
+  .navigation button.yes{
+    color: $energized;
+    border:5px solid $energized;
+  }
+  .navigation button.yes:active{
+    background: lighten($energized, 20%);
+  }
+  .navigation button.no{
+    color: $assertive;
+    border:5px solid $assertive;
+  }
+  .navigation button.no:active{
+    background: lighten($assertive, 20%);
+  }
+}

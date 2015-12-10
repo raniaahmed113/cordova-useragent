@@ -1,6 +1,6 @@
 <ion-view title="Login" class="landing">
     <ion-content scroll="false">
-        <img src="img/logo.png" class="logo center"/>
+        <img src="/img/logos/{{logoVariant}}.png" class="logo center"/>
         <div class="center-vertical">
             <form ng-submit="login()">
                 <div class="list">
@@ -10,13 +10,16 @@
                     <label class="item item-input item-stacked-label-padded">
                         <input type="password" required ng-model="loginData.password" class="input" placeholder="{{'Password' | translate}}">
                     </label>
-                    <label class="item">
+                    <label class="item log">
                         <button type="submit"
-                                class="button button-block button-transparent"
+                                class="button button-block button-positive"
                                 ng-disabled="!loginData.username || !loginData.password"
                                 translate>
                             Login
                         </button>
+                    </label>
+                    <label class="item fb">
+                        <button class="button button-block button-balanced"><i class="ion-social-facebook"></i></button>
                     </label>
                 </div>
             </form>
@@ -25,7 +28,7 @@
     <ion-footer-bar>
         <button class="button button-large button-full button-assertive center" ng-click="registration.modal.show()">
             <span translate>Don't have an account yet?</span>
-            <span class="reg" translate>Register now</span>
+            <span class="reg" translate>Register</span>
         </button>
     </ion-footer-bar>
 </ion-view>

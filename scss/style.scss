@@ -6,100 +6,11 @@
   background-color:#E7E7E7;
 }
 
-.landing.pane, .landing.scroll-content {
-  background-image: url(../img/bg.jpg);
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-}
-
 .center-vertical {
   height: 100%;
   @include display-flex();
   @include flex-direction(column);
   @include justify-content(center);
-}
-
-.landing {
-  .logo {
-    width:100%;
-    padding:0px 70px;
-    position:absolute;
-    top:0;
-  }
-
-  .item {
-    border: none;
-    background: transparent;
-  }
-
-  .bar {
-    background:transparent;
-    padding:0px;
-  }
-
-  .bar-footer {
-    bottom:66px;
-  }
-
-  .bar .button {
-    @include border-radius(0px);
-    background:rgba(0, 0, 0, 0.5);
-    border:none;
-    border-top:1px solid $light;
-    height:100px;
-    font-weight:700;
-  }
-
-  .bar .button .reg{
-    font-size:18px;
-    font-weight:800;
-    display:block;
-    text-transform: uppercase;
-  }
-
-  input.input {
-    background: $light;
-    @include border-radius(5px 5px 5px 5px);
-    margin: 10px 17px 10px 0px;
-    padding: 10px;
-    height: 45px;
-  }
-
-  .rules {
-    color:$light;
-    margin:10px 15px 0px 15px;
-    font-weight:bold;
-    font-size:12px;
-    text-align: left;
-  }
-  .rules a{
-    color:$calm;
-    text-decoration: none;
-  }
-}
-
-.settings {
-  color:$text;
-
-  .nickname {
-    line-height:40px;
-    color:$text;
-  }
-  .icon.ion-ios-arrow-forward {
-    color:$text;
-  }
-  .item {
-    font-size:14px;
-  }
-  i.icon {
-    font-size:25px;
-  }
-  .input-label {
-    font-size:12px;
-    font-weight:bold;
-    color:$text;
-  }
 }
 .credits {
   h4 {
@@ -121,6 +32,14 @@ ion-list.list-dark, .list.list-dark {
 
 .main-menu {
   background:#3B3B3B;
+}
+.menu-left i {
+  font-size:20px;
+  margin-right:10px;
+}
+.menu-right .input-label {
+  color:$light;
+  padding-left:20px;
 }
 .menu-left,  .menu-right{
   border-right:2px solid #373737;
@@ -144,10 +63,37 @@ ion-list.list-dark, .list.list-dark {
 }
 
 input + .validation {
-  color: $assertive;
-  font-size: 14px;
+  position: absolute;
+  top: 0px;
+  left:16px;
+  right:16px;
+  background: #D9141D;
+  color: white;
+  text-align:center;
+  @include border-radius(5px);
 }
+input + .validation span {
+  text-align:center;
+  line-height: 26px;
+  font-size: 15px;
+  font-weight: bold;
+}
+input + .validation span::after {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
 
+  border-top: 15px solid #D9141D;
+  content: " ";
+  display:block;
+  position:absolute;
+  top:23px;
+  left:0;
+  right:0;
+  margin-left:auto;
+  margin-right:auto;
+}
 .item-stacked-label-padded {
   @extend .item-stacked-label;
   padding-right: 16px;
@@ -215,31 +161,8 @@ td-card {
 
 .button.gift {
   margin: 10px 0 0 15px;
-}
-.quickie {
-  .quickie-yes, .quickie-no {
-    display: block;
-    position: absolute;
-    top: 20px;
-    font-size: 2em;
-    font-weight: bold;
-    margin: 10px;
-    padding: 5px 15px;
-    border: 5px solid;
-    @include border-radius(15px);
-  }
-
-  .quickie-yes {
-    color: $balanced;
-    border-color: $balanced;
-    left: 0;
-  }
-
-  .quickie-no {
-    color: $assertive;
-    border-color: $assertive;
-    right: 0;
-  }
+  width: 27%;
+  min-height:120px;
 }
 
 .row-wrap {
@@ -348,6 +271,9 @@ ul.chat {
 .item-conversation .ion-reply {
   margin-right: 5px;
 }
+.item-input {
+  padding: 20px 16px 0px 16px;
+}
 
 .bar-main-nav {
   > a {
@@ -403,6 +329,7 @@ ul.chat {
   @extend .button-block;
   padding: 25px 10px;
   line-height: 22px;
+  min-height: 160px;
 
   .icon {
     display: block;
@@ -411,105 +338,6 @@ ul.chat {
     &::before {
       font-size: 3em;
     }
-  }
-}
-
-.profile {
-  @include transition(0.25s ease-out all);
-  @include display-flex();
-  @include flex-direction(column);
-  overflow: visible;
-
-  &.tabs-open {
-    @include translate3d(0, -90%, 0);
-  }
-
-  .item>span {
-    font-size:12px;
-  }
-  .thumbs {
-    text-align: center;
-  }
-
-  .tabs-striped.tabs-dark .tab-item.active {
-    border-color: $assertive;
-  }
-
-  > .photos {
-    height: 100%;
-    position: relative;
-    background-color: #656D7D;
-    @include radial-gradient(#656D7D, #1B1D24);
-
-    .slider {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-
-      .slider-slides {
-        .slider-slide {
-          @include display-flex();
-          @include justify-content(center);
-          @include align-items(center);
-
-          > img {
-            max-width: 100%;
-            max-height: 100%;
-          }
-        }
-      }
-    }
-
-    .overlay {
-      position: absolute;
-      z-index: 10;
-      color: white;
-      min-height: 20px;
-      padding: 10px;
-      @include transition(0.15s linear all);
-
-      &.ng-hide {
-        display: block !important;
-        opacity: 0;
-      }
-
-      &.top {
-        top: 0;
-        right: 0;
-      }
-
-      &.bottom {
-        bottom: 0;
-        left: 0;
-      }
-
-      &.center {
-        top: 50%;
-        left: 50%;
-        @include translate(-50%, -50%);
-        width: 75%;
-      }
-
-      .about {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        @include line-clamp(3);
-        @include display-box();
-        @include box-orient(vertical);
-      }
-    }
-  }
-
-  .tabs {
-    position: static;
-    top: auto;
-    @include flex(1, 0, auto);
-  }
-
-  > .tabs-content {
-    height: 90%;
   }
 }
 
@@ -523,3 +351,10 @@ ul.chat {
   font-weight:bold;
   @include border-radius(5px);
 }
+
+@import "wall.scss";
+@import "landing.scss";
+@import "settings.scss";
+@import "quickie.scss";
+@import "profile.scss";
+@import "media.scss";

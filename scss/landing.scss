@@ -1,0 +1,80 @@
+.landing {
+  .pane, .scroll-content {
+    background-image: url(/img/bg.jpg);
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+  }
+  
+  .logo {
+    width:100%;
+    padding:0px 70px;
+    position:absolute;
+    top:0;
+  }
+
+  .item {
+    border: none;
+    background: transparent;
+  }
+
+  .item.fb {
+    float:right;
+    width:80px;
+    margin-left:-12px;
+  }
+  .item.fb button {
+    font-size:30px;
+  }
+
+  .item.log {
+    float:left;
+    width:80%;
+    margin-right:-6px;
+  }
+
+  .bar {
+    background:transparent;
+    padding:0px;
+  }
+
+  .bar-footer {
+    bottom:66px;
+  }
+
+  .bar .button {
+    @include border-radius(0px);
+    background:rgba(0, 0, 0, 0.5);
+    border:none;
+    border-top:1px solid $light;
+    height:100px;
+    font-weight:700;
+  }
+
+  .bar .button .reg{
+    font-size:18px;
+    font-weight:800;
+    display:block;
+    text-transform: uppercase;
+  }
+
+  input.input {
+    background: $light;
+    @include border-radius(5px 5px 5px 5px);
+    margin: 10px 17px 10px 0px;
+    padding: 10px;
+    height: 45px;
+  }
+
+  .rules {
+    color:$light;
+    margin:10px 15px 0px 15px;
+    font-weight:bold;
+    font-size:12px;
+    text-align: left;
+  }
+  .rules a{
+    color:$calm;
+    text-decoration: none;
+  }
+}

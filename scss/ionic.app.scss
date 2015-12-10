@@ -22,6 +22,11 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "../www/lib/ionic/scss/ionic";
 
+
 // Hotvibes
 @import "mixins.scss";
 @import "style.scss";
+
+
+// Include custom icon and fonts
+@import "fonts";

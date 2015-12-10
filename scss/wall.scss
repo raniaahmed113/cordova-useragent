@@ -1,0 +1,14 @@
+.wall {
+  .list.card {
+    @include border-radius(5px 5px 0px 0px);
+  }
+  .tabs.tabs-secondary {
+    @include border-radius(0px 0px 5px 5px);
+    color: black;
+    font-size: 14px;
+  }
+  .tab-item span{
+    font-weight:bold;
+    color:#54B9CB;
+  }
+}
