@@ -912,10 +912,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
     })
 
-    .controller('QuickieSwipeCtrl', function($scope, User, QuickieVote) {
+    .controller('QuickieSwipeCtrl', function($state, $scope, $ionicPopup, TDCardDelegate, __, User, QuickieVote) {
         $scope.users = User.query({
             notVotedInQuickie: true,
-            photoSize: 'w330h330'
+            photoSize: 'w330h330',
+            limit: 10
         });
 
         $scope.cardPos = 0;
@@ -932,6 +933,52 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             $scope.cardPos = 0;
             quickieVote.$save();
+
+            var nextUser = User.query({
+                notVotedInQuickie: true,
+                photoSize: 'w330h330',
+                limit: 1,
+                exclude: $scope.users.map(function(user) {
+                    return user.id;
+                }).join(',')
+
+            }).then(function() {
+                $scope.users.push(nextUser);
+            });
+        };
+
+        $scope.sayYes = function() {
+
+        };
+
+        $scope.sayNo = function() {
+
+        };
+
+        function onVipRequired() {
+            $ionicPopup.alert({
+                title: __("Available only for VIP members"),
+                template: __("Vip is required")
+                // FIXME: buttons
+            });
+        }
+
+        $scope.openChat = function() {
+            if (!$scope.currUser.isVip) {
+                onVipRequired();
+                return;
+            }
+
+            $state.go('inside.conversations-single', { id: $scope.users[0].id });
+        };
+
+        $scope.openProfile = function() {
+            if (!$scope.currUser.isVip) {
+                onVipRequired();
+                return;
+            }
+
+            $state.go('inside.user', { userId: $scope.users[0].id });
         };
     })
 
