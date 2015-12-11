@@ -149,23 +149,28 @@ resource-collection {
 }
 
 td-cards {
-  margin: 15px;
-  position: relative;
   height: 100%;
+  margin: 15px;
 
-  ion-spinner {
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    @include translate(-50%, -50%);
+  .td-cards {
+    height: 100%;
+    position: relative;
+
+    & > * {
+      position: absolute;
+      top: 35%;left: 50%;
+      @include translate(-50%, -50%);
+      /*display: flex;
+      justify-content: center;
+      align-items: center;*/
+    }
   }
 }
 
 td-card {
-  position: absolute;
-  @include border-radius(15px);
+  min-width: 315px;
   overflow: hidden;
-
+  @include border-radius(15px);
   @include transition(0.15s linear opacity);
 
   &.ng-hide {

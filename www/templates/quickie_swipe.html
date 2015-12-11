@@ -3,20 +3,22 @@
         <td-cards>
             <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
             <div class="error-sign" ng-if="noMore">
-                <span translate>Sorry, no more members - come back tomorrow</span>
+                <span translate>No more members to display. Try coming back tomorrow.</span>
                 <i class="icon ion-ios-rainy"></i>
             </div>
-            <td-card ng-repeat="user in users"
-                     on-destroy="onCardDestroyed($index)"
-                     on-partial-swipe="onCardMove(amt)"
-                     ng-hide="!firstPhotoLoaded || !user.loadedFully">
+            <div>
+                <td-card ng-repeat="user in users"
+                         on-destroy="onCardDestroyed($index)"
+                         on-partial-swipe="onCardMove(amt)"
+                         ng-hide="!firstPhotoLoaded || !user.loadedFully">
 
-                <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
-                <span ng-if="$index == 0">
-                    <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
-                    <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
-                </span>
-            </td-card>
+                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
+                    <span ng-if="$index == 0">
+                        <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
+                        <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
+                    </span>
+                </td-card>
+            </div>
         </td-cards>
 
         <div class="navigation">

@@ -970,6 +970,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.onCardDestroyed = function($index) {
             $scope.cardPos = 0;
+            $scope.photosTotal++;
 
             var user = $scope.users.splice($index, 1)[0];
             var quickieVote = new QuickieVote({
@@ -1001,8 +1002,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                         excludeIds[user.id] = true;
                         $scope.users.push(user);
                     });
-
-                    $scope.photosTotal += response.resource.length;
                 },
 
                 function() {
