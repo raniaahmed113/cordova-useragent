@@ -10,6 +10,7 @@
                 <td-card ng-repeat="user in users"
                          on-destroy="onCardDestroyed($index)"
                          on-partial-swipe="onCardMove(amt)"
+                         on-snap-back="onSnapBack($index)"
                          ng-hide="!firstPhotoLoaded || !user.loadedFully">
 
                     <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />

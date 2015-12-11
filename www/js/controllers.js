@@ -985,6 +985,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.cardPos = progress;
         };
 
+        $scope.onSnapBack = function() {
+            $scope.cardPos = 0;
+        };
+
         $scope.onCardDestroyed = function($index) {
             $scope.cardPos = 0;
             $scope.photosTotal++;
