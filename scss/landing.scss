@@ -10,7 +10,7 @@
     width:100%;
     padding:0px 70px;
     position:absolute;
-    top:0;
+    top:20px;
   }
 
   .item {
@@ -27,7 +27,10 @@
   .item.fb button {
     font-size:30px;
   }
-
+  .item.item-radio {
+    margin:0px 16px;
+    border-bottom:1px solid $dark;
+  }
   .item.log {
     float:left;
     width:80%;
