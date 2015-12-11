@@ -104,12 +104,20 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
     })
 
     .service('AuthService', function($q, $window, $rootScope, $filter, $injector, $ionicUser, Config, Api) {
-        var currentUser = null;
+        var currentUser = null,
+            accToken = null;
 
         this.init = function() {
+            accToken = localStorage['accToken'];
+
             var userData = localStorage['currentUser'];
-            if (userData && userData[0] == '{') {
-                currentUser = $injector.get('User').valueOf(JSON.parse(userData));
+            if (userData) {
+                try {
+                    currentUser = $injector.get('User').valueOf(JSON.parse(userData));
+
+                } catch (e) {
+                    localStorage['currentUser'] = null;
+                }
             }
         };
 
@@ -125,6 +133,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
          */
         this.setCurrentUser = function(user) {
             if (user == null) {
+                localStorage.removeItem('accToken');
                 localStorage.removeItem('currentUser');
 
             } else {
@@ -150,6 +159,19 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             currentUser = user;
         };
 
+        this.getAccessToken = function() {
+            return accToken;
+        };
+
+        function setAccessToken(token) {
+            if (!token) {
+                return;
+            }
+
+            accToken = token;
+            localStorage['accToken'] = token;
+        };
+
         /**
          * @returns {boolean}
          */
@@ -157,30 +179,46 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             return currentUser != null;
         };
 
-        this.doLogin = function(args) {
-            var self = this;
+        this.doLogin = function(username, password) {
+            var self = this,
+                deferred = $q.defer(),
+                User = $injector.get('User');
 
             Api.request().post(Config.API_URL_BASE + 'auth/login', {
-                    username: args['username'],
-                    password: args['password'],
+                    username: username,
+                    password: password,
                     grant_type: 'password',
                     client_id: Config.API_CLIENT_ID,
                     client_secret: ''
                 })
                 .success(function(response, status, headers, config) {
-                    var user = $injector.get('User').valueOf(response.user);
-                    user.accessToken = response['access_token'];
-                    self.setCurrentUser(user);
+                    // Login successful
+                    setAccessToken(response['access_token']);
 
-                    if (args['onLoggedIn'] && typeof(args['onLoggedIn']) == 'function') {
-                        args['onLoggedIn'](response, status, headers, config);
-                    }
+                    // Now let's retrieve info about the current user
+                    User.get({
+                        id: response['user_id'],
+                        include: 'profilePhoto.url(size=w50h50)'
+
+                    }).$promise.then(
+                        function(userData) {
+                            try {
+                                var user = User.valueOf(userData);
+
+                            } catch (e) {
+                                deferred.reject();
+                                return;
+                            }
+
+                            self.setCurrentUser(user);
+                            deferred.resolve(user);
+                        },
+                        deferred.reject
+                    );
                 })
-                .error(function(response, status, headers, config) {
-                    if (args['onError'] && typeof(args['onError']) == 'function') {
-                        args['onError'](response, status, headers, config);
-                    }
-                });
+                .error(deferred.reject);
+
+            return deferred.promise;
         };
 
         this.submitRegistration = function(data) {
@@ -198,12 +236,12 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
     .service('HttpInterceptor', function($rootScope, $window, $q, $translate, AuthService, Config) {
         this.request = function(config) {
             if (config.url.startsWith(Config.API_URL_BASE)) {
-                var currentUser = AuthService.getCurrentUser();
-
                 config.headers['Accept-Language'] = $translate.use();
 
-                if (currentUser != null) {
-                    config.headers['Authorization'] = 'Bearer ' + currentUser.accessToken;
+                var accToken = AuthService.getAccessToken();
+
+                if (accToken != null) {
+                    config.headers['Authorization'] = 'Bearer ' + accToken;
 
                     if (!config.headers['DPR']) {
                         config.headers['DPR'] = $window.devicePixelRatio;

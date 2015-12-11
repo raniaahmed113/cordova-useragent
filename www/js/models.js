@@ -1,24 +1,25 @@
 angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
-    .factory('User', function($resource, Config, Filter) {
+    .factory('User', function($resource, $q, Config, Filter) {
         var User = $resource(
             Config.API_URL_BASE + 'users/:id',
             { id: '@id' },
             { update: { method: 'PATCH' }}
         );
 
-        User.valueOf = function(data) {
-            if (!data || !data.id) {
-                throw "Invalid data provided";
+        User.valueOf = function(object) {
+            if (!object || !object.id) {
+                throw {
+                    message: "Can't parse object into User instance: property 'id' is missing",
+                    data: object
+                };
             }
 
-            var output = new User(data);
-
-            if (output.filter) {
-                output.filter = new Filter(output.filter);
+            if (object.filter) {
+                object.filter = new Filter(object.filter);
             }
 
-            return output;
+            return object;
         };
 
         return User;

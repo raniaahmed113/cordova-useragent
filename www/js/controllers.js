@@ -111,26 +111,26 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         $scope.logoVariant = "logo-" + Config.API_CLIENT_ID + pixelDensitySuffix;
         $scope.loginData = {};
+
         $scope.login = function() {
-            var loginArgs = $scope.loginData;
-
-            loginArgs.onLoggedIn = function() {
-                $ionicLoading.hide();
-                $state.go('inside.users').then(function() {
-                    delete $scope.loginData.password;
-                });
-            };
-
-            loginArgs.onError = function(error) {
-                $ionicLoading.hide();
-                $ionicPopup.alert({
-                    title: __("Something's wrong"),
-                    template: Api.translateErrorCode(error.code)
-                });
-            };
-
             $ionicLoading.show({ template: __('Please wait') + '..'});
-            AuthService.doLogin(loginArgs);
+
+            AuthService.doLogin($scope.loginData.username, $scope.loginData.password).then(
+                function() {
+                    $ionicLoading.hide();
+                    $state.go('inside.users').then(function() {
+                        delete $scope.loginData.password;
+                    });
+                },
+
+                function(error) {
+                    $ionicLoading.hide();
+                    $ionicPopup.alert({
+                        title: __("Something's wrong"),
+                        template: Api.translateErrorCode(error.code ? error.code : 0)
+                    });
+                }
+            );
         };
 
         $scope.countries = Country.query();
