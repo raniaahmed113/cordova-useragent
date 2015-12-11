@@ -198,7 +198,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     // Now let's retrieve info about the current user
                     User.get({
                         id: response['user_id'],
-                        include: 'profilePhoto.url(size=w50h50)'
+                        include: 'filter,profilePhoto.url(size=w50h50)'
 
                     }).$promise.then(
                         function(userData) {
