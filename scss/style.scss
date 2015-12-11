@@ -404,9 +404,14 @@ ul.chat {
   @include border-radius(5px);
 }
 
+.rules {
+  margin:10px;
+}
+
 @import "wall.scss";
 @import "landing.scss";
 @import "settings.scss";
 @import "quickie.scss";
 @import "profile.scss";
+
 @import "media.scss";

@@ -29,9 +29,8 @@
                     <option ng-repeat="country in countries" value="{{country.id}}">{{country.label}}</option>
                 </select>
             </label>-->
-
-            <div class="item item-divider" translate>Your gender</div>
             <label class="item item-radio">
+                <div class="item item-divider" translate>Your gender</div>
                 <ion-radio ng-model="registration.data.gender" ng-value="'male'">
                     <span translate>a man</span>
                 </ion-radio>
@@ -39,7 +38,7 @@
                     <span translate>a woman</span>
                 </ion-radio>
             </label>
-            <div class="rules center">{{'By registering you accept'}} <a href="">{{'rules and regulations'}}</a></div>
+            <div class="rules center">{{'By registering you accept'}} <a ng-click="rules.modal.show()">{{'rules and regulations'}}</a></div>
             <div class="padding">
                 <button
                         type="submit"

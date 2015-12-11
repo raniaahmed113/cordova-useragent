@@ -1,0 +1,11 @@
+<ion-modal-view>
+    <ion-header-bar class="bar-dark">
+        <h1 class="title" translate>Rules</h1>
+        <div class="buttons">
+            <button class="button" ng-click="rules.modal.hide()"><i class="icon ion-android-close"></i></button>
+        </div>
+    </ion-header-bar>
+    <ion-content class="rules">
+        <div ng-include="'templates/rules/' + language + '.html'"></div>
+    </ion-content>
+</ion-modal-view>

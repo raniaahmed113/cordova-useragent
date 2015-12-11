@@ -95,7 +95,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('LoginCtrl', function(
-        $scope, $state, $ionicModal, $ionicLoading, $ionicPopup,
+        $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate,
         __, AuthService, Country, Config, Api
     ) {
         var pixelDensitySuffix = '';
@@ -134,6 +134,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.countries = Country.query();
+
+        $scope.language = $translate.use();
+        $scope.rules = {};
         $scope.registration = {
             data: {
                 clientId: Config.API_CLIENT_ID
@@ -183,6 +186,15 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             })
             .then(function(modal) {
                 $scope.registration.modal = modal;
+            });
+
+        $ionicModal
+            .fromTemplateUrl('templates/rules.html', {
+                scope: $scope,
+                animation: 'slide-in-left'
+            })
+            .then(function(modal) {
+                $scope.rules.modal = modal;
             });
     })
 
