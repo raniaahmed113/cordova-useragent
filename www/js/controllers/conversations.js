@@ -61,7 +61,8 @@ angular.module('hotvibes.controllers')
                     id: $scope.currUser.id,
                     text: $scope.msgText,
                     dateSent: null,
-                    conversationId: $scope.conversation.id
+                    conversationId: $scope.conversation.id,
+                    sendTime: new Date().getTime()
                 });
 
                 $rootScope.$broadcast('newMessage', msg);
@@ -86,6 +87,14 @@ angular.module('hotvibes.controllers')
                             ? Api.translateErrorCode(error.data.code)
                             : __("We're sorry, but something went wrong. Please try again later.")
                     });
+
+                    // Find & remove the failed-to-send message
+                    for (var i=$scope.messages.length-1; i >= 0; i--) {
+                        if ($scope.messages[i].sendTime == msg.sendTime) {
+                            $scope.messages.splice(i, 1);
+                            break;
+                        }
+                    }
                 }
             });
         };
