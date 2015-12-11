@@ -1,7 +1,11 @@
 <ion-view title="{{'Quickie' | translate}}">
     <ion-content scroll="false" class="quickie">
         <td-cards>
-            <ion-spinner ng-show="photosTotal > photosLoaded"></ion-spinner>
+            <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
+            <div class="error-sign" ng-if="noMore">
+                <span translate>Sorry, no more members - come back tomorrow</span>
+                <i class="icon ion-ios-rainy"></i>
+            </div>
             <td-card ng-repeat="user in users"
                      on-destroy="onCardDestroyed($index)"
                      on-partial-swipe="onCardMove(amt)"

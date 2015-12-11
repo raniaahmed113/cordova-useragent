@@ -925,8 +925,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('QuickieSwipeCtrl', function($state, $scope, $ionicPopup, TDCardDelegate, __, User, QuickieVote) {
-        $scope.photosLoaded = 0;
-        $scope.photosTotal = 1;
+        $scope.photosLoaded = $scope.photosTotal = 0;
         $scope.firstPhotoLoaded = false;
 
         var queryParams = {
@@ -992,11 +991,18 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             );
 
             nextUser.$promise.then(
-                function() {
-                    // FIXME: Handle case where no more users are available
-                    excludeIds[nextUser.id] = true;
-                    $scope.photosTotal++;
-                    $scope.users.push(nextUser);
+                function(response) {
+                    if (response.resource.length < 1) {
+                        $scope.noMore = true;
+                        return;
+                    }
+
+                    response.resource.forEach(function(user) {
+                        excludeIds[user.id] = true;
+                        $scope.users.push(user);
+                    });
+
+                    $scope.photosTotal += response.resource.length;
                 },
 
                 function() {
