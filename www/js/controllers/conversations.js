@@ -36,14 +36,16 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.msgText = '';
-        $scope.conversation = Conversation.get(params, null, null, function(err) {
+        $scope.conversation = Conversation.get(params, null, null, function(err) { // FIXME: get from cache
             if (err.status == 404 /* Not Found */) {
                 // There is no conversation created yet
                 $scope.conversation.withUser = User.get({ id: params.withUserId }); // FIXME: get from cache
             }
-        }); // FIXME: get from cache
-        $scope.messages = Message.query(params, function() {
+        });
+
+        $scope.messages = Message.query(params, function(response) {
             $ionicScrollDelegate.scrollBottom(true);
+
             // TODO: load more
             // TODO: support for attachments
         });
@@ -72,7 +74,6 @@ angular.module('hotvibes.controllers')
                 msg.dateSent = Math.round(Date.now() / 1000);
 
             }, function(error) {
-                console.log(error);
                 var allowTryAgain = error.status == 0 || error.status == 500;
 
                 if (allowTryAgain) {

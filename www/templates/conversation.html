@@ -2,7 +2,7 @@
     <ion-nav-title translate translate-values="{name: conversation.withUser.nickName}">Conversation with %s</ion-nav-title>
     <ion-content>
         <ul class="list chat">
-            <div
+            <li
                 class="message"
                 ng-repeat="message in messages"
                 ng-class="{'item-positive': message.isNew, mine: message.id == currUser.id, failed: message.error ? true : false}"
@@ -17,11 +17,15 @@
                         <span ng-if="message.dateSent">{{message.dateSent*1000 | amCalendar}}</span>
                     </span>
                 </div>
-            </div>
+            </li>
         </ul>
-        <div ng-if="messages.$promise.resolve && messages.length < 1">
-            <h2 translate>None yet</h2>
-            <h3 translate>Send a message. Get to know each other</h3>
+        <div class="center center-vertical-margin">
+            <ion-spinner ng-show="!messages.$resolved"></ion-spinner>
+            <div class="error-sign" ng-if="messages.$resolved && messages.length < 1">
+                <div translate>None yet</div>
+                <span translate>Send a message. Get to know each other</span>
+                <i class="icon ion-ios-rainy"></i>
+            </div>
         </div>
     </ion-content>
 

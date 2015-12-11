@@ -111,12 +111,12 @@ input + .validation span::after {
   @extend .tab-item.disabled;
 }
 
+.center-vertical-margin {
+  margin-top: 50%;
+}
+
 resource-collection {
   display: block;
-
-  .overlay.center {
-    margin-top: 50%;
-  }
 }
 
 .center-vertical-disabled .overlay.center {

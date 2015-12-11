@@ -9,6 +9,10 @@ angular.module('hotvibes.controllers')
             photoSize: 'w330h330'
         };
 
+        if ($scope.currUser.quickieFilter) {
+
+        }
+
         $scope.users = User.query(
             angular.extend(queryParams, {
                 limit: 5

@@ -1,6 +1,6 @@
 <div ng-transclude></div>
 <ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
-<div class="overlay center">
+<div class="center center-vertical-margin">
     <ion-spinner ng-show="!list.$resolved"></ion-spinner>
     <div class="error-sign" ng-if="error">
         <span translate>Sorry, some nasty error prevented us from showing you this page</span>
