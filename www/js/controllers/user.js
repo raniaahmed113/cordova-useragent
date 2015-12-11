@@ -165,10 +165,6 @@ angular.module('hotvibes.controllers')
                 return;
             }
 
-            if ($index == $scope.currentPhoto) {
-                return;
-            }
-
             $ionicSlideBoxDelegate.slide($index);
             $window.history.back();
         };
