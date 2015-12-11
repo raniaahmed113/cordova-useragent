@@ -1,20 +1,30 @@
 angular.module('hotvibes.controllers')
 
-    .controller('QuickieSwipeCtrl', function($state, $scope, $ionicPopup, TDCardDelegate, __, User, QuickieVote) {
+    .controller('QuickieSwipeCtrl', function(
+        $state, $scope, $ionicPopup,
+        __, Api, User, QuickieVote, TDCardDelegate
+    ) {
         $scope.photosLoaded = $scope.photosTotal = 0;
         $scope.firstPhotoLoaded = false;
 
-        var queryParams = {
+        var filter = {
             notVotedInQuickie: true,
             photoSize: 'w330h330'
         };
 
-        if ($scope.currUser.quickieFilter) {
-
+        // Apply the filter
+        if (!$scope.currUser.quickieFilter) {
+            $scope.currUser.quickieFilter = $scope.currUser.filter
+                ? $scope.currUser.filter
+                : {
+                    gender: $scope.currUser.gender == "male" ? "female" : "male"
+                };
         }
 
+        filter = angular.extend(filter, Api.formatFilter($scope.currUser.quickieFilter));
+
         $scope.users = User.query(
-            angular.extend(queryParams, {
+            angular.extend(filter, {
                 limit: 5
             })
         );
@@ -74,7 +84,7 @@ angular.module('hotvibes.controllers')
             );
 
             var nextUser = User.query(
-                angular.extend(queryParams, {
+                angular.extend(filter, {
                     limit: 1,
                     exclude: Object.keys(excludeIds).join(',')
                 })
