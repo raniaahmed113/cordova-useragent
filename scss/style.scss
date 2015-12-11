@@ -148,66 +148,6 @@ resource-collection {
   }
 }
 
-td-cards {
-  height: 100%;
-  margin: 15px;
-
-  .td-cards {
-    height: 100%;
-    position: relative;
-
-    & > * {
-      position: absolute;
-      top: 35%;left: 50%;
-      @include translate(-50%, -50%);
-      /*display: flex;
-      justify-content: center;
-      align-items: center;*/
-    }
-  }
-}
-
-td-card {
-  min-width: 315px;
-  overflow: hidden;
-  @include border-radius(15px);
-  @include transition(0.15s linear opacity);
-
-  &.ng-hide {
-    display: block !important;
-    opacity: 0;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.td-cards > td-card {
-  z-index: 0;
-
-  &:nth-child(1) {
-    z-index: 100;
-  }
-
-  &:nth-child(2) {
-    z-index: 99;
-  }
-
-  &:nth-child(3) {
-    z-index: 98;
-  }
-
-  &:nth-child(4) {
-    z-index: 97;
-  }
-
-  &:nth-child(5) {
-    z-index: 96;
-  }
-}
-
 .button.gift {
   margin: 10px 0 0 15px;
   width: 27%;
@@ -413,5 +353,4 @@ ul.chat {
 @import "settings.scss";
 @import "quickie.scss";
 @import "profile.scss";
-
 @import "media.scss";

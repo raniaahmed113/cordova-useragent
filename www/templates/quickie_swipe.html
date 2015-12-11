@@ -6,12 +6,12 @@
                 <span translate>No more members to display. Try coming back tomorrow.</span>
                 <i class="icon ion-ios-rainy"></i>
             </div>
-            <div>
-                <td-card ng-repeat="user in users"
-                         on-destroy="onCardDestroyed($index)"
-                         on-partial-swipe="onCardMove(amt)"
-                         on-snap-back="onSnapBack($index)"
-                         ng-hide="!firstPhotoLoaded || !user.loadedFully">
+            <div ng-repeat="user in users">
+                <td-card
+                     on-destroy="onCardDestroyed($index)"
+                     on-partial-swipe="onCardMove(amt)"
+                     on-snap-back="onSnapBack($index)"
+                     ng-hide="!firstPhotoLoaded || !user.loadedFully">
 
                     <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
                     <span ng-if="$index == 0">
