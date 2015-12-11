@@ -98,6 +98,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope, $state, $ionicModal, $ionicLoading, $ionicPopup,
         __, AuthService, Country, Config, Api
     ) {
+        var pixelDensitySuffix = '';
+
+
+        $scope.logoVariant = "logo-" + Config.API_CLIENT_ID + pixelDensitySuffix;
         $scope.loginData = {};
         $scope.login = function() {
             var loginArgs = $scope.loginData;
