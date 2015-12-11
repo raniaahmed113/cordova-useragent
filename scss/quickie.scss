@@ -24,8 +24,9 @@
   }
 
   .navigation {
+    z-index: 999;
     position:absolute;
-    bottom:35px;
+    bottom:20px;
     left:0;
     right:0;
     margin-left:auto;
@@ -46,7 +47,6 @@
   .navigation .small {
     width:40px;
     margin:10px 10px;
-    height: 60px;
   }
   .navigation .small button {
     font-size:25px;

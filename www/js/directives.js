@@ -1,5 +1,16 @@
 angular.module('hotvibes.directives', [])
 
+    .directive('imgonload', function() {
+        return {
+            restrict: 'A',
+            link: function(scope, element, attrs) {
+                element.bind('load', function() {
+                    scope.$apply(attrs['imgonload']);
+                });
+            }
+        };
+    })
+
     .directive('resourceCollection', function() {
         return {
             restrict: 'E',

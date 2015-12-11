@@ -152,13 +152,26 @@ td-cards {
   margin: 15px;
   position: relative;
   height: 100%;
+
+  ion-spinner {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    @include translate(-50%, -50%);
+  }
 }
 
 td-card {
   position: absolute;
-  background: $gray;
   @include border-radius(15px);
   overflow: hidden;
+
+  @include transition(0.15s linear opacity);
+
+  &.ng-hide {
+    display: block !important;
+    opacity: 0;
+  }
 
   img {
     width: 100%;

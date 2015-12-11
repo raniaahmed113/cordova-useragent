@@ -1,26 +1,31 @@
 <ion-view title="{{'Quickie' | translate}}">
     <ion-content scroll="false" class="quickie">
         <td-cards>
-            <td-card ng-repeat="user in users" on-destroy="onCardDestroyed($index)"
-                     on-partial-swipe="onCardMove(amt)">
-                <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" alt="" />
+            <ion-spinner ng-show="photosTotal > photosLoaded"></ion-spinner>
+            <td-card ng-repeat="user in users"
+                     on-destroy="onCardDestroyed($index)"
+                     on-partial-swipe="onCardMove(amt)"
+                     ng-hide="!firstPhotoLoaded || !user.loadedFully">
+
+                <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
                 <span ng-if="$index == 0">
                     <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
                     <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
                 </span>
             </td-card>
-            <div class="navigation">
-                <span>
-                    <button class="icon ion-close-round no" ng-click="sayNo()"></button>
-                </span>
-                <span class="small">
-                    <button class="icon ion-person user" ng-click="openProfile()"></button>
-                    <button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button>
-                </span>
-                <span>
-                    <button class="icon ion-heart yes" ng-click="sayYes()"></button>
-                </span>
-            </div>
         </td-cards>
+
+        <div class="navigation">
+            <span>
+                <button class="icon ion-close-round no" ng-click="sayNo()"></button>
+            </span>
+            <span class="small">
+                <button class="icon ion-person user" ng-click="openProfile()"></button>
+                <button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button>
+            </span>
+            <span>
+                <button class="icon ion-heart yes" ng-click="sayYes()"></button>
+            </span>
+        </div>
     </ion-content>
 </ion-view>

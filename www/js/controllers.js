@@ -925,11 +925,44 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
     })
 
     .controller('QuickieSwipeCtrl', function($state, $scope, $ionicPopup, TDCardDelegate, __, User, QuickieVote) {
-        $scope.users = User.query({
+        $scope.photosLoaded = 0;
+        $scope.photosTotal = 1;
+        $scope.firstPhotoLoaded = false;
+
+        var queryParams = {
             notVotedInQuickie: true,
-            photoSize: 'w330h330',
-            limit: 10
-        });
+            photoSize: 'w330h330'
+        };
+
+        $scope.users = User.query(
+            angular.extend(queryParams, {
+                limit: 5
+            })
+        );
+
+        var excludeIds = {};
+
+        $scope.users.$promise.then(
+            function(list) {
+                $scope.photosTotal += list.resource.length;
+
+                list.resource.forEach(function(user) {
+                    excludeIds[user.id] = true;
+                });
+            },
+            function(error) {
+                // FIXME: handle this
+            }
+        );
+
+        $scope.onPhotoLoaded = function(user, $index) {
+            user.loadedFully = true;
+            $scope.photosLoaded++;
+
+            if ($index == 0) {
+                $scope.firstPhotoLoaded = true;
+            }
+        };
 
         $scope.cardPos = 0;
         $scope.onCardMove = function(progress) {
@@ -937,26 +970,39 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.onCardDestroyed = function($index) {
+            $scope.cardPos = 0;
+
             var user = $scope.users.splice($index, 1)[0];
             var quickieVote = new QuickieVote({
                 voteForUserId: user.id,
                 vote: $scope.cardPos > 0 ? 'yes' : 'no'
             });
 
-            $scope.cardPos = 0;
-            quickieVote.$save();
+            quickieVote.$save(
+                function(vote) {
+                    delete excludeIds[vote.voteForUserId];
+                }
+            );
 
-            var nextUser = User.query({
-                notVotedInQuickie: true,
-                photoSize: 'w330h330',
-                limit: 1,
-                exclude: $scope.users.map(function(user) {
-                    return user.id;
-                }).join(',')
+            var nextUser = User.query(
+                angular.extend(queryParams, {
+                    limit: 1,
+                    exclude: Object.keys(excludeIds).join(',')
+                })
+            );
 
-            }).then(function() {
-                $scope.users.push(nextUser);
-            });
+            nextUser.$promise.then(
+                function() {
+                    // FIXME: Handle case where no more users are available
+                    excludeIds[nextUser.id] = true;
+                    $scope.photosTotal++;
+                    $scope.users.push(nextUser);
+                },
+
+                function() {
+                    // FIXME: Failed to retrieve the next member
+                }
+            );
         };
 
         $scope.sayYes = function() {
@@ -970,7 +1016,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         function onVipRequired() {
             $ionicPopup.alert({
                 title: __("Available only for VIP members"),
-                template: __("Vip is required")
+                template: __("Vip is required") // FIXME: translation
                 // FIXME: buttons
             });
         }
