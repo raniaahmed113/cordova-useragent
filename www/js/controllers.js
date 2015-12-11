@@ -954,15 +954,20 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         var excludeIds = {};
 
         $scope.users.$promise.then(
-            function(list) {
-                $scope.photosTotal += list.resource.length;
+            function(response) {
+                if (response.resource.length < 1) {
+                    $scope.noMore = true;
+                    return;
+                }
 
-                list.resource.forEach(function(user) {
+                $scope.photosTotal += response.resource.length;
+                response.resource.forEach(function(user) {
                     excludeIds[user.id] = true;
                 });
             },
             function(error) {
-                // FIXME: handle this
+                // Failed to load the initial batch of members
+                $scope.error = true;
             }
         );
 

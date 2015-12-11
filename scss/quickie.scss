@@ -84,4 +84,10 @@
   .navigation button.no:active{
     background: lighten($assertive, 20%);
   }
+
+  .navigation button[disabled] {
+    color: $gray !important;
+    border-color: $gray !important;
+    opacity: 0.8;
+  }
 }

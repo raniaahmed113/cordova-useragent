@@ -23,14 +23,14 @@
 
         <div class="navigation">
             <span>
-                <button class="icon ion-close-round no" ng-click="sayNo()"></button>
+                <button class="icon ion-close-round no" ng-click="sayNo()" ng-disabled="!firstPhotoLoaded"></button>
             </span>
             <span class="small">
-                <button class="icon ion-person user" ng-click="openProfile()"></button>
-                <button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button>
+                <button class="icon ion-person user" ng-click="openProfile()" ng-disabled="!firstPhotoLoaded"></button>
+                <button class="icon ion-ios-chatbubble sms" ng-click="openChat()" ng-disabled="!firstPhotoLoaded"></button>
             </span>
             <span>
-                <button class="icon ion-heart yes" ng-click="sayYes()"></button>
+                <button class="icon ion-heart yes" ng-click="sayYes()" ng-disabled="!firstPhotoLoaded"></button>
             </span>
         </div>
     </ion-content>
