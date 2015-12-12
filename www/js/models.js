@@ -88,6 +88,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'chatRooms/:roomId/posts/:id', { id: '@id' });
     })
 
+    .factory('ChatRoomPostComment', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'chatRooms/:roomId/posts/:postId/comments', { roomId: '@roomId', postId: '@postId' });
+    })
+
     .factory('Conversation', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/conversations/:withUserId', { withUserId: '@id' });
     })

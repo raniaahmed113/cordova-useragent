@@ -15,12 +15,12 @@
                 <div class="item item-body">
                     <p>{{post.body}}</p>
                     <p>
-                        <a href="#" class="subdued" translate="%u comment" translate-plural="%u comments" translate-n="post.cntComments"></a>
+                        <a href="#/chatRooms/{{chatRoom.id}}/posts/{{post.id}}" class="subdued" translate="%u comment" translate-plural="%u comments" translate-n="post.cntComments"></a>
                     </p>
                 </div>
 
                 <div class="item tabs tabs-secondary tabs-royal tabs-icon-left">
-                    <a class="tab-item" href="#">
+                    <a class="tab-item" href="#/chatRooms/{{chatRoom.id}}/posts/{{post.id}}">
                         <i class="icon ion-chatbox"></i>
                         <span translate>Replay Shout</span>
                     </a>

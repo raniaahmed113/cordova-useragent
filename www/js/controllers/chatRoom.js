@@ -4,12 +4,16 @@ angular.module('hotvibes.controllers')
         $scope, $stateParams, $ionicModal, $ionicLoading, $ionicPopup,
         __, Api, ChatRoomPost
     ) {
-        var loadPosts = function() {
+        $scope.chatRoom = {
+            id: $stateParams.id
+        };
+
+        function loadPosts() {
             return ChatRoomPost.query({
-                roomId: $stateParams.id,
+                roomId: $scope.chatRoom.id,
                 include: 'author.profilePhoto.url(size=w80h80)'
             });
-        };
+        }
 
         $scope.posts = loadPosts();
         $scope.doRefresh = function() {
@@ -46,7 +50,7 @@ angular.module('hotvibes.controllers')
 
             $ionicLoading.show();
             post.$save({
-                    roomId: $stateParams.id
+                    roomId: $scope.chatRoom.id
                 },
                 function() {
                     // Success
@@ -80,6 +84,45 @@ angular.module('hotvibes.controllers')
                                 : __("We're sorry, but something went wrong. Please try again later.")
                         });
                     }
+                }
+            );
+        };
+    })
+
+    .controller('ChatRoomPostCtrl', function($scope, $stateParams, ChatRoomPost, ChatRoomPostComment) {
+        $scope.post = ChatRoomPost.get({
+            roomId: $stateParams.roomId,
+            id: $stateParams.id,
+            include: [
+                'author.profilePhoto(size=w128h128)',
+                'comments'
+
+            ].join(',')
+        });
+
+        $scope.newComment = {};
+        $scope.sendComment = function() {
+            if (!$scope.newComment.text) {
+                return;
+            }
+
+            var comment = new ChatRoomPostComment({
+                roomId: $stateParams.roomId,
+                postId: $scope.post.id,
+                author: $scope.currUser,
+                text: $scope.newComment.text,
+                datePosted: null
+            });
+
+            var index = $scope.post.comments.push(comment);
+
+            comment.$save().then(
+                function() {
+                    comment.datePosted = (new Date().getTime() / 1000);
+                },
+                function() {
+                    console.log(arguments);
+                    delete $scope.post.comments[index];
                 }
             );
         };

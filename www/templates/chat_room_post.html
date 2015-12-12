@@ -1,0 +1,51 @@
+<ion-view title="{{'Replay Shout' | translate}}">
+    <ion-content>
+        <div class="list card">
+            <a class="item item-avatar" href="#/users/{{post.author.id}}">
+                <img ng-src="{{post.author.profilePhoto | profilePhotoUrl:post.author.gender}}">
+                <h2>{{post.author.nickName}}</h2>
+                <p>{{post.datePosted*1000 | amCalendar}}</p>
+            </a>
+
+            <div class="item item-body">
+                <p>{{post.body}}</p>
+            </div>
+        </div>
+
+        <div class="list">
+            <div class="center error-sign" ng-if="post.$resolved && post.comments.length < 1">
+                <span translate>Nothing here, so far</span>
+                <i class="icon ion-ios-rainy"></i>
+            </div>
+
+            <a ng-repeat="comment in post.comments" class="item item-avatar" href="#/users/{{comment.author.id}}">
+                <img ng-src="{{comment.author.profilePhoto | profilePhotoUrl:comment.author.gender}}">
+                <h2>{{comment.author.nickName}}</h2>
+                <p>{{comment.text}}</p>
+
+                <div class="status">
+                    <span ng-if="comment.error" translate>Failed. Tap to retry.</span>
+                    <span ng-if="!comment.error">
+                        <span ng-if="!comment.datePosted" translate>Sending..</span>
+                        <span ng-if="comment.datePosted">{{comment.datePosted*1000 | amCalendar}}</span>
+                    </span>
+                </div>
+            </a>
+        </div>
+    </ion-content>
+
+    <ion-footer-bar keyboard-attach class="bar-stable">
+        <form class="item-input-inset" ng-submit="sendComment()" style="width: 100%">
+            <label class="item-input-wrapper">
+                <input
+                        type="text"
+                        placeholder="{{'Your message' | translate}}"
+                        ng-model="newComment.text" />
+            </label>
+            <button class="button button-clear" type="submit" ng-disabled="newComment.text.length < 1" translate>
+                Send
+            </button>
+        </form>
+    </ion-footer-bar>
+
+</ion-view>

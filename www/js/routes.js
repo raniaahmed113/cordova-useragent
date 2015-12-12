@@ -156,6 +156,16 @@ angular.module('hotvibes.routes', [])
                 }
             })
 
+            .state('inside.chatRoom-post', {
+                url: "/chatRooms/:roomId/posts/:id",
+                views: {
+                    main: {
+                        templateUrl: "templates/chat_room_post.html",
+                        controller: 'ChatRoomPostCtrl'
+                    }
+                }
+            })
+
             .state('inside.settings', {
                 url: "/settings",
                 views: {
