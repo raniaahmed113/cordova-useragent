@@ -21,7 +21,7 @@ angular.module('hotvibes.directives', [])
                 subProperty: '='
             },
             templateUrl: 'templates/resource_collection.html',
-            controller: function($scope, $resource, $q, ErrorCode) {
+            controller: function($scope, $resource, $q, __, ErrorCode) {
                 var onError = function(response) {
                     $scope.error = true;
 
@@ -30,7 +30,7 @@ angular.module('hotvibes.directives', [])
                             case ErrorCode.VIP_REQUIRED:
                                 $scope.error = {
                                     icon: 'ion-star',
-                                    message: 'Only for VIP members'
+                                    message: __("Only for VIP members")
                                 };
                                 break;
                         }

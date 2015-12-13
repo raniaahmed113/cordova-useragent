@@ -110,11 +110,11 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.sayYes = function() {
-
+            TDCardDelegate.$getByHandle('members').getFirstCard().swipe('right');
         };
 
         $scope.sayNo = function() {
-
+            TDCardDelegate.$getByHandle('members').getFirstCard().swipe('left');
         };
 
         function canPerformAction() {
@@ -124,9 +124,18 @@ angular.module('hotvibes.controllers')
 
             if (!$scope.currUser.isVip) {
                 $ionicPopup.alert({
-                    title: __("Available only for VIP members"),
-                    template: __("Vip is required") // FIXME: translation
-                    // FIXME: buttons
+                    title: "VIP",
+                    template: __("Only for VIP members"),
+                    buttons: [
+                        { text: __("Cancel") },
+                        {
+                            text: __("Get VIP"),
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                // TODO
+                            }
+                        }
+                    ]
                 });
                 return false;
             }
