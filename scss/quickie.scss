@@ -99,6 +99,18 @@ td-card {
     padding: 5px 21px;
     display:inline-block;
   }
+
+  .navigation button[disabled] {
+    color: $gray !important;
+    border-color: $gray !important;
+    opacity: 0.8;
+  }
+
+  .navigation[disabled] button {
+    @extend button[disabled];
+    pointer-events: none;
+  }
+
   .navigation span {
     display:inline-block;
   }
@@ -142,11 +154,5 @@ td-card {
   }
   .navigation button.no:active{
     background: lighten($assertive, 20%);
-  }
-
-  .navigation button[disabled] {
-    color: $gray !important;
-    border-color: $gray !important;
-    opacity: 0.8;
   }
 }

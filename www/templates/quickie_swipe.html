@@ -22,16 +22,16 @@
             </div>
         </td-cards>
 
-        <div class="navigation">
+        <div class="navigation" ng-disabled="!users[0] || !users[0].loadedFully">
             <span>
-                <button class="icon ion-close-round no" ng-click="sayNo()" ng-disabled="!firstPhotoLoaded"></button>
+                <button class="icon ion-close-round no" ng-click="sayNo()"></button>
             </span>
             <span class="small">
-                <button class="icon ion-person user" ng-click="openProfile()" ng-disabled="!firstPhotoLoaded"></button>
-                <button class="icon ion-ios-chatbubble sms" ng-click="openChat()" ng-disabled="!firstPhotoLoaded"></button>
+                <button class="icon ion-person user" ng-click="openProfile()"></button>
+                <button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button>
             </span>
             <span>
-                <button class="icon ion-heart yes" ng-click="sayYes()" ng-disabled="!firstPhotoLoaded"></button>
+                <button class="icon ion-heart yes" ng-click="sayYes()"></button>
             </span>
         </div>
     </ion-content>
