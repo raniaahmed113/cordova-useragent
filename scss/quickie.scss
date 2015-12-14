@@ -13,7 +13,7 @@ td-cards {
 
       z-index: 0;
 
-      &:nth-child(1):not(ion-spinner) {
+      &:nth-child(1) {
         z-index: 100;
       }
 

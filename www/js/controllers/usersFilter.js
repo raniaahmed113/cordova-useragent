@@ -25,6 +25,6 @@ angular.module('hotvibes.controllers')
                 $scope.currUser.filter.cityName = city.label;
             }
         }).then(function(modal) {
-                $scope.cityPicker = modal;
-            });
+            $scope.cityPicker = modal;
+        });
     });

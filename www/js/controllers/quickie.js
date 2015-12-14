@@ -1,7 +1,7 @@
 angular.module('hotvibes.controllers')
 
     .controller('QuickieSwipeCtrl', function(
-        $state, $scope, $ionicPopup,
+        $state, $scope, $ionicPopup, $q,
         __, Api, User, QuickieVote, TDCardDelegate
     ) {
         $scope.photosLoaded = $scope.photosTotal = 0;
@@ -9,6 +9,7 @@ angular.module('hotvibes.controllers')
 
         var filter = {
             notVotedInQuickie: true,
+            loggedInRecently: true,
             photoSize: 'w330h330'
         };
 
@@ -19,33 +20,86 @@ angular.module('hotvibes.controllers')
                 : {
                     gender: $scope.currUser.gender == "male" ? "female" : "male"
                 };
+        } else {
+            $scope.currUser.quickieFilter.gender = $scope.currUser.filter
+                ? $scope.currUser.filter.gender
+                : [ $scope.currUser.gender == "male" ? "female" : "male" ];
         }
 
         filter = angular.extend(filter, Api.formatFilter($scope.currUser.quickieFilter));
 
-        $scope.users = User.query(
-            angular.extend(filter, {
-                limit: 5
-            })
-        );
+        var limit = 20,
+            cardsOnScreen = 5,
+            members = null,
+            excludeIds = {};
 
-        var excludeIds = {};
+        function loadMore() {
+            if ($scope.noMore) {
+                return;
+            }
 
-        $scope.users.$promise.then(
-            function(response) {
-                if (response.resource.length < 1) {
-                    $scope.noMore = true;
+            var deferred = $q.defer();
+
+            members = User.query(
+                angular.extend(filter, {
+                    limit: limit,
+                    exclude: Object.keys(excludeIds).join(',')
+                })
+            );
+
+            members.$promise.then(
+                function(response) {
+                    if (response.resource.length < limit) {
+                        $scope.noMore = true;
+                    }
+
+                    response.resource.forEach(function(user) {
+                        excludeIds[user.id] = true;
+                    });
+
+                    deferred.resolve(response.resource);
+                },
+                function(error) {
+                    // Failed to load the initial batch of members
+                    $scope.error = true;
+                }
+            );
+
+            return deferred.promise;
+        }
+
+        function getNext() {
+            var deferred = $q.defer();
+
+            if (members.length > 0) {
+                deferred.resolve(
+                    members.splice(0, 1)[0]
+                );
+
+            } else if ($scope.noMore) {
+                deferred.reject({ noMore: true });
+
+            } else {
+                loadMore().then(
+                    function() {
+                        deferred.resolve(
+                            members.splice(0, 1)[0]
+                        );
+                    }
+                );
+            }
+
+            return deferred.promise;
+        }
+
+        loadMore().then(
+            function() {
+                if (members.length < 1) {
                     return;
                 }
 
-                $scope.photosTotal += response.resource.length;
-                response.resource.forEach(function(user) {
-                    excludeIds[user.id] = true;
-                });
-            },
-            function(error) {
-                // Failed to load the initial batch of members
-                $scope.error = true;
+                $scope.users = members.splice(0, cardsOnScreen);
+                $scope.photosTotal += $scope.users.length;
             }
         );
 
@@ -68,14 +122,13 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.onCardDestroyed = function($index) {
-            $scope.cardPos = 0;
-            $scope.photosTotal++;
-
             var user = $scope.users.splice($index, 1)[0];
             var quickieVote = new QuickieVote({
                 voteForUserId: user.id,
                 vote: $scope.cardPos > 0 ? 'yes' : 'no'
             });
+
+            $scope.cardPos = 0;
 
             quickieVote.$save(
                 function(vote) {
@@ -83,38 +136,22 @@ angular.module('hotvibes.controllers')
                 }
             );
 
-            var nextUser = User.query(
-                angular.extend(filter, {
-                    limit: 1,
-                    exclude: Object.keys(excludeIds).join(',')
-                })
-            );
-
-            nextUser.$promise.then(
-                function(response) {
-                    if (response.resource.length < 1) {
-                        $scope.noMore = true;
-                        return;
-                    }
-
-                    response.resource.forEach(function(user) {
-                        excludeIds[user.id] = true;
-                        $scope.users.push(user);
-                    });
-                },
-
-                function() {
-                    // FIXME: Failed to retrieve the next member
+            getNext().then(
+                function(nextMember) {
+                    excludeIds[nextMember.id] = true;
+                    $scope.users.push(nextMember);
+                    $scope.photosTotal++;
                 }
             );
         };
 
         $scope.sayYes = function() {
-            TDCardDelegate.$getByHandle('members').getFirstCard().swipe('right');
+            $scope.cardPos = 1;
+            TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('right');
         };
 
         $scope.sayNo = function() {
-            TDCardDelegate.$getByHandle('members').getFirstCard().swipe('left');
+            TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('left');
         };
 
         function canPerformAction() {

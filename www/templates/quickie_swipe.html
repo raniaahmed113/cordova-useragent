@@ -1,11 +1,6 @@
 <ion-view title="{{'Quickie' | translate}}">
     <ion-content scroll="false" class="quickie">
         <td-cards delegate-handle="members">
-            <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
-            <div class="error-sign" ng-if="noMore">
-                <span translate>No more members to display. Try coming back tomorrow.</span>
-                <i class="icon ion-ios-rainy"></i>
-            </div>
             <div ng-repeat="user in users">
                 <td-card
                      on-destroy="onCardDestroyed($index)"
@@ -19,6 +14,13 @@
                         <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
                     </span>
                 </td-card>
+            </div>
+
+            <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
+
+            <div class="error-sign" ng-if="noMore">
+                <span translate>No more members to display. Try coming back tomorrow.</span>
+                <i class="icon ion-ios-rainy"></i>
             </div>
         </td-cards>
 
