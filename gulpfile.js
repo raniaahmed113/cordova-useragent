@@ -18,7 +18,7 @@ var config = {
         './scss/**/*.scss'
     ],
     pathHtml: './www/templates/**/*.html',
-    pathJs: './www/js/*.js'
+    pathJs: './www/js/**/*.js'
 };
 
 var switchFlavor = function(projectId, appVersion) {
