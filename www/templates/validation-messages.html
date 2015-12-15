@@ -17,7 +17,7 @@
         <li ng-message="file">Invalid file</li>
         <li ng-message="minlength">Please use at least {{ attrs.minlength }} characters</li>
         <li ng-message="maxlength">Please do not exceed {{ attrs.maxlength }} characters</li>
-        <li ng-message="ngFabMatch">The {{ attrs.type ==='password'? 'passwords' : 'values' }} should match</li>
+        <li ng-message="ngFabMatch"><span translate>Passwords do not match</span></li>
         <li ng-message="serverError">{{field.errorMessage || 'This value is invalid'}}</li>
         <li ng-message="min" ng-if="attrs.type == 'time' ">The time provided should be after {{ attrs.min |date: 'HH:MM' }}</li>
         <li ng-message="max" ng-if="attrs.type == 'time' ">The time provided should be before {{attrs.max |date: 'HH:MM'}}</li>

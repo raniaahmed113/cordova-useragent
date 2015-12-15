@@ -170,7 +170,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
             accToken = token;
             localStorage['accToken'] = token;
-        };
+        }
 
         /**
          * @returns {boolean}
@@ -199,6 +199,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     User.get({
                         id: response['user_id'],
                         include: [
+                            'profile',
                             'isVip',
                             'filter',
                             'quickieFilter',
@@ -210,14 +211,13 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                         function(userData) {
                             try {
                                 var user = User.valueOf(userData);
+                                self.setCurrentUser(user);
+                                deferred.resolve(user);
 
-                            } catch (e) {
-                                deferred.reject();
-                                return;
+                            } catch(e) {
+                                console.error(e);
+                                deferred.reject(e);
                             }
-
-                            self.setCurrentUser(user);
-                            deferred.resolve(user);
                         },
                         deferred.reject
                     );

@@ -1,12 +1,21 @@
 angular.module('hotvibes.controllers')
 
-    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, __, Country, CityPicker) {
+    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, __, Country, CityPicker, User) {
         $scope.profile = {
             cityName: $scope.currUser.cityName,
-            country: $scope.currUser.country,
-            //phone: $scope.currUser.profile.phoneNumber,
+            country: { id: $scope.currUser.country },
+            phone: $scope.currUser.profile.phoneNumber,
             email: $scope.currUser.email
         };
+
+        $scope.$watch('profile.country', function(newVal, oldVal) {
+            if (newVal === oldVal) {
+                return;
+            }
+
+            $scope.profile.cityName = '';
+        });
+
         $scope.save = function() {
             // TODO: implement
             console.log('onSubmit');
@@ -24,27 +33,35 @@ angular.module('hotvibes.controllers')
                 $scope.profile.form.city.$setDirty();
             }
         }).then(function(modal) {
-                $scope.modal = modal;
-            });
+            $scope.modal = modal;
+        });
 
         $scope.password = {};
         $scope.changePassword = function() {
             $ionicLoading.show({ template: __('Please wait') + '..' });
 
-            $scope.currUser.$update({
-                password: $scope.password.new
-
-            }).then(
-                function() {
-                    // TODO: implement password changes
+            User.update(
+                {
+                    oldPassword: $scope.password.old,
+                    password: $scope.password.new
                 },
-                function() {
+                $scope.currUser
 
-                }
+            ).$promise.then(
+                function() {
+                    $ionicLoading.show({
+                        template: __('Password has been successfully changed'),
+                        noBackdrop: true,
+                        duration: 1000
+                    });
+
+                    $scope.logout();
+                },
+                $scope.onError
 
             ).finally(function() {
-                    $ionicLoading.hide();
-                });
+                $ionicLoading.hide();
+            });
         };
     })
 

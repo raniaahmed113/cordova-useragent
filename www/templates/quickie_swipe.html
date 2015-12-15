@@ -18,7 +18,7 @@
 
             <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
 
-            <div class="error-sign" ng-if="noMore">
+            <div class="error-sign" ng-if="noMore && (firstPhotoLoaded || photosTotal < 1)">
                 <span translate>No more members to display. Try coming back tomorrow.</span>
                 <i class="icon ion-ios-rainy"></i>
             </div>

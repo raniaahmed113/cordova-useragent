@@ -11,13 +11,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         };
 
         $scope.$on('authTokenExpired', function() {
-            $scope.logout();
-
             $ionicLoading.show({
                 template: __('You have been logged-out. Please log-in again.'),
                 noBackdrop: true,
                 duration: 1000
             });
+
+            $scope.logout();
         });
 
         $scope.rightMenuEnabled = $state.current.views.rightMenu ? true : false;

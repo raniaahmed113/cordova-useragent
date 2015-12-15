@@ -3,7 +3,7 @@
         <form ng-fab-form name="profile.form" ng-submit="save()" novalidate class="list list-inset">
             <label class="item item-input">
                 <span class="input-label" translate>Username</span>
-                <input type="text" value="{{currUser.login}}" disabled />
+                <input type="text" value="{{currUser.nickName}}" disabled />
             </label>
 
             <label class="item item-input">
@@ -13,14 +13,12 @@
 
             <label class="item item-input item-select">
                 <span class="input-label" translate>Your country</span>
-                <select ng-model="profile.country">
-                    <option ng-repeat="country in countries" value="{{country.id}}">{{country.label}}</option>
-                </select>
+                <select ng-options="country.label for country in countries track by country.id" ng-model="profile.country"></select>
             </label>
 
-            <div class="item item-input-inset item-button-right">
+            <div class="item item-input">
                 <span class="input-label" translate>City</span>
-                <input type="text" name="city" ng-model="profile.cityName" disabled />
+                <label class="input-item-wrapper"><input type="text" name="city" ng-model="profile.cityName" disabled /></label>
                 <button type="button" class="button button-small button-positive" ng-click="modal.show()" translate>
                     Change
                 </button>

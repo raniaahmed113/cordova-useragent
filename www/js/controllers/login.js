@@ -19,7 +19,7 @@ angular.module('hotvibes.controllers')
 
         $scope.loginData = {};
         $scope.login = function() {
-            $ionicLoading.show({ template: __('Please wait') + '..'});
+            $ionicLoading.show({ template: __("Please wait") + '..'});
 
             AuthService.doLogin($scope.loginData.username, $scope.loginData.password).then(
                 function() {

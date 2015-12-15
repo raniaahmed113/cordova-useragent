@@ -4,7 +4,11 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         var User = $resource(
             Config.API_URL_BASE + 'users/:id',
             { id: '@id' },
-            { update: { method: 'PATCH' }}
+            {
+                update: {
+                    method: 'PATCH'
+                }
+            }
         );
 
         User.valueOf = function(object) {
@@ -13,6 +17,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                     message: "Can't parse object into User instance: property 'id' is missing",
                     data: object
                 };
+            }
+
+            if (!(object instanceof User)) {
+                object = new User(object);
             }
 
             if (object.filter) {
