@@ -73,6 +73,10 @@ ion-list.list-dark, .list.list-dark {
   padding-bottom:10px;
 }
 
+.input-label .validation {
+  @extend .assertive;
+}
+
 input + .validation {
   position: absolute;
   top: 0px;
@@ -273,12 +277,13 @@ ul.chat {
 .item-conversation .ion-reply {
   margin-right: 5px;
 }
-.item-input {
-   padding: 20px 16px 0px 16px;
+
+/*.item-input {
+   padding: 20px 16px 0 16px;
  }
 .item-input.item-select {
   padding: 5px;
-}
+}*/
 
 .bar-main-nav {
   > a {
