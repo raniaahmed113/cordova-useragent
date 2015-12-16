@@ -25,6 +25,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case ErrorCode.VIP_REQUIRED:
                     return __("Available only for VIP members");
 
+                case ErrorCode.PHOTO_IS_REQUIRED_HERE:
+                    return __("Only for members with photo");
+
                 case ErrorCode.MEMBER_HAS_BLOCKED_YOU:
                     return __("You are blocked by this member");
 
@@ -39,6 +42,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
                 case ErrorCode.TEXT_TOO_SHORT:
                     return __("Please enter some text first.");
+
+                case ErrorCode.IMAGE_SIZE_INVALID:
+                    return __('Incorrenct image dimensions');
 
                 default:
                     // TODO: log to analytics: unknown err code
