@@ -1,6 +1,6 @@
 <ion-view title="{{'User Settings' | translate}}">
     <ion-content class="settings user">
-        <form ng-fab-form name="profile.form" ng-submit="save()" novalidate class="list list-inset">
+        <form ng-fab-form name="settings.form" ng-submit="save()" novalidate class="list list-inset">
             <label class="item item-input">
                 <span class="input-label" translate>Username</span>
                 <input type="text" value="{{currUser.nickName}}" disabled />
@@ -13,12 +13,12 @@
 
             <label class="item item-input item-select">
                 <span class="input-label" translate>Your country</span>
-                <select ng-options="country.label for country in countries track by country.id" ng-model="profile.country"></select>
+                <select ng-options="country.label for country in countries track by country.id" ng-model="settings.country"></select>
             </label>
 
             <div class="item item-input">
                 <span class="input-label" translate>City</span>
-                <label class="input-item-wrapper"><input type="text" name="city" ng-model="profile.cityName" disabled /></label>
+                <label class="input-item-wrapper"><input type="text" ng-model="settings.city" disabled /></label>
                 <button type="button" class="button button-small button-positive" ng-click="modal.show()" translate>
                     Change
                 </button>
@@ -26,17 +26,17 @@
 
             <label class="item item-input">
                 <span class="input-label" translate>Phone number</span>
-                <input type="tel" ng-model="profile.phone" />
+                <input type="tel" ng-model="settings.profile.phone" minlength="5" />
             </label>
 
             <label class="item item-input">
                 <span class="input-label" translate>Your email</span>
-                <input type="email" ng-model="profile.email" />
+                <input type="email" ng-model="settings.email" required />
             </label>
 
             <div class="padding">
                 <p class="center" translate>Your phone number and e-mail address are not shown to other members.</p>
-                <button class="button button-block button-positive" type="submit" ng-disabled="profile.form.$pristine" translate>
+                <button class="button button-block button-positive" type="submit" ng-disabled="settings.form.$pristine" translate>
                     Save
                 </button>
             </div>

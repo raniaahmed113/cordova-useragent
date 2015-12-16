@@ -14,3 +14,41 @@ Array.prototype.toggleElement = function(element) {
         this.push(element);
     }
 };
+
+//FormController.prototype.getDirtyValues = function(form) {
+var FormUtils = {
+
+    getDirtyFields: function(form) {
+        var output = {};
+
+        function setVal(object, key, prefix) {
+            prefix = prefix ? prefix + '.' : '';
+
+            var matches = key.match(/^([a-zA-Z]+)\.(.*)/);
+            if (matches) {
+                if (!object[matches[1]]) {
+                    object[matches[1]] = {};
+                }
+
+                setVal(
+                    object[matches[1]],
+                    matches[2],
+                    prefix + matches[1]
+                );
+                return;
+            }
+
+            object[key] = form[prefix + key].$modelValue;
+        }
+
+        Object.keys(form).forEach(function(key) {
+            if (key.match(/^\$|ng[A-Z]/) || !form[key].$dirty) {
+                return;
+            }
+
+            setVal(output, key);
+        });
+
+        return output;
+    }
+};

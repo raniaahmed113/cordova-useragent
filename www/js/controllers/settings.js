@@ -1,36 +1,66 @@
 angular.module('hotvibes.controllers')
 
-    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, __, Country, CityPicker, User) {
-        $scope.profile = {
-            cityName: $scope.currUser.cityName,
+    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, __, Country, CityPicker) {
+        $scope.settings = {
+            city: $scope.currUser.city,
             country: { id: $scope.currUser.country },
-            phone: $scope.currUser.profile.phoneNumber,
+            profile: { phoneNumber: $scope.currUser.profile.phoneNumber },
             email: $scope.currUser.email
         };
 
-        $scope.$watch('profile.country', function(newVal, oldVal) {
+        $scope.$watch('settings.country', function(newVal, oldVal) {
             if (newVal === oldVal) {
                 return;
             }
 
-            $scope.profile.cityName = '';
+            $scope.settings.city = '';
         });
 
         $scope.save = function() {
-            // TODO: implement
-            console.log('onSubmit');
-            $ionicLoading.show();
+            $ionicLoading.show({ template: __('Please wait') + '..' });
+
+            $scope.currUser.$update(
+                FormUtils.getDirtyFields($scope.settings.form).settings
+
+            ).then(
+                function() {
+                    $scope.currUser.city = $scope.settings.city;
+                    $scope.currUser.country = $scope.settings.country.id;
+
+                    if ($scope.settings.profile.phoneNumber != $scope.currUser.profile.phoneNumber) {
+                        $scope.currUser.profile.phoneNumber = $scope.settings.profile.phoneNumber;
+                        $scope.currUser.profile.isPhoneNumberConfirmed = false;
+                    }
+
+                    if ($scope.settings.email != $scope.currUser.email) {
+                        $scope.currUser.email = $scope.settings.email;
+                        $scope.currUser.profile.isEmailConfirmed = false;
+                    }
+
+                    $scope.settings.form.$setPristine();
+
+                    $ionicLoading.show({
+                        template: __('Saved'),
+                        noBackdrop: true,
+                        duration: 1000
+                    });
+                },
+                $scope.onError
+
+            ).finally(function() {
+                $ionicLoading.hide();
+            });
         };
 
         $scope.countries = Country.query();
 
         new CityPicker({
             getCountry: function() {
-                return $scope.profile.country;
+                return $scope.settings.country;
             },
             onCitySelected: function(city) {
-                $scope.profile.cityName = city.label;
-                $scope.profile.form.city.$setDirty();
+                $scope.settings.city = city.label;
+                $scope.settings.form.settings.city.$setDirty();
             }
         }).then(function(modal) {
             $scope.modal = modal;
@@ -40,14 +70,11 @@ angular.module('hotvibes.controllers')
         $scope.changePassword = function() {
             $ionicLoading.show({ template: __('Please wait') + '..' });
 
-            User.update(
-                {
-                    oldPassword: $scope.password.old,
-                    password: $scope.password.new
-                },
-                $scope.currUser
+            $scope.currUser.$update({
+                oldPassword: $scope.password.old,
+                password: $scope.password.new
 
-            ).$promise.then(
+            }).then(
                 function() {
                     $ionicLoading.show({
                         template: __('Password has been successfully changed'),
@@ -142,7 +169,7 @@ angular.module('hotvibes.controllers')
 
     .controller('SettingsAlbumCtrl', function(
         $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
-        __, MediaFile, Album, Rule
+        __, MediaFile, Album, Rule, ErrorCode
     ) {
         var thumbParams = 'size=w80h80';
 
@@ -193,7 +220,7 @@ angular.module('hotvibes.controllers')
                         && error.data.rule.type == Rule.MIN_VALUE
                         && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
                     ) {
-                        error.data.message = __('Incorrenct image dimensions');
+                        error.data.code = ErrorCode.IMAGE_SIZE_INVALID
                     }
 
                     $scope.onError(error);

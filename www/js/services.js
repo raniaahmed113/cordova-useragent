@@ -150,7 +150,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
                     var properties = [
                         'ageMin', 'ageMax', 'aroundMe', 'realMembers',
-                        'withFacebook', 'withFotos', 'cityId', 'cityName', 'newMembers'
+                        'withFacebook', 'withFotos', 'cityId', 'city', 'newMembers'
                     ];
                     for (var i in properties) {
                         if (user.filter.hasOwnProperty(properties[i]) && !user.filter[properties[i]]) {

@@ -33,7 +33,7 @@ angular.module('hotvibes.controllers')
 
             if (newFilter.cityId && newFilter.country != oldFilter.country) {
                 // Country has changed - let's reset the chosen city too
-                newFilter.cityId = newFilter.cityName = null;
+                newFilter.cityId = newFilter.city = null;
                 return;
             }
 

@@ -11,8 +11,8 @@
                 <i class="icon ion-camera"></i> {{currentPhoto+1}} / {{user.photos.length}}
             </div>
 
-            <div class="overlay bottom" ng-show="showUi && (user.cityName || user.profile.about)">
-                <span ng-if="user.cityName"><i class="icon ion-ios-location"></i> {{user.cityName}}</span>
+            <div class="overlay bottom" ng-show="showUi && (user.city || user.profile.about)">
+                <span ng-if="user.city"><i class="icon ion-ios-location"></i> {{user.city}}</span>
                 <p class="about">{{user.profile.about}}</p>
             </div>
 

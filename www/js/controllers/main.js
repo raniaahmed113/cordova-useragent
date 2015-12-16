@@ -34,6 +34,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return;
             }
 
+            console.log('currUser has changed');
             AuthService.setCurrentUser(newUser);
 
         }, true);

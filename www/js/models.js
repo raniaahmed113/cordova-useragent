@@ -1,15 +1,8 @@
 angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
-    .factory('User', function($resource, $q, Config, Filter) {
-        var User = $resource(
-            Config.API_URL_BASE + 'users/:id',
-            { id: '@id' },
-            {
-                update: {
-                    method: 'PATCH'
-                }
-            }
-        );
+    .factory('User', function($http, $resource, $q, Config, Filter) {
+        var BASE_URL = Config.API_URL_BASE + 'users/',
+            User = $resource(BASE_URL + ':id', { id: '@id' });
 
         User.valueOf = function(object) {
             if (!object || !object.id) {
@@ -28,6 +21,23 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             }
 
             return object;
+        };
+
+        /**
+         * Performs a partial update of the resource using the PATCH HTTP method.
+         *
+         * @param {object} params entity body of the HTTP request
+         * @returns {Promise}
+         */
+        User.prototype.$update = function(params) {
+            var deferred = $q.defer();
+
+            $http.patch(BASE_URL + this.id, params).then(
+                deferred.resolve,
+                deferred.reject
+            );
+
+            return deferred.promise;
         };
 
         return User;

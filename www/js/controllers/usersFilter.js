@@ -22,7 +22,7 @@ angular.module('hotvibes.controllers')
             },
             onCitySelected: function(city) {
                 $scope.currUser.filter.cityId = city.id;
-                $scope.currUser.filter.cityName = city.label;
+                $scope.currUser.filter.city = city.label;
             }
         }).then(function(modal) {
             $scope.cityPicker = modal;
