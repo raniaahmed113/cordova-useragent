@@ -71,8 +71,8 @@ angular.module('hotvibes.controllers')
             $ionicLoading.show({ template: __('Please wait') + '..' });
 
             $scope.currUser.$update({
-                oldPassword: $scope.password.old,
-                password: $scope.password.new
+                password: $scope.password.new,
+                _params: { oldPassword: $scope.password.old }
 
             }).then(
                 function() {
