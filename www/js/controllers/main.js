@@ -71,12 +71,21 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
 
         $scope.onError = function(response, params) {
+            var errMessage;
+            if (params && params.message) {
+                errMessage = params.message;
+
+            } else if (response && response.data) {
+                errMessage = Api.translateErrorCode(response.data.code);
+
+            } else {
+                errMessage = __("We're sorry, but something went wrong. Please try again later.");
+            }
+
             $ionicLoading.hide();
             $ionicPopup.alert({
                 title: params && params.title || __("Something's wrong"),
-                template: response && response.data
-                    ? Api.translateErrorCode(response.data.code)
-                    : __("We're sorry, but something went wrong. Please try again later.")
+                template: errMessage
             });
         };
     });
