@@ -1,6 +1,9 @@
 angular.module('hotvibes.controllers')
 
-    .controller('SettingsProfileCtrl', function($scope, $ionicLoading, $ionicModal, $q, __, Country, CityPicker) {
+    .controller('SettingsProfileCtrl', function(
+        $scope, $ionicLoading, $ionicModal, $q,
+        __, Country, CityPicker, ErrorCode
+    ) {
         $scope.settings = {
             city: $scope.currUser.city,
             country: { id: $scope.currUser.country },
@@ -84,7 +87,14 @@ angular.module('hotvibes.controllers')
 
                     $scope.logout();
                 },
-                $scope.onError
+                function(error) {
+                    var params = null;
+                    if (error.data && error.data.code && error.data.code == ErrorCode.INVALID_CREDENTIALS) {
+                        params = { message: __("Invalid password") }
+                    }
+
+                    $scope.onError(error, params);
+                }
 
             ).finally(function() {
                 $ionicLoading.hide();
