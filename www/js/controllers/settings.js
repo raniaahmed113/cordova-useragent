@@ -102,26 +102,41 @@ angular.module('hotvibes.controllers')
         };
     })
 
-    .controller('SettingsAboutCtrl', function($scope, $ionicLoading, __) {
+    .controller('SettingsAboutCtrl', function($scope, $ionicLoading, __, DataMap) {
+        $scope.purposes = DataMap.purpose;
         $scope.selectables = [
-            {id: 'maritalStatus', label: __('Status:'), options: []},
-            {id: 'living', label: __('Living'), options: []},
-            {id: 'smoking', label: __('Smoking'), options: []},
-            {id: 'drinking', label: __('Drinking'), options: []},
-            {id: 'education', label: __('Education'), options: []}
+            { id: 'maritalStatus', label: __('Status:'), options: DataMap.maritalStatus },
+            { id: 'livesWith', label: __('Living'), options: DataMap.livesWith },
+            { id: 'doesSmoke', label: __('Smoking'), options: DataMap.doesSmoke },
+            { id: 'doesDrink', label: __('Drinking'), options: DataMap.doesDrink },
+            { id: 'education', label: __('Education'), options: DataMap.education }
         ];
 
-        $scope.purposes = [
-            {id: 'dating', label: __('Real dates')},
-            {id: 'sex', label: __('S&M')},
-            {id: 'chat', label: __('Online chat')},
-            {id: 'relationship', label: __('Normal relationships')},
-            {id: 'marriage', label: __('Mariage')}
-        ];
+        $scope.aboutMe = angular.copy($scope.currUser.profile);
 
         $scope.save = function() {
-            // TODO: implement
-            $ionicLoading.show();
+            $ionicLoading.show({ template: __('Please wait') + '..' });
+
+            var form = this.aboutMeForm,
+                changes = { profile: FormUtils.getDirtyFields(form).aboutMe };
+
+            $scope.currUser.$update(changes)
+                .then(
+                    function() {
+                        $scope.currUser = angular.extend($scope.currUser, changes);
+                        form.$setPristine();
+
+                        $ionicLoading.show({
+                            template: __('Saved'),
+                            noBackdrop: true,
+                            duration: 1000
+                        });
+                    },
+                    $scope.onError
+
+                ).finally(function() {
+                    $ionicLoading.hide();
+                });
         };
     })
 

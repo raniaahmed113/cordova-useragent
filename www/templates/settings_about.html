@@ -11,9 +11,7 @@
 
                 <label ng-repeat="selectable in selectables" class="item item-input item-select">
                     <span class="input-label">{{selectable.label}}</span>
-                    <select ng-model="aboutMe[selectable.id]">
-                        <option ng-repeat="option in selectable.options" value="{{option.id}}">{{option.label}}</option>
-                    </select>
+                    <select ng-model="aboutMe[selectable.id]" ng-options="optionId as optionLabel for (optionId, optionLabel) in selectable.options"></select>
                 </label>
             </div>
 
@@ -21,12 +19,16 @@
                 <li class="item item-divider" translate>Looking for:</li>
 
                 <li class="item item-checkbox">
-                    <label class="checkbox"><input type="checkbox" ng-model="aboutMe.lookingFor[0]"></label>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-checked="aboutMe.lookingFor.indexOf('male') > -1" ng-click="aboutMe.lookingFor.toggleElement('male')">
+                    </label>
                     <span translate>Looking for male</span>
                 </li>
 
                 <li class="item item-checkbox">
-                    <label class="checkbox"><input type="checkbox" ng-model="aboutMe.lookingFor[1]"></label>
+                    <label class="checkbox">
+                        <input type="checkbox" ng-checked="aboutMe.lookingFor.indexOf('female') > -1" ng-click="aboutMe.lookingFor.toggleElement('female')">
+                    </label>
                     <span translate>Looking for female</span>
                 </li>
             </ul>
@@ -34,28 +36,28 @@
             <ul class="list list-inset">
                 <li class="item item-divider" translate>Purpose:</li>
 
-                <li ng-repeat="purpose in purposes" class="item item-checkbox">
-                    <label class="checkbox"><input type="checkbox" ng-model="aboutMe.purpose[purpose.id]"></label>
-                    {{purpose.label}}
+                <li ng-repeat="(purposeId, purposeLabel) in purposes" class="item item-checkbox">
+                    <label class="checkbox"><input type="checkbox" ng-checked="aboutMe.purpose.indexOf(purposeId) > -1"></label>
+                    {{purposeLabel}}
                 </li>
             </ul>
 
             <div class="list list-inset">
                 <div class="item item-divider" translate>About me:</div>
                 <label class="item item-input">
-                    <textarea rows="4" ng-model="aboutMe.description" placeholder="{{'Įrašyk pora sakinių apie save' | translate}}"></textarea>
+                    <textarea rows="4" ng-model="aboutMe.about" placeholder="{{'Įrašyk pora sakinių apie save' | translate}}"></textarea>
                 </label>
             </div>
 
             <div class="list list-inset">
                 <div class="item item-divider" translate>Ideal man/woman:</div>
                 <label class="item item-input">
-                    <textarea rows="4" ng-model="aboutMe.perfectMatch" placeholder="{{'Koks tau yra idealus partneris?' | translate}}"></textarea>
+                    <textarea rows="4" ng-model="aboutMe.idealPartner" placeholder="{{'Koks tau yra idealus partneris?' | translate}}"></textarea>
                 </label>
             </div>
 
             <div class="padding">
-                <button class="button button-block button-positive" type="submit" ng-disabled="aboutMeForm.$invalid" translate>
+                <button class="button button-block button-positive" type="submit" ng-disabled="aboutMeForm.$pristine || aboutMeForm.$invalid" translate>
                     Save changes
                 </button>
             </div>
