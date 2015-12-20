@@ -1,13 +1,13 @@
 <div ng-transclude></div>
 <ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
 <div class="center center-vertical-margin">
-    <ion-spinner ng-show="!list.$resolved"></ion-spinner>
+    <ion-spinner ng-show="promise.$$state.status < 1"></ion-spinner>
     <div class="error-sign" ng-if="error">
         <span ng-if="error.message">{{error.message}}</span>
         <span ng-if="!error.message" translate>Sorry, some nasty error prevented us from showing you this page</span>
         <i class="icon {{error.icon || 'ion-close-circled'}}"></i>
     </div>
-    <div class="error-sign" ng-if="!error && list.$resolved && list.length < 1">
+    <div class="error-sign" ng-if="!error && promise.$$state.status >= 1 && list.length < 1">
         <span translate>Nothing here, so far</span>
         <i class="icon ion-ios-rainy"></i>
     </div>
