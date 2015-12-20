@@ -123,7 +123,7 @@ angular.module('hotvibes.controllers')
             $scope.currUser.$update(changes)
                 .then(
                     function() {
-                        $scope.currUser = angular.extend($scope.currUser, changes);
+                        $scope.currUser = angular.merge($scope.currUser, changes);
                         form.$setPristine();
 
                         $ionicLoading.show({
