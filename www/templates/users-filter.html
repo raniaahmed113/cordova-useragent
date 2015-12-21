@@ -18,8 +18,7 @@
         <div class="item item-divider" translate>Sex</div>
         <ion-checkbox
                 ng-repeat="type in genders"
-                ng-checked="currUser.filter.gender.indexOf(type) > -1"
-                ng-click="currUser.filter.gender.toggleElement(type)">
+                ng-model="currUser.filter.gender[type]">
             {{type | translateProfileVal:'gender'}}
         </ion-checkbox>
 

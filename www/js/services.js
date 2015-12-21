@@ -69,6 +69,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
                 } else if (angular.isArray(value)) {
                     value = value.join(',');
+
+                } else if (angular.isObject(value)) {
+                    value = Object.keys(value).join(',');
                 }
 
                 output[key] = value;

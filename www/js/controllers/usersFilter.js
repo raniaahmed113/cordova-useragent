@@ -12,9 +12,6 @@ angular.module('hotvibes.controllers')
 
         $scope.ages = range(18, 99);
         $scope.genders = ['male', 'female'];
-        $scope.toggleGender = function($index) {
-            $scope.currUser.filter.gender.toggleElement($scope.genders[$index]);
-        };
 
         new CityPicker({
             getCountry: function() {
