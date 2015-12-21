@@ -135,7 +135,7 @@ angular.module('hotvibes', [
         });
     })
 
-    .run(function($ionicPlatform, $ionicModal, $translate, $rootScope, amMoment, AuthService, Config, DataMap) {
+    .run(function($injector, $ionicPlatform, $ionicModal, $translate, $rootScope, amMoment, AuthService, Config) {
         AuthService.init();
 
         var setLanguage = function(lang) {
@@ -161,28 +161,34 @@ angular.module('hotvibes', [
             setLanguage(localStorage['selectedLocale']);
 
         } else {
-            var modalScope = $rootScope.$new();
-            modalScope.changeLang = function(localeId) {
-                localStorage['selectedLocale'] = localeId;
-                setLanguage(localeId);
-                modalScope.modal.hide();
-            };
-            modalScope.languages = Config.LANGUAGES.map(function(lang) {
-                return {
-                    id: lang,
-                    title: DataMap.language[lang]
-                }
-            });
+            $translate.onReady(function() {
+                var modalScope = $rootScope.$new();
 
-            $ionicModal
-                .fromTemplateUrl('templates/select_language.html', {
-                    scope: modalScope,
-                    animation: 'slide-in-up'
-                })
-                .then(function(modal) {
-                    modalScope.modal = modal;
-                    modal.show();
+                modalScope.changeLang = function(localeId) {
+                    localStorage['selectedLocale'] = localeId;
+                    setLanguage(localeId);
+                    modalScope.modal.hide();
+                };
+
+                modalScope.languages = Config.LANGUAGES.map(function(lang) {
+                    var DataMap = $injector.get('DataMap');
+
+                    return {
+                        id: lang,
+                        title: DataMap.language[lang]
+                    }
                 });
+
+                $ionicModal
+                    .fromTemplateUrl('templates/select_language.html', {
+                        scope: modalScope,
+                        animation: 'slide-in-up'
+                    })
+                    .then(function(modal) {
+                        modalScope.modal = modal;
+                        modal.show();
+                    });
+            });
         }
 
         $ionicPlatform.ready(function() {

@@ -24,14 +24,14 @@
 
                 <li class="item item-checkbox">
                     <label class="checkbox">
-                        <input type="checkbox" ng-model="aboutMe.lookingFor.male">
+                        <input type="checkbox" ng-model="aboutMe.lookingFor.male" />
                     </label>
                     <span translate>Looking for male</span>
                 </li>
 
                 <li class="item item-checkbox">
                     <label class="checkbox">
-                        <input type="checkbox" ng-model="aboutMe.lookingFor.female">
+                        <input type="checkbox" ng-model="aboutMe.lookingFor.female" />
                     </label>
                     <span translate>Looking for female</span>
                 </li>
@@ -42,7 +42,7 @@
 
                 <li ng-repeat="(purposeId, purposeLabel) in purposes" class="item item-checkbox">
                     <label class="checkbox">
-                        <input type="checkbox" ng-model="aboutMe.purpose[purposeId]" />
+                        <input type="checkbox" name="aboutMe.purpose.{{purposeId}}" ng-model="aboutMe.purpose[purposeId]" />
                     </label>
                     {{purposeLabel}}
                 </li>

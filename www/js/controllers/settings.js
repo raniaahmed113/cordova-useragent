@@ -103,6 +103,8 @@ angular.module('hotvibes.controllers')
     })
 
     .controller('SettingsAboutCtrl', function($scope, $ionicLoading, __, DataMap) {
+        $scope.aboutMe = angular.copy($scope.currUser.profile);
+
         $scope.purposes = DataMap.purpose;
         $scope.selectables = [
             { id: 'maritalStatus', label: __('Status:'), options: DataMap.maritalStatus },
@@ -111,8 +113,6 @@ angular.module('hotvibes.controllers')
             { id: 'doesDrink', label: __('Drinking'), options: DataMap.doesDrink },
             { id: 'education', label: __('Education'), options: DataMap.education }
         ];
-
-        $scope.aboutMe = angular.copy($scope.currUser.profile);
 
         $scope.save = function() {
             $ionicLoading.show({ template: __('Please wait') + '..' });
@@ -203,15 +203,44 @@ angular.module('hotvibes.controllers')
             include: 'photos.url(' + thumbParams + ')'
         });
 
+        $scope.album.$promise.then(function() {
+            $scope.album.photos = $scope.album.photos.map(function(photo) {
+                return new MediaFile(photo);
+            });
+        });
+
+        $scope.setAsMain = function($index) {
+            $scope.popover.hide();
+            $scope.album.photos.forEach(function(photo, photoIndex) {
+                if (photo.isMain) {
+                    $scope.album.photos[photoIndex].isMain = false;
+                }
+
+                if (photoIndex == $index) {
+                    photo.isMain = true;
+                    photo.$save();
+
+                    $scope.album.photos[photoIndex] = photo;
+                }
+            });
+        };
+
+        $scope.deletePhoto = function($index) {
+            $scope.popover.hide();
+            $scope.album.photos[$index].$delete();
+            delete $scope.album.photos[$index];
+        };
+
         $scope.photoOptions = function($index, $event) {
+            $scope.$current = $index;
+
             $ionicPopover.fromTemplateUrl('templates/popover_photo_options.html', {
                 scope: $scope
 
             }).then(function(popover) {
+                $scope.popover = popover;
                 popover.show($event);
             });
-
-            // TODO: photo actions: delete, set as main, etc
         };
 
         var filePicker;

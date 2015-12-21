@@ -42,7 +42,7 @@ var FormUtils = {
         }
 
         Object.keys(form).forEach(function(key) {
-            if (key.match(/^\$|ng[A-Z]/) || !form[key].$dirty) {
+            if (key.match(/^(\$|ng[A-Z])/) || !form[key].$dirty) {
                 return;
             }
 
