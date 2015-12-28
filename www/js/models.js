@@ -1,8 +1,47 @@
 angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
-    .factory('User', function($http, $resource, $q, Config, Filter) {
-        var BASE_URL = Config.API_URL_BASE + 'users/',
-            User = $resource(BASE_URL + ':id', { id: '@id' });
+    .factory('Resource', function($q, $resource, $http) {
+        return function(url, urlParamMapping, options) {
+            var Resource = $resource(url, urlParamMapping, options);
+
+            function getUrl(resource) {
+                var completeUrl = angular.copy(url);
+
+                Object.keys(urlParamMapping).forEach(function(key) {
+                    var value = urlParamMapping[key];
+                    if (value[0] == '@') {
+                        value = resource[value.substr(1)];
+                    }
+
+                    completeUrl = completeUrl.replace(new RegExp(":" + key), value);
+                });
+
+                return completeUrl;
+            }
+
+            /**
+             * Performs a partial update of the resource using the PATCH HTTP method.
+             *
+             * @param {object} params entity body of the HTTP request
+             * @returns {Promise}
+             */
+            Resource.prototype.$update = function(params) {
+                var deferred = $q.defer();
+
+                $http.patch(getUrl(this), params).then(
+                    deferred.resolve,
+                    deferred.reject
+                );
+
+                return deferred.promise;
+            };
+
+            return Resource;
+        };
+    })
+
+    .factory('User', function(Resource, Config, Filter) {
+        var User = Resource(Config.API_URL_BASE + 'users/:id', { id: '@id' });
 
         User.valueOf = function(object) {
             if (!object || !object.id) {
@@ -21,23 +60,6 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             }
 
             return object;
-        };
-
-        /**
-         * Performs a partial update of the resource using the PATCH HTTP method.
-         *
-         * @param {object} params entity body of the HTTP request
-         * @returns {Promise}
-         */
-        User.prototype.$update = function(params) {
-            var deferred = $q.defer();
-
-            $http.patch(BASE_URL + this.id, params).then(
-                deferred.resolve,
-                deferred.reject
-            );
-
-            return deferred.promise;
         };
 
         return User;
@@ -63,8 +85,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/albums/:id', { id : '@id' });
     })
 
-    .factory('MediaFile', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/albums/:albumId/files/:id', { albumId: '@albumId', id: '@id' }, {
+    .factory('MediaFile', function(Resource, Config) {
+        return Resource(Config.API_URL_BASE + 'me/albums/:albumId/files/:id', { albumId: '@albumId', id: '@id' }, {
                 save: {
                     method: 'POST',
 

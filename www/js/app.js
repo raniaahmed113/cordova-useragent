@@ -101,7 +101,7 @@ angular.module('hotvibes', [
 
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
         $resourceProvider.defaults.actions.get.cache = cache;*/
-        $resourceProvider.defaults.actions.update = { method: 'PUT' };
+
         $resourceProvider.defaults.actions.query.interceptor = {
             response: function(response) {
                 response.resource.$metadata = {
