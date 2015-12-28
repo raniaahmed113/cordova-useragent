@@ -186,8 +186,8 @@ angular.module('hotvibes.controllers')
                     $scope.onError
 
                 ).finally(function() {
-                        $ionicLoading.hide();
-                    });
+                    $ionicLoading.hide();
+                });
             });
         };
     })
@@ -209,20 +209,23 @@ angular.module('hotvibes.controllers')
             });
         });
 
+        $scope.zoomPhoto = function($index) {
+            $scope.popover.hide();
+
+            // TODO
+        };
+
         $scope.setAsMain = function($index) {
             $scope.popover.hide();
+
             $scope.album.photos.forEach(function(photo, photoIndex) {
                 if (photo.isMain) {
                     $scope.album.photos[photoIndex].isMain = false;
                 }
-
-                if (photoIndex == $index) {
-                    photo.isMain = true;
-                    photo.$save();
-
-                    $scope.album.photos[photoIndex] = photo;
-                }
             });
+
+            $scope.album.photos[$index].isMain = true;
+            $scope.album.photos[$index].$update({ isMain: true });
         };
 
         $scope.deletePhoto = function($index) {
@@ -235,7 +238,8 @@ angular.module('hotvibes.controllers')
             $scope.$current = $index;
 
             $ionicPopover.fromTemplateUrl('templates/popover_photo_options.html', {
-                scope: $scope
+                scope: $scope,
+                animation: 'slide-in-up'
 
             }).then(function(popover) {
                 $scope.popover = popover;
@@ -257,15 +261,9 @@ angular.module('hotvibes.controllers')
                 });
 
                 // Upload the file
-                file.$save().then(function(response) {
+                file.$save().then(function(uploadedPhoto) {
                     // Display the newly uploaded file
-                    $scope.album.photos.push(
-                        MediaFile.get({
-                            albumId: $stateParams.albumId,
-                            id: response.id,
-                            include: 'url(' + thumbParams + ')'
-                        })
-                    );
+                    $scope.album.photos.push(uploadedPhoto);
 
                 }, function(error) {
                     if (
@@ -281,12 +279,15 @@ angular.module('hotvibes.controllers')
 
                 }).finally(function() {
                     $ionicLoading.hide();
+                    // TODO: reset the value of the file input field because after failing to upload the user might try again and the value of the field wont change if the same photo is selected thus nothing will happen
                 });
             });
         });
 
         $scope.openFilePicker = function() {
-            ionic.trigger('click', { target: filePicker });
+            setTimeout(function() {
+                ionic.trigger('click', { target: filePicker });
+            }, 50);
         };
 
         $scope.deleteAlbum = function() {
