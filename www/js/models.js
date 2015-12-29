@@ -1,8 +1,10 @@
 angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
-    .factory('Resource', function($q, $resource, $http) {
+    .factory('ApiResource', function($q, $resource, $http, Config) {
         return function(url, urlParamMapping, options) {
-            var Resource = $resource(url, urlParamMapping, options);
+            url = Config.API_URL_BASE + url;
+
+            var ApiResource = $resource(url, urlParamMapping, options);
 
             function getUrl(resource) {
                 var completeUrl = angular.copy(url);
@@ -25,7 +27,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
              * @param {object} params entity body of the HTTP request
              * @returns {Promise}
              */
-            Resource.prototype.$update = function(params) {
+            ApiResource.prototype.$update = function(params) {
                 var deferred = $q.defer();
 
                 $http.patch(getUrl(this), params).then(
@@ -36,12 +38,12 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 return deferred.promise;
             };
 
-            return Resource;
+            return ApiResource;
         };
     })
 
-    .factory('User', function(Resource, Config, Filter) {
-        var User = Resource(Config.API_URL_BASE + 'users/:id', { id: '@id' });
+    .factory('User', function(ApiResource, Filter) {
+        var User = ApiResource('users/:id', { id: '@id' });
 
         User.valueOf = function(object) {
             if (!object || !object.id) {
@@ -81,12 +83,36 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/friends/:userId');
     })
 
-    .factory('Album', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/albums/:id', { id : '@id' });
+    .factory('Album', function(__, ApiResource, MediaFile) {
+        var Album = ApiResource('me/albums/:id', { id : '@id' }),
+            parentGet = Album.get;
+
+        Album.get = function(params) {
+            if (params.id == 0) {
+                var mainAlbum = new Album();
+                mainAlbum.id = params.id;
+                mainAlbum.name = __("MainPictures");
+                mainAlbum.photos = MediaFile.query({
+                    albumId: mainAlbum.id,
+                    include: params.include.replace(/photos\./g, '')
+                });
+                mainAlbum.$promise = {
+                    then: function(func) {
+                        func();
+                    }
+                };
+
+                return mainAlbum;
+            }
+
+            return parentGet(params);
+        };
+
+        return Album;
     })
 
-    .factory('MediaFile', function(Resource, Config) {
-        return Resource(Config.API_URL_BASE + 'me/albums/:albumId/files/:id', { albumId: '@albumId', id: '@id' }, {
+    .factory('MediaFile', function(ApiResource) {
+        return ApiResource('me/albums/:albumId/files/:id', { albumId: '@albumId', id: '@id' }, {
                 save: {
                     method: 'POST',
 

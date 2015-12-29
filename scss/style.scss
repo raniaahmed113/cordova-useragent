@@ -217,7 +217,26 @@ resource-collection {
 }
 
 img.thumb {
-  height: 100%;
+  &.main {
+    border: 2px solid red;
+  }
+}
+
+.row.row-wrap {
+  position: relative;
+
+  .thumb {
+    position: absolute;
+    transition: all .5s ease-in-out;
+
+    @for $i from 0 to 50 {
+      &:nth-child(#{$i}) {
+        $posHorizontal: ($i - 1) % 4;
+        $posVertical: floor(($i - 1) / 4);
+        @include translate3d(100% * $posHorizontal, 100% * $posVertical, 0);
+      }
+    }
+  }
 }
 
 img.framed {

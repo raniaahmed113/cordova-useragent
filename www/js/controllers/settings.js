@@ -141,7 +141,7 @@ angular.module('hotvibes.controllers')
     })
 
     .controller('SettingsAlbumsCtrl', function($scope, $ionicPopover, $ionicPopup, $ionicLoading, __, Album) {
-        $scope.albums = Album.query({ include: 'thumbUrl(size=w80h80)' });
+        $scope.albums = Album.query({ include: 'mainPhoto.url(size=w80h80)' });
 
         $scope.promptCreateAlbum = {
             albumName: null
@@ -203,39 +203,35 @@ angular.module('hotvibes.controllers')
             include: 'photos.url(' + thumbParams + ')'
         });
 
-        $scope.album.$promise.then(function() {
-            $scope.album.photos = $scope.album.photos.map(function(photo) {
-                return new MediaFile(photo);
-            });
-        });
-
-        $scope.zoomPhoto = function($index) {
+        $scope.zoomPhoto = function(photo) {
             $scope.popover.hide();
 
             // TODO
         };
 
-        $scope.setAsMain = function($index) {
+        $scope.setAsMain = function(newMainPhoto) {
             $scope.popover.hide();
 
-            $scope.album.photos.forEach(function(photo, photoIndex) {
-                if (photo.isMain) {
-                    $scope.album.photos[photoIndex].isMain = false;
+            newMainPhoto.isMain = true;
+
+            $scope.album.photos.forEach(function(photo) {
+                if (photo.isMain && photo.id != newMainPhoto.id) {
+                    photo.isMain = false;
                 }
             });
 
-            $scope.album.photos[$index].isMain = true;
-            $scope.album.photos[$index].$update({ isMain: true });
+            newMainPhoto.$update({ isMain: true });
         };
 
-        $scope.deletePhoto = function($index) {
+        $scope.deletePhoto = function(photo) {
             $scope.popover.hide();
-            $scope.album.photos[$index].$delete();
-            delete $scope.album.photos[$index];
+            photo.$delete();
+
+            delete $scope.album.photos[$scope.album.photos.indexOf(photo)];
         };
 
-        $scope.photoOptions = function($index, $event) {
-            $scope.$current = $index;
+        $scope.showOptionsFor = function(photo, $event) {
+            $scope.selectedPhoto = photo;
 
             $ionicPopover.fromTemplateUrl('templates/popover_photo_options.html', {
                 scope: $scope,

@@ -1,9 +1,9 @@
 <ion-popover-view>
     <ion-content>
         <div class="list">
-            <a ng-click="zoomPhoto($current)" class="item" translate>Zoom</a>
-            <a ng-click="setAsMain($current)" ng-hide="album.photos[$current].isMain" class="item" translate>Set as main photo</a>
-            <a ng-click="deletePhoto($current)" class="item item-assertive" translate>Delete</a>
+            <a ng-click="zoomPhoto(selectedPhoto)" class="item" translate>Zoom</a>
+            <a ng-click="setAsMain(selectedPhoto)" ng-hide="selectedPhoto.isMain" class="item" translate>Set as main photo</a>
+            <a ng-click="deletePhoto(selectedPhoto)" class="item item-assertive" translate>Delete</a>
         </div>
     </ion-content>
 </ion-popover-view>

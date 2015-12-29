@@ -14,10 +14,11 @@
         <resource-collection promise="album.$promise" list="album.photos">
             <div class="row row-wrap">
                 <img
-                    ng-repeat="photo in album.photos | orderBy:'photo.isMain':false" ng-src="{{photo.url}}"
-                    ng-click="photoOptions($index, $event)"
+                    ng-repeat="photo in album.photos | orderBy:'isMain':true" ng-src="{{photo.url}}"
+                    ng-click="showOptionsFor(photo, $event)"
                     class="col col-25 thumb"
-                    alt="" />
+                    alt=""
+                    ng-class="{main: photo.isMain}"/>
             </div>
         </resource-collection>
     </ion-content>
