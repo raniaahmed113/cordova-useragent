@@ -68,6 +68,12 @@ ion-list.list-dark, .list.list-dark {
   color:$text;
   text-transform: uppercase;
   font-size:13px;
+
+  button {
+    top: 5px;right: 5px;
+    min-height: 0;
+    padding-left: 10px;
+  }
 }
 .item.item-divider.item-button-right {
   padding-bottom:10px;
@@ -124,7 +130,8 @@ input + .validation span::after {
 }
 
 .center-vertical-margin {
-  margin-top: 50%;
+  margin-top: 30%;
+  margin-bottom: 30%;
 }
 
 resource-collection {
@@ -216,28 +223,46 @@ resource-collection {
   }
 }
 
-img.thumb {
-  &.main {
-    border: 2px solid red;
-  }
-}
-
-.row.row-wrap {
+a.thumb {
+  display: inline-block;
   position: relative;
+  width: 82px;
+  height: 82px;
+  padding: 5px;
 
-  .thumb {
+  > img {
+    min-height: 100%;
+    width: 100%;
+    background: $stable;
+  }
+
+  & > span {
     position: absolute;
-    transition: all .5s ease-in-out;
-
-    @for $i from 0 to 50 {
-      &:nth-child(#{$i}) {
-        $posHorizontal: ($i - 1) % 4;
-        $posVertical: floor(($i - 1) / 4);
-        @include translate3d(100% * $posHorizontal, 100% * $posVertical, 0);
-      }
-    }
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: .7em;
   }
 }
+
+//.row.row-wrap {
+//  position: relative;
+//
+//  .thumb {
+//    height: auto;
+//    position: absolute;
+//    transition: all .5s ease-in-out;
+//
+//    @for $i from 0 to 50 {
+//      &:nth-child(#{$i}) {
+//        $posHorizontal: ($i - 1) % 4;
+//        $posVertical: floor(($i - 1) / 4);
+//        @include translate3d(100% * $posHorizontal, 100% * $posVertical, 0);
+//      }
+//    }
+//  }
+//}
 
 img.framed {
   max-width: 6em;

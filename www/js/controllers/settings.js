@@ -147,6 +147,21 @@ angular.module('hotvibes.controllers')
             albumName: null
         };
 
+        $scope.$on('albumDeleted', function(albumId) {
+            var $index = -1;
+
+            for (var i=0; i<$scope.albums.length; i++) {
+                if ($scope.albums[i].id == albumId) {
+                    $index = index;
+                    break;
+                }
+            }
+
+            if ($index > -1) {
+                $scope.albums.splice($index, 1);
+            }
+        });
+
         $scope.createAlbum = function() {
             $ionicPopup.prompt({
                 title: __('Add New Album'),
@@ -193,7 +208,7 @@ angular.module('hotvibes.controllers')
     })
 
     .controller('SettingsAlbumCtrl', function(
-        $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
+        $rootScope, $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
         __, MediaFile, Album, Rule, ErrorCode
     ) {
         var thumbParams = 'size=w80h80';
@@ -225,9 +240,11 @@ angular.module('hotvibes.controllers')
 
         $scope.deletePhoto = function(photo) {
             $scope.popover.hide();
-            photo.$delete();
 
-            delete $scope.album.photos[$scope.album.photos.indexOf(photo)];
+            var index = $scope.album.photos.indexOf(photo),
+                photoToDelete = $scope.album.photos.splice(index, 1)[0];
+
+            photoToDelete.$delete();
         };
 
         $scope.showOptionsFor = function(photo, $event) {
@@ -257,7 +274,7 @@ angular.module('hotvibes.controllers')
                 });
 
                 // Upload the file
-                file.$save().then(function(uploadedPhoto) {
+                file.$save({ previewThumbSize: 'w80h80' }).then(function(uploadedPhoto) {
                     // Display the newly uploaded file
                     $scope.album.photos.push(uploadedPhoto);
 
@@ -288,9 +305,7 @@ angular.module('hotvibes.controllers')
 
         $scope.deleteAlbum = function() {
             $scope.album.$delete();
-            //$rootScope.$broadcast('');
-            // FIXME: notify albums list about deleted element
-
+            $rootScope.$broadcast('albumDeleted', $scope.album.id);
             $ionicHistory.goBack();
         };
     });

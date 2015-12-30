@@ -13,12 +13,13 @@
 
         <resource-collection promise="album.$promise" list="album.photos">
             <div class="row row-wrap">
-                <img
-                    ng-repeat="photo in album.photos | orderBy:'isMain':true" ng-src="{{photo.url}}"
-                    ng-click="showOptionsFor(photo, $event)"
-                    class="col col-25 thumb"
-                    alt=""
-                    ng-class="{main: photo.isMain}"/>
+                <a href="#" class="thumb"
+                    ng-repeat="photo in album.photos | orderBy:'isMain':true"
+                    ng-click="showOptionsFor(photo, $event)">
+
+                    <img ng-src="{{photo.url}}" alt="" />
+                    <span class="positive-bg" ng-if="photo.isMain" translate>Main</span>
+                </a>
             </div>
         </resource-collection>
     </ion-content>

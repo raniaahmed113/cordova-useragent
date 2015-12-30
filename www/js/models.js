@@ -90,17 +90,14 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         Album.get = function(params) {
             if (params.id == 0) {
                 var mainAlbum = new Album();
+
                 mainAlbum.id = params.id;
                 mainAlbum.name = __("MainPictures");
                 mainAlbum.photos = MediaFile.query({
                     albumId: mainAlbum.id,
                     include: params.include.replace(/photos\./g, '')
                 });
-                mainAlbum.$promise = {
-                    then: function(func) {
-                        func();
-                    }
-                };
+                mainAlbum.$promise = mainAlbum.photos.$promise;
 
                 return mainAlbum;
             }
