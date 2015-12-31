@@ -69,6 +69,14 @@ angular.module('hotvibes.controllers')
             $scope.modal = modal;
         });
 
+        $scope.confirmPhone = function() {
+
+        };
+
+        $scope.resendConfirmationEmail = function() {
+
+        };
+
         $scope.password = {};
         $scope.changePassword = function() {
             $ionicLoading.show({ template: __('Please wait') + '..' });

@@ -16,23 +16,46 @@
                 <select ng-options="country.label for country in countries track by country.id" ng-model="settings.country"></select>
             </label>
 
-            <div class="item item-input">
+            <div class="item item-input item-input-with-action">
                 <span class="input-label" translate>City</span>
-                <label class="input-item-wrapper"><input type="text" ng-model="settings.city" disabled /></label>
-                <button type="button" class="button button-small button-positive" ng-click="modal.show()" translate>
-                    Change
-                </button>
+                <div>
+                    <input type="text" ng-model="settings.city" disabled />
+                    <button ng-click="modal.show()" translate>
+                        Change
+                    </button>
+                </div>
             </div>
 
-            <label class="item item-input">
+            <div class="item item-input item-input-with-action">
                 <span class="input-label" translate>Phone number</span>
-                <input type="tel" ng-model="settings.profile.phone" minlength="5" />
-            </label>
+                <div>
+                    <input type="tel" ng-model="settings.profile.phoneNumber" minlength="5" />
+                    <div ng-if="settings.profile.isPhoneNumberConfirmed" class="positive" translate></div>
+                    <div ng-if="!settings.profile.isPhoneNumberConfirmed" class="status assertive">
+                        <label translate>Your phone number is unconfirmed.</label>
+                        <button ng-click="confirmPhone()" class="button-assertive" translate>
+                            Confirm now.
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-            <label class="item item-input">
+            <div class="item item-input item-input-with-action">
                 <span class="input-label" translate>Your email</span>
-                <input type="email" ng-model="settings.email" required />
-            </label>
+                <div>
+                    <input type="email" ng-model="settings.email" required />
+                    <div ng-if="settings.profile.isEmailConfirmed" class="positive" translate></div>
+                    <div ng-if="!settings.profile.isEmailConfirmed" class="status assertive">
+                        <label translate>We have previously sent you an e-mail, containing a confirmation link.</label>
+                        <label translate translate-values="{name: '<span translate>Resend activation email.</span>'}">
+                            If you haven't yet received the letter, please make sure, that the entered e-mail address is correct and then click %s.
+                        </label>
+                        <button ng-click="resendConfirmationEmail()" class="button-assertive" translate>
+                            Resend activation email.
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             <div class="padding">
                 <p class="center" translate>Your phone number and e-mail address are not shown to other members.</p>

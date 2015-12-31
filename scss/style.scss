@@ -81,11 +81,40 @@ ion-list.list-dark, .list.list-dark {
 
 .input-label .validation {
   @extend .assertive;
+  white-space: normal;
+}
+
+.item-input-with-action {
+
+  > div {
+    flex: 1;
+    padding-right: 10px;
+  }
+
+  .status {
+    text-align: center;
+    white-space: normal;
+
+    > label {
+      font-size: 0.95em;
+
+      + button {
+        margin-top: 5px;
+      }
+    }
+  }
+
+  button {
+    @extend .button;
+    @extend .button-small;
+    @extend .button-outline;
+    @extend .button-block;
+  }
 }
 
 input + .validation {
   position: absolute;
-  top: 0px;
+  top: 0;
   left:16px;
   right:16px;
   background: #D9141D;
