@@ -168,7 +168,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('PendingConfirmation', function(ApiResource) {
-        return ApiResource('me/pendingConfirmations', { type: '@type' });
+        return ApiResource('me/pendingConfirmations/:id', { id: '@id' });
     })
 
     .factory('Gift', function($resource, Config) {

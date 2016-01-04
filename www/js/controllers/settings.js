@@ -127,7 +127,7 @@ angular.module('hotvibes.controllers')
         $scope.resendPhoneConfirmationCode = function() {
             $ionicLoading.show({ template: __('Please wait') + '..' });
 
-            var confirmation = new PendingConfirmation({ type: 'phoneNumber' });
+            var confirmation = new PendingConfirmation({ id: 'phoneNumber' });
 
             confirmation.$save().then(
                 function() {
@@ -144,7 +144,7 @@ angular.module('hotvibes.controllers')
         $scope.resendConfirmationEmail = function() {
             $ionicLoading.show({ template: __('Please wait') + '..' });
 
-            var confirmation = new PendingConfirmation({ type: 'email' });
+            var confirmation = new PendingConfirmation({ id: 'email' });
 
             confirmation.$save().then(
                 function() {
