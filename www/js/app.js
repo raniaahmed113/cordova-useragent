@@ -14,8 +14,8 @@ angular.module('hotvibes', [
         CANT_PERFORM_ACTION_ON_SELF: 106,
         TEXT_TOO_SHORT: 107,
         MUST_WAIT_FOR_REPLY: 108,
-        IMAGE_SIZE_INVALID: 109
-
+        IMAGE_SIZE_INVALID: 109,
+        INVALID_INPUT: 110
     })
 
     .constant('Rule', {

@@ -1,8 +1,8 @@
 angular.module('hotvibes.controllers')
 
     .controller('SettingsProfileCtrl', function(
-        $scope, $ionicLoading, $ionicModal, $q,
-        __, Country, CityPicker, ErrorCode
+        $scope, $ionicLoading, $ionicPopup, $q,
+        __, PendingConfirmation, Country, CityPicker, ErrorCode
     ) {
         $scope.settings = {
             city: $scope.currUser.city,
@@ -70,11 +70,92 @@ angular.module('hotvibes.controllers')
         });
 
         $scope.confirmPhone = function() {
+            $scope.confirmPhonePrompt = { code: null };
+            $ionicPopup.prompt({
+                title: __('Confirm your phone number'),
+                subTitle: __('Your phone number is unconfirmed. We send you SMS with passwod. Check your phone and enter password below.'),
+                template: '<input type="number" placeholder="' + __('Code') + '" ng-model="confirmPhonePrompt.code" required />',
+                scope: $scope,
+                buttons: [
+                    { text: __('Cancel') },
+                    {
+                        text: '<b>' + __('Check code') + '</b>',
+                        type: 'button-positive',
+                        onTap: function(event) {
+                            if (!$scope.confirmPhonePrompt.code) {
+                                event.preventDefault();
+                                return null;
+                            }
 
+                            return $scope.confirmPhonePrompt.code;
+                        }
+                    }
+                ]
+            }).then(function(code) {
+                if (!code) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: __('Please wait') + '..' });
+
+                $scope.currUser.$update({
+                    profile: { isPhoneNumberConfirmed: true },
+                    _params: { code: code }
+
+                }).then(
+                    function() {
+                        $ionicLoading.show({
+                            template: __('Your phone was confirmed'),
+                            noBackdrop: true,
+                            duration: 1000
+                        });
+                    },
+                    function(error) {
+                        $ionicLoading.hide();
+
+                        var params = null;
+                        if (error.data && error.data.code && error.data.code == ErrorCode.INVALID_INPUT) {
+                            params = { message: __("Unable to confirm phone") }
+                        }
+
+                        $scope.onError(error, params);
+                    }
+                );
+            });
+        };
+
+        $scope.resendPhoneConfirmationCode = function() {
+            $ionicLoading.show({ template: __('Please wait') + '..' });
+
+            var confirmation = new PendingConfirmation({ type: 'phoneNumber' });
+
+            confirmation.$save().then(
+                function() {
+                    $ionicLoading.show({
+                        template: __('Message sent'),
+                        noBackdrop: true,
+                        duration: 2000
+                    });
+                },
+                $scope.onError
+            );
         };
 
         $scope.resendConfirmationEmail = function() {
+            $ionicLoading.show({ template: __('Please wait') + '..' });
 
+            var confirmation = new PendingConfirmation({ type: 'email' });
+
+            confirmation.$save().then(
+                function() {
+                    $ionicLoading.show({
+                        template: __('Confirmation email was sent'),
+                        noBackdrop: true,
+                        duration: 3000
+                    });
+                },
+                $scope.onError
+            );
         };
 
         $scope.password = {};
@@ -96,17 +177,16 @@ angular.module('hotvibes.controllers')
                     $scope.logout();
                 },
                 function(error) {
+                    $ionicLoading.hide();
+
                     var params = null;
-                    if (error.data && error.data.code && error.data.code == ErrorCode.INVALID_CREDENTIALS) {
+                    if (error.data && error.data.code && error.data.code == ErrorCode.INVALID_INPUT) {
                         params = { message: __("Invalid password") }
                     }
 
                     $scope.onError(error, params);
                 }
-
-            ).finally(function() {
-                $ionicLoading.hide();
-            });
+            );
         };
     })
 

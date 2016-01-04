@@ -31,7 +31,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 var deferred = $q.defer();
 
                 $http.patch(getUrl(this), params).then(
-                    deferred.resolve,
+                    deferred.resolve, // FIXME: apply the changes after success update on API side
                     deferred.reject
                 );
 
@@ -165,6 +165,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('Request', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'me/requests');
+    })
+
+    .factory('PendingConfirmation', function(ApiResource) {
+        return ApiResource('me/pendingConfirmations', { type: '@type' });
     })
 
     .factory('Gift', function($resource, Config) {
