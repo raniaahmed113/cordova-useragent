@@ -20,7 +20,7 @@
                 <span class="input-label" translate>City</span>
                 <div>
                     <input type="text" ng-model="settings.city" disabled />
-                    <button ng-click="modal.show()" translate>
+                    <button type="button" ng-click="modal.show()" translate>
                         Change
                     </button>
                 </div>
@@ -33,7 +33,7 @@
                     <div ng-if="settings.profile.isPhoneNumberConfirmed" class="positive" translate></div>
                     <div ng-if="!settings.profile.isPhoneNumberConfirmed" class="status assertive">
                         <label translate>Your phone number is unconfirmed.</label>
-                        <button ng-click="confirmPhone()" class="button-assertive" translate>
+                        <button type="button" ng-click="confirmPhone()" class="button-assertive" translate>
                             Confirm now.
                         </button>
                     </div>
@@ -50,7 +50,7 @@
                         <label translate translate-values="{name: '<span translate>Resend activation email.</span>'}">
                             If you haven't yet received the letter, please make sure, that the entered e-mail address is correct and then click %s.
                         </label>
-                        <button ng-click="resendConfirmationEmail()" class="button-assertive" translate>
+                        <button type="button" ng-click="resendConfirmationEmail()" class="button-assertive" translate>
                             Resend activation email.
                         </button>
                     </div>
@@ -59,7 +59,7 @@
 
             <div class="padding">
                 <p class="center" translate>Your phone number and e-mail address are not shown to other members.</p>
-                <button class="button button-block button-positive" type="submit" ng-disabled="settings.form.$pristine" translate>
+                <button type="submit" class="button button-block button-positive" ng-disabled="settings.form.$pristine" translate>
                     Save
                 </button>
             </div>
