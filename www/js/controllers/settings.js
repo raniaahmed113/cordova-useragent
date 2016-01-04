@@ -59,7 +59,7 @@ angular.module('hotvibes.controllers')
 
         new CityPicker({
             getCountry: function() {
-                return $scope.settings.country;
+                return $scope.settings.country.id;
             },
             onCitySelected: function(city) {
                 $scope.settings.city = city.label;
