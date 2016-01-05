@@ -54,7 +54,7 @@
             <span class="input-label" translate>Country</span>
             <select
                     ng-model="currUser.filter.country"
-                    ng-options="country.id as country.label for country in countries">
+                    ng-options="countryId as countryName for (countryId, countryName) in countries">
             </select>
         </label>
 

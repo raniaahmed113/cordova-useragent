@@ -2,7 +2,7 @@ angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
         $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate,
-        __, AuthService, Country, Config, Api
+        __, AuthService, DataMap, Config, Api
     ) {
         var pixelDensitySuffix = '';
 
@@ -39,7 +39,7 @@ angular.module('hotvibes.controllers')
             );
         };
 
-        $scope.countries = Country.query();
+        $scope.countries = DataMap.country;
         $scope.language = $translate.use();
         $scope.rules = {};
 

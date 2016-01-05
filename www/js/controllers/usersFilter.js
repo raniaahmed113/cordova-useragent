@@ -1,7 +1,7 @@
 angular.module('hotvibes.controllers')
 
-    .controller('UsersFilterCtrl', function($scope, __, Country, CityPicker) {
-        $scope.countries = Country.query();
+    .controller('UsersFilterCtrl', function($scope, __, DataMap, CityPicker) {
+        $scope.countries = DataMap.country;
 
         var range = function(min, max, step) {
             step = step || 1;
