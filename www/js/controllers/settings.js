@@ -2,14 +2,9 @@ angular.module('hotvibes.controllers')
 
     .controller('SettingsProfileCtrl', function(
         $scope, $ionicLoading, $ionicPopup, $q,
-        __, PendingConfirmation, Country, CityPicker, ErrorCode
+        __, PendingConfirmation, CityPicker, ErrorCode, DataMap
     ) {
-        $scope.settings = {
-            city: $scope.currUser.city,
-            country: { id: $scope.currUser.country },
-            profile: { phoneNumber: $scope.currUser.profile.phoneNumber },
-            email: $scope.currUser.email
-        };
+        $scope.settings = angular.copy($scope.currUser);
 
         $scope.$watch('settings.country', function(newVal, oldVal) {
             if (newVal === oldVal) {
@@ -55,15 +50,15 @@ angular.module('hotvibes.controllers')
             });
         };
 
-        $scope.countries = Country.query();
+        $scope.countries = DataMap.country;
 
         new CityPicker({
             getCountry: function() {
-                return $scope.settings.country.id;
+                return $scope.settings.country;
             },
             onCitySelected: function(city) {
                 $scope.settings.city = city.label;
-                $scope.settings.form.settings.city.$setDirty();
+                $scope.settings.form['settings.city'].$setDirty();
             }
         }).then(function(modal) {
             $scope.modal = modal;

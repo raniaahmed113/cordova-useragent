@@ -13,7 +13,10 @@
 
             <label class="item item-input item-select">
                 <span class="input-label" translate>Your country</span>
-                <select ng-options="country.label for country in countries track by country.id" ng-model="settings.country"></select>
+                <select
+                        ng-model="settings.country"
+                        ng-options="countryId as countryName for (countryId, countryName) in countries">
+                </select>
             </label>
 
             <div class="item item-input item-input-with-action">

@@ -168,25 +168,15 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('PendingConfirmation', function(ApiResource) {
-        return ApiResource('me/pendingConfirmations/:id', { id: '@id' });
+        return ApiResource('me/pendingConfirmations/:id', { id: '@id' }, {
+            save: {
+                method: 'PUT'
+            }
+        });
     })
 
     .factory('Gift', function($resource, Config) {
         return $resource(Config.API_URL_BASE + 'dataSets/gifts');
-    })
-
-    .factory('Country', function(__) {
-        return {
-            query: function() {
-                return [
-                    {id: 'LT', label: __('Lithuania')},
-                    {id: 'LV', label: __('Latvia')},
-                    {id: 'PL', label: __('Poland')},
-                    {id: 'HR', label: __('Croatia/Hrvatska')},
-                    {id: 'UK', label: __('United Kingdom')}
-                ];
-            }
-        };
     })
 
     .factory('City', function($resource, Config) {
@@ -293,6 +283,14 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('DataMap', function(__) {
         return {
+            country: {
+                LT: __('Lithuania'),
+                LV: __('Latvia'),
+                PL: __('Poland'),
+                HR: __('Croatia/Hrvatska'),
+                UK: __('United Kingdom')
+            },
+
             gender: {
                 male: __('Man'),
                 female: __('Female')

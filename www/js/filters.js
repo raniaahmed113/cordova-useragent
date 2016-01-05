@@ -36,8 +36,8 @@ angular.module('hotvibes.filters', [])
 
     .filter('translateProfileVal', function(DataMap, $translate) {
         var translateProfileVal = function(value, mapId) {
-            if (angular.isArray(value)) {
-                return value.map(function(element) {
+            if (angular.isObject(value)) {
+                return Object.keys(value).map(function(element) {
                     return translateProfileVal(element, mapId);
                 });
             }
