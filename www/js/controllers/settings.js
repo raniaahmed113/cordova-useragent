@@ -22,16 +22,11 @@ angular.module('hotvibes.controllers')
 
             ).then(
                 function() {
-                    $scope.currUser.city = $scope.settings.city;
-                    $scope.currUser.country = $scope.settings.country.id;
-
                     if ($scope.settings.profile.phoneNumber != $scope.currUser.profile.phoneNumber) {
-                        $scope.currUser.profile.phoneNumber = $scope.settings.profile.phoneNumber;
                         $scope.currUser.profile.isPhoneNumberConfirmed = false;
                     }
 
                     if ($scope.settings.email != $scope.currUser.email) {
-                        $scope.currUser.email = $scope.settings.email;
                         $scope.currUser.profile.isEmailConfirmed = false;
                     }
 
