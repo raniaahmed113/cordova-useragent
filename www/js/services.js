@@ -71,7 +71,17 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     value = value.join(',');
 
                 } else if (angular.isObject(value)) {
-                    value = Object.keys(value).join(',');
+                    var transformed = [];
+
+                    angular.forEach(value, function(propertyVal, propertyName) {
+                        if (propertyVal !== true) {
+                            return;
+                        }
+
+                        transformed.push(propertyName);
+                    });
+
+                    value = transformed;
                 }
 
                 output[key] = value;

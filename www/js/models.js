@@ -71,8 +71,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/quickieVotes');
     })
 
-    .factory('Filter', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/filters/:type', { type: '@type' });
+    .factory('Filter', function(ApiResource) {
+        return ApiResource('me/filters/:type', { type: '@type' });
     })
 
     .factory('Guest', function($resource, Config) {
