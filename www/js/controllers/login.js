@@ -69,7 +69,13 @@ angular.module('hotvibes.controllers')
                     }).error(function(response, status, headers, config) {
                         $ionicLoading.hide();
 
-                        if (status == 400 /* Bad Request*/ && response.rule && response.rule.field) {
+                        if (
+                                status == 400 /* Bad Request*/ 
+                                && response.rule 
+                                && response.rule.field
+                                && $scope.registration.form['registration.data.' + response.rule.field]
+                        ) {
+                            // TODO: handle cases where such email is already registered (ErrorCode.EMAIL_ALREADY_TAKEN) - show password recovery screen or smth
                             var field = $scope.registration.form['registration.data.' + response.rule.field];
                             field.errorMessage = response.message;
                             field.$validators.serverError = function() { return true; }; // This will reset 'serverError' when value changes

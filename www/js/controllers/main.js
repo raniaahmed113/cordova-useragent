@@ -14,7 +14,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $ionicLoading.show({
                 template: __('You have been logged-out. Please log-in again.'),
                 noBackdrop: true,
-                duration: 1000
+                duration: 3000
             });
 
             $scope.logout();

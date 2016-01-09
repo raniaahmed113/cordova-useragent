@@ -23,14 +23,18 @@
                 <input type="date" ng-model="registration.data.birthday" class="input" required autocomplete="birthday" placeholder="{{'Birthday' | translate}}"/>
             </label>
 
-            <!--<label class="item item-input item-select item-stacked-label-padded">
+            <label class="item item-input item-select item-stacked-label-padded">
                 <span class="input-label" translate>Your country</span>
-                <select ng-model="registration.data.country" ng-options="countryId as countryName for (countryId, countryName) in countries" class="input" required>
+                <select
+                        ng-model="registration.data.country"
+                        ng-options="countryId as countryName for (countryId, countryName) in countries"
+                        class="input"
+                        required>
                 </select>
-            </label>-->
+            </label>
 
             <label class="item item-radio">
-                <div class="item item-divider" translate>Your gender</div>
+                <span class="item item-divider" translate>Your gender</span>
                 <ion-radio ng-model="registration.data.gender" ng-value="'male'">
                     <span translate>a man</span>
                 </ion-radio>

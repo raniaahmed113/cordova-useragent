@@ -15,8 +15,12 @@ angular.module('hotvibes', [
         TEXT_TOO_SHORT: 107,
         MUST_WAIT_FOR_REPLY: 108,
         IMAGE_SIZE_INVALID: 109,
-        INVALID_INPUT: 110
+        INVALID_INPUT: 110,
+        EMAIL_ALREADY_TAKEN: 111,
+        USERNAME_ALREADY_TAKEN: 112
     })
+
+    // IMPORTANT: after adding a new error code here - add the error message to services.js
 
     .constant('Rule', {
         MIN_VALUE: 'minValue'

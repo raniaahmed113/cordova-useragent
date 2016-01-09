@@ -59,6 +59,7 @@ angular.module('hotvibes.controllers')
             $scope.modal = modal;
         });
 
+        // FIXME: don't show 'unconfirmed' alert if field is empty or dirty
         $scope.confirmPhone = function() {
             $scope.confirmPhonePrompt = { code: null };
             $ionicPopup.prompt({
