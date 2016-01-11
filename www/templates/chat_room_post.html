@@ -21,15 +21,16 @@
             <a ng-repeat="comment in post.comments" class="item item-avatar" href="#/users/{{comment.author.id}}">
                 <img ng-src="{{comment.author.profilePhoto | profilePhotoUrl:comment.author.gender}}">
                 <h2>{{comment.author.nickName}}</h2>
-                <p>{{comment.text}}</p>
-
-                <div class="status">
-                    <span ng-if="comment.error" translate>Failed. Tap to retry.</span>
-                    <span ng-if="!comment.error">
-                        <span ng-if="!comment.datePosted" translate>Sending..</span>
-                        <span ng-if="comment.datePosted">{{comment.datePosted*1000 | amCalendar}}</span>
-                    </span>
-                </div>
+                <p>
+                    <span class="status">
+                        <span ng-if="comment.error" translate>Failed. Tap to retry.</span>
+                        <span ng-if="!comment.error">
+                            <span ng-if="!comment.datePosted" translate>Sending..</span>
+                            <span ng-if="comment.datePosted">{{comment.datePosted*1000 | amCalendar}}</span>
+                        </span>
+                    </span><br />
+                    {{comment.text}}
+                </p>
             </a>
         </div>
     </ion-content>
