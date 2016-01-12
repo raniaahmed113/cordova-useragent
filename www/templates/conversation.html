@@ -8,7 +8,7 @@
                 ng-class="{'item-positive': message.isNew, mine: message.id == currUser.id, failed: message.error ? true : false}"
                 ng-click="resend($index)">
 
-                {{message.text}}
+                <span ng-bind-html="message.text | linky:'_blank' | emoticonize"></span>
 
                 <div class="status">
                     <span ng-if="message.error" translate>Failed. Tap to retry.</span>

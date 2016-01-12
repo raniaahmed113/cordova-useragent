@@ -94,8 +94,16 @@ angular.module('hotvibes.controllers')
             roomId: $stateParams.roomId,
             id: $stateParams.id,
             include: [
-                'author.profilePhoto.url(size=w50h50)',
-                'comments.author.profilePhoto.url(size=w50h50)'
+                'author.profilePhoto.url(size=w50h50)'
+
+            ].join(',')
+        });
+
+        $scope.comments = ChatRoomPostComment.query({
+            roomId: $stateParams.roomId,
+            postId: $stateParams.id,
+            include: [
+                'author.profilePhoto.url(size=w50h50)'
 
             ].join(',')
         });
@@ -114,19 +122,20 @@ angular.module('hotvibes.controllers')
                 datePosted: null
             });
 
-            var index = $scope.post.comments.push(comment);
+            $scope.comments.unshift(comment);
 
             // Clear input after sending
             $scope.newComment.text = '';
 
-            $ionicScrollDelegate.scrollBottom(true);
+            $ionicScrollDelegate.scrollTop(true);
 
             comment.$save().then(
                 function() {
                     comment.datePosted = (new Date().getTime() / 1000);
                 },
                 function() {
-                    $scope.post.comments.splice(index, 1);
+                    var index = $scope.comments.indexOf(comment);
+                    $scope.comments.splice(index, 1);
                 }
             );
         };

@@ -8,20 +8,19 @@
             </a>
 
             <div class="item item-body">
-                <p>{{post.body}}</p>
+                <a ng-if="post.video" class="embed" href="https://{{post.video.link}}" target="_blank">
+                    <img class="full-image" ng-src="{{post.video.thumbs[0]}}" alt="" />
+                    <h4>{{post.video.title}}</h4>
+                </a>
+                <p ng-bind-html="post.body | linky:'_blank' | emoticonize"></p>
             </div>
         </div>
 
-        <div class="list">
-            <div class="center error-sign" ng-if="post.$resolved && post.comments.length < 1">
-                <span translate>Nothing here, so far</span>
-                <i class="icon ion-ios-rainy"></i>
-            </div>
-
-            <a ng-repeat="comment in post.comments" class="item item-avatar" href="#/users/{{comment.author.id}}">
+        <resource-collection list="comments">
+            <a ng-repeat="comment in comments" class="item item-avatar" href="#/users/{{comment.author.id}}">
                 <img ng-src="{{comment.author.profilePhoto | profilePhotoUrl:comment.author.gender}}">
                 <h2>{{comment.author.nickName}}</h2>
-                <p>
+                <p class="wrap">
                     <span class="status">
                         <span ng-if="comment.error" translate>Failed. Tap to retry.</span>
                         <span ng-if="!comment.error">
@@ -29,10 +28,10 @@
                             <span ng-if="comment.datePosted">{{comment.datePosted*1000 | amCalendar}}</span>
                         </span>
                     </span><br />
-                    {{comment.text}}
+                    <span ng-bind-html="comment.text | linky:'_blank' | emoticonize"></span>
                 </p>
             </a>
-        </div>
+        </resource-collection>
     </ion-content>
 
     <ion-footer-bar keyboard-attach class="bar-stable">
@@ -40,11 +39,11 @@
             <label class="item-input-wrapper">
                 <input
                         type="text"
-                        placeholder="{{'Your message' | translate}}"
+                        placeholder="{{'Write a comment...' | translate}}"
                         ng-model="newComment.text" />
             </label>
             <button class="button button-clear" type="submit" ng-disabled="newComment.text.length < 1" translate>
-                Send
+                Save Comment
             </button>
         </form>
     </ion-footer-bar>

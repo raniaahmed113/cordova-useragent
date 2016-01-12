@@ -2,9 +2,11 @@
     <ion-nav-buttons side="right">
         <button class="button" ng-click="openPostComposer()"><i class="icon ion-compose"></i></button>
     </ion-nav-buttons>
+
     <ion-content class="wall">
         <resource-collection list="posts">
             <ion-refresher pulling-text="{{'Pull to refresh..' | translate}}" on-refresh="doRefresh()"></ion-refresher>
+
             <div class="list card" ng-repeat="post in posts">
                 <a class="item item-avatar" href="#/users/{{post.author.id}}">
                     <img ng-src="{{post.author.profilePhoto | profilePhotoUrl:post.author.gender}}">
@@ -13,7 +15,11 @@
                 </a>
 
                 <div class="item item-body">
-                    <p>{{post.body}}</p>
+                    <a ng-if="post.video" class="embed" href="https://{{post.video.link}}" target="_blank">
+                        <img class="full-image" ng-src="{{post.video.thumbs[0]}}" alt="" />
+                        <h4>{{post.video.title}}</h4>
+                    </a>
+                    <p ng-bind-html="post.body | linky:'_blank' | emoticonize"></p>
                     <p>
                         <a href="#/chatRooms/{{chatRoom.id}}/posts/{{post.id}}" class="subdued" translate="%u comment" translate-plural="%u comments" translate-n="post.cntComments"></a>
                     </p>
@@ -24,10 +30,10 @@
                         <i class="icon ion-chatbox"></i>
                         <span translate>Replay Shout</span>
                     </a>
-                    <a class="tab-item" href="#">
+                    <!--<a class="tab-item" href="#">
                         <i class="icon ion-alert-circled"></i>
                         <span translate>Improper post</span>
-                    </a>
+                    </a>-->
                 </div>
             </div>
         </resource-collection>
