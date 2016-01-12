@@ -35,6 +35,7 @@ var switchFlavor = function(projectId, appVersion) {
         fs.readFileSync('./config.tpl.js', { encoding: 'utf8' })
             .replace(/\$apiClientId/, cfg.apiClientId)
             .replace(/\$languages/, JSON.stringify(cfg.languages))
+            .replace(/\$fbAppId/, cfg.fbAppId)
     );
 
     // Compile config file for Cordova
@@ -48,6 +49,15 @@ var switchFlavor = function(projectId, appVersion) {
             .replace(/{\$appDesc}/, cfg.desc)
             .replace(/{\$emailSupport}/, cfg.author.email)
             .replace(/{\$url}/, cfg.author.href)
+    );
+
+    // Compile config file for Cordova plugins
+    fs.writeFileSync(
+        './plugins/fetch.json',
+
+        fs.readFileSync('./plugins/fetch.json', { encoding: 'utf8' })
+            .replace(/"APP_ID": "(\d+)"/, '"APP_ID": "' + cfg.fbAppId + '"')
+            .replace(/"APP_NAME": "(.*?)"/, '"APP_NAME": "' + cfg.name + '"')
     );
 
     fs.writeFileSync(

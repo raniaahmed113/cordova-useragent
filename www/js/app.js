@@ -1,5 +1,5 @@
 angular.module('hotvibes', [
-    'ionic','ionic.service.core',  'ionic.service.push',
+    'ionic', 'ionic.service.core', 'ionic.service.push', 'ngCordova',
     'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
     'hotvibes.config', 'hotvibes.routes', 'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
@@ -66,7 +66,7 @@ angular.module('hotvibes', [
     .config(function(
         $stateProvider, $translateProvider, $urlRouterProvider, $httpProvider,
         $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/,
-        ngFabFormProvider
+        $cordovaFacebookProvider, ngFabFormProvider, Config
     ) {
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
@@ -137,6 +137,11 @@ angular.module('hotvibes', [
                 el.after(compiledAlert);
             }
         });
+
+        // Configure FB
+        if (!window.cordova) {
+            $cordovaFacebookProvider.browserInit(Config.FB_APP_ID);
+        }
     })
 
     .run(function($injector, $ionicPlatform, $ionicModal, $translate, $rootScope, amMoment, AuthService, Config) {

@@ -204,19 +204,13 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             return currentUser != null;
         };
 
-        this.doLogin = function(username, password) {
+        function login(authMethod, loginParams) {
             var self = this,
                 deferred = $q.defer(),
                 User = $injector.get('User');
 
-            Api.request().post(Config.API_URL_BASE + 'auth/login', {
-                    username: username,
-                    password: password,
-                    grant_type: 'password',
-                    client_id: Config.API_CLIENT_ID,
-                    client_secret: ''
-                })
-                .success(function(response, status, headers, config) {
+            Api.request().post(Config.API_URL_BASE + 'auth/' + authMethod, loginParams)
+                .success(function(response) {
                     // Login successful
                     setAccessToken(response['access_token']);
 
@@ -240,7 +234,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                                 deferred.resolve(user);
 
                             } catch(e) {
-                                console.error(e);
                                 deferred.reject(e);
                             }
                         },
@@ -250,6 +243,20 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 .error(deferred.reject);
 
             return deferred.promise;
+        }
+
+        this.doLogin = function(username, password) {
+            return login('login', {
+                username: username,
+                password: password,
+                grant_type: 'password',
+                client_id: Config.API_CLIENT_ID,
+                client_secret: ''
+            });
+        };
+
+        this.loginWithFb = function(accessToken) {
+            return login('fb', { accessToken: accessToken });
         };
 
         this.submitRegistration = function(data) {

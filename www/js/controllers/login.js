@@ -1,7 +1,7 @@
 angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
-        $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate,
+        $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate, $cordovaFacebook,
         __, AuthService, DataMap, Config, Api
     ) {
         var pixelDensitySuffix = '';
@@ -23,8 +23,8 @@ angular.module('hotvibes.controllers')
 
             AuthService.doLogin($scope.loginData.username, $scope.loginData.password).then(
                 function() {
-                    $ionicLoading.hide();
                     $state.go('inside.users').then(function() {
+                        $ionicLoading.hide();
                         delete $scope.loginData.password;
                     });
                 },
@@ -37,6 +37,39 @@ angular.module('hotvibes.controllers')
                     });
                 }
             );
+        };
+
+        $scope.loginWithFb = function() {
+            $ionicLoading.show({ template: __("Please wait") + '..'});
+
+            $cordovaFacebook.login([ 'email' ])
+                .then(function(response) {
+                    if (response.status != 'connected') {
+                        // Ignore
+                        return;
+                    }
+
+                    AuthService.loginWithFb(response.authResponse.accessToken)
+                        .then(
+                            function(response) {
+                                $state.go('inside.users').then(function() {
+                                    $ionicLoading.hide();
+                                    delete $scope.loginData.password;
+                                });
+                            },
+                            function(error) {
+                                $ionicLoading.hide();
+
+                                $ionicPopup.alert({
+                                    title: __("Something's wrong"),
+                                    template: Api.translateErrorCode(error.code)
+                                });
+                            }
+                        );
+
+                }, function(error) {
+                    $ionicLoading.hide();
+                });
         };
 
         $scope.countries = DataMap.country;

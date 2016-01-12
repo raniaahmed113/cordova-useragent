@@ -7,7 +7,8 @@
       "email": "support@flirtas.lt"
     },
     "languages": ["lt"],
-    "apiClientId": 1
+    "apiClientId": 1,
+    "fbAppId": 150080468451846
   },
 
   "lt.vertex.flirts": {
@@ -18,7 +19,8 @@
       "email": "support@flirts.lv"
     },
     "languages": ["lv", "ru"],
-    "apiClientId": 2
+    "apiClientId": 2,
+    "fbAppId": 292406547510577
   },
 
   "lt.vertex.flirtak": {
@@ -29,7 +31,8 @@
       "email": "support@flirtak.pl"
     },
     "languages": ["pl"],
-    "apiClientId": 3
+    "apiClientId": 3,
+    "fbAppId": 463787470303781
   },
 
   "lt.vertex.flertik": {
@@ -40,7 +43,8 @@
       "email": "support@flertik.hr"
     },
     "languages": ["hr"],
-    "apiClientId": 4
+    "apiClientId": 4,
+    "fbAppId": 368641053226058
   },
 
   "me.vertex.hotvibes": {
@@ -51,6 +55,7 @@
       "email": "support@hotvibes.com"
     },
     "languages": ["en"],
-    "apiClientId": 5
+    "apiClientId": 5,
+    "fbAppId": 104103746299996
   }
 }

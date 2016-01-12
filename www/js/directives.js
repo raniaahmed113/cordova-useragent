@@ -68,6 +68,7 @@ angular.module('hotvibes.directives', [])
                 });
 
                 var fetch = function() {
+                    // FIXME: value is sometimes undefined
                     var config = $scope.list.$promise.$$state.value.config;
                     config.params.page = $scope.currPage;
 

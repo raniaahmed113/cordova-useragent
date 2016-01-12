@@ -25,7 +25,8 @@
     "org.apache.cordova.device",
     "org.apache.cordova.console",
     "com.ionic.keyboard",
-    "phonegap-plugin-push"
+    "phonegap-plugin-push",
+    "phonegap-facebook-plugin"
   ],
   "cordovaPlatforms": [
     "ios",
