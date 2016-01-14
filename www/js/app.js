@@ -17,7 +17,8 @@ angular.module('hotvibes', [
         IMAGE_SIZE_INVALID: 109,
         INVALID_INPUT: 110,
         EMAIL_ALREADY_TAKEN: 111,
-        USERNAME_ALREADY_TAKEN: 112
+        USERNAME_ALREADY_TAKEN: 112,
+        NO_SUCH_USER: 113
     })
 
     // IMPORTANT: after adding a new error code here - add the error message to services.js

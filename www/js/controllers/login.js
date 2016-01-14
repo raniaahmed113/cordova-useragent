@@ -2,7 +2,7 @@ angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
         $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate, $cordovaFacebook,
-        __, AuthService, DataMap, Config, Api
+        __, AuthService, DataMap, Config, Api, ErrorCode
     ) {
         var pixelDensitySuffix = '';
 
@@ -42,34 +42,62 @@ angular.module('hotvibes.controllers')
         $scope.loginWithFb = function() {
             $ionicLoading.show({ template: __("Please wait") + '..'});
 
-            $cordovaFacebook.login([ 'email' ])
-                .then(function(response) {
+            function onError(errCode) {
+                $ionicLoading.hide();
+
+                $ionicPopup.alert({
+                    title: __("Something's wrong"),
+                    template: Api.translateErrorCode(errCode)
+                });
+            }
+
+            function onNewAccount() {
+                $cordovaFacebook.api("me", ["email"]).then(
+                    function(fbData) {
+                        $ionicLoading.hide();
+
+                        //fbData.location.name = "Vilnius, Lithuania"
+                        $scope.registration.data.email = fbData.email;
+                        $scope.registration.data.gender = fbData.gender;
+                        $scope.registration.data.birthday = new Date(fbData.birthday);
+                        $scope.registration.modal.show();
+                    },
+                    function(error) {
+                        // error
+                    }
+                );
+            }
+
+            function onConnectedToFb(accessToken) {
+                AuthService.loginWithFb(accessToken).then(
+                    function() {
+                        $state.go('inside.users').then(function() {
+                            $ionicLoading.hide();
+                            delete $scope.loginData.password;
+                        });
+                    },
+                    function(error) {
+                        if (error && error.code && error.code == ErrorCode.NO_SUCH_USER) {
+                            onNewAccount();
+                            return;
+                        }
+
+                        onError(error.code);
+                    }
+                );
+            }
+
+            $cordovaFacebook.login([ 'email' ]).then(
+                function(response) {
                     if (response.status != 'connected') {
                         // Ignore
                         return;
                     }
 
-                    AuthService.loginWithFb(response.authResponse.accessToken)
-                        .then(
-                            function() {
-                                $state.go('inside.users').then(function() {
-                                    $ionicLoading.hide();
-                                    delete $scope.loginData.password;
-                                });
-                            },
-                            function(error) {
-                                $ionicLoading.hide();
-
-                                $ionicPopup.alert({
-                                    title: __("Something's wrong"),
-                                    template: Api.translateErrorCode(error.code)
-                                });
-                            }
-                        );
-
-                }, function(error) {
-                    $ionicLoading.hide();
-                });
+                    onConnectedToFb(response.authResponse.accessToken);
+                },
+                onError
+            );
         };
 
         $scope.countries = DataMap.country;
