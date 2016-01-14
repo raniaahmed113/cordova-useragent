@@ -51,7 +51,7 @@ angular.module('hotvibes.controllers')
 
                     AuthService.loginWithFb(response.authResponse.accessToken)
                         .then(
-                            function(response) {
+                            function() {
                                 $state.go('inside.users').then(function() {
                                     $ionicLoading.hide();
                                     delete $scope.loginData.password;
