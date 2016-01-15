@@ -51,42 +51,6 @@ angular.module('hotvibes.controllers')
                 });
             }
 
-            function onNewAccount() {
-                $cordovaFacebook.api("me", ["email"]).then(
-                    function(fbData) {
-                        $ionicLoading.hide();
-
-                        //fbData.location.name = "Vilnius, Lithuania"
-                        $scope.registration.data.email = fbData.email;
-                        $scope.registration.data.gender = fbData.gender;
-                        $scope.registration.data.birthday = new Date(fbData.birthday);
-                        $scope.registration.modal.show();
-                    },
-                    function(error) {
-                        // error
-                    }
-                );
-            }
-
-            function onConnectedToFb(accessToken) {
-                AuthService.loginWithFb(accessToken).then(
-                    function() {
-                        $state.go('inside.users').then(function() {
-                            $ionicLoading.hide();
-                            delete $scope.loginData.password;
-                        });
-                    },
-                    function(error) {
-                        if (error && error.code && error.code == ErrorCode.NO_SUCH_USER) {
-                            onNewAccount();
-                            return;
-                        }
-
-                        onError(error.code);
-                    }
-                );
-            }
-
             $cordovaFacebook.login([ 'email' ]).then(
                 function(response) {
                     if (response.status != 'connected') {
@@ -94,7 +58,17 @@ angular.module('hotvibes.controllers')
                         return;
                     }
 
-                    onConnectedToFb(response.authResponse.accessToken);
+                    AuthService.loginWithFb(response.authResponse.accessToken).then(
+                        function() {
+                            $state.go('inside.users').then(function() {
+                                $ionicLoading.hide();
+                                delete $scope.loginData.password;
+                            });
+                        },
+                        function(error) {
+                            onError(error.code);
+                        }
+                    );
                 },
                 onError
             );
