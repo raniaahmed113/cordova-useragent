@@ -10,7 +10,7 @@
     "ionic-contrib-tinder-cards": "https://github.com/Bixev/ionic-ion-tinder-cards.git",
     "angular-resource": "~1.4.8",
     "ionic-platform-web-client": "~0.2.1",
-    "facebook-connect-plugin": "https://cdn.rawgit.com/Wizcorp/phonegap-facebook-plugin/master/facebookConnectPlugin.js",
+    "facebook-connect-plugin": "git@git.vertex.lt:bower-packages/facebook-connect-plugin.git",
     "ngCordova": "~0.1.23-alpha"
   },
   "devDependencies": {}

@@ -51,7 +51,7 @@ angular.module('hotvibes.controllers')
                 });
             }
 
-            $cordovaFacebook.login([ 'email' ]).then(
+            $cordovaFacebook.login([ 'user_birthday', 'user_location' ]).then(
                 function(response) {
                     if (response.status != 'connected') {
                         // Ignore
