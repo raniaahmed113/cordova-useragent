@@ -2,7 +2,7 @@ angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
         $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate, $cordovaFacebook,
-        __, AuthService, DataMap, Config, Api, ErrorCode
+        __, AuthService, DataMap, Config, Api
     ) {
         var pixelDensitySuffix = '';
 

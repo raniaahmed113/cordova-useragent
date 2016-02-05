@@ -34,7 +34,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 return;
             }
 
-            console.log('currUser has changed');
             AuthService.setCurrentUser(newUser);
 
         }, true);
@@ -46,7 +45,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             }
 
             var user = $ionicUser.current();
-            var userId = (Config.IS_LIVE_DB ? "" : "dev-") + $scope.currUser.id;
+            var userId = $scope.currUser.id;
 
             if (user.id != userId) {
                 if (!user.isFresh()) {
