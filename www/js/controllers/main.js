@@ -57,6 +57,18 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             $ionicPush.init({
                 debug: false,
+                ios: {
+                    categories: {
+                        newMessage: {
+                            yes: {
+                                title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
+                            },
+                            no: {
+                                title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
+                            }
+                        }
+                    }
+                },
                 onNotification: function(notification) {
                     PushNotificationHandler.handle(notification);
                 },
