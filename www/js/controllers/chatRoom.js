@@ -89,7 +89,10 @@ angular.module('hotvibes.controllers')
         };
     })
 
-    .controller('ChatRoomPostCtrl', function($scope, $stateParams, $ionicScrollDelegate, ChatRoomPost, ChatRoomPostComment) {
+    .controller('ChatRoomPostCtrl', function(
+        $window, $scope, $stateParams, $ionicPopup, $ionicPosition, $ionicScrollDelegate,
+        __, Api, ChatRoomPost, ChatRoomPostComment
+    ) {
         $scope.post = ChatRoomPost.get({
             roomId: $stateParams.roomId,
             id: $stateParams.id,
@@ -127,15 +130,29 @@ angular.module('hotvibes.controllers')
             // Clear input after sending
             $scope.newComment.text = '';
 
-            $ionicScrollDelegate.scrollTop(true);
+            // TODO: broadcast an event, which would increment the comment count in the previous (master) post list view
+            var newCommentPos = $ionicPosition.position(angular.element(
+                document.getElementById('list-comments').firstElementChild.firstElementChild // first comment element
+            ));
+
+            $ionicScrollDelegate.scrollTo(newCommentPos.left, newCommentPos.top, true);
 
             comment.$save().then(
                 function() {
+                    // Success
                     comment.datePosted = (new Date().getTime() / 1000);
                 },
-                function() {
+                function(error) {
+                    // Failed
                     var index = $scope.comments.indexOf(comment);
                     $scope.comments.splice(index, 1);
+
+                    $ionicPopup.alert({
+                        title: __("Something's wrong"),
+                        template: error.data
+                            ? Api.translateErrorCode(error.data.code)
+                            : __("We're sorry, but something went wrong. Please try again later.")
+                    });
                 }
             );
         };

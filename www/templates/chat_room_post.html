@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <resource-collection list="comments">
+        <resource-collection id="list-comments" list="comments">
             <a ng-repeat="comment in comments" class="item item-avatar" href="#/users/{{comment.author.id}}">
                 <img ng-src="{{comment.author.profilePhoto | profilePhotoUrl:comment.author.gender}}">
                 <h2>{{comment.author.nickName}}</h2>
