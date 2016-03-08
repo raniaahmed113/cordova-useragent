@@ -414,7 +414,13 @@ angular.module('hotvibes.controllers')
 
         $scope.$on('$ionicView.afterEnter', function() {
             filePicker = document.querySelector('ion-view[nav-view="active"] #file-picker');
-            filePicker.removeEventListener('change');
+
+            if (filePicker.hasAttribute('ready')) {
+                // Was set-up already
+                return;
+            }
+
+            filePicker.setAttribute('ready', 'true');
             filePicker.addEventListener('change', function(event) {
                 $ionicLoading.show({ template: __('Uploading') + '..' });
 
