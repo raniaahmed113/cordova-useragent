@@ -5,6 +5,7 @@
         <span ng-if="error.message">{{error.message}}</span>
         <span ng-if="!error.message" translate>Sorry, some nasty error prevented us from showing you this page</span>
         <i class="icon {{error.icon || 'ion-close-circled'}}"></i>
+        <button class="button button-block button-stable" ng-click="retry()" translate>Try again</button>
     </div>
 
     <ion-spinner ng-show="!error && promise.$$state.status < 1"></ion-spinner>

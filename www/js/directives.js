@@ -67,12 +67,14 @@ angular.module('hotvibes.directives', [])
                     $scope.promise = deferred.promise;
                 });
 
+                /**
+                 * @returns {promise}
+                 */
                 var fetch = function() {
-                    // FIXME: value is sometimes undefined
-                    var config = $scope.list.$promise.$$state.value.config;
+                    var config = $scope.list.$promise.$$state.value.config; // FIXME: value is sometimes undefined
                     config.params.page = $scope.currPage;
 
-                    $resource(config.url).query(
+                    return $resource(config.url).query(
                         config.params,
 
                         function(response) {
@@ -80,7 +82,9 @@ angular.module('hotvibes.directives', [])
 
                             // Append/overwrite rows
                             for (var i=0; i<response.resource.length; i++) {
-                                $scope.list[lastIndex + i] = $scope.subProperty ? response.resource[i][$scope.subProperty] : response.resource[i];
+                                $scope.list[lastIndex + i] = $scope.subProperty
+                                    ? response.resource[i][$scope.subProperty]
+                                    : response.resource[i];
                             }
 
                             // Overwrite meta-data
@@ -91,12 +95,17 @@ angular.module('hotvibes.directives', [])
                         },
 
                         onError
-                    );
+                    ).$promise;
                 };
 
                 $scope.loadMore = function() {
                     $scope.currPage++;
                     fetch();
+                };
+
+                $scope.retry = function() {
+                    $scope.error = false;
+                    $scope.promise = fetch();
                 };
             }
         };
