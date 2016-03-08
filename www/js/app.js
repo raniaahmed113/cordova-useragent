@@ -4,7 +4,7 @@ angular.module('hotvibes', [
     'hotvibes.config', 'hotvibes.routes', 'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])
 
-    .constant('ErrorCode', {
+    .constant('ErrorCode', { // IMPORTANT: after adding a new error code here - add the error message to services.js
         INVALID_CREDENTIALS: 100,
         NOT_ENOUGH_CREDITS: 101,
         VIP_REQUIRED: 102,
@@ -20,8 +20,6 @@ angular.module('hotvibes', [
         USERNAME_ALREADY_TAKEN: 112,
         NO_SUCH_USER: 113
     })
-
-    // IMPORTANT: after adding a new error code here - add the error message to services.js
 
     .constant('Rule', {
         MIN_VALUE: 'minValue'

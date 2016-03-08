@@ -288,10 +288,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                         config.headers['Viewport-Width'] = $window.innerWidth;
                     }
                 }
-
-                if (Config.XDEBUG) {
-                    config.url += (config.url.indexOf('?') > -1 ? '&' : '?') + "XDEBUG_SESSION_START=PHPSTORM";
-                }
             }
 
             return config;

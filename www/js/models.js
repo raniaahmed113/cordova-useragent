@@ -191,31 +191,28 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'users/:userId/duelInvites', { userId: '@userId' });
     })
 
-    /*.factory('Notification', function($resource, Config) {
-        var model = $resource(Config.API_URL_BASE + 'me/notifications');
-
-        model.prototype.getBody = function() {
-            switch (this.type) {
-                case 'commentWallPost':
-                    return this.sender.nickName + ' has commented on your wall post.';
-
-                case 'addGift':
-                    return 'You have received a gift from ' + this.sender.nickName;
-
-                case 'friendAccept':
-                    return '<a href="#/users/' + this.sender.id + '">' + this.sender.nickName + '</a>' +
-                        ' has accepted your friendship request.';
-
-                default:
-                    return '...';
-            }
-        };
-
-        return model;
-    })*/
-
     .factory('__', function($translate) {
         return $translate.instant;
+    })
+
+    .factory('gettextCatalog', function() {
+        return {
+
+            /**
+             * gettextCatalog.getPlural will be picked-up by the keyword extractor of angular-gettext (when using 'gulp translate-extract')
+             * The actual translation will take place when the following HTML will be parsed
+             * More info: https://angular-gettext.rocketeer.be/dev-guide/annotate-js/
+             *
+             * @param {int} num
+             * @param {string} keySingular
+             * @param {string} keyPlural
+             *
+             * @returns {string}
+             */
+            getPlural: function(num, keySingular, keyPlural) {
+                return '<span translate="' + keySingular + '" translate-plural="' + keyPlural + '" translate-n="' + num + '"></span>';
+            }
+        }
     })
 
     .factory('CityPicker', function($q, $ionicModal, $rootScope, City) {
