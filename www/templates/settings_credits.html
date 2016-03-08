@@ -1,8 +1,13 @@
 <ion-view title="{{'My Credits' | translate}}" xmlns="http://www.w3.org/1999/html">
     <ion-content class="credits">
         <h4 class="center"><span translate>Credit balance</span>:</h4>
-            <h1 class="center">
-                <i class="icon icon-kreditai"></i> {{currUser.credits}}
-            </h1>
+        <h1 class="center">
+            <i class="icon icon-kreditai"></i> {{currUser.credits}}
+        </h1>
+
+        <div ng-if="billingSupported" class="center">
+            <ion-spinner ng-if="!creditOptions"></ion-spinner>
+            <button ng-repeat="option in creditOptions" ng-click="option.buy()" translate="Buy %u credit" translate-plural="Buy %u credits" translate-n="option.amount" class="button button-block button-positive"></button>
+        </div>
     </ion-content>
 </ion-view>

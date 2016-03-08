@@ -179,8 +179,8 @@ angular.module('hotvibes.routes', [])
                 url: "/settings/credits",
                 views: {
                     main: {
-                        templateUrl: "templates/settings_credits.html"/*,
-                         controller: 'SettingsProfileCtrl'*/
+                        templateUrl: "templates/settings_credits.html",
+                         controller: 'SettingsCreditsCtrl'
                     }
                 }
             })
