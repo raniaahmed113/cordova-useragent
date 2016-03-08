@@ -169,8 +169,7 @@ gulp.task('translate', ['translate-extract'], function() {
     locales.forEach(function(loc) {
         fs.createReadStream('./tmp/i18n/all.po')
             .pipe(request.post({
-                // FIXME: use live url
-                url: 'http://vertex-flirtas-jm.vagrantshare.com/install/translations/' + loc,
+                url: 'https://www.hotvibes.com/install/translations/' + loc,
                 headers: {
                     'Lc-Debug': '9K^Sa7Rslu@Q31vzCW3E%cYEflU*4ZBd'
                 }
