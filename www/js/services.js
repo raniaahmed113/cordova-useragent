@@ -119,7 +119,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 return;
             }
 
-            if (notification.app.asleep) {
+            if (!notification.additionalData.foreground) {
                 // If we receive this as a result of user clicking on the notification while the app is in the background..
                 // .. redirect to a relevant page
 
