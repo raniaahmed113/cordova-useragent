@@ -248,7 +248,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             return deferred.promise;
         }
 
-        this.doLogin = function(username, password) {
+        this.loginWithCredentials = function(username, password) {
             return login('login', {
                 username: username,
                 password: password

@@ -21,22 +21,23 @@ angular.module('hotvibes.controllers')
         $scope.login = function() {
             $ionicLoading.show({ template: __("Please wait") + '..'});
 
-            AuthService.doLogin($scope.loginData.username, $scope.loginData.password).then(
-                function() {
-                    $state.go('inside.users').then(function() {
-                        $ionicLoading.hide();
-                        delete $scope.loginData.password;
-                    });
-                },
+            AuthService.loginWithCredentials($scope.loginData.username, $scope.loginData.password)
+                .then(
+                    function() {
+                        $state.go('inside.users').then(function() {
+                            $ionicLoading.hide();
+                            delete $scope.loginData.password;
+                        });
+                    },
 
-                function(error) {
-                    $ionicLoading.hide();
-                    $ionicPopup.alert({
-                        title: __("Something's wrong"),
-                        template: Api.translateErrorCode(error.code ? error.code : 0)
-                    });
-                }
-            );
+                    function(error) {
+                        $ionicLoading.hide();
+                        $ionicPopup.alert({
+                            title: __("Something's wrong"),
+                            template: Api.translateErrorCode(error.code ? error.code : 0)
+                        });
+                    }
+                );
         };
 
         $scope.loginWithFb = function() {
@@ -58,17 +59,18 @@ angular.module('hotvibes.controllers')
                         return;
                     }
 
-                    AuthService.loginWithFb(response.authResponse.accessToken).then(
-                        function() {
-                            $state.go('inside.users').then(function() {
-                                $ionicLoading.hide();
-                                delete $scope.loginData.password;
-                            });
-                        },
-                        function(error) {
-                            onError(error.code);
-                        }
-                    );
+                    AuthService.loginWithFb(response.authResponse.accessToken)
+                        .then(
+                            function() {
+                                $state.go('inside.users').then(function() {
+                                    $ionicLoading.hide();
+                                    delete $scope.loginData.password;
+                                });
+                            },
+                            function(error) {
+                                onError(error.code);
+                            }
+                        );
                 },
                 function(error) {
                     $ionicLoading.hide();
