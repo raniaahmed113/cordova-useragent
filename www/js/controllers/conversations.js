@@ -50,7 +50,7 @@ angular.module('hotvibes.controllers')
             // TODO: support for attachments
         });
 
-        $scope.$on('newMessage', function(event, msg) {
+        $rootScope.$on('newMessage', function(event, msg) {
             $scope.messages.push(msg);
             $ionicScrollDelegate.scrollBottom(true);
         });
