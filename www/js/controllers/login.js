@@ -70,7 +70,16 @@ angular.module('hotvibes.controllers')
                         }
                     );
                 },
-                onError
+                function(error) {
+                    $ionicLoading.hide();
+
+                    if (error.errorCode == '4201') {
+                        // Login cancelled by the user - do nothing
+                        return;
+                    }
+
+                    onError();
+                }
             );
         };
 
