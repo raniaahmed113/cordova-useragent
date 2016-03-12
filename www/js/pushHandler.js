@@ -1,4 +1,4 @@
-var __ = translate; // require('translate');
+var __ = require('translate');
 
 function onNotificationReceived(notification) {
     switch (notification.type) {
@@ -9,13 +9,12 @@ function onNotificationReceived(notification) {
                 { icon: '', title: __('Replay'), callback: 'message.reply' },
                 { icon: '', title: __('Mark as read'), callback: 'message.markAsRead' }
             ];
-            return true;
+            break;
 
         case 'newQuickieYes':
             notification.message = __('Some one likes you');
-            return true;
-
-        default:
-            return true;
+            break;
     }
+
+    return true;
 }
