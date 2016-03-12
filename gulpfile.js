@@ -60,6 +60,9 @@ var switchFlavor = function(projectId, appVersion) {
             .replace(/"APP_NAME": "(.*?)"/, '"APP_NAME": "' + cfg.name + '"')
     );
 
+    // FIXME: change billing key
+    // FIXME: change FB appId/key
+
     fs.writeFileSync(
         './current.json',
 
@@ -70,6 +73,21 @@ var switchFlavor = function(projectId, appVersion) {
         })
     );
 };
+
+function switchEnvironment(envId) {
+    var env = require('./environments/' + envId + '.json');
+
+    // Compile config file for Angular
+    fs.writeFileSync(
+        './www/js/config.js',
+
+        fs.readFileSync('./www/js/config.js', { encoding: 'utf8' })
+            .replace(/API_URL_BASE: '(.*?)'/, "API_URL_BASE: '" + env.apiUrl + "'")
+    );
+
+    /*sh.exec('ionic config set app_id ' + env.ionicAppId);
+    sh.exec('ionic config set api_key ' + env.ionicApiKey);*/
+}
 
 var assembleAndroid = function(appFileName) {
     if (sh.exec('ionic build android --release').code !== 0) {
@@ -112,6 +130,34 @@ gulp.task('hr', function() {
 
 gulp.task('en', function() {
     switchFlavor('me.vertex.hotvibes');
+});
+
+gulp.task('env-local', function() {
+    switchEnvironment('local');
+});
+
+gulp.task('env-dev', function() {
+    switchEnvironment('dev');
+});
+
+gulp.task('env-prod', function() {
+    switchEnvironment('prod');
+});
+
+gulp.task('setup', function() {
+    // Install nodejs
+    // npm install
+    // bower install
+    // gulp setup
+
+    // TODO
+    // 1. Prompt for API url for local env, Ionic app id &key. Write to environments/local.json file
+
+    // 2. Call task 'lt'
+
+    // 3. Call task 'env-local'
+
+    // 4. Call task 'translate'
 });
 
 gulp.task('assemble', function() {
@@ -197,7 +243,7 @@ gulp.task('translate', ['translate-extract'], function() {
 
 gulp.task('default', ['sass']);
 
-gulp.task('sass', function (done) {
+gulp.task('sass', function(done) {
     gulp.src('./scss/ionic.app.scss')
         .pipe(sass({
             errLogToConsole: true
@@ -211,18 +257,18 @@ gulp.task('sass', function (done) {
         .on('end', done);
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
     gulp.watch(config.pathScss, ['sass']);
 });
 
-gulp.task('install', ['git-check'], function () {
+gulp.task('install', ['git-check'], function() {
     return bower.commands.install()
-        .on('log', function (data) {
+        .on('log', function(data) {
             gutil.log('bower', gutil.colors.cyan(data.id), data.message);
         });
 });
 
-gulp.task('git-check', function (done) {
+gulp.task('git-check', function(done) {
     if (!sh.which('git')) {
         console.log(
             '  ' + gutil.colors.red('Git is not installed.'),
