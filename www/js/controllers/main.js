@@ -1,10 +1,11 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('AppCtrl', function(
-        $rootScope, $scope, $state, $ionicUser, $ionicPush, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading,
-        __, AuthService, Config, PushNotificationHandler, Api
+        $rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading,
+        __, AuthService, Config, Api, PushNotificationHandler
     ) {
         $scope.logout = function() {
+            PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
             $state.go('login');
             $ionicHistory.clearCache();
@@ -46,44 +47,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         // Start listening for push notifications
         $ionicPlatform.ready(function() {
             if (!window.cordova) {
+                // Do nothing if app is running in a browser rather than as an app on an actual device
                 return;
             }
 
-            var user = $ionicUser.current();
-            var userId = $scope.currUser.id;
-
-            if (user.id != userId) {
-                if (!user.isFresh()) {
-                    user = new $ionicUser();
-                }
-
-                user.id = userId;
-            }
-
-            $ionicPush.init({
-                debug: false,
-                ios: {
-                    categories: {
-                        newMessage: {
-                            yes: {
-                                title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
-                            },
-                            no: {
-                                title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
-                            }
-                        }
-                    }
-                },
-                onNotification: function(notification) {
-                    PushNotificationHandler.handle(notification);
-                },
-                onRegister: function(data) {
-                    user.addPushToken(data.token);
-                    user.save();
-                }
-            });
-
-            $ionicPush.register();
+            PushNotificationHandler.init();
         });
 
         $scope.onError = function(response, params) {

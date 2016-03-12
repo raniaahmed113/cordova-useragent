@@ -97,10 +97,24 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('PushNotificationHandler', function($rootScope, $state) {
+    .service('PushNotificationHandler', function($rootScope, $state, AuthService) {
 
-        this.handle = function(notification) {
-            if (!notification._payload || !notification._payload._type) {
+        var push = null,
+            deviceId = null,
+            token = null;
+
+        function onDeviceRegistered(data) {
+            token = data.registrationId;
+            localStorage['deviceToken'] = token;
+
+            AuthService.getCurrentUser().registerDevice(token).then(function(device) {
+                deviceId = device.id;
+                localStorage['deviceId'] = deviceId;
+            });
+        }
+
+        function onReceivedNotification(notification) {
+            if (!notification.additionalData || !notification.additionalData._type) {
                 // Malformed notification received - do nothing
                 return;
             }
@@ -109,26 +123,79 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 // If we receive this as a result of user clicking on the notification while the app is in the background..
                 // .. redirect to a relevant page
 
-                switch (notification._payload._type) {
+                switch (notification.additionalData._type) {
                     case 'newMessage':
-                        $state.go('inside.conversations-single', { id: notification._payload.conversationId });
+                        $state.go('inside.conversations-single', { id: notification.additionalData.payload.conversationId });
                         break;
                 }
             }/* else {
-                console.log($state);
+             console.log($state);
 
-                $ionicLoading.show({
-                    template: notification.text,
-                    noBackdrop: true,
-                    duration: 1000
-                });
-            }*/
+             $ionicLoading.show({
+             template: notification.text,
+             noBackdrop: true,
+             duration: 1000
+             });
+             }*/
 
-            $rootScope.$broadcast(notification._payload._type, notification._payload);
+            $rootScope.$broadcast(notification.additionalData._type, notification.additionalData.payload);
+        }
+
+        this.init = function() {
+            token = localStorage['deviceToken'];
+            deviceId = localStorage['deviceId'];
+
+            push = PushNotification.init({
+                android: {
+                    senderID: "957136533015" // FIXME: move to config
+                }/*,
+                 ios: {
+                 alert: true,
+                 badge: true,
+                 sound: true,
+                 categories: {
+                 newMessage: {
+                 yes: {
+                 title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
+                 },
+                 no: {
+                 title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
+                 }
+                 }
+                 }
+                 },
+                 windows: {}*/
+            });
+
+            push.on('registration', onDeviceRegistered);
+            push.on('notification', onReceivedNotification);
+            /*push.on('error', function(e) {
+             // e.message
+             });*/
+        };
+
+        this.getToken = function() {
+            return token;
+        };
+
+        this.unregister = function() {
+            if (!deviceId) {
+                return;
+            }
+
+            AuthService.getCurrentUser().unregisterDevice(deviceId);
+
+            token = null;
+            deviceId = null;
+
+            localStorage.removeItem('deviceId');
+            localStorage.removeItem('deviceToken');
+
+            push.unregister();
         };
     })
 
-    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, $ionicUser, Config, Api) {
+    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, Config, Api) {
         var currentUser = null,
             accToken = null,
             self = this;

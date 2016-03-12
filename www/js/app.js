@@ -1,5 +1,5 @@
 angular.module('hotvibes', [
-    'ionic', 'ionic.service.core', 'ionic.service.push', 'ngCordova',
+    'ionic', 'ngCordova',
     'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',
     'hotvibes.config', 'hotvibes.routes', 'hotvibes.filters', 'hotvibes.controllers', 'hotvibes.services', 'hotvibes.directives'
 ])

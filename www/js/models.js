@@ -42,7 +42,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         };
     })
 
-    .factory('User', function(ApiResource, Filter) {
+    .factory('User', function(ApiResource, Filter, Device) {
         var User = ApiResource('users/:id', { id: '@id' });
 
         User.valueOf = function(object) {
@@ -64,7 +64,22 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             return object;
         };
 
+        User.prototype.registerDevice = function(token) {
+            return new Device({
+                token: token,
+                type: 'android' // FIXME: unhardcode this
+            }).$save();
+        };
+
+        User.prototype.unregisterDevice = function(id) {
+            Device.delete({ id: id });
+        };
+
         return User;
+    })
+
+    .factory('Device', function($resource, Config) {
+        return $resource(Config.API_URL_BASE + 'me/devices/:id', { id: '@id' });
     })
 
     .factory('QuickieVote', function($resource, Config) {
