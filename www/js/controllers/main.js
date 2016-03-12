@@ -20,9 +20,14 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.logout();
         });
 
-        $scope.rightMenuEnabled = $state.current.views.rightMenu ? true : false;
-        $scope.$on('$stateChangeStart', function(event, state) {
+        function checkShouldRightMenuBeEnabled(state) {
             $scope.rightMenuEnabled = state.views && state.views.rightMenu ? true : false;
+        }
+
+        checkShouldRightMenuBeEnabled($state.current);
+
+        $scope.$on('$stateChangeStart', function(event, state) {
+            checkShouldRightMenuBeEnabled(state);
         });
 
         // Load the currently-logged-in user instance from the localStorage
