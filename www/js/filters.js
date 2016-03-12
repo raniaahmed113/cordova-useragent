@@ -84,7 +84,7 @@ angular.module('hotvibes.filters', [])
             }
 
             return input.replace(rEmojis, function(match, text) {
-                return '<img src="https://cdn.flirtas.lt/img/emoticons/' + text + '.gif" alt="" />';
+                return '<img src="https://cdn.hotvibes.com/img/emoticons/' + text + '.gif" alt="" />';
             });
         };
     });
