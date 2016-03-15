@@ -21,8 +21,8 @@ angular.module('hotvibes.directives', [])
                 subProperty: '='
             },
             templateUrl: 'templates/resource_collection.html',
-            controller: function($scope, $resource, $q, __, ErrorCode) {
-                var onError = function(response) {
+            controller: function($q, $scope, $state, $resource, $ionicNavBarDelegate, __, ErrorCode) {
+                function onError(response) {
                     $scope.error = true;
 
                     if (response.data && response.data.code) {
@@ -35,18 +35,16 @@ angular.module('hotvibes.directives', [])
                                 break;
                         }
                     }
-                };
+                }
 
                 $scope.$watch('list', function() {
+                    var deferred = $q.defer();
+
                     $scope.error = false;
                     $scope.currPage = 1;
+                    $scope.promise = deferred.promise;
 
-                    if (!$scope.promise) {
-                        $scope.promise = $scope.list.$promise;
-                    }
-
-                    var deferred = $q.defer();
-                    $scope.promise.then(
+                    $scope.list.$promise.then(
                         function(response) {
                             if ($scope.subProperty) {
                                 var Resource = $resource(response.config.url + '/:id', { id: '@id'});
@@ -63,15 +61,24 @@ angular.module('hotvibes.directives', [])
                             onError(error);
                         }
                     );
-
-                    $scope.promise = deferred.promise;
                 });
 
                 /**
                  * @returns {promise}
                  */
-                var fetch = function() {
-                    var config = $scope.list.$promise.$$state.value.config; // FIXME: value is sometimes undefined
+                function fetch() {
+                    var config = $scope.list.$promise.$$state.value.config;
+
+                    if (!config) {
+                        // value.config may be undefined when value is instanceof Error
+                        $state.reload().then(function() {
+                            // On entering the view show the nav-bar
+                            // Workaround for https://github.com/driftyco/ionic/issues/3852
+                            $ionicNavBarDelegate.showBar(true);
+                        });
+                        return null;
+                    }
+
                     config.params.page = $scope.currPage;
 
                     return $resource(config.url).query(
@@ -96,7 +103,7 @@ angular.module('hotvibes.directives', [])
 
                         onError
                     ).$promise;
-                };
+                }
 
                 $scope.loadMore = function() {
                     $scope.currPage++;
