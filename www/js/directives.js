@@ -79,6 +79,10 @@ angular.module('hotvibes.directives', [])
                         return null;
                     }
 
+                    if (!config.params) {
+                        config.params = {};
+                    }
+
                     config.params.page = $scope.currPage;
 
                     return $resource(config.url).query(
