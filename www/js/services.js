@@ -104,8 +104,16 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             token = null;
 
         function onDeviceRegistered(data) {
+            if (data.registrationId == token) {
+                return;
+            }
+
             token = data.registrationId;
             localStorage['deviceToken'] = token;
+
+            if (deviceId) {
+                AuthService.getCurrentUser().unregisterDevice(deviceId);
+            }
 
             AuthService.getCurrentUser().registerDevice(token).then(function(device) {
                 deviceId = device.id;
