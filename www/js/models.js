@@ -6,21 +6,6 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
             var ApiResource = $resource(url, urlParamMapping, options);
 
-            function getUrl(resource) {
-                var completeUrl = angular.copy(url);
-
-                Object.keys(urlParamMapping).forEach(function(key) {
-                    var value = urlParamMapping[key];
-                    if (value[0] == '@') {
-                        value = resource[value.substr(1)];
-                    }
-
-                    completeUrl = completeUrl.replace(new RegExp(":" + key), value);
-                });
-
-                return completeUrl;
-            }
-
             /**
              * Performs a partial update of the resource using the PATCH HTTP method.
              *
@@ -28,9 +13,24 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
              * @returns {Promise}
              */
             ApiResource.prototype.$update = function(params) {
+                function getCompleteUrl(resource) {
+                    var completeUrl = angular.copy(url);
+
+                    Object.keys(urlParamMapping).forEach(function(key) {
+                        var value = urlParamMapping[key];
+                        if (value[0] == '@') {
+                            value = resource[value.substr(1)];
+                        }
+
+                        completeUrl = completeUrl.replace(new RegExp(":" + key), value);
+                    });
+
+                    return completeUrl;
+                }
+
                 var deferred = $q.defer();
 
-                $http.patch(getUrl(this), params).then(
+                $http.patch(getCompleteUrl(this), params).then(
                     deferred.resolve, // FIXME: apply the changes after success update on API side
                     deferred.reject
                 );
@@ -78,8 +78,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return User;
     })
 
-    .factory('Device', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/devices/:id', { id: '@id' });
+    .factory('Device', function(ApiResource) {
+        return ApiResource('me/devices/:id', { id: '@id' });
     })
 
     .factory('QuickieVote', function($resource, Config) {
