@@ -405,15 +405,18 @@ angular.module('hotvibes.controllers')
     })
 
     .controller('SettingsAlbumCtrl', function(
-        $rootScope, $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
+        $q, $rootScope, $scope, $stateParams, $ionicHistory, $ionicLoading, $ionicPopover,
         __, MediaFile, Album, Rule, ErrorCode
     ) {
-        var thumbParams = 'size=w80h80';
-
         $scope.album = Album.get({
             id: $stateParams.albumId,
-            include: 'photos.url(' + thumbParams + ')'
+            include: 'photos.url(size=w80h80)'
         });
+
+        var deferred = $q.defer();
+        $scope.photos = [];
+        $scope.photos.$promise = deferred.promise;
+        $scope.album.$promise.then(deferred.resolve, deferred.reject);
 
         $scope.zoomPhoto = function(photo) {
             $scope.popover.hide();

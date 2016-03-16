@@ -11,7 +11,7 @@
     <ion-content scroll="false">
         <input type="file" accept="image/*" id="file-picker" />
 
-        <resource-collection promise="album.$promise" list="album.photos">
+        <resource-collection list="photos">
             <div class="row row-wrap">
                 <a href="#" class="thumb"
                     ng-repeat="photo in album.photos | orderBy:'isMain':true"
