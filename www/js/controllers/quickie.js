@@ -168,8 +168,8 @@ angular.module('hotvibes.controllers')
                         {
                             text: __("Get VIP"),
                             type: 'button-positive',
-                            onTap: function(e) {
-                                // TODO
+                            onTap: function() {
+                                $state.go('inside.settings-vip');
                             }
                         }
                     ]
