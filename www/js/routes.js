@@ -185,6 +185,16 @@ angular.module('hotvibes.routes', [])
                 }
             })
 
+            .state('inside.settings-vip', {
+                url: "/settings/vip",
+                views: {
+                    main: {
+                        templateUrl: "templates/settings_vip.html",
+                        controller: 'SettingsVipCtrl'
+                    }
+                }
+            })
+
             .state('inside.settings-profile', {
                 url: "/settings/profile",
                 views: {

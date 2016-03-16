@@ -1,0 +1,22 @@
+<ion-view title="{{'VIP Membership' | translate}}" xmlns="http://www.w3.org/1999/html">
+    <ion-content>
+        <h4 ng-if="currUser.isVip" class="center">
+            <span translate>Your VIP membership expires on</span>:
+            <h4 class="center positive">{{currUser.vipTill}}</h4>
+        </h4>
+
+        <div ng-if="!currUser.isVip" class="center">
+            <img src="img/buy-vip.png" alt="" class="padding" />
+
+            <div ng-if="billingSupported">
+                <ion-spinner ng-if="!subscribe"></ion-spinner>
+
+                <div ng-if="subscribe" ng-repeat="option in purchaseOptions">
+                    <button ng-click="option.buy()" class="button button-block button-positive" translate>Buy VIP membership</button>
+                    <p translate="Subscription costs %s for %s days. It is renewed automatically." translate-values="{cost: option.cost, days: option.numDays}"></p>
+                </div>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>
