@@ -23,28 +23,53 @@ angular.module('hotvibes.directives', [])
             templateUrl: 'templates/resource_collection.html',
             controller: function($q, $scope, $state, $resource, $ionicNavBarDelegate, __, ErrorCode) {
                 function onError(response) {
-                    $scope.error = true;
+                    if (!response.data) {
+                        response.data = { code: -1 };
 
-                    if (response.data && response.data.code) {
-                        switch (response.data.code) {
-                            case ErrorCode.VIP_REQUIRED:
-                                $scope.error = {
-                                    icon: 'ion-star',
-                                    message: __("Only for VIP members")
-                                };
-                                break;
-                        }
+                    } else if (!response.data.code) {
+                        response.data.code = -1;
+                    }
+
+                    switch (response.data.code) {
+                        case ErrorCode.VIP_REQUIRED:
+                            $scope.error = {
+                                icon: 'ion-star',
+                                message: __("Only for VIP members"),
+                                actions: [
+                                    {
+                                        label: __("Become a VIP member"),
+                                        class: 'button-positive',
+                                        onClick: function() {
+                                            $state.go('inside.settings-vip');
+                                        }
+                                    }
+                                ]
+                            };
+                            break;
+
+                        default:
+                            $scope.error = {
+                                icon: 'ion-close-circled',
+                                message: __("Sorry, some nasty error prevented us from showing you this page"),
+                                actions: [
+                                    {
+                                        label: __("Try again"),
+                                        onClick: function() {
+                                            $scope.error = null;
+                                            $scope.promise = fetch();
+                                        }
+                                    }
+                                ]
+                            };
+                            break;
                     }
                 }
 
                 $scope.$watch('list', function() {
-                    var deferred = $q.defer();
+                    var deferred = $q.defer(),
+                        onListResolved = $scope.promise ? $scope.promise : $scope.list.$promise;
 
-                    $scope.error = false;
-                    $scope.currPage = 1;
-                    $scope.promise = deferred.promise;
-
-                    $scope.list.$promise.then(
+                    onListResolved.then(
                         function(response) {
                             if ($scope.subProperty) {
                                 var Resource = $resource(response.config.url + '/:id', { id: '@id'});
@@ -61,6 +86,10 @@ angular.module('hotvibes.directives', [])
                             onError(error);
                         }
                     );
+
+                    $scope.error = null;
+                    $scope.currPage = 1;
+                    $scope.promise = deferred.promise;
                 });
 
                 /**
@@ -112,11 +141,6 @@ angular.module('hotvibes.directives', [])
                 $scope.loadMore = function() {
                     $scope.currPage++;
                     fetch();
-                };
-
-                $scope.retry = function() {
-                    $scope.error = false;
-                    $scope.promise = fetch();
                 };
             }
         };

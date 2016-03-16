@@ -1,11 +1,12 @@
 <div ng-transclude></div>
+
 <ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
+
 <div class="center center-vertical-margin" ng-if="list.length < 1">
     <div class="error-sign" ng-if="error">
-        <span ng-if="error.message">{{error.message}}</span>
-        <span ng-if="!error.message" translate>Sorry, some nasty error prevented us from showing you this page</span>
-        <i class="icon {{error.icon || 'ion-close-circled'}}"></i>
-        <button class="button button-block button-stable" ng-click="retry()" translate>Try again</button>
+        <span>{{error.message}}</span>
+        <i class="icon {{error.icon}}"></i>
+        <button class="button button-block {{action.class || 'button-stable'}}" ng-repeat="action in error.actions" ng-click="action.onClick()">{{action.label}}</button>
     </div>
 
     <ion-spinner ng-show="!error && promise.$$state.status < 1"></ion-spinner>
