@@ -34,11 +34,12 @@ angular.module('hotvibes.controllers')
             excludeIds = {};
 
         function loadMore() {
-            if ($scope.noMore) {
-                return;
-            }
-
             var deferred = $q.defer();
+
+            if ($scope.noMore) {
+                deferred.resolve([]);
+                return deferred.promise;
+            }
 
             members = User.query(
                 angular.extend(filter, {
