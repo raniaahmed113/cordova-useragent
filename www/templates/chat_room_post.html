@@ -42,7 +42,7 @@
                         placeholder="{{'Write a comment...' | translate}}"
                         ng-model="newComment.text" />
             </label>
-            <button class="button button-clear" type="submit" ng-disabled="newComment.text.length < 1" translate>
+            <button class="button button-clear" type="submit" ng-disabled="!newComment.text" translate>
                 Save Comment
             </button>
         </form>
