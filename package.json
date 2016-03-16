@@ -32,7 +32,8 @@
       },
       "locator": "cc.fovea.cordova.purchase",
       "id": "cc.fovea.cordova.purchase"
-    }
+    },
+    "cordova-plugin-splashscreen"
   ],
   "cordovaPlatforms": [
     "ios",
