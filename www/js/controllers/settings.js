@@ -62,6 +62,7 @@ angular.module('hotvibes.controllers')
         // FIXME: don't show 'unconfirmed' alert if field is empty or dirty
         $scope.confirmPhone = function() {
             $scope.confirmPhonePrompt = { code: null };
+
             $ionicPopup.prompt({
                 title: __('Confirm your phone number'),
                 subTitle: __('Your phone number is unconfirmed. We send you SMS with passwod. Check your phone and enter password below.'),
