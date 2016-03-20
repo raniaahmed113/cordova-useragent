@@ -29,8 +29,8 @@
                 <button class="icon ion-close-round no" ng-click="sayNo()"></button>
             </span>
             <span class="small">
-                <button class="icon ion-person user" ui-sref="inside.user({ userId: users[0].id })"></button>
-                <button class="icon ion-ios-chatbubble sms" ui-sref="inside.conversations-single({ id: users[0].id })"></button>
+                <button class="icon ion-person user" ng-click="openProfile()"></button>
+                <button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button>
             </span>
             <span>
                 <button class="icon ion-heart yes" ng-click="sayYes()"></button>

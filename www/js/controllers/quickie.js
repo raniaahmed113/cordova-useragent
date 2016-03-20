@@ -1,6 +1,9 @@
 angular.module('hotvibes.controllers')
 
-    .controller('QuickieSwipeCtrl', function($scope, $q, Api, User, QuickieVote, TDCardDelegate) {
+    .controller('QuickieSwipeCtrl', function(
+        $state, $scope, $ionicPopup, $q,
+        __, Api, User, QuickieVote, TDCardDelegate
+    ) {
         $scope.photosLoaded = $scope.photosTotal = 0;
         $scope.firstPhotoLoaded = false;
 
@@ -150,6 +153,48 @@ angular.module('hotvibes.controllers')
 
         $scope.sayNo = function() {
             TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('left');
+        };
+
+        function canPerformAction() {
+            if ($scope.users.length < 1) {
+                return false;
+            }
+
+            if (!$scope.currUser.isVip) {
+                $ionicPopup.alert({
+                    title: "VIP",
+                    template: __("Only for VIP members"),
+                    buttons: [
+                        { text: __("Cancel") },
+                        {
+                            text: __("Get VIP"),
+                            type: 'button-positive',
+                            onTap: function() {
+                                $state.go('inside.settings-vip');
+                            }
+                        }
+                    ]
+                });
+                return false;
+            }
+
+            return true;
+        }
+
+        $scope.openChat = function() {
+            if (!canPerformAction()) {
+                return;
+            }
+
+            $state.go('inside.conversations-single', { id: $scope.users[0].id });
+        };
+
+        $scope.openProfile = function() {
+            if (!canPerformAction()) {
+                return;
+            }
+
+            $state.go('inside.user', { userId: $scope.users[0].id });
         };
     })
 
