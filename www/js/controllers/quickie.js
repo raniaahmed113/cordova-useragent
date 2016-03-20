@@ -93,16 +93,20 @@ angular.module('hotvibes.controllers')
             return deferred.promise;
         }
 
-        loadMore().then(
-            function() {
-                if (members.length < 1) {
-                    return;
-                }
+        function submitVote(vote) {
+            vote.$save().finally(function() {
+                delete excludeIds[vote.voteForUserId];
+            });
+        }
 
-                $scope.users = members.splice(0, cardsOnScreen);
-                $scope.photosTotal += $scope.users.length;
+        loadMore().then(function() {
+            if (members.length < 1) {
+                return;
             }
-        );
+
+            $scope.users = members.splice(0, cardsOnScreen);
+            $scope.photosTotal += $scope.users.length;
+        });
 
         $scope.onPhotoLoaded = function(user, $index) {
             user.loadedFully = true;
@@ -130,20 +134,13 @@ angular.module('hotvibes.controllers')
             });
 
             $scope.cardPos = 0;
+            submitVote(quickieVote);
 
-            quickieVote.$save(
-                function(vote) {
-                    delete excludeIds[vote.voteForUserId];
-                }
-            );
-
-            getNext().then(
-                function(nextMember) {
-                    excludeIds[nextMember.id] = true;
-                    $scope.users.push(nextMember);
-                    $scope.photosTotal++;
-                }
-            );
+            getNext().then(function(nextMember) {
+                excludeIds[nextMember.id] = true;
+                $scope.users.push(nextMember);
+                $scope.photosTotal++;
+            });
         };
 
         $scope.sayYes = function() {
@@ -202,7 +199,7 @@ angular.module('hotvibes.controllers')
         $scope.title = __('Who said YES to me');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
-            include: 'voter.profilePhoto.url(size=w80h80)'
+            include: 'voter.profilePhoto.url(size=w80h80)' // FIXME: use 'require' here to exclude deleted accounts
         });
     })
 
@@ -211,6 +208,6 @@ angular.module('hotvibes.controllers')
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
             matched: true,
-            include: 'voter.profilePhoto.url(size=w80h80)'
+            include: 'voter.profilePhoto.url(size=w80h80)' // FIXME: use 'require' here to exclude deleted accounts
         });
     });
