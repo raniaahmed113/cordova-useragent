@@ -4,9 +4,9 @@
     </ion-nav-buttons>
 
     <ion-content class="wall">
-        <resource-collection list="posts">
-            <ion-refresher pulling-text="{{'Pull to refresh..' | translate}}" on-refresh="doRefresh()"></ion-refresher>
+        <ion-refresher pulling-text="{{'Pull to refresh..' | translate}}" on-refresh="doRefresh()"></ion-refresher>
 
+        <resource-collection list="posts">
             <div class="list card" ng-repeat="post in posts">
                 <a class="item item-avatar" href="#/users/{{post.author.id}}">
                     <img ng-src="{{post.author.profilePhoto | profilePhotoUrl:post.author.gender}}">
