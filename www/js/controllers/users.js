@@ -69,6 +69,8 @@ angular.module('hotvibes.controllers')
         $scope.title = __('Guests');
         $scope.subProperty = 'guest';
         $scope.users = Guest.query({ include: 'guest.profilePhoto.url(size=w80h80)' });
+
+        $scope.currUser.cacheCounts.cntNewGuests = 0;
     })
 
     .controller('FriendsCtrl', function($scope, __, Friend) {

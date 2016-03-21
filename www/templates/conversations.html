@@ -4,9 +4,9 @@
             <ion-list>
                 <ion-item class="item-avatar item-conversation"
                           ng-repeat="conversation in conversations | orderBy:'-lastMessage.dateSent'"
-                          href="#/conversations/{{conversation.id}}"
-                          ng-class="{'item-positive': conversation.isUnread}"
-                        >
+                          ng-class="{'item-royal': conversation.cntUnreadMessages > 0}"
+                          ng-click="openConversation(conversation)"
+                >
                     <img ng-src="{{conversation.withUser.profilePhoto | profilePhotoUrl:conversation.withUser.gender}}">
                     <h2>{{conversation.withUser.nickName}}</h2>
                     <p><i class="icon ion-reply" ng-hide="conversation.lastMessage.id != conversation.ownerId"></i>{{conversation.lastMessage.text || ''}}</p>

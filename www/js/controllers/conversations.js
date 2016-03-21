@@ -1,7 +1,22 @@
 angular.module('hotvibes.controllers')
 
-    .controller('ConversationsCtrl', function($scope, $rootScope, $ionicActionSheet, Conversation) {
-        $scope.conversations = Conversation.query();
+    .controller('ConversationsCtrl', function($scope, $state, $rootScope, $ionicActionSheet, User, Conversation) {
+        var authorIncludes = 'profilePhoto.url(size=w80h80)';
+
+        $scope.conversations = Conversation.query({
+            include: [
+                'lastMessage',
+                'withUser.' + authorIncludes
+            ].join(',')
+        });
+
+        $scope.openConversation = function(conversation) {
+            if (conversation.cntUnreadMessages > 0) {
+                conversation.cntUnreadMessages = 0;
+            }
+
+            $state.go('inside.conversations-single', { id: conversation.id });
+        };
 
         $scope.deleteItem = function(item) {
             var index = $scope.conversations.indexOf(item);
@@ -11,17 +26,39 @@ angular.module('hotvibes.controllers')
 
         $rootScope.$on('newMessage', function(event, message) {
             $scope.conversations.$promise.then(function() {
-                var conversationId = message['conversationId'];
+                var conversationId = message['conversationId'],
+                    conversation = null;
 
                 for (var i=0; i<$scope.conversations.length; i++) {
                     // Find the right conversation in the list
-                    if ($scope.conversations[i].id != conversationId) {
-                        continue;
+                    if ($scope.conversations[i].id == conversationId) {
+                        conversation = $scope.conversations[i];
+                        break;
                     }
+                }
 
-                    // Update the lastMessage info
-                    $scope.conversations[i].lastMessage = message;
-                    break;
+                if (conversation != null) {
+                    // Such conversation already exists, update the list
+                    conversation.lastMessage = message;
+                    conversation.cntUnreadMessages += 1;
+
+                } else {
+                    // Get info about the author of the message
+                    // Then.. create a new conversation in the list
+                    User.get({
+                        id: conversationId,
+                        include: authorIncludes
+
+                    }).$promise.then(function(messageAuthor) {
+                        $scope.conversations.unshift(
+                            new Conversation({
+                                id: conversationId,
+                                withUser: messageAuthor,
+                                cntUnreadMessages: 1,
+                                lastMessage: message
+                            })
+                        );
+                    });
                 }
             });
         });
@@ -32,7 +69,10 @@ angular.module('hotvibes.controllers')
         __, Conversation, Message, User, Api
     ) {
         var params = {
-            withUserId: $stateParams.userId || $stateParams.id
+            withUserId: $stateParams.userId || $stateParams.id,
+            include: [
+                'withUser'
+            ].join(',')
         };
 
         $scope.msgText = '';
@@ -40,6 +80,13 @@ angular.module('hotvibes.controllers')
             if (err.status == 404 /* Not Found */) {
                 // There is no conversation created yet
                 $scope.conversation.withUser = User.get({ id: params.withUserId }); // FIXME: get from cache
+            }
+        });
+
+        // Mark unread messages as 'seen'
+        $scope.conversation.$promise.then(function(conversation) {
+            if (conversation.cntUnreadMessages > 0) {
+                $scope.currUser.cacheCounts.cntUnreadMessages -= conversation.cntUnreadMessages;
             }
         });
 

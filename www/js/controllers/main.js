@@ -27,6 +27,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         checkShouldRightMenuBeEnabled($state.current);
 
+        // Some views make use of the right menu (eg. users list, right menu used for filtering the list)
+        // So.. let's check, after each state change, whether this state has some content in the rightMenu
         $scope.$on('$stateChangeStart', function(event, state) {
             checkShouldRightMenuBeEnabled(state);
         });
@@ -43,6 +45,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             AuthService.setCurrentUser(newUser);
 
         }, true);
+
+        // Watch for changes to cacheCounts and update the counter of the side-menu badge
+        $scope.$watch('currUser.cacheCounts', function() {
+            $scope.cntUnseenEvents = Math.max(0, $scope.currUser.cacheCounts.cntUnreadMessages)
+                + Math.max(0, $scope.currUser.cacheCounts.cntNewGuests);
+        });
 
         // Start listening for push notifications
         $ionicPlatform.ready(function() {

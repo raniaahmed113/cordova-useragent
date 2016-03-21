@@ -455,6 +455,11 @@ ul.chat {
   margin:10px;
 }
 
+.header-item.buttons .button .badge {
+  top: -20px;
+  left: 15px;
+}
+
 @import "wall.scss";
 @import "landing.scss";
 @import "settings.scss";

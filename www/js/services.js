@@ -295,6 +295,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     User.get({
                         id: response['user_id'],
                         include: [
+                            'cacheCounts', // FIXME: require these instead of include
                             'profile',
                             'isVip',
                             'filter',
