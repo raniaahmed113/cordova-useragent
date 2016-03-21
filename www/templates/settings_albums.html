@@ -2,6 +2,7 @@
     <ion-content class="center-vertical-disabled">
         <div class="list list-inset">
             <div class="item item-divider" translate>MainPictures</div>
+
             <div class="item item-nav-view-container">
                 <ion-nav-view name="mainAlbum"></ion-nav-view>
             </div>
@@ -10,6 +11,7 @@
                 <span translate>My Albums</span>
                 <button class="button button-small icon ion-plus" ng-click="createAlbum()"></button>
             </div>
+
             <resource-collection list="albums">
                 <a class="item item-thumbnail-left" href="#/settings/albums/{{album.id}}" ng-repeat="album in albums">
                     <img ng-src="{{album.mainPhoto.url || 'img/album-empty.png'}}">

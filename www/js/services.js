@@ -136,17 +136,12 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                         $state.go('inside.conversations-single', { id: notification.additionalData.payload.conversationId });
                         break;
                 }
-            }/* else {
-             console.log($state);
+            }
 
-             $ionicLoading.show({
-             template: notification.text,
-             noBackdrop: true,
-             duration: 1000
-             });
-             }*/
-
-            $rootScope.$broadcast(notification.additionalData._type, notification.additionalData.payload);
+            $rootScope.$broadcast(
+                notification.additionalData._type,
+                notification.additionalData.payload
+            );
         }
 
         this.init = function() {

@@ -41,12 +41,13 @@ angular.module('hotvibes.controllers')
                 return deferred.promise;
             }
 
-            members = User.query(
-                angular.extend(filter, {
+            members = User.query(angular.extend(
+                filter,
+                {
                     limit: limit,
                     exclude: Object.keys(excludeIds).join(',')
-                })
-            );
+                }
+            ));
 
             members.$promise.then(
                 function(response) {
@@ -81,13 +82,11 @@ angular.module('hotvibes.controllers')
                 deferred.reject({ noMore: true });
 
             } else {
-                loadMore().then(
-                    function() {
-                        deferred.resolve(
-                            members.splice(0, 1)[0]
-                        );
-                    }
-                );
+                loadMore().then(function() {
+                    deferred.resolve(
+                        members.splice(0, 1)[0]
+                    );
+                });
             }
 
             return deferred.promise;
@@ -127,11 +126,11 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.onCardDestroyed = function($index) {
-            var user = $scope.users.splice($index, 1)[0];
-            var quickieVote = new QuickieVote({
-                voteForUserId: user.id,
-                vote: $scope.cardPos > 0 ? 'yes' : 'no'
-            });
+            var user = $scope.users.splice($index, 1)[0],
+                quickieVote = new QuickieVote({
+                    voteForUserId: user.id,
+                    vote: $scope.cardPos > 0 ? 'yes' : 'no'
+                });
 
             $scope.cardPos = 0;
             submitVote(quickieVote);
