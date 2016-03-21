@@ -98,23 +98,31 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return $resource(Config.API_URL_BASE + 'me/friends/:userId');
     })
 
-    .factory('Album', function(__, ApiResource, MediaFile) {
+    .factory('Album', function($q, __, ApiResource, MediaFile) {
         var Album = ApiResource('me/albums/:id', { id : '@id' }),
             parentGet = Album.get;
 
         Album.get = function(params) {
             if (params.id == 0) {
-                var mainAlbum = new Album();
+                var deferred = $q.defer();
 
-                mainAlbum.id = params.id;
-                mainAlbum.name = __("MainPictures");
-                mainAlbum.photos = MediaFile.query({
-                    albumId: mainAlbum.id,
+                MediaFile.query({
+                    albumId: params.id,
                     include: params.include.replace(/photos\./g, '')
-                });
-                mainAlbum.$promise = mainAlbum.photos.$promise;
 
-                return mainAlbum;
+                }).$promise.then(
+                    function(result) {
+                        var album = new Album();
+                        album.id = params.id;
+                        album.name = __("MainPictures");
+                        album.photos = result.resource;
+
+                        deferred.resolve(album);
+                    },
+                    deferred.reject
+                );
+
+                return { $promise: deferred.promise };
             }
 
             return parentGet(params);

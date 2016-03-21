@@ -417,7 +417,15 @@ angular.module('hotvibes.controllers')
         var deferred = $q.defer();
         $scope.photos = [];
         $scope.photos.$promise = deferred.promise;
-        $scope.album.$promise.then(deferred.resolve, deferred.reject);
+
+        $scope.album.$promise.then(
+            function(album) {
+                $scope.album = album;
+                $scope.photos = album.photos;
+                deferred.resolve();
+            },
+            deferred.reject
+        );
 
         $scope.zoomPhoto = function(photo) {
             $scope.popover.hide();
