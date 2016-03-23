@@ -1,6 +1,6 @@
 angular.module('hotvibes.controllers')
 
-    .controller('ConversationsCtrl', function($scope, $state, $rootScope, $ionicActionSheet, User, Conversation) {
+    .controller('ConversationsCtrl', function($scope, $state, $ionicActionSheet, User, Conversation, PushNotificationHandler) {
         var authorIncludes = 'profilePhoto.url(size=w80h80)';
 
         $scope.conversations = Conversation.query({
@@ -24,7 +24,7 @@ angular.module('hotvibes.controllers')
             $scope.conversations.splice(index, 1);
         };
 
-        $rootScope.$on('newMessage', function(event, message) {
+        function onNewMessage(event, message) {
             $scope.conversations.$promise.then(function() {
                 var conversationId = message['conversationId'],
                     conversation = null;
@@ -40,33 +40,45 @@ angular.module('hotvibes.controllers')
                 if (conversation != null) {
                     // Such conversation already exists, update the list
                     conversation.lastMessage = message;
-                    conversation.cntUnreadMessages += 1;
+
+                    // If receiving a new message (rather than sending one)..
+                    // ..increment the unread counter
+                    if (message.id != $scope.currUser.id) {
+                        conversation.cntUnreadMessages += 1;
+                    }
 
                 } else {
-                    // Get info about the author of the message
+                    // Get info about the our chat partner
                     // Then.. create a new conversation in the list
                     User.get({
                         id: conversationId,
                         include: authorIncludes
 
-                    }).$promise.then(function(messageAuthor) {
+                    }).$promise.then(function(chatPartner) {
                         $scope.conversations.unshift(
                             new Conversation({
                                 id: conversationId,
-                                withUser: messageAuthor,
-                                cntUnreadMessages: 1,
+                                withUser: chatPartner,
+                                cntUnreadMessages: message.id == $scope.currUser.id ? 0 : 1,
                                 lastMessage: message
                             })
                         );
                     });
                 }
             });
+        }
+
+        $scope.$on('newMessage.sent', onNewMessage);
+        var subId = PushNotificationHandler.subscribe('newMessage.received', onNewMessage);
+
+        $scope.$on('$destroy', function() {
+            PushNotificationHandler.unsubscribe(subId);
         });
     })
 
     .controller('ConversationCtrl', function(
-        $scope, $rootScope, $stateParams, $ionicScrollDelegate, $ionicPopup,
-        __, Conversation, Message, User, Api
+        $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup,
+        __, Conversation, Message, User, Api, PushNotificationHandler
     ) {
         var params = {
             withUserId: $stateParams.userId || $stateParams.id,
@@ -83,23 +95,38 @@ angular.module('hotvibes.controllers')
             }
         });
 
-        // Mark unread messages as 'seen'
-        $scope.conversation.$promise.then(function(conversation) {
-            if (conversation.cntUnreadMessages > 0) {
-                $scope.currUser.cacheCounts.cntUnreadMessages -= conversation.cntUnreadMessages;
-            }
-        });
-
         $scope.messages = Message.query(params, function(response) {
             $ionicScrollDelegate.scrollBottom(true);
 
             // TODO: load more
             // TODO: support for attachments
+
+            // Mark unread messages as 'seen'
+            $scope.conversation.$promise.then(function(conversation) {
+                if (conversation.cntUnreadMessages > 0) {
+                    $scope.currUser.cacheCounts.cntUnreadMessages -= conversation.cntUnreadMessages;
+                }
+            });
         });
 
-        $rootScope.$on('newMessage', function(event, msg) {
+        function onNewMessage(event, msg) {
             $scope.messages.push(msg);
             $ionicScrollDelegate.scrollBottom(true);
+        }
+
+        $scope.$on('newMessage.sent', onNewMessage);
+
+        var subId = PushNotificationHandler.subscribe('newMessage.received', function(event, msg) {
+            // Stop event propagation to the parent AppCtrl: Prevent notification counter from incrementing
+            event.stopPropagation();
+
+            onNewMessage(event, msg);
+
+            // FIXME: send an ack to the API, that we have read this message
+        });
+
+        $scope.$on('$destroy', function() {
+            PushNotificationHandler.unsubscribe(subId);
         });
 
         $scope.sendMessage = function(msg) {
@@ -112,7 +139,7 @@ angular.module('hotvibes.controllers')
                     sendTime: new Date().getTime()
                 });
 
-                $rootScope.$broadcast('newMessage', msg);
+                $rootScope.$broadcast('newMessage.sent', msg);
 
                 // Clear message input after sending
                 $scope.msgText = '';

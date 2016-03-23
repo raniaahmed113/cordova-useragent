@@ -47,10 +47,22 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         }, true);
 
         // Watch for changes to cacheCounts and update the counter of the side-menu badge
-        $scope.$watch('currUser.cacheCounts', function() {
+        $scope.$watchGroup([ 'currUser.cacheCounts.cntUnreadMessages', 'currUser.cacheCounts.cntNewGuests' ], function() {
             $scope.cntUnseenEvents = Math.max(0, $scope.currUser.cacheCounts.cntUnreadMessages)
                 + Math.max(0, $scope.currUser.cacheCounts.cntNewGuests);
         });
+
+        var subId = PushNotificationHandler.subscribe('newMessage.received', function() {
+            $scope.currUser.cacheCounts.cntUnreadMessages += 1;
+        });
+
+        $scope.$on('$destroy', function() {
+            PushNotificationHandler.unsubscribe(subId);
+        });
+
+        /*$scope.$on('newGuest', function(event, guest) {
+            console.log(guest);
+        });*/
 
         // Start listening for push notifications
         $ionicPlatform.ready(function() {
