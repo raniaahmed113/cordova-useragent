@@ -11,6 +11,7 @@ angular.module('hotvibes.controllers')
                 "galleryAlbums",
                 "photos.url(size=w" + $window.innerWidth + "h0)",
                 "gifts",
+                'isOnline',
                 "isFriend",
                 "isInvitedToFriends",
                 "isFavorite",

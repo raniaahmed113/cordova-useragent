@@ -1,5 +1,8 @@
 <ion-view>
-    <ion-nav-title>{{user.nickName}}, {{user.age}}<span ng-if="user.city">, {{user.city}}</span></ion-nav-title>
+    <ion-nav-title>
+        <i class="online" ng-if="user.isOnline"></i>
+        <span ng-if="user.id">{{user.nickName}}, {{user.age}}</span>
+    </ion-nav-title>
     <ion-nav-buttons side="right">
         <button class="button icon ion-unlocked"
                 ng-if="user.photos[currentPhoto].isLocked"

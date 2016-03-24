@@ -1,5 +1,10 @@
 <ion-view>
-    <ion-nav-title translate translate-values="{name: conversation.withUser.nickName}">Conversation with %s</ion-nav-title>
+    <ion-nav-title translate translate-values="{name: (conversation.withUser.isOnline ? '<i class=\'online\'></i> ' : '') + conversation.withUser.nickName}">Conversation with %s</ion-nav-title>
+    <!--<ion-nav-buttons side="right">
+        <a href="#/users/{{conversation.withUser.id}}">
+            <img class="avatar" ng-src="{{conversation.withUser.profilePhoto | profilePhotoUrl:conversation.withUser.gender}}" />
+        </a>
+    </ion-nav-buttons>-->
     <ion-content>
         <ul class="list chat">
             <li
