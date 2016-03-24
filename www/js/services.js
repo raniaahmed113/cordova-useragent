@@ -289,22 +289,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     setAccessToken(response['access_token']);
 
                     // Now let's retrieve info about the current user
-                    User.get({
-                        id: response['user_id'],
-                        include: [
-                            'cacheCounts', // FIXME: require these instead of include
-                            'profile',
-                            'isVip',
-                            'filter',
-                            'quickieFilter',
-                            'profilePhoto.url(size=w50h50)'
-
-                        ].join(',')
-
-                    }).$promise.then(
-                        function(userData) {
+                    User.getInstanceForStorage(response['user_id']).then(
+                        function(user) {
                             try {
-                                var user = User.valueOf(userData);
                                 self.setCurrentUser(user);
                                 deferred.resolve(user);
 

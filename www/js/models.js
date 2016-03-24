@@ -42,7 +42,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         };
     })
 
-    .factory('User', function(ApiResource, Filter, Device) {
+    .factory('User', function($q, ApiResource, Filter, Device) {
         var User = ApiResource('users/:id', { id: '@id' });
 
         User.valueOf = function(object) {
@@ -57,13 +57,60 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 object = new User(object);
             }
 
-            if (object.filter) {
+            if (object.filter && !(object.filter instanceof Filter)) {
                 object.filter = new Filter(object.filter);
             }
+
+            /*if (object.quickieFilter && !(object.quickieFilter instanceof Filter)) {
+                object.quickieFilter = new QuickieFilter(object.quickieFilter);
+            }*/
 
             return object;
         };
 
+        /**
+         * @param {int|string} userId
+         *
+         * @returns {Promise}
+         */
+        User.getInstanceForStorage = function(userId) {
+            var deferred = $q.defer();
+
+            User.get({
+                id: userId,
+                include: [
+                    'cacheCounts', // FIXME: require these instead of include
+                    'profile',
+                    'isVip',
+                    'filter',
+                    'quickieFilter',
+                    'profilePhoto.url(size=w50h50)'
+
+                ].join(',')
+
+            }).$promise.then(
+                function(userData) {
+                    try {
+                        var user = User.valueOf(userData);
+
+                    } catch (e) {
+                        deferred.reject(e);
+                        return;
+                    }
+
+                    deferred.resolve(user);
+                },
+                deferred.reject
+            );
+
+            return deferred.promise;
+        };
+
+        /**
+         * @param {string} token
+         *
+         * @returns {Promise}
+         */
         User.prototype.registerDevice = function(token) {
             return new Device({
                 token: token,
@@ -71,8 +118,21 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             }).$save();
         };
 
+        /**
+         * @param {int} id
+         *
+         * @returns {Promise}
+         */
         User.prototype.unregisterDevice = function(id) {
-            Device.delete({ id: id });
+            return Device.delete({ id: id });
+        };
+
+        User.prototype.refresh = function() {
+            var userInstance = this;
+
+            User.getInstanceForStorage(this.id).then(function(freshUserData) {
+                userInstance = freshUserData;
+            });
         };
 
         return User;

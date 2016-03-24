@@ -46,6 +46,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         }, true);
 
+        // Initiate a data refresh from the server
+        $scope.currUser.refresh();
+
         // Watch for changes to cacheCounts and update the counter of the side-menu badge
         $scope.$watchGroup([ 'currUser.cacheCounts.cntUnreadMessages', 'currUser.cacheCounts.cntNewGuests' ], function() {
             $scope.cntUnseenEvents = Math.max(0, $scope.currUser.cacheCounts.cntUnreadMessages)
