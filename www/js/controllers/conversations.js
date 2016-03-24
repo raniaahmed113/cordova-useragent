@@ -1,6 +1,6 @@
 angular.module('hotvibes.controllers')
 
-    .controller('ConversationsCtrl', function($scope, $state, $ionicActionSheet, User, Conversation, PushNotificationHandler) {
+    .controller('ConversationsCtrl', function($scope, $state, $ionicActionSheet, User, Conversation) {
         var authorIncludes = 'profilePhoto.url(size=w80h80)';
 
         $scope.conversations = Conversation.query({
@@ -69,16 +69,12 @@ angular.module('hotvibes.controllers')
         }
 
         $scope.$on('newMessage.sent', onNewMessage);
-        var subId = PushNotificationHandler.subscribe('newMessage.received', onNewMessage);
-
-        $scope.$on('$destroy', function() {
-            PushNotificationHandler.unsubscribe(subId);
-        });
+        $scope.$on('newMessage.received', onNewMessage);
     })
 
     .controller('ConversationCtrl', function(
         $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup,
-        __, Conversation, Message, User, Api, PushNotificationHandler
+        __, Conversation, Message, User, Api
     ) {
         var params = {
             withUserId: $stateParams.userId || $stateParams.id,
@@ -89,12 +85,19 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.msgText = '';
-        $scope.conversation = Conversation.get(params, null, null, function(err) { // FIXME: get from cache
+        $scope.conversation = Conversation.get(params, null, null, function(err) { // TODO: get from cache
             if (err.status == 404 /* Not Found */) {
                 // There is no conversation created yet
-                $scope.conversation.withUser = User.get({ id: params.withUserId }); // FIXME: get from cache
+                $scope.conversation.withUser = User.get({ id: params.withUserId }); // TODO: get from cache
             }
         });
+
+        function markAllMessagesAsRead() {
+            $scope.conversation.cntUnreadMessages = 0;
+            $scope.conversation.$update({
+                dateLastRead: 'now'
+            });
+        }
 
         $scope.messages = Message.query(params, function(response) {
             $ionicScrollDelegate.scrollBottom(true);
@@ -104,9 +107,12 @@ angular.module('hotvibes.controllers')
 
             // Mark unread messages as 'seen'
             $scope.conversation.$promise.then(function(conversation) {
-                if (conversation.cntUnreadMessages > 0) {
-                    $scope.currUser.cacheCounts.cntUnreadMessages -= conversation.cntUnreadMessages;
+                if (conversation.cntUnreadMessages < 1) {
+                    return;
                 }
+
+                $scope.currUser.cacheCounts.cntUnreadMessages -= conversation.cntUnreadMessages;
+                markAllMessagesAsRead();
             });
         });
 
@@ -116,18 +122,11 @@ angular.module('hotvibes.controllers')
         }
 
         $scope.$on('newMessage.sent', onNewMessage);
-
-        var subId = PushNotificationHandler.subscribe('newMessage.received', function(event, msg) {
-            // Stop event propagation to the parent AppCtrl: Prevent notification counter from incrementing
-            event.stopPropagation();
-
+        $scope.$on('newMessage.received', function(event, msg) {
             onNewMessage(event, msg);
 
-            // FIXME: send an ack to the API, that we have read this message
-        });
-
-        $scope.$on('$destroy', function() {
-            PushNotificationHandler.unsubscribe(subId);
+            // TODO: call the following only after some user activity
+            markAllMessagesAsRead();
         });
 
         $scope.sendMessage = function(msg) {
@@ -137,7 +136,7 @@ angular.module('hotvibes.controllers')
                     text: $scope.msgText,
                     dateSent: null,
                     conversationId: $scope.conversation.id,
-                    sendTime: new Date().getTime()
+                    sendTime: new Date().getTime() // FIXME: check, if this is correct (maybe we should set seconds here, instead of millis)
                 });
 
                 $rootScope.$broadcast('newMessage.sent', msg);

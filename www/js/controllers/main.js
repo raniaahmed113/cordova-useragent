@@ -52,12 +52,18 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 + Math.max(0, $scope.currUser.cacheCounts.cntNewGuests);
         });
 
-        var subId = PushNotificationHandler.subscribe('newMessage.received', function() {
-            $scope.currUser.cacheCounts.cntUnreadMessages += 1;
-        });
+        // TODO: move push notification handling/cacheCounts incrementation to a dedicated service?
+        $scope.$on('newMessage.received', function(event, msg) {
+            // We shouldn't increment the 'unread messages' counter..
+            // ..if, our current view is a conversation with the author of this message
+            if (
+                $state.$current.self.name == 'inside.conversations-single'
+                && $state.$current.locals.globals.$stateParams.id == msg.id
+            ) {
+                return;
+            }
 
-        $scope.$on('$destroy', function() {
-            PushNotificationHandler.unsubscribe(subId);
+            $scope.currUser.cacheCounts.cntUnreadMessages += 1;
         });
 
         /*$scope.$on('newGuest', function(event, guest) {

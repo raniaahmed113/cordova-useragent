@@ -97,12 +97,11 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('PushNotificationHandler', function($state, AuthService) {
+    .service('PushNotificationHandler', function($rootScope, $state, AuthService) {
 
         var push = null,
             deviceId = null,
-            token = null,
-            listeners = [];
+            token = null;
 
         function onDeviceRegistered(data) {
             if (data.registrationId == token) {
@@ -139,52 +138,12 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 }
             }
 
-            publish(
-                notification.additionalData._type,
-                notification.additionalData.payload
-            );
-        }
-
-        function publish(key, message) {
-            if (!listeners[key]) {
-                // Nothing to do
-                return;
-            }
-
-            var stopPropagation = false,
-                event = {
-                    stopPropagation: function() {
-                        stopPropagation = true;
-                    }
-                };
-
-            for (var keys = Object.keys(listeners[key]), i=0; i<keys.length; i++) {
-                listeners[key][keys[i]](event, message);
-
-                if (stopPropagation) {
-                    break;
-                }
-            }
-        }
-
-        function sortListenersByPriority(notificationKey) {
-            if (listeners[notificationKey].length <= 1) {
-                // Nothing to do
-                return;
-            }
-
-            listeners[notificationKey] = Object.keys(listeners[notificationKey])
-                .sort(function(listenerId1, listenerId2) {
-                    return listeners[notificationKey][listenerId1].priority - listeners[notificationKey][listenerId2].priority;
-                })
-                .reduce(function(result, key) {
-                    if (!result[notificationKey]) {
-                        result[notificationKey] = {};
-                    }
-
-                    result[notificationKey][key] = listeners[notificationKey][key];
-                    return result;
-                }, {});
+            $rootScope.$apply(function() {
+                $rootScope.$broadcast(
+                    notification.additionalData._type,
+                    notification.additionalData.payload
+                );
+            });
         }
 
         this.init = function() {
@@ -238,42 +197,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             localStorage.removeItem('deviceToken');
 
             push.unregister();
-        };
-
-        /**
-         * @param {string} notificationKey
-         * @param {function} callback
-         * @param {int} [priority]
-         *
-         * @returns {int}
-         */
-        this.subscribe = function(notificationKey, callback, priority) {
-            var id = listeners.length;
-
-            if (!listeners[notificationKey]) {
-                listeners[notificationKey] = {};
-            }
-
-            if (!priority) {
-                priority = 0;
-            }
-
-            callback.priority = priority;
-
-            listeners[notificationKey][id] = callback;
-
-            // Re-sort
-            sortListenersByPriority(notificationKey);
-
-            return notificationKey + '-' + id;
-        };
-
-        /**
-         * @param {int} listenerId
-         */
-        this.unsubscribe = function(listenerId) {
-            var idData = listenerId.split('-');
-            delete listeners[idData[0]][idData[1]];
         };
     })
 
