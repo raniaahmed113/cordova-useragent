@@ -87,7 +87,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                         transformed.push(propertyName);
                     });
 
-                    value = transformed;
+                    value = transformed.join(',');
                 }
 
                 output[key] = value;
