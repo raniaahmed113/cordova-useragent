@@ -131,7 +131,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             var userInstance = this;
 
             User.getInstanceForStorage(this.id).then(function(freshUserData) {
-                userInstance = freshUserData;
+                userInstance = angular.extend(userInstance, freshUserData);
             });
         };
 
