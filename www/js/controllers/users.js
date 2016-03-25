@@ -38,8 +38,8 @@ angular.module('hotvibes.controllers')
             }
 
             // Search results filter has changed - re-fetch newly filtered results
-            $ionicScrollDelegate.scrollTop(true);
             loadUsers();
+            $ionicScrollDelegate.scrollTop(true);
 
             // Save the filter to the back-end
             var changes = angular.copy(newFilter);
