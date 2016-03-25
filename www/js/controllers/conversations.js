@@ -1,6 +1,6 @@
 angular.module('hotvibes.controllers')
 
-    .controller('ConversationsCtrl', function($scope, $state, $ionicActionSheet, User, Conversation) {
+    .controller('ConversationsCtrl', function($rootScope, $scope, $state, $ionicActionSheet, User, Conversation) {
         var authorIncludes = 'profilePhoto.url(size=w80h80)';
 
         $scope.conversations = Conversation.query({
@@ -68,8 +68,8 @@ angular.module('hotvibes.controllers')
             });
         }
 
-        $scope.$on('newMessage.sent', onNewMessage);
-        $scope.$on('newMessage.received', onNewMessage);
+        $rootScope.$on('newMessage.sent', onNewMessage);
+        $rootScope.$on('newMessage.received', onNewMessage);
     })
 
     .controller('ConversationCtrl', function(
@@ -88,6 +88,7 @@ angular.module('hotvibes.controllers')
         $scope.conversation = Conversation.get(params, null, null, function(err) { // TODO: get from cache
             if (err.status == 404 /* Not Found */) {
                 // There is no conversation created yet
+                $scope.conversation.id = params.withUserId;
                 $scope.conversation.withUser = User.get({ id: params.withUserId }); // TODO: get from cache
             }
         });
