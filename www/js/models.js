@@ -61,6 +61,16 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 object.filter = new Filter(object.filter);
             }
 
+            if (object.cacheCounts) {
+                if (object.cacheCounts.cntNewMessages < 0) {
+                    object.cacheCounts.cntNewMessages = 0;
+                }
+
+                if (object.cacheCounts.cntNewGuests < 0) {
+                    object.cacheCounts.cntNewGuests = 0;
+                }
+            }
+
             /*if (object.quickieFilter && !(object.quickieFilter instanceof Filter)) {
                 object.quickieFilter = new QuickieFilter(object.quickieFilter);
             }*/
