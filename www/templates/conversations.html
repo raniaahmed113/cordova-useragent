@@ -9,8 +9,12 @@
                           ng-click="openConversation(conversation)">
 
                     <img ng-src="{{conversation.withUser.profilePhoto | profilePhotoUrl:conversation.withUser.gender}}">
+
                     <h2>{{conversation.withUser.nickName}}</h2>
-                    <p><i class="icon ion-reply" ng-hide="conversation.lastMessage.id != conversation.ownerId"></i>{{conversation.lastMessage.text || ''}}</p>
+                    <p>
+                        <i class="icon ion-reply" ng-hide="conversation.lastMessage.id != conversation.ownerId"></i>
+                        {{conversation.lastMessage.text || ''}}
+                    </p>
 
                     <ion-option-button class="button-assertive" ng-click="deleteItem(conversation)">
                         <span translate>Delete</span>

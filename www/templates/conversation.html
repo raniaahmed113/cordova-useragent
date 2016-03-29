@@ -6,6 +6,7 @@
         </a>
     </ion-nav-buttons>-->
     <ion-content>
+
         <ul class="list chat">
             <li
                 class="message"
@@ -14,6 +15,12 @@
                 ng-click="resend($index)">
 
                 <span ng-bind-html="message.text | linky:'_blank' | emoticonize"></span>
+
+                <div class="attachment" ng-if="message.attachment" ng-switch="message.type">
+                    <a ng-switch-when="image" ng-href="{{message.attachment.url}}" target="_blank">
+                        <img ng-src="{{message.attachment.thumbUrl}}" />
+                    </a>
+                </div>
 
                 <div class="status">
                     <span ng-if="message.error" translate>Failed. Tap to retry.</span>
@@ -24,6 +31,7 @@
                 </div>
             </li>
         </ul>
+
         <div class="center center-vertical-margin">
             <ion-spinner ng-show="!messages.$resolved"></ion-spinner>
             <div class="error-sign" ng-if="messages.$resolved && messages.length < 1">
@@ -32,6 +40,7 @@
                 <i class="icon ion-ios-rainy"></i>
             </div>
         </div>
+
     </ion-content>
 
     <ion-footer-bar keyboard-attach class="bar-stable">
