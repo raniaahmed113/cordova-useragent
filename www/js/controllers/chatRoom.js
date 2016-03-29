@@ -16,12 +16,6 @@ angular.module('hotvibes.controllers')
         }
 
         $scope.posts = loadPosts();
-        $scope.doRefresh = function() {
-            loadPosts().$promise.then(function(result) {
-                $scope.posts = result.resource;
-                $scope.$broadcast('scroll.refreshComplete');
-            });
-        };
 
         $ionicModal
             .fromTemplateUrl('templates/chat_room_post_new.html', {

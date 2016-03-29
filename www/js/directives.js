@@ -128,9 +128,6 @@ angular.module('hotvibes.directives', [])
 
                             // Overwrite meta-data
                             $scope.list.$metadata = response.resource.$metadata;
-
-                            // Broadcast that our infinite-scroll load is now complete
-                            $scope.$broadcast('scroll.infiniteScrollComplete');
                         },
 
                         onError
@@ -140,7 +137,15 @@ angular.module('hotvibes.directives', [])
 
                 $scope.loadMore = function() {
                     $scope.currPage++;
-                    fetch();
+                    fetch().then(function() {
+                        $scope.$broadcast('scroll.infiniteScrollComplete');
+                    });
+                };
+
+                $scope.reload = function() {
+                    fetch().then(function() {
+                        $scope.$broadcast('scroll.refreshComplete');
+                    });
                 };
             }
         };

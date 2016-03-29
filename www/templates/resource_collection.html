@@ -1,3 +1,5 @@
+<ion-refresher pulling-text="{{'Pull to refresh..' | translate}}" on-refresh="reload()"></ion-refresher>
+
 <div ng-transclude></div>
 
 <ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
