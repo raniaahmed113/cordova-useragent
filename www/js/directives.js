@@ -66,10 +66,9 @@ angular.module('hotvibes.directives', [])
                 }
 
                 $scope.$watch('list', function() {
-                    var deferred = $q.defer(),
-                        onListResolved = $scope.promise ? $scope.promise : $scope.list.$promise;
+                    var deferred = $q.defer();
 
-                    onListResolved.then(
+                    $scope.list.$promise.then(
                         function(response) {
                             if ($scope.subProperty) {
                                 var Resource = $resource(response.config.url + '/:id', { id: '@id'});
@@ -135,6 +134,7 @@ angular.module('hotvibes.directives', [])
                         },
 
                         onError
+
                     ).$promise;
                 }
 
