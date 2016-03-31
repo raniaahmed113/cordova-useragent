@@ -1,9 +1,9 @@
-<ion-view title="{{'VIP Membership' | translate}}" xmlns="http://www.w3.org/1999/html">
+<ion-view title="{{'VIP Membership' | translate}}">
     <ion-content>
-        <h4 ng-if="currUser.isVip" class="center">
+        <div ng-if="currUser.isVip" class="center">
             <span translate>Your VIP membership expires on</span>:
             <h4 class="center positive">{{currUser.vipTill}}</h4>
-        </h4>
+        </div>
 
         <div ng-if="!currUser.isVip" class="center">
             <img src="img/buy-vip.png" alt="" class="padding" />
