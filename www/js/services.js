@@ -127,15 +127,16 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 return;
             }
 
-            if (!notification.additionalData.foreground) {
-                // If we receive this as a result of user clicking on the notification while the app is in the background..
-                // .. redirect to a relevant page
-
+            // If we receive this as a result of user clicking on the notification (property 'coldstart' is defined) while the app is in the background..
+            // .. redirect to a relevant page
+            if (typeof notification.additionalData.coldstart !== 'undefined') {
                 switch (notification.additionalData._type) {
-                    case 'newMessage':
+                    case 'newMessage.received':
                         $state.go('inside.conversations-single', { id: notification.additionalData.payload.conversationId });
                         break;
                 }
+
+                return;
             }
 
             $rootScope.$apply(function() {
@@ -144,6 +145,10 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     notification.additionalData.payload
                 );
             });
+
+            // iOS gives us 30 seconds to handle our background notification
+            // Let's notify the system that we have finished and our app process could be killed now
+            push.finish();
         }
 
         this.init = function() {
