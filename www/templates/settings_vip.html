@@ -1,12 +1,12 @@
 <ion-view title="{{'VIP Membership' | translate}}">
     <ion-content>
-        <div ng-if="currUser.isVip" class="center">
+        <div ng-if="currUser.isVip" class="center padding">
             <span translate>Your VIP membership expires on</span>:
             <h4 class="center positive">{{currUser.vipTill}}</h4>
         </div>
 
-        <div ng-if="!currUser.isVip" class="center">
-            <img src="img/buy-vip.png" alt="" class="padding" />
+        <div ng-if="!currUser.isVip" class="center padding">
+            <img src="img/buy-vip.png" alt="" />
 
             <div ng-if="billingSupported">
                 <ion-spinner ng-if="!subscribe"></ion-spinner>
