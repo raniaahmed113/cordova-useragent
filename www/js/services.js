@@ -122,23 +122,6 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         }
 
         function onReceivedNotification(notification) {
-            if (!notification.additionalData || !notification.additionalData._type) {
-                // Malformed notification received - do nothing
-                return;
-            }
-
-            // If we receive this as a result of user clicking on the notification (property 'coldstart' is defined) while the app is in the background..
-            // .. redirect to a relevant page
-            if (typeof notification.additionalData.coldstart !== 'undefined') {
-                switch (notification.additionalData._type) {
-                    case 'newMessage.received':
-                        $state.go('inside.conversations-single', { id: notification.additionalData.payload.conversationId });
-                        break;
-                }
-
-                return;
-            }
-
             $rootScope.$apply(function() {
                 $rootScope.$broadcast(
                     notification.additionalData._type,
@@ -149,6 +132,14 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             // iOS gives us 30 seconds to handle our background notification
             // Let's notify the system that we have finished and our app process could be killed now
             push.finish();
+        }
+
+        function onClickedNotification(notification) {
+            switch (notification.additionalData._type) {
+                case 'newMessage.received':
+                    $state.go('inside.conversations-single', { id: notification.additionalData.payload.conversationId });
+                    break;
+            }
         }
 
         this.init = function() {
@@ -178,7 +169,22 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             });
 
             push.on('registration', onDeviceRegistered);
-            push.on('notification', onReceivedNotification);
+            push.on('notification', function(notification) {
+                if (!notification.additionalData || !notification.additionalData._type) {
+                    // Malformed notification received. Ignore it
+                    return;
+                }
+
+                // If 'notification.additionalData.coldstart' property is present (not undefined)..
+                // ..it means, that we got this event because user has clicked on the notification..
+                // ..so we need to handle this differently..
+                if (typeof notification.additionalData.coldstart !== 'undefined') {
+                    onClickedNotification(notification);
+                    return;
+                }
+
+                onReceivedNotification(notification);
+            });
             /*push.on('error', function(e) {
              // e.message
              });*/
