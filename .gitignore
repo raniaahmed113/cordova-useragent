@@ -9,6 +9,5 @@ www/css
 www/lib
 tmp
 www/i18n
-config.xml
 current.json
-config.js
+www/js/config.js
