@@ -22,8 +22,8 @@
 }
 .credits {
   h4 {
-    color:$text-dark;
-    font-weight:normal;
+    color: $text-dark;
+    font-weight: normal;
   }
 }
 
@@ -31,11 +31,17 @@
   .input-value {
     margin-left: auto;
     padding: 0 48px 0 16px;
+    max-width: 65%;
+    text-indent: .01px;
+    text-overflow: '';
+    white-space: nowrap;
+    font-size: 14px;
+    direction: rtl;
   }
 }
 
 .menu .bar-header {
-  border-bottom:2px solid #373737;
+  border-bottom: 2px solid #373737;
 }
 
 .menu.menu-dark {
