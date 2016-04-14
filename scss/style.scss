@@ -27,56 +27,41 @@
   }
 }
 
-ion-list.list-dark, .list.list-dark {
-  .item, .item-content {
-    background: #424242;
-    color: $light;
-  }
-
-  ion-item, .item {
-    border: 1px solid #3E3E3E;
-  }
-  .item-content {
-    @extend .item-dark;
+.item-input.item-select {
+  .input-value {
+    margin-left: auto;
+    padding: 0 48px 0 16px;
   }
 }
 
-.main-menu {
-  background:#3B3B3B;
-}
-.menu-left i {
-  font-size:20px;
-  margin-right:10px;
-}
-.menu-right .input-label {
-  color:$light;
-  padding-left:20px;
-}
-.menu-left,  .menu-right{
-  border-right:2px solid #373737;
-}
 .menu .bar-header {
   border-bottom:2px solid #373737;
 }
-.list-inset .item {
-  border-color: darken($stable, 15%);
-}
-.item.item-divider {
-  background:#e7e7e7;
-  padding-left:3px;
-  border:none;
-  color:$text;
-  text-transform: uppercase;
-  font-size:13px;
 
-  button {
-    top: 5px;right: 5px;
-    min-height: 0;
-    padding-left: 10px;
+.menu.menu-dark {
+  &, .input-label, .item, .item-content, select {
+    color: $light;
+    border-color: darken($dark, 3%);
+  }
+
+  &, select, > .view-container > .pane {
+    background-color: $dark;
+  }
+
+  ion-list, .list {
+    .item, .item-content {
+      background: $dark;
+    }
+
+    .item.item-divider {
+      background-color: darken($dark, 3%);
+    }
   }
 }
-.item.item-divider.item-button-right {
-  padding-bottom:10px;
+
+.menu .item-content > .icon {
+  font-size: 20px;
+  margin-right: 10px;
 }
 
 .input-label .validation {

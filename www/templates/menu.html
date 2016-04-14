@@ -1,6 +1,6 @@
 <ion-side-menus enable-menu-with-back-views="false">
 
-    <ion-side-menu side="left" edge-drag-threshold="true">
+    <ion-side-menu side="left" edge-drag-threshold="true" class="menu-dark">
         <ion-header-bar class="bar-main-nav bar-dark">
             <a href="#/settings" menu-close>
                 <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" /> {{currUser.nickName}} <i class="icon ion-ios-gear"></i>
@@ -42,7 +42,7 @@
         <ion-nav-view name="main"></ion-nav-view>
     </ion-side-menu-content>
 
-    <ion-side-menu side="right" is-enabled="rightMenuEnabled">
+    <ion-side-menu side="right" is-enabled="rightMenuEnabled" class="menu-dark">
         <ion-nav-view name="rightMenu"></ion-nav-view>
     </ion-side-menu>
 

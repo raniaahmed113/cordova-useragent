@@ -1,8 +1,8 @@
 <ion-header-bar class="bar-dark">
     <h1 class="title" translate>Filter</h1>
 </ion-header-bar>
-<ion-content class="main-menu">
-    <div class="list list-dark">
+<ion-content class="content-dark">
+    <div class="list">
         <ion-checkbox
                 ng-checked="currUser.filter.isOnline"
                 ng-click="currUser.filter.isOnline = !currUser.filter.isOnline">
@@ -58,12 +58,9 @@
             </select>
         </label>
 
-        <div class="item item-input-inset item-button-right">
+        <label class="item item-input item-select" ng-click="cityPicker.show()">
             <span class="input-label" translate>City</span>
-            <input type="text" name="city" ng-model="currUser.filter.city" disabled />
-            <button type="button" class="button button-small button-positive" ng-click="cityPicker.show()" translate>
-                Change
-            </button>
-        </div>
+            <span class="input-value">{{currUser.filter.country}}</span>
+        </label>
     </div>
 </ion-content>
