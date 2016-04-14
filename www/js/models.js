@@ -318,6 +318,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             $scope.closeModal = function() {
                 modalWindow.hide();
             };
+
             $scope.search = function() {
                 if (!$scope.input.searchQuery) {
                     return;
@@ -347,11 +348,24 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 });
             };
 
-            $scope.onItemSelected = function($index) {
-                params.onCitySelected($scope.rows[$index]);
+            if (params.currentSelection) {
+                $scope.currentSelection = params.currentSelection;
+            }
+
+            function onItemSelected(item) {
+                params.onCitySelected(item);
                 modalWindow.hide();
                 $scope.input.searchQuery = '';
                 $scope.rows = [];
+                $scope.currentSelection = item;
+            }
+
+            $scope.clearCurrent = function() {
+                onItemSelected(null);
+            };
+
+            $scope.onItemSelected = function(rowIndex) {
+                onItemSelected($scope.rows[rowIndex]);
             };
 
             $ionicModal

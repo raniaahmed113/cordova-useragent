@@ -1,25 +1,35 @@
 angular.module('hotvibes.controllers')
 
     .controller('UsersFilterCtrl', function($scope, __, DataMap, CityPicker) {
-        $scope.countries = DataMap.country;
-
-        var range = function(min, max, step) {
+        function range(min, max, step) {
             step = step || 1;
             var input = [];
-            for (var i = min; i <= max; i += step) input.push(i);
+
+            for (var i = min; i <= max; i += step) {
+                input.push(i);
+            }
+
             return input;
-        };
+        }
 
         $scope.ages = range(18, 99);
         $scope.genders = ['male', 'female'];
+        $scope.countries = DataMap.country;
 
         new CityPicker({
+            currentSelection:
+                $scope.currUser.filter.city
+                    ? {
+                        id: $scope.currUser.filter.cityId,
+                        label: $scope.currUser.filter.city
+                    }
+                    : null,
             getCountry: function() {
                 return $scope.currUser.filter.country;
             },
             onCitySelected: function(city) {
-                $scope.currUser.filter.cityId = city.id;
-                $scope.currUser.filter.city = city.label;
+                $scope.currUser.filter.cityId = city ? city.id : null;
+                $scope.currUser.filter.city = city ? city.label : null;
             }
         }).then(function(modal) {
             $scope.cityPicker = modal;

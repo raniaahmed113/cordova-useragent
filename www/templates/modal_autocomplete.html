@@ -14,6 +14,12 @@
     <ion-content>
         <ul class="list">
             <ion-spinner ng-show="searching"></ion-spinner>
+            <li ng-if="currentSelection" ng-click="clearCurrent()" class="item item-stable item-button-right">
+                {{currentSelection.label}}
+                <button class="button">
+                    <i class="icon ion-trash-b"></i>
+                </button>
+            </li>
             <li ng-click="onItemSelected($index)" class="item" ng-repeat="row in rows">{{row.label}}</li>
         </ul>
     </ion-content>
