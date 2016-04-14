@@ -41,7 +41,7 @@
 .menu.menu-dark {
   &, .input-label, .item, .item-content, select {
     color: $light;
-    border-color: darken($dark, 3%);
+    border-color: darken($dark, 3%) !important;
   }
 
   &, select, > .view-container > .pane {
@@ -50,7 +50,7 @@
 
   ion-list, .list {
     .item, .item-content {
-      background: $dark;
+      @extend .item-dark;
     }
 
     .item.item-divider {
