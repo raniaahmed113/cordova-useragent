@@ -57,12 +57,12 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         // TODO: move push notification handling/cacheCounts incrementation to a dedicated service?
         $scope.$on('newMessage.received', function(event, msg) {
-            // We shouldn't increment the 'unread messages' counter..
-            // ..if, our current view is a conversation with the author of this message
             if (
                 $state.$current.self.name == 'inside.conversations-single'
                 && $state.$current.locals.globals.$stateParams.id == msg.id
             ) {
+                // We shouldn't increment the 'unread messages' counter..
+                // ..if, our current view is a conversation with the author of this message
                 return;
             }
 

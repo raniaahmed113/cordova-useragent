@@ -7,7 +7,10 @@ angular.module('hotvibes.controllers')
             include: [
                 'lastMessage',
                 'withUser.' + authorIncludes
-            ].join(',')
+            ].join(',')/*,
+            require: [
+                'withUser.' + authorIncludes
+            ].join(',')*/
         });
 
         $scope.openConversation = function(conversation) {

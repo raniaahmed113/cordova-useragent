@@ -290,6 +290,7 @@ angular.module('hotvibes.controllers')
     .controller('SettingsCreditsCtrl', function($scope, $ionicLoading, __, gettextCatalog, Config) {
         if (window.store) {
             //store.verbosity = store.DEBUG;
+            // FIXME: resolve gateway ID properly via device platform
             store.validator = Config.API_URL_BASE + "paymentGateways/google/payments?u=" + $scope.currUser.id;
 
             store.register({
@@ -504,6 +505,7 @@ angular.module('hotvibes.controllers')
                     }
 
                     $scope.onError(error);
+                    // FIXME: change the value of file input to null so that we could try again with the same photo
 
                 }).finally(function() {
                     $ionicLoading.hide();
