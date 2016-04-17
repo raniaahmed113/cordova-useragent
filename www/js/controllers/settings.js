@@ -472,6 +472,47 @@ angular.module('hotvibes.controllers')
 
         var filePicker;
 
+        function uploadFile(fileData) {
+            $ionicLoading.show({ template: __('Uploading') + '..' });
+
+            var file = new MediaFile({
+                albumId: $stateParams.albumId,
+                file: fileData
+            });
+
+            // Upload the file
+            file.$save({ previewThumbSize: 'w80h80' }).then(function(uploadResult) {
+                // Fetch the info for the newly uploaded photo
+                MediaFile.get({
+                    albumId: $stateParams.albumId,
+                    id: uploadResult.id,
+                    include: 'url(size=w80h80)'
+
+                }).$promise
+                    .then(
+                        function(newPhoto) { $scope.album.photos.push(newPhoto) },
+                        $scope.onError
+                    )
+                    .finally(function() {
+                        $ionicLoading.hide();
+                    });
+
+            }, function(error) {
+                // Upload failed
+                if (
+                    error.status == 400
+                    && error.data.rule
+                    && error.data.rule.type == Rule.MIN_VALUE
+                    && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
+                ) {
+                    error.data.code = ErrorCode.IMAGE_SIZE_INVALID
+                }
+
+                $scope.onError(error);
+
+            });
+        }
+
         $scope.$on('$ionicView.afterEnter', function() {
             filePicker = document.querySelector('ion-view[nav-view="active"] #file-picker');
 
@@ -482,35 +523,12 @@ angular.module('hotvibes.controllers')
 
             filePicker.setAttribute('ready', 'true');
             filePicker.addEventListener('change', function(event) {
-                $ionicLoading.show({ template: __('Uploading') + '..' });
+                uploadFile(event.target.files[0]);
 
-                var file = new MediaFile({
-                    albumId: $stateParams.albumId,
-                    file: event.target.files[0]
-                });
-
-                // Upload the file
-                file.$save({ previewThumbSize: 'w80h80' }).then(function(uploadedPhoto) {
-                    // Display the newly uploaded file
-                    $scope.album.photos.push(uploadedPhoto);
-
-                }, function(error) {
-                    if (
-                        error.status == 400
-                        && error.data.rule
-                        && error.data.rule.type == Rule.MIN_VALUE
-                        && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
-                    ) {
-                        error.data.code = ErrorCode.IMAGE_SIZE_INVALID
-                    }
-
-                    $scope.onError(error);
-                    // FIXME: change the value of file input to null so that we could try again with the same photo
-
-                }).finally(function() {
-                    $ionicLoading.hide();
-                    // TODO: reset the value of the file input field because after failing to upload the user might try again and the value of the field wont change if the same photo is selected thus nothing will happen
-                });
+                // Let's change the value of file input to null
+                // Otherwise the onChange event wouldn't trigger if we tried uploading the same photo again.
+                // For example, the user would do that if the first attempt failed because of some connectivity error
+                filePicker.value = null;
             });
         });
 
