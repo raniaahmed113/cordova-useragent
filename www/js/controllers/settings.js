@@ -191,7 +191,8 @@ angular.module('hotvibes.controllers')
             { id: 'livesWith', label: __('Living'), options: DataMap.livesWith },
             { id: 'doesSmoke', label: __('Smoking'), options: DataMap.doesSmoke },
             { id: 'doesDrink', label: __('Drinking'), options: DataMap.doesDrink },
-            { id: 'education', label: __('Education'), options: DataMap.education }
+            { id: 'education', label: __('Education'), options: DataMap.education },
+            { id: 'employment', label: __('Work'), options: DataMap.employment }
         ];
 
         $scope.save = function() {
