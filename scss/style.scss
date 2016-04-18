@@ -467,6 +467,10 @@ ion-header-bar .buttons .avatar {
   @include border-radius(50%);
 }
 
+.popup-container.popup-width-auto .popup {
+  width: auto;
+}
+
 @import "wall.scss";
 @import "landing.scss";
 @import "settings.scss";

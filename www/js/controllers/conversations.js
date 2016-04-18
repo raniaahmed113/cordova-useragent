@@ -77,7 +77,7 @@ angular.module('hotvibes.controllers')
 
     .controller('ConversationCtrl', function(
         $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup,
-        __, Conversation, Message, User, Api
+        __, Conversation, Message, User, Api, Report
     ) {
         var params = {
             withUserId: $stateParams.userId || $stateParams.id,
@@ -103,6 +103,11 @@ angular.module('hotvibes.controllers')
             });
         }
 
+        function onNewMessage(event, msg) {
+            $scope.messages.push(msg);
+            $ionicScrollDelegate.scrollBottom(true);
+        }
+
         $scope.messages = Message.query(params, function(response) {
             $ionicScrollDelegate.scrollBottom(true);
 
@@ -119,11 +124,6 @@ angular.module('hotvibes.controllers')
                 markAllMessagesAsRead();
             });
         });
-
-        function onNewMessage(event, msg) {
-            $scope.messages.push(msg);
-            $ionicScrollDelegate.scrollBottom(true);
-        }
 
         $scope.$on('newMessage.sent', onNewMessage);
         $scope.$on('newMessage.received', function(event, msg) {
@@ -187,5 +187,41 @@ angular.module('hotvibes.controllers')
 
             // Send again
             $scope.sendMessage($scope.messages[messageIndex]);
-        }
+        };
+
+        $scope.report = function() {
+            $ionicPopup.show({
+                templateUrl: 'templates/report.html',
+                cssClass: 'popup-width-auto',
+                title: __('Report'),
+                subTitle: __('What would you like to report?'),
+                scope: $scope,
+                buttons: [
+                    { text: __('Cancel') },
+                    {
+                        text: __('Report'),
+                        type: 'button-assertive',
+                        onTap: function(e) {
+                            if (!$scope.report.reason) {
+                                e.preventDefault();
+                                return;
+                            }
+                            
+                            var report = new Report({
+                                offenderId: params.withUserId,
+                                reason: $scope.report.reason
+                            });
+
+                            report.$save();
+
+                            $ionicLoading.show({
+                                template: __('fake_thanks'),
+                                noBackdrop: true,
+                                duration: 3000
+                            });
+                        }
+                    }
+                ]
+            });
+        };
     });
