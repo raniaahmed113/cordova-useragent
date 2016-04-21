@@ -1,100 +1,13 @@
 .landing {
-  background-image: url(/img/bg.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
+  color: white;
+  background-color: $blue;
 
-  .logo {
-    width: 100%;
-    padding: 0 70px;
-    position: absolute;
-    top: 20px;
-  }
-
-  .item {
-    border: none;
-    background: transparent;
-  }
-
-  .item.fb {
-    float: right;
-    width: 80px;
-    margin-left: -20px;
-    margin-right: 5px;
-  }
-
-  .item.fb button {
-    font-size:30px;
-  }
-
-  .item.item-radio {
-    margin: 0 16px;
-    border-bottom: 1px solid $dark;
-  }
-
-  .bar {
-    background: transparent;
-    padding: 0;
-  }
-
-  .bar-footer {
-    bottom: 66px;
-  }
-
-  .bar .button {
-    @include border-radius(0px);
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    border-top: 1px solid $light;
-    height: 100px;
-    font-weight: 700;
-  }
-
-  .bar .button .reg{
-    font-size: 18px;
-    font-weight: 800;
-    display: block;
+  h2 {
     text-transform: uppercase;
   }
 
-  input.input {
-    background: $light;
-    @include border-radius(5px 5px 5px 5px);
-    margin: 10px 17px 10px 0px;
-    padding: 10px;
-    height: 45px;
-  }
-
-  .rules {
-    color: $light;
-    margin: 10px 15px 0 15px;
-    font-weight: bold;
-    font-size: 12px;
-    text-align: left;
-
-    a {
-      color: $calm;
-      text-decoration: none;
-    }
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 1) {
-  .landing {
-    background-image: url(../img/bg.jpg);
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 1.5) {
-  .landing {
-    background-image: url(../img/bg2x.jpg);
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 2.5) {
-  .landing {
-    background-image: url(../img/bg3x.jpg);
+  h2, h3, h4 {
+    color: white;
+    text-align: center;
   }
 }

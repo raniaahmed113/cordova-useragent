@@ -125,12 +125,14 @@ input + .validation {
   text-align:center;
   @include border-radius(5px);
 }
+
 input + .validation span {
   text-align:center;
   line-height: 26px;
   font-size: 15px;
   font-weight: bold;
 }
+
 input + .validation span::after {
   width: 0;
   height: 0;
@@ -431,19 +433,15 @@ ul.chat {
   }
 }
 
-.button.button-transparent {
-  border-color: #111;
-  background: rgba(0, 0, 0, 0.5);
-  color: $light;
-}
-
 .button {
-  font-weight:bold;
+  font-weight: bold;
   @include border-radius(5px);
-}
 
-.rules {
-  margin:10px;
+  &.button-transparent {
+    border-color: #111;
+    background: rgba(0, 0, 0, 0.5);
+    color: $light;
+  }
 }
 
 .header-item.buttons .button .badge {

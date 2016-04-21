@@ -1,8 +1,8 @@
 angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
-        $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate, $cordovaFacebook,
-        __, AuthService, DataMap, Config, Api
+        $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook,
+        __, AuthService, Config, Api
     ) {
         var pixelDensitySuffix = '';
 
@@ -17,7 +17,136 @@ angular.module('hotvibes.controllers')
 
         $scope.logoVariant = "logo-" + Config.API_CLIENT_ID + pixelDensitySuffix;
 
-        $scope.loginData = {};
+        function onError(errCode) {
+            $ionicPopup.alert({
+                title: __("Something's wrong"),
+                template: Api.translateErrorCode(errCode)
+            });
+        }
+
+        function onLoggedIn() {
+            $state.go('inside.users');
+        }
+
+        function onLoginFailed(error) {
+            onError(error.code); // FIXME
+        }
+
+        $scope.loginWithFb = function() {
+            $ionicLoading.show({ template: __("Please wait") + '..'});
+
+            $cordovaFacebook.login([ 'user_birthday', 'user_location' ]).then(
+                function(response) {
+                    if (response.status != 'connected') {
+                        // Ignore
+                        return;
+                    }
+
+                    AuthService.loginWithFb(response.authResponse.accessToken)
+                        .then(
+                            onLoggedIn,
+                            onLoginFailed
+                        );
+                },
+                function(error) {
+                    $ionicLoading.hide();
+
+                    if (error.errorCode == '4201') {
+                        // Login cancelled by the user - do nothing
+                        return;
+                    }
+
+                    onError();
+                }
+            );
+        };
+
+        function requestInputPhoneNumber() {
+            $ionicPopup.prompt({
+                title: __('Login with phone number'),
+                template: __('Enter number'),
+                inputType: 'tel',
+                inputPlaceholder: __('Phone number')
+
+            }).then(function(phoneNumber) {
+                if (!phoneNumber) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: __("Please wait") + '..'});
+                AuthService.sendConfirmationCode(phoneNumber)
+                    .then(
+                        function() {
+                            requestInputSmsCode(phoneNumber)
+                        },
+                        onLoginFailed
+                    )
+                    .finally(function() {
+                        $ionicLoading.hide();
+                    });
+
+            });
+        }
+
+        function requestInputSmsCode(phoneNumber) {
+            $ionicPopup.prompt({
+                title: __('Confirm your number'),
+                template: __('Confirm code has been sent!'),
+                inputType: 'number',
+                inputPlaceholder: __('Code')
+
+            }).then(function(smsCode) {
+                if (!smsCode) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: __("Please wait") + '..'});
+                AuthService.loginWithSmsCode(phoneNumber, smsCode)
+                    .then(
+                        onLoggedIn,
+                        onLoginFailed
+                    )
+                    .finally(function() {
+                        $ionicLoading.hide();
+                    });
+            });
+        }
+
+        $scope.showAltLoginMethods = function() {
+            $ionicActionSheet.show({
+                buttons: [
+                    { text: __('Login with phone number') },
+                    { text: __('Login with username/email') }
+                ],
+                titleText: __('Alternative login methods'),
+                cancelText: __('Cancel'),
+                buttonClicked: function(index) {
+                    switch (index) {
+                        case 0: // Phone number
+                            requestInputPhoneNumber();
+                            break;
+
+                        case 1: // Email
+                            $scope.loginWithPassword.modal.show();
+                            break;
+                    }
+
+                    return true;
+                }
+            });
+        };
+
+        $scope.loginWithPassword = {};
+        $ionicModal
+            .fromTemplateUrl('templates/login_password.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.loginWithPassword.modal = modal;
+            });
+
+        /*$scope.loginData = {};
         $scope.login = function() {
             $ionicLoading.show({ template: __("Please wait") + '..'});
 
@@ -38,51 +167,6 @@ angular.module('hotvibes.controllers')
                         });
                     }
                 );
-        };
-
-        $scope.loginWithFb = function() {
-            $ionicLoading.show({ template: __("Please wait") + '..'});
-
-            function onError(errCode) {
-                $ionicLoading.hide();
-
-                $ionicPopup.alert({
-                    title: __("Something's wrong"),
-                    template: Api.translateErrorCode(errCode)
-                });
-            }
-
-            $cordovaFacebook.login([ 'user_birthday', 'user_location' ]).then(
-                function(response) {
-                    if (response.status != 'connected') {
-                        // Ignore
-                        return;
-                    }
-
-                    AuthService.loginWithFb(response.authResponse.accessToken)
-                        .then(
-                            function() {
-                                $state.go('inside.users').then(function() {
-                                    $ionicLoading.hide();
-                                    delete $scope.loginData.password;
-                                });
-                            },
-                            function(error) {
-                                onError(error.code);
-                            }
-                        );
-                },
-                function(error) {
-                    $ionicLoading.hide();
-
-                    if (error.errorCode == '4201') {
-                        // Login cancelled by the user - do nothing
-                        return;
-                    }
-
-                    onError();
-                }
-            );
         };
 
         $scope.countries = DataMap.country;
@@ -116,7 +200,7 @@ angular.module('hotvibes.controllers')
                         $ionicLoading.hide();
 
                         if (
-                                status == 400 /* Bad Request*/ 
+                                status == 400 // Bad Request
                                 && response.rule 
                                 && response.rule.field
                                 && $scope.registration.form['registration.data.' + response.rule.field]
@@ -153,5 +237,5 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.rules.modal = modal;
-            });
+            });*/
     });
