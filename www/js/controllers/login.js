@@ -2,7 +2,7 @@ angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
         $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook,
-        __, AuthService, Config, Api
+        __, AuthService, Config, Api, ErrorCode
     ) {
         var pixelDensitySuffix = '';
 
@@ -17,19 +17,15 @@ angular.module('hotvibes.controllers')
 
         $scope.logoVariant = "logo-" + Config.API_CLIENT_ID + pixelDensitySuffix;
 
-        function onError(errCode) {
+        function onError(message) {
             $ionicPopup.alert({
                 title: __("Something's wrong"),
-                template: Api.translateErrorCode(errCode)
+                template: message
             });
         }
 
         function onLoggedIn() {
             $state.go('inside.users');
-        }
-
-        function onLoginFailed(error) {
-            onError(error.code); // FIXME
         }
 
         $scope.loginWithFb = function() {
@@ -45,7 +41,9 @@ angular.module('hotvibes.controllers')
                     AuthService.loginWithFb(response.authResponse.accessToken)
                         .then(
                             onLoggedIn,
-                            onLoginFailed
+                            function(error) {
+                                onError(Api.translateErrorCode(error.code));
+                            }
                         );
                 },
                 function(error) {
@@ -79,7 +77,9 @@ angular.module('hotvibes.controllers')
                         function() {
                             requestInputSmsCode(phoneNumber)
                         },
-                        onLoginFailed
+                        function(error) {
+                            onError(Api.translateErrorCode(error.code));
+                        }
                     )
                     .finally(function() {
                         $ionicLoading.hide();
@@ -88,27 +88,66 @@ angular.module('hotvibes.controllers')
             });
         }
 
+        function register(phoneNumber, smsCode) {
+            // __('Fantastic, you're re nearly there. We just need couple more things')
+        }
+
         function requestInputSmsCode(phoneNumber) {
             $ionicPopup.prompt({
                 title: __('Confirm your number'),
                 template: __('Confirm code has been sent!'),
                 inputType: 'number',
-                inputPlaceholder: __('Code')
+                inputPlaceholder: __('Code'),
+                buttons: [
+                    {
+                        text: __('Cancel'),
+                        type: 'button-default'
+                    },
+                    {
+                        text: __('Check code'),
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            // Do not auto-close the pop-up
+                            e.preventDefault();
 
-            }).then(function(smsCode) {
-                if (!smsCode) {
-                    return;
-                }
+                            var self = this,
+                                smsCode = this.scope.$parent.data.response;
 
-                $ionicLoading.show({ template: __("Please wait") + '..'});
-                AuthService.loginWithSmsCode(phoneNumber, smsCode)
-                    .then(
-                        onLoggedIn,
-                        onLoginFailed
-                    )
-                    .finally(function() {
-                        $ionicLoading.hide();
-                    });
+                            if (!smsCode) {
+                                return;
+                            }
+
+                            $ionicLoading.show({ template: __("Please wait") + '..'});
+                            AuthService.loginWithSmsCode(phoneNumber, smsCode)
+                                .then(
+                                    function() {
+                                        self.hide();
+                                        onLoggedIn();
+                                    },
+                                    function(error) {
+                                        var message;
+
+                                        if (error.code && error.code == ErrorCode.INVALID_CREDENTIALS) {
+                                            // No account found associated with this phone number: proceed to registration
+                                            register(phoneNumber, smsCode);
+                                            return;
+
+                                        } else if (error.code && error.code == ErrorCode.INVALID_INPUT) {
+                                            message = __("Unable to confirm phone");
+
+                                        } else {
+                                            message = Api.translateErrorCode(error.code);
+                                        }
+
+                                        onError(message);
+                                    }
+                                )
+                                .finally(function() {
+                                    $ionicLoading.hide();
+                                });
+                        }
+                    }
+                ]
             });
         }
 
