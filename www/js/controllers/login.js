@@ -64,27 +64,55 @@ angular.module('hotvibes.controllers')
                 title: __('Login with phone number'),
                 template: __('Enter number'),
                 inputType: 'tel',
-                inputPlaceholder: __('Phone number')
+                inputPlaceholder: __('Phone number'),
+                buttons: [
+                    {
+                        text: __('Cancel'),
+                        type: 'button-default'
+                    },
+                    {
+                        text: __('Continue'),
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            // Do not auto-close the pop-up
+                            e.preventDefault();
 
-            }).then(function(phoneNumber) {
-                if (!phoneNumber) {
-                    return;
-                }
+                            var self = this,
+                                phoneNumber = this.scope.$parent.data.response;
 
-                $ionicLoading.show({ template: __("Please wait") + '..'});
-                AuthService.sendConfirmationCode(phoneNumber)
-                    .then(
-                        function() {
-                            requestInputSmsCode(phoneNumber)
-                        },
-                        function(error) {
-                            onError(Api.translateErrorCode(error.code));
+                            if (!phoneNumber) {
+                                return;
+                            }
+
+                            $ionicLoading.show({ template: __("Please wait") + '..' });
+                            AuthService.sendConfirmationCode(phoneNumber)
+                                .then(
+                                    function() {
+                                        self.hide();
+                                        requestInputSmsCode(phoneNumber)
+                                    },
+                                    function(error) {
+                                        var message;
+
+                                        switch (error.code) {
+                                            case ErrorCode.INVALID_INPUT:
+                                                message = __("Incorect phone number.");
+                                                break;
+
+                                            default:
+                                                message = Api.translateErrorCode(error.code);
+                                                break;
+                                        }
+
+                                        onError(message);
+                                    }
+                                )
+                                .finally(function () {
+                                    $ionicLoading.hide();
+                                });
                         }
-                    )
-                    .finally(function() {
-                        $ionicLoading.hide();
-                    });
-
+                    }
+                ]
             });
         }
 
@@ -127,16 +155,21 @@ angular.module('hotvibes.controllers')
                                     function(error) {
                                         var message;
 
-                                        if (error.code && error.code == ErrorCode.INVALID_CREDENTIALS) {
+                                        if (error.code == ErrorCode.INVALID_CREDENTIALS) {
                                             // No account found associated with this phone number: proceed to registration
+                                            self.hide();
                                             register(phoneNumber, smsCode);
                                             return;
+                                        }
 
-                                        } else if (error.code && error.code == ErrorCode.INVALID_INPUT) {
-                                            message = __("Unable to confirm phone");
+                                        switch (error.code) {
+                                            case ErrorCode.INVALID_INPUT:
+                                                message = __("Unable to confirm phone");
+                                                break;
 
-                                        } else {
-                                            message = Api.translateErrorCode(error.code);
+                                            default:
+                                                message = Api.translateErrorCode(error.code);
+                                                break;
                                         }
 
                                         onError(message);
