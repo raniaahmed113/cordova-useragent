@@ -2,10 +2,10 @@
     <ion-nav-title translate translate-values="{name: (conversation.withUser.isOnline ? '<i class=\'online\'></i> ' : '') + conversation.withUser.nickName}">Conversation with %s</ion-nav-title>
 
     <ion-nav-buttons side="right">
-        <!--<a href="#/users/{{conversation.withUser.id}}">
+        <button class="button button-stable" ng-if="conversation.withUser" ng-click="report()"><i class="icon ion-alert-circled"></i></button>
+        <a href="#/users/{{conversation.withUser.id}}" ng-if="conversation.withUser">
             <img class="avatar" ng-src="{{conversation.withUser.profilePhoto | profilePhotoUrl:conversation.withUser.gender}}" />
-        </a>-->
-        <button class="button button-stable" ng-click="report()"><i class="icon ion-alert-circled"></i></button>
+        </a>
     </ion-nav-buttons>
 
     <ion-content>

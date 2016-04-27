@@ -83,7 +83,7 @@ angular.module('hotvibes.controllers')
             withUserId: $stateParams.userId || $stateParams.id,
             include: [
                 'withUser.isOnline'
-                //,'withUser.profilePhoto.url(size=w40h40)'
+                ,'withUser.profilePhoto.url(size=w40h40)'
             ].join(',')
         };
 
