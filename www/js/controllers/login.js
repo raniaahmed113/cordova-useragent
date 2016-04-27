@@ -44,7 +44,9 @@ angular.module('hotvibes.controllers')
                             function(error) {
                                 onError(Api.translateErrorCode(error.code));
                             }
-                        );
+                        ).finally(function() {
+                            $ionicLoading.hide();
+                        });
                 },
                 function(error) {
                     $ionicLoading.hide();
