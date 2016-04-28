@@ -1,24 +1,33 @@
 <ion-view>
-    <ion-content scroll="false" class="landing center-vertical">
+    <ion-content scroll="false" class="landing center center-vertical">
 
-        <img ng-src="img/logos/{{logoVariant}}.png" class="logo center" />
-        <h2 translate>title_page_seo_keyword</h2>
-        <h3 translate>homepage_intro_section_short</h3>
+        <div>
+            <img ng-src="img/logos/{{logoVariant}}.png" />
+        </div>
+
+        <h3 class="all-caps" translate>title_page_seo_keyword</h3>
+        <h4 translate>homepage_intro_section_short</h4>
 
         <p class="icons">
-            <i class="icon"></i>
-            <i class="icon"></i>
-            <i class="icon"></i>
-            <i class="icon"></i>
+            <i class="icon-heart_1"></i>
+            <i class="icon-heart_2"></i>
+            <i class="icon-heart_3"></i>
+            <i class="icon-heart_4"></i>
         </p>
 
+        <div class="center">
+            <div class="separator"></div>
+        </div>
     </ion-content>
 
-    <ion-footer-bar class="bar-stable center">
-        <button class="button button-calm" ng-click="loginWithFb()">
-            <i class="icon ion-social-facebook"></i> Facebook
-        </button>
+    <ion-footer-bar class="bar-stable bar-height-auto">
+        <div class="bar-content center padding">
+            <h4 translate>Register or login with:</h4>
+            <button class="button button-block button-large button-calm" ng-click="loginWithFb()">
+                <i class="icon ion-social-facebook"></i> Facebook
+            </button>
 
-        <button class="button button-clear" ng-click="showAltLoginMethods()" translate>Alternative login methods</button>
+            <button class="button button-block button-large button-stable" ng-click="showAltLoginMethods()" translate>Alternative login methods</button>
+        </div>
     </ion-footer-bar>
 </ion-view>

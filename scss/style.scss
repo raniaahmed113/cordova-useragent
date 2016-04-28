@@ -115,7 +115,7 @@
   }
 }
 
-input + .validation {
+/*input + .validation {
   position: absolute;
   top: 0;
   left:16px;
@@ -148,7 +148,8 @@ input + .validation span::after {
   right:0;
   margin-left:auto;
   margin-right:auto;
-}
+}*/
+
 .item-stacked-label-padded {
   @extend .item-stacked-label;
   padding-right: 16px;
@@ -243,6 +244,10 @@ a.embed {
       white-space: normal;
     }
   }
+}
+
+.all-caps {
+  text-transform: uppercase;
 }
 
 .list .item.item-nav-view-container {
@@ -463,6 +468,14 @@ ion-header-bar .buttons .avatar {
   width: 100%;
   height: 100%;
   @include border-radius(50%);
+}
+
+.bar.bar-height-auto {
+  height: auto;
+
+  >.bar-content {
+    flex: 1;
+  }
 }
 
 .popup-container.popup-width-auto .popup {

@@ -1,8 +1,8 @@
 angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
-        $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook,
-        __, AuthService, Config, Api, ErrorCode
+        $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook, $translate,
+        __, AuthService, Config, Api, ErrorCode, DataMap
     ) {
         var pixelDensitySuffix = '';
 
@@ -118,10 +118,6 @@ angular.module('hotvibes.controllers')
             });
         }
 
-        function register(phoneNumber, smsCode) {
-            // __('Fantastic, you're re nearly there. We just need couple more things')
-        }
-
         function requestInputSmsCode(phoneNumber) {
             $ionicPopup.prompt({
                 title: __('Confirm your number'),
@@ -210,37 +206,26 @@ angular.module('hotvibes.controllers')
             });
         };
 
-        $scope.loginWithPassword = {};
-        $ionicModal
-            .fromTemplateUrl('templates/login_password.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            })
-            .then(function(modal) {
-                $scope.loginWithPassword.modal = modal;
-            });
+        $scope.loginWithPassword = {
+            data: {},
+            submit: function() {
+                $ionicLoading.show({ template: __("Please wait") + '..'});
 
-        /*$scope.loginData = {};
-        $scope.login = function() {
-            $ionicLoading.show({ template: __("Please wait") + '..'});
+                AuthService.loginWithCredentials($scope.loginWithPassword.data.username, $scope.loginWithPassword.data.password)
+                    .then(
+                        function() {
+                            onLoggedIn();
+                            $scope.loginWithPassword.modal.hide();
+                            delete $scope.loginWithPassword.data.password;
+                        },
 
-            AuthService.loginWithCredentials($scope.loginData.username, $scope.loginData.password)
-                .then(
-                    function() {
-                        $state.go('inside.users').then(function() {
-                            $ionicLoading.hide();
-                            delete $scope.loginData.password;
-                        });
-                    },
-
-                    function(error) {
-                        $ionicLoading.hide();
-                        $ionicPopup.alert({
-                            title: __("Something's wrong"),
-                            template: Api.translateErrorCode(error.code ? error.code : 0)
-                        });
-                    }
-                );
+                        function(error) {
+                            onError(Api.translateErrorCode(error.code));
+                        }
+                    ).finally(function() {
+                    $ionicLoading.hide();
+                });
+            }
         };
 
         $scope.countries = DataMap.country;
@@ -275,7 +260,7 @@ angular.module('hotvibes.controllers')
 
                         if (
                                 status == 400 // Bad Request
-                                && response.rule 
+                                && response.rule
                                 && response.rule.field
                                 && $scope.registration.form['registration.data.' + response.rule.field]
                         ) {
@@ -295,6 +280,21 @@ angular.module('hotvibes.controllers')
             }
         };
 
+        function register(phoneNumber, smsCode) {
+            $scope.registration.data.phoneNumber = phoneNumber;
+            $scope.registration.data.smsCode = smsCode;
+            $scope.registration.modal.show();
+        }
+
+        $ionicModal
+            .fromTemplateUrl('templates/login_password.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.loginWithPassword.modal = modal;
+            });
+
         $ionicModal
             .fromTemplateUrl('templates/register.html', {
                 scope: $scope,
@@ -302,6 +302,7 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.registration.modal = modal;
+                modal.show();
             });
 
         $ionicModal
@@ -311,5 +312,5 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.rules.modal = modal;
-            });*/
+            });
     });
