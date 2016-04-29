@@ -34,7 +34,7 @@
                 <div>
                     <input type="tel" ng-model="settings.profile.phoneNumber" minlength="5" />
                     <div ng-if="settings.profile.isPhoneNumberConfirmed" class="positive" translate></div>
-                    <div ng-if="!settings.profile.isPhoneNumberConfirmed" class="status assertive">
+                    <div ng-if="!settings.profile.isPhoneNumberConfirmed && settings.profile.phoneNumber" class="status assertive">
                         <label translate>Your phone number is unconfirmed.</label>
                         <button type="button" ng-click="confirmPhone()" class="button-assertive" translate>
                             Confirm now.
