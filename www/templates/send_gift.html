@@ -11,7 +11,7 @@
     <ion-content>
         <button class="button gift" ng-repeat="gift in gifts" ng-click="sendGift(gift)" ng-disabled="gift.price > currUser.credits">
             <img ng-src="{{gift.thumbUrl}}" alt="" />
-            <div><i class="icon ion-social-usd"></i> {{gift.price}}</div>
+            <div><i class="icon ion-ios-pricetag"></i> {{gift.price}}</div>
         </button>
     </ion-content>
 </ion-modal-view>
