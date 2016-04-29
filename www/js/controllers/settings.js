@@ -509,8 +509,12 @@ angular.module('hotvibes.controllers')
                     error.data.code = ErrorCode.IMAGE_SIZE_INVALID
                 }
 
-                $scope.onError(error);
+                var params = {};
+                if (error.data && error.data.code == ErrorCode.ALREADY_DID_THAT) {
+                    params.message = __("This file is already uploaded");
+                }
 
+                $scope.onError(error, params);
             });
         }
 

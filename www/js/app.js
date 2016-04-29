@@ -10,7 +10,7 @@ angular.module('hotvibes', [
         VIP_REQUIRED: 102,
         PHOTO_IS_REQUIRED_HERE: 103,
         MEMBER_HAS_BLOCKED_YOU: 104,
-        INVITE_ALREADY_SENT: 105,
+        ALREADY_DID_THAT: 105,
         CANT_PERFORM_ACTION_ON_SELF: 106,
         TEXT_TOO_SHORT: 107,
         MUST_WAIT_FOR_REPLY: 108,

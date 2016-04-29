@@ -34,8 +34,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case ErrorCode.MUST_WAIT_FOR_REPLY:
                     return __("You can't send a file unless a member replyed to your message.");
 
-                case ErrorCode.INVITE_ALREADY_SENT:
-                    return __("Already invited");
+                case ErrorCode.ALREADY_DID_THAT:
+                    return __("Already invited"); // FIXME: this shouldn't be done globally
 
                 case ErrorCode.CANT_PERFORM_ACTION_ON_SELF:
                     return __("Fatal error. You cannot do this :(");
