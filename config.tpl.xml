@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="{$projectId}" version="{$version}" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" id="{$projectId}" version="{$version}">
   <name>{$appName}</name>
   <description>{$appDesc}</description>
   <author email="{$emailSupport}" href="{$url}">{$appName}</author>
   <content src="index.html"/>
   <access origin="*"/>
   <allow-navigation href="http://*/*"/>
+
+  <preference name="orientation" value="portrait" />
+
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="BackupWebStorage" value="none"/>
+
   <preference name="SplashScreen" value="screen"/>
+  <preference name="ShowSplashScreen" value="true" />
   <preference name="SplashScreenDelay" value="3000"/>
-  <feature name="StatusBar">
-    <param name="ios-package" value="CDVStatusBar" onload="true"/>
+  <preference name="AutoHideSplashScreen" value="true" />
+  <preference name="SplashShowOnlyFirstTime" value="false" />
+  <preference name="FadeSplashScreen" value="false"/>
+  <preference name="ShowSplashScreenSpinner" value="false"/>
+
+  <!--<config-file platform="android" parent="/manifest">
+    <application android:theme="@android:style/Theme.DeviceDefault.NoActionBar"></application>
+  </config-file>-->
+
+  <feature name="SplashScreen">
+    <param name="android-package" onload="true" value="org.apache.cordova.splashscreen.SplashScreen" />
   </feature>
+
+  <feature name="StatusBar">
+    <param name="ios-package" onload="true" value="CDVStatusBar"/>
+  </feature>
+
   <platform name="android">
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
     <icon src="resources/android/icon/drawable-mdpi-icon.png" density="mdpi"/>
@@ -35,6 +54,7 @@
     <splash src="resources/android/splash/drawable-port-xxhdpi-screen.png" density="port-xxhdpi"/>
     <splash src="resources/android/splash/drawable-port-xxxhdpi-screen.png" density="port-xxxhdpi"/>
   </platform>
+
   <platform name="ios">
     <icon src="resources/ios/icon/icon.png" width="57" height="57"/>
     <icon src="resources/ios/icon/icon@2x.png" width="114" height="114"/>
@@ -63,5 +83,10 @@
     <splash src="resources/ios/splash/Default@2x~iphone.png" width="640" height="960"/>
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
+
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+
+  <plugin name="cc.fovea.cordova.purchase" spec="~4.0.0">
+    <variable name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwAiyEkJFV/CQUayJzb5ALeYcGRG5pLcRJCD0SNX/6Zzvkb/JF2qzFlKU6CrVry3XXqxF4h06TTglpB7O5dkEhwD5rpRIZGp4xU6cs9Q/ShMTN0rfUFgIjHamx13fV5Lf9OKhXtcEN0wIIKnGJJb3BgSjnGNQTpSdeTDgU3UN5GFdlUwWm/1QL7tE1sQ9nWzjNEWj2ZWo1FU4N2NHlBvnZrcQ7f7OqKX9pCDaoCh3mc2vQKcmIOpx2oDdeCZwfY3sz4/mdoQJ4BmVqFOsqnhAM+3o/0Wi5yJ7chg6U4wMmxCnfScbivHA0hBHV8qsHSZg+j3uvIN9QLaGmcvTyqn5RQIDAQAB"/>
+  </plugin>
 </widget>
