@@ -333,9 +333,11 @@ angular.module('hotvibes.controllers')
                         throw "Unknown product: " + product.alias;
                 }
 
-                $scope.currUser.credits += numCredits;
-                $ionicLoading.hide();
+                $scope.$apply(function() {
+                    $scope.currUser.credits += numCredits;
+                });
 
+                $ionicLoading.hide();
                 product.finish();
 
                 $ionicPopup.alert({
@@ -350,10 +352,12 @@ angular.module('hotvibes.controllers')
             $scope.billingSupported = true;
 
             store.ready(function() {
-                $scope.creditOptions = [
-                    { amount: 200, buy: function() { store.order("200 credits"); } },
-                    { amount: 500, buy: function() { store.order("500 credits"); } }
-                ];
+                $scope.$apply(function() {
+                    $scope.creditOptions = [
+                        { amount: 200, buy: function() { store.order("200 credits"); } },
+                        { amount: 500, buy: function() { store.order("500 credits"); } }
+                    ];
+                });
             });
 
             store.refresh();
@@ -394,13 +398,15 @@ angular.module('hotvibes.controllers')
             });
 
             store.ready(function() {
-                $scope.purchaseOptions = [
-                    {
-                        buy: function() { store.order("vip"); },
-                        cost: '€3',
-                        numDays: 30
-                    }
-                ];
+                $scope.$apply(function() {
+                    $scope.purchaseOptions = [
+                        {
+                            buy: function() { store.order("vip"); },
+                            cost: '€3',
+                            numDays: 30
+                        }
+                    ];
+                });
             });
 
             store.refresh();
