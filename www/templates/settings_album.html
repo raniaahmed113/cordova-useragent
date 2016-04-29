@@ -4,7 +4,7 @@
     </ion-nav-title>
 
     <ion-nav-buttons side="right">
-        <button class="button icon ion-upload" ng-click="openFilePicker()"></button>&nbsp;
+        <button class="button icon ion-android-upload" ng-click="openFilePicker()"></button>&nbsp;
         <button ng-if="album.id > 0" class="button icon ion-trash-b" ng-click="deleteAlbum()"></button>
     </ion-nav-buttons>
 
@@ -13,13 +13,13 @@
 
         <resource-collection list="photos">
             <div class="row row-wrap">
-                <a href="#" class="thumb"
-                    ng-repeat="photo in album.photos | orderBy:'isMain':true"
+                <span class="thumb"
+                    ng-repeat="photo in photos | orderBy:'isMain':true"
                     ng-click="showOptionsFor(photo, $event)">
 
                     <img ng-src="{{photo.url}}" alt="" />
                     <span class="royal positive-bg" ng-if="photo.isMain" translate>Main</span>
-                </a>
+                </span>
             </div>
         </resource-collection>
     </ion-content>
