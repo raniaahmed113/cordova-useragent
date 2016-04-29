@@ -4,18 +4,7 @@ angular.module('hotvibes.controllers')
         $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook, $translate,
         __, AuthService, Config, Api, ErrorCode, DataMap
     ) {
-        var pixelDensitySuffix = '';
-
-        if ($window.devicePixelRatio) {
-            if ($window.devicePixelRatio >= 1.5 && $window.devicePixelRatio < 2.5) {
-                pixelDensitySuffix = '@2x';
-
-            } else if ($window.devicePixelRatio >= 2.5) {
-                pixelDensitySuffix = '@3x';
-            }
-        }
-
-        $scope.logoVariant = "logo-" + Config.API_CLIENT_ID + pixelDensitySuffix;
+        $scope.logoVariant = Config.API_CLIENT_ID;
 
         function onError(message) {
             $ionicPopup.alert({
@@ -302,7 +291,7 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.registration.modal = modal;
-                modal.show();
+                //modal.show();
             });
 
         $ionicModal
