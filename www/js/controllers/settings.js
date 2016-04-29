@@ -412,22 +412,13 @@ angular.module('hotvibes.controllers')
         __, MediaFile, Album, Rule, ErrorCode
     ) {
         $scope.album = Album.get({
-            id: $stateParams.albumId,
-            include: 'photos.url(size=w80h80)'
+            id: $stateParams.albumId
         });
 
-        var deferred = $q.defer();
-        $scope.photos = [];
-        $scope.photos.$promise = deferred.promise;
-
-        $scope.album.$promise.then(
-            function(album) {
-                $scope.album = album;
-                $scope.photos = album.photos;
-                deferred.resolve();
-            },
-            deferred.reject
-        );
+        $scope.photos = MediaFile.query({
+            albumId: $stateParams.albumId,
+            include: 'url(size=w80h80)'
+        });
 
         $scope.zoomPhoto = function(photo) {
             $scope.popover.hide();
@@ -440,7 +431,7 @@ angular.module('hotvibes.controllers')
 
             newMainPhoto.isMain = true;
 
-            $scope.album.photos.forEach(function(photo) {
+            $scope.photos.forEach(function(photo) {
                 if (photo.isMain && photo.id != newMainPhoto.id) {
                     photo.isMain = false;
                 }
@@ -452,8 +443,8 @@ angular.module('hotvibes.controllers')
         $scope.deletePhoto = function(photo) {
             $scope.popover.hide();
 
-            var index = $scope.album.photos.indexOf(photo),
-                photoToDelete = $scope.album.photos.splice(index, 1)[0];
+            var index = $scope.photos.indexOf(photo),
+                photoToDelete = $scope.photos.splice(index, 1)[0];
 
             photoToDelete.$delete();
         };
@@ -491,7 +482,7 @@ angular.module('hotvibes.controllers')
 
                 }).$promise
                     .then(
-                        function(newPhoto) { $scope.album.photos.push(newPhoto) },
+                        function(newPhoto) { $scope.photos.push(newPhoto) },
                         $scope.onError
                     )
                     .finally(function() {
@@ -509,8 +500,12 @@ angular.module('hotvibes.controllers')
                     error.data.code = ErrorCode.IMAGE_SIZE_INVALID
                 }
 
-                $scope.onError(error);
+                var params = {};
+                if (error.data && error.data.code == ErrorCode.ALREADY_DID_THAT) {
+                    params.message = __("This file is already uploaded");
+                }
 
+                $scope.onError(error, params);
             });
         }
 

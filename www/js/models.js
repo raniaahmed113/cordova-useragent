@@ -176,11 +176,15 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             if (params.id == 0) {
                 var deferred = $q.defer();
 
-                MediaFile.query({
-                    albumId: params.id,
-                    include: params.include.replace(/photos\./g, '')
+                var fileQueryParams = {
+                    albumId: params.id
+                };
 
-                }).$promise.then(
+                if (params.include) {
+                    fileQueryParams.include = params.include.replace(/photos\./g, '');
+                }
+
+                MediaFile.query(fileQueryParams).$promise.then(
                     function(result) {
                         var album = new Album();
                         album.id = params.id;
