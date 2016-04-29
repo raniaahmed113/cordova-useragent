@@ -332,6 +332,37 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             });
         };
 
+        /**
+         * @param {string} phoneNumber
+         *
+         * @returns {Promise}
+         */
+        this.sendConfirmationCode = function(phoneNumber) {
+            var deferred = $q.defer();
+
+            Api.request().post(Config.API_URL_BASE + 'auth/phoneNumber', {
+                clientId: Config.API_CLIENT_ID,
+                number: phoneNumber
+            })
+                .success(deferred.resolve)
+                .error(deferred.reject);
+
+            return deferred.promise;
+        };
+
+        /**
+         * @param {string} phoneNumber
+         * @param {number} code
+         *
+         * @returns {Promise}
+         */
+        this.loginWithSmsCode = function(phoneNumber, code) {
+            return login('smsCode', {
+                code: code,
+                phoneNumber: phoneNumber
+            });
+        };
+
         this.submitRegistration = function(data) {
             // Do a copy so we don't modify binded values
             var params = angular.copy(data);

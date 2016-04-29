@@ -1,100 +1,36 @@
 .landing {
-  background-image: url(/img/bg.jpg);
-  background-repeat: no-repeat;
-  background-position: center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
+  color: white;
+  background-color: $blue;
 
-  .logo {
-    width: 100%;
-    padding: 0 70px;
-    position: absolute;
-    top: 20px;
+  .intro {
+    padding-left: 10%;
+    padding-right: 10%;
+    flex: 1;
   }
 
-  .item {
-    border: none;
-    background: transparent;
+  label.item {
+    background-color: white;
   }
 
-  .item.fb {
-    float: right;
-    width: 80px;
-    margin-left: -20px;
-    margin-right: 5px;
+  h2, h3, h4 {
+    color: white;
   }
 
-  .item.fb button {
-    font-size:30px;
-  }
+  .icons {
+    font-size: 3em;
+    margin-top: 30px;
+    display: flex;
 
-  .item.item-radio {
-    margin: 0 16px;
-    border-bottom: 1px solid $dark;
-  }
-
-  .bar {
-    background: transparent;
-    padding: 0;
-  }
-
-  .bar-footer {
-    bottom: 66px;
-  }
-
-  .bar .button {
-    @include border-radius(0px);
-    background: rgba(0, 0, 0, 0.5);
-    border: none;
-    border-top: 1px solid $light;
-    height: 100px;
-    font-weight: 700;
-  }
-
-  .bar .button .reg{
-    font-size: 18px;
-    font-weight: 800;
-    display: block;
-    text-transform: uppercase;
-  }
-
-  input.input {
-    background: $light;
-    @include border-radius(5px 5px 5px 5px);
-    margin: 10px 17px 10px 0px;
-    padding: 10px;
-    height: 45px;
-  }
-
-  .rules {
-    color: $light;
-    margin: 10px 15px 0 15px;
-    font-weight: bold;
-    font-size: 12px;
-    text-align: left;
-
-    a {
-      color: $calm;
-      text-decoration: none;
+    >i {
+      flex: 1;
     }
   }
-}
 
-@media (-webkit-min-device-pixel-ratio: 1) {
-  .landing {
-    background-image: url(../img/bg.jpg);
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 1.5) {
-  .landing {
-    background-image: url(../img/bg2x.jpg);
-  }
-}
-
-@media (-webkit-min-device-pixel-ratio: 2.5) {
-  .landing {
-    background-image: url(../img/bg3x.jpg);
+  .separator {
+    display: inline-block;
+    width: 20%;
+    height: 2px;
+    margin-top: 30px;
+    background-color: white;
   }
 }

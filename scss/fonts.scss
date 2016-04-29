@@ -10,27 +10,37 @@
 }
 
 [class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'icomoon' !important;
+  speak: none;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
   text-transform: none;
   line-height: 1;
+
+  /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-heart_1:before {
+  content: "\e915";
+}
+.icon-heart_2:before {
+  content: "\e916";
+}
+.icon-heart_3:before {
+  content: "\e917";
+}
+.icon-heart_4:before {
+  content: "\e918";
+}
 .icon-kreditai:before {
   content: "\e900";
 }
 .icon-dvikova:before {
   content: "\e901";
-}
-.icon-dvikova{
-  font-size: 13px;
-}
-.icon-gift85{
-  font-size: 12px;
 }
 .icon-gift85:before {
   content: "\e902";
@@ -89,3 +99,4 @@
 .icon-heart-broken:before {
   content: "\e914";
 }
+

@@ -1,56 +1,24 @@
 angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
-        $window, $scope, $state, $ionicModal, $ionicLoading, $ionicPopup, $translate, $cordovaFacebook,
-        __, AuthService, DataMap, Config, Api
+        $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook, $translate,
+        __, AuthService, Config, Api, ErrorCode, DataMap
     ) {
-        var pixelDensitySuffix = '';
+        $scope.logoVariant = Config.API_CLIENT_ID;
 
-        if ($window.devicePixelRatio) {
-            if ($window.devicePixelRatio >= 1.5 && $window.devicePixelRatio < 2.5) {
-                pixelDensitySuffix = '@2x';
-
-            } else if ($window.devicePixelRatio >= 2.5) {
-                pixelDensitySuffix = '@3x';
-            }
+        function onError(message) {
+            $ionicPopup.alert({
+                title: __("Something's wrong"),
+                template: message
+            });
         }
 
-        $scope.logoVariant = "logo-" + Config.API_CLIENT_ID + pixelDensitySuffix;
-
-        $scope.loginData = {};
-        $scope.login = function() {
-            $ionicLoading.show({ template: __("Please wait") + '..'});
-
-            AuthService.loginWithCredentials($scope.loginData.username, $scope.loginData.password)
-                .then(
-                    function() {
-                        $state.go('inside.users').then(function() {
-                            $ionicLoading.hide();
-                            delete $scope.loginData.password;
-                        });
-                    },
-
-                    function(error) {
-                        $ionicLoading.hide();
-                        $ionicPopup.alert({
-                            title: __("Something's wrong"),
-                            template: Api.translateErrorCode(error.code ? error.code : 0)
-                        });
-                    }
-                );
-        };
+        function onLoggedIn() {
+            $state.go('inside.users');
+        }
 
         $scope.loginWithFb = function() {
             $ionicLoading.show({ template: __("Please wait") + '..'});
-
-            function onError(errCode) {
-                $ionicLoading.hide();
-
-                $ionicPopup.alert({
-                    title: __("Something's wrong"),
-                    template: Api.translateErrorCode(errCode)
-                });
-            }
 
             $cordovaFacebook.login([ 'user_birthday', 'user_location' ]).then(
                 function(response) {
@@ -61,16 +29,13 @@ angular.module('hotvibes.controllers')
 
                     AuthService.loginWithFb(response.authResponse.accessToken)
                         .then(
-                            function() {
-                                $state.go('inside.users').then(function() {
-                                    $ionicLoading.hide();
-                                    delete $scope.loginData.password;
-                                });
-                            },
+                            onLoggedIn,
                             function(error) {
-                                onError(error.code);
+                                onError(Api.translateErrorCode(error.code));
                             }
-                        );
+                        ).finally(function() {
+                            $ionicLoading.hide();
+                        });
                 },
                 function(error) {
                     $ionicLoading.hide();
@@ -83,6 +48,173 @@ angular.module('hotvibes.controllers')
                     onError();
                 }
             );
+        };
+
+        function requestInputPhoneNumber() {
+            $ionicPopup.prompt({
+                title: __('Login with phone number'),
+                template: __('Enter number'),
+                inputType: 'tel',
+                inputPlaceholder: __('Phone number'),
+                buttons: [
+                    {
+                        text: __('Cancel'),
+                        type: 'button-default'
+                    },
+                    {
+                        text: __('Continue'),
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            // Do not auto-close the pop-up
+                            e.preventDefault();
+
+                            var self = this,
+                                phoneNumber = this.scope.$parent.data.response;
+
+                            if (!phoneNumber) {
+                                return;
+                            }
+
+                            $ionicLoading.show({ template: __("Please wait") + '..' });
+                            AuthService.sendConfirmationCode(phoneNumber)
+                                .then(
+                                    function() {
+                                        self.hide();
+                                        requestInputSmsCode(phoneNumber)
+                                    },
+                                    function(error) {
+                                        var message;
+
+                                        switch (error.code) {
+                                            case ErrorCode.INVALID_INPUT:
+                                                message = __("Incorect phone number.");
+                                                break;
+
+                                            default:
+                                                message = Api.translateErrorCode(error.code);
+                                                break;
+                                        }
+
+                                        onError(message);
+                                    }
+                                )
+                                .finally(function () {
+                                    $ionicLoading.hide();
+                                });
+                        }
+                    }
+                ]
+            });
+        }
+
+        function requestInputSmsCode(phoneNumber) {
+            $ionicPopup.prompt({
+                title: __('Confirm your number'),
+                template: __('Confirm code has been sent!'),
+                inputType: 'number',
+                inputPlaceholder: __('Code'),
+                buttons: [
+                    {
+                        text: __('Cancel'),
+                        type: 'button-default'
+                    },
+                    {
+                        text: __('Check code'),
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            // Do not auto-close the pop-up
+                            e.preventDefault();
+
+                            var self = this,
+                                smsCode = this.scope.$parent.data.response;
+
+                            if (!smsCode) {
+                                return;
+                            }
+
+                            $ionicLoading.show({ template: __("Please wait") + '..'});
+                            AuthService.loginWithSmsCode(phoneNumber, smsCode)
+                                .then(
+                                    function() {
+                                        self.hide();
+                                        onLoggedIn();
+                                    },
+                                    function(error) {
+                                        var message;
+
+                                        if (error.code == ErrorCode.INVALID_CREDENTIALS) {
+                                            // No account found associated with this phone number: proceed to registration
+                                            self.hide();
+                                            register(phoneNumber, smsCode);
+                                            return;
+                                        }
+
+                                        switch (error.code) {
+                                            case ErrorCode.INVALID_INPUT:
+                                                message = __("Unable to confirm phone");
+                                                break;
+
+                                            default:
+                                                message = Api.translateErrorCode(error.code);
+                                                break;
+                                        }
+
+                                        onError(message);
+                                    }
+                                )
+                                .finally(function() {
+                                    $ionicLoading.hide();
+                                });
+                        }
+                    }
+                ]
+            });
+        }
+
+        $scope.showAltLoginMethods = function() {
+            $ionicActionSheet.show({
+                buttons: [
+                    { text: __('Login with phone number') },
+                    { text: __('Login with username/email') }
+                ],
+                titleText: __('Alternative login methods'),
+                cancelText: __('Cancel'),
+                buttonClicked: function(index) {
+                    switch (index) {
+                        case 0: // Phone number
+                            requestInputPhoneNumber();
+                            break;
+
+                        case 1: // Email
+                            $scope.loginWithPassword.modal.show();
+                            break;
+                    }
+
+                    return true;
+                }
+            });
+        };
+
+        $scope.loginWithPassword = {
+            data: {},
+            submit: function() {
+                $ionicLoading.show({ template: __("Please wait") + '..'});
+
+                AuthService.loginWithCredentials($scope.loginWithPassword.data.username, $scope.loginWithPassword.data.password)
+                    .then(
+                        function() {
+                            onLoggedIn();
+                            $scope.loginWithPassword.modal.hide();
+                            delete $scope.loginWithPassword.data.password;
+                        },
+
+                        function(error) {
+                            onError(Api.translateErrorCode(error.code));
+                        }
+                    ).finally(function() {
+                    $ionicLoading.hide();
+                });
+            }
         };
 
         $scope.countries = DataMap.country;
@@ -116,8 +248,8 @@ angular.module('hotvibes.controllers')
                         $ionicLoading.hide();
 
                         if (
-                                status == 400 /* Bad Request*/ 
-                                && response.rule 
+                                status == 400 // Bad Request
+                                && response.rule
                                 && response.rule.field
                                 && $scope.registration.form['registration.data.' + response.rule.field]
                         ) {
@@ -137,6 +269,21 @@ angular.module('hotvibes.controllers')
             }
         };
 
+        function register(phoneNumber, smsCode) {
+            $scope.registration.data.phoneNumber = phoneNumber;
+            $scope.registration.data.smsCode = smsCode;
+            $scope.registration.modal.show();
+        }
+
+        $ionicModal
+            .fromTemplateUrl('templates/login_password.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.loginWithPassword.modal = modal;
+            });
+
         $ionicModal
             .fromTemplateUrl('templates/register.html', {
                 scope: $scope,
@@ -144,6 +291,7 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.registration.modal = modal;
+                //modal.show();
             });
 
         $ionicModal
