@@ -11,6 +11,32 @@ angular.module('hotvibes.directives', [])
         };
     })
 
+    .directive('parseUrls', function() {
+        return {
+            restrict: 'A',
+            link: function($scope, $element, $attrs) {
+                angular.element($element).on('click', function(event) {
+                    var target;
+
+                    if (event.target instanceof HTMLAnchorElement) {
+                        target = event.target;
+
+                    } else if (event.currentTarget instanceof HTMLAnchorElement) {
+                        target = event.currentTarget;
+                    }
+
+                    var href = target.getAttribute('href');
+                    if (!href) {
+                        return;
+                    }
+
+                    event.preventDefault();
+                    window.open(encodeURI(href), '_system');
+                });
+            }
+        }
+    })
+
     .directive('resourceCollection', function() {
         return {
             restrict: 'E',

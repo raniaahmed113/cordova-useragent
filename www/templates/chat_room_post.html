@@ -8,11 +8,11 @@
             </a>
 
             <div class="item item-body">
-                <a ng-if="post.video" class="embed" href="https://{{post.video.link}}" target="_blank">
+                <a ng-if="post.video" class="embed" href="https://{{post.video.link}}" parse-urls>
                     <img class="full-image" ng-src="{{post.video.thumbs[0]}}" alt="" />
                     <h4>{{post.video.title}}</h4>
                 </a>
-                <p ng-bind-html="post.body | linky:'_blank' | emoticonize"></p>
+                <p ng-bind-html="post.body | linky | emoticonize" parse-urls></p>
             </div>
         </div>
 
@@ -28,7 +28,7 @@
                             <span ng-if="comment.datePosted">{{comment.datePosted*1000 | amCalendar}}</span>
                         </span>
                     </span><br />
-                    <span ng-bind-html="comment.text | linky:'_blank' | emoticonize"></span>
+                    <span ng-bind-html="comment.text | linky | emoticonize" parse-urls></span>
                 </p>
             </a>
         </resource-collection>

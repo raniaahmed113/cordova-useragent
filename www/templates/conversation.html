@@ -17,7 +17,7 @@
                 ng-class="{'item-positive': message.isNew, mine: message.id == currUser.id, failed: message.error ? true : false}"
                 ng-click="resend($index)">
 
-                <span ng-bind-html="message.text | linky:'_blank' | emoticonize"></span>
+                <span ng-bind-html="message.text | linky | emoticonize" parse-urls></span>
 
                 <div class="attachment" ng-if="message.attachment" ng-switch="message.type">
                     <a ng-switch-when="image" ng-href="{{message.attachment.url}}" target="_blank">
