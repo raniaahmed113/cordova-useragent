@@ -6,14 +6,20 @@
     padding-left: 10%;
     padding-right: 10%;
     flex: 1;
+    color: white;
+
+    h1, h2, h3, h4, h5 {
+      color: white;
+    }
+  }
+
+  .footer {
+    background: white;
+    color: $dark;
   }
 
   label.item {
     background-color: white;
-  }
-
-  h2, h3, h4 {
-    color: white;
   }
 
   .icons {

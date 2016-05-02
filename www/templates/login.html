@@ -2,7 +2,7 @@
     <ion-content scroll="false" class="landing center center-vertical">
 
         <div class="intro">
-            <img src="img/logos/logo-{{logoVariant}}.png" srcset="img/logos/logo-{{logoVariant}}.png 1x, img/logos/logo-{{logoVariant}}@2x.png 2x, img/logos/logo-{{logoVariant}}@3x.png 3x" alt="Hello" />
+            <img ng-src="img/logos/logo-{{logoVariant}}.png" srcset="img/logos/logo-{{logoVariant}}.png 1x, img/logos/logo-{{logoVariant}}@2x.png 2x, img/logos/logo-{{logoVariant}}@3x.png 3x" alt="Hello" />
 
             <h3 class="all-caps" translate>title_page_seo_keyword</h3>
             <h4 translate>homepage_intro_section_short</h4>
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="bar-content center padding">
+        <div class="footer center padding">
             <h4 translate>Register or login with:</h4>
             <button class="button button-block button-calm" ng-click="loginWithFb()">
                 <i class="icon ion-social-facebook"></i> Facebook
