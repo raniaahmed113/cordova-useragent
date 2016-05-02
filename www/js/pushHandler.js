@@ -5,10 +5,10 @@ function onNotificationReceived(notification) {
         case 'newMessage':
             notification.style = 'inbox';
             //notification.summaryText = __('There are %n% notifications');
-            notification.actions = [
+            /*notification.actions = [
                 { icon: '', title: __('Replay'), callback: 'message.reply' },
                 { icon: '', title: __('Mark as read'), callback: 'message.markAsRead' }
-            ];
+            ];*/
             break;
 
         case 'newQuickieYes':
