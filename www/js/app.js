@@ -143,7 +143,10 @@ angular.module('hotvibes', [
         }
     })
 
-    .run(function($injector, $ionicPlatform, $ionicModal, $translate, $rootScope, amMoment, AuthService, Config) {
+    .run(function(
+        $injector, $ionicPlatform, $ionicModal, $translate, $rootScope, $cordovaGoogleAnalytics, amMoment,
+        AuthService, Config
+    ) {
         AuthService.init();
 
         var setLanguage = function(lang) {
@@ -201,8 +204,12 @@ angular.module('hotvibes', [
 
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
-            if (window.cordova && window.cordova.plugins.Keyboard) {
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            if (window.cordova) {
+                if (window.cordova.plugins.Keyboard) {
+                    cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                }
+
+                $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
             }
 
             // TODO: show some message when device goes offline

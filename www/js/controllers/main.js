@@ -1,7 +1,7 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('AppCtrl', function(
-        $rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading,
+        $rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading, $cordovaGoogleAnalytics,
         __, AuthService, Config, Api, PushNotificationHandler
     ) {
         $scope.logout = function() {
@@ -21,16 +21,22 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $scope.logout();
         });
 
-        function checkShouldRightMenuBeEnabled(state) {
+        function onStateChanged(state) {
             $scope.rightMenuEnabled = state.views && state.views.rightMenu ? true : false;
+
+            if (window.cordova) {
+                $cordovaGoogleAnalytics.trackView(state.name);
+            }
         }
 
-        checkShouldRightMenuBeEnabled($state.current);
+        $ionicPlatform.ready(function() {
+            onStateChanged($state.current);
+        });
 
         // Some views make use of the right menu (eg. users list, right menu used for filtering the list)
         // So.. let's check, after each state change, whether this state has some content in the rightMenu
         $scope.$on('$stateChangeStart', function(event, state) {
-            checkShouldRightMenuBeEnabled(state);
+            onStateChanged(state);
         });
 
         // Load the currently-logged-in user instance from the localStorage
