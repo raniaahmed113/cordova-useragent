@@ -175,6 +175,11 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     return;
                 }
 
+                if (notification.additionalData._deviceId != deviceId) {
+                    unregister(notification.additionalData._deviceId);
+                    return;
+                }
+
                 // If 'notification.additionalData.coldstart' property is present (not undefined)..
                 // ..it means, that we got this event because user has clicked on the notification..
                 // ..so we need to handle this differently..
@@ -194,20 +199,26 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             return token;
         };
 
-        this.unregister = function() {
-            if (!deviceId) {
-                return;
+        this.unregister = function(deviceToBeUnregisteredId) {
+            if (!deviceToBeUnregisteredId) {
+                if (!deviceId) {
+                    return;
+                }
+
+                deviceToBeUnregisteredId = deviceId;
             }
 
-            AuthService.getCurrentUser().unregisterDevice(deviceId);
+            AuthService.getCurrentUser().unregisterDevice(deviceToBeUnregisteredId);
 
-            token = null;
-            deviceId = null;
+            if (deviceToBeUnregisteredId == deviceId) {
+                token = null;
+                deviceId = null;
 
-            localStorage.removeItem('deviceId');
-            localStorage.removeItem('deviceToken');
+                localStorage.removeItem('deviceId');
+                localStorage.removeItem('deviceToken');
 
-            push.unregister();
+                push.unregister();
+            }
         };
     })
 
