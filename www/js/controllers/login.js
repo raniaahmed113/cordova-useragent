@@ -31,7 +31,7 @@ angular.module('hotvibes.controllers')
                         .then(
                             onLoggedIn,
                             function(error) {
-                                onError(Api.translateErrorCode(error.code));
+                                onError(Api.translateErrorCode(error ? error.code : 0));
                             }
                         ).finally(function() {
                             $ionicLoading.hide();
@@ -91,7 +91,7 @@ angular.module('hotvibes.controllers')
                                                 break;
 
                                             default:
-                                                message = Api.translateErrorCode(error.code);
+                                                message = Api.translateErrorCode(error? error.code : 0);
                                                 break;
                                         }
 
@@ -155,7 +155,7 @@ angular.module('hotvibes.controllers')
                                                 break;
 
                                             default:
-                                                message = Api.translateErrorCode(error.code);
+                                                message = Api.translateErrorCode(error ? error.code : 0);
                                                 break;
                                         }
 
@@ -209,11 +209,11 @@ angular.module('hotvibes.controllers')
                         },
 
                         function(error) {
-                            onError(Api.translateErrorCode(error.code));
+                            onError(Api.translateErrorCode(error ? error.code : 0));
                         }
                     ).finally(function() {
-                    $ionicLoading.hide();
-                });
+                        $ionicLoading.hide();
+                    });
             }
         };
 
@@ -262,7 +262,7 @@ angular.module('hotvibes.controllers')
                         } else {
                             $ionicPopup.alert({
                                 title: __("Something's wrong"),
-                                template: Api.translateErrorCode(response.code)
+                                template: Api.translateErrorCode(response ? response.code : 0)
                             });
                         }
                     });
