@@ -7,8 +7,9 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.logout = function() {
             PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
-            $state.go('login');
-            $ionicHistory.clearCache();
+            $state.go('login').then(function() {
+                $ionicHistory.clearCache();
+            });
         };
 
         $scope.$on('authTokenExpired', function() {
