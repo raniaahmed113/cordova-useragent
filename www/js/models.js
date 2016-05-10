@@ -421,7 +421,6 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
             purpose: {
                 dating: __('Real dates'),
-                sex: __('S&M'),
                 onlineChat: __('Online chat'),
                 relationship: __('Normal relationships'),
                 marriage: __('Mariage'),
