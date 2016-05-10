@@ -1,16 +1,21 @@
 .landing {
   color: white;
   background-color: $blue;
+  @include display-flex();
+  @include flex-direction(column);
 
-  .intro {
+  .content {
     padding-left: 10%;
     padding-right: 10%;
-    flex: 1;
     color: white;
 
     h1, h2, h3, h4, h5 {
       color: white;
     }
+  }
+
+  .intro {
+    @include flex(1);
   }
 
   .footer {

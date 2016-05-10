@@ -15,7 +15,6 @@
 }
 
 .center-vertical {
-  height: 100%;
   @include display-flex();
   @include flex-direction(column);
   @include justify-content(center);

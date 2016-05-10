@@ -1,21 +1,27 @@
 <ion-view>
-    <ion-content scroll="false" class="landing center center-vertical">
+    <ion-content scroll="false" class="landing center">
 
-        <div class="intro">
-            <img ng-src="img/logos/logo-{{logoVariant}}.png" srcset="img/logos/logo-{{logoVariant}}.png 1x, img/logos/logo-{{logoVariant}}@2x.png 2x, img/logos/logo-{{logoVariant}}@3x.png 3x" alt="Hello" />
+        <div class="intro content center-vertical">
+            <div>
+                <img
+                    ng-src="img/logos/logo-{{logoVariant}}.png"
+                    ng-srcset="img/logos/logo-{{logoVariant}}.png 1x, img/logos/logo-{{logoVariant}}@2x.png 2x, img/logos/logo-{{logoVariant}}@3x.png 3x"
+                    alt=""
+                />
 
-            <h3 class="all-caps" translate>title_page_seo_keyword</h3>
-            <h4 translate>homepage_intro_section_short</h4>
+                <h3 class="all-caps" translate>title_page_seo_keyword</h3>
+                <h4 translate>homepage_intro_section_short</h4>
 
-            <p class="icons">
-                <i class="icon-heart_1"></i>
-                <i class="icon-heart_2"></i>
-                <i class="icon-heart_3"></i>
-                <i class="icon-heart_4"></i>
-            </p>
+                <p class="icons">
+                    <i class="icon-heart_1"></i>
+                    <i class="icon-heart_2"></i>
+                    <i class="icon-heart_3"></i>
+                    <i class="icon-heart_4"></i>
+                </p>
 
-            <div class="center">
-                <div class="separator"></div>
+                <div class="center">
+                    <div class="separator"></div>
+                </div>
             </div>
         </div>
 
@@ -27,5 +33,6 @@
 
             <button class="button button-block button-stable" ng-click="showAltLoginMethods()" translate>Alternative login methods</button>
         </div>
+
     </ion-content>
 </ion-view>
