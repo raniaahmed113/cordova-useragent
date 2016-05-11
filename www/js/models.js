@@ -38,6 +38,20 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 return deferred.promise;
             };
 
+            var originalQueryFunc = ApiResource.query;
+
+            ApiResource.query = function(params) {
+                if (params.include && angular.isArray(params.include)) {
+                    params.include = params.include.join(',');
+                }
+
+                if (params.require && angular.isArray(params.require)) {
+                    params.require = params.require.join(',');
+                }
+
+                return originalQueryFunc(params);
+            };
+
             return ApiResource;
         };
     })
@@ -152,20 +166,20 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return ApiResource('me/devices/:id', { id: '@id' });
     })
 
-    .factory('QuickieVote', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/quickieVotes');
+    .factory('QuickieVote', function(ApiResource) {
+        return ApiResource('me/quickieVotes');
     })
 
     .factory('Filter', function(ApiResource) {
         return ApiResource('me/filters/:type', { type: '@type' });
     })
 
-    .factory('Guest', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/guests');
+    .factory('Guest', function(ApiResource) {
+        return ApiResource('me/guests');
     })
 
-    .factory('Friend', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/friends/:userId');
+    .factory('Friend', function(ApiResource) {
+        return ApiResource('me/friends/:userId');
     })
 
     .factory('Album', function($q, __, ApiResource, MediaFile) {
@@ -232,24 +246,24 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         );
     })
 
-    .factory('Favorite', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/favorites/:userId');
+    .factory('Favorite', function(ApiResource) {
+        return ApiResource('me/favorites/:userId');
     })
 
-    .factory('BlockedUser', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/blocks/:userId');
+    .factory('BlockedUser', function(ApiResource) {
+        return ApiResource('me/blocks/:userId');
     })
 
-    .factory('ChatRoom', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'chatRooms/:id', { id: '@id' });
+    .factory('ChatRoom', function(ApiResource) {
+        return ApiResource('chatRooms/:id', { id: '@id' });
     })
 
-    .factory('ChatRoomPost', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'chatRooms/:roomId/posts/:id', { id: '@id' });
+    .factory('ChatRoomPost', function(ApiResource) {
+        return ApiResource('chatRooms/:roomId/posts/:id', { id: '@id' });
     })
 
-    .factory('ChatRoomPostComment', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'chatRooms/:roomId/posts/:postId/comments', { roomId: '@roomId', postId: '@postId' });
+    .factory('ChatRoomPostComment', function(ApiResource) {
+        return ApiResource('chatRooms/:roomId/posts/:postId/comments', { roomId: '@roomId', postId: '@postId' });
     })
 
     .factory('Conversation', function(ApiResource) {
@@ -260,12 +274,12 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return ApiResource('reports/:id', { id: '@id' });
     })
 
-    .factory('Message', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/conversations/:withUserId/messages');
+    .factory('Message', function(ApiResource) {
+        return ApiResource('me/conversations/:withUserId/messages');
     })
 
-    .factory('Request', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'me/requests');
+    .factory('Request', function(ApiResource) {
+        return ApiResource('me/requests');
     })
 
     .factory('PendingConfirmation', function(ApiResource) {
@@ -276,20 +290,20 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         });
     })
 
-    .factory('Gift', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'dataSets/gifts');
+    .factory('Gift', function(ApiResource) {
+        return ApiResource('dataSets/gifts');
     })
 
-    .factory('City', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'dataSets/cities');
+    .factory('City', function(ApiResource) {
+        return ApiResource('dataSets/cities');
     })
 
-    .factory('UserGift', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:userId/gifts', { userId: '@userId' });
+    .factory('UserGift', function(ApiResource) {
+        return ApiResource('users/:userId/gifts', { userId: '@userId' });
     })
 
-    .factory('DuelInvite', function($resource, Config) {
-        return $resource(Config.API_URL_BASE + 'users/:userId/duelInvites', { userId: '@userId' });
+    .factory('DuelInvite', function(ApiResource) {
+        return ApiResource('users/:userId/duelInvites', { userId: '@userId' });
     })
 
     .factory('__', function($translate) {
