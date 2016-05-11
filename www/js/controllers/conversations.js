@@ -1,16 +1,14 @@
 angular.module('hotvibes.controllers')
 
     .controller('ConversationsCtrl', function($rootScope, $scope, $state, $ionicActionSheet, User, Conversation) {
-        var authorIncludes = 'profilePhoto.url(size=w80h80)';
-
         $scope.conversations = Conversation.query({
+            require: [
+                'withUser'
+            ],
             include: [
                 'lastMessage',
-                'withUser.' + authorIncludes
-            ].join(',')/*,
-            require: [
-                'withUser.' + authorIncludes
-            ].join(',')*/
+                'withUser.profilePhoto.url(size=w80h80)'
+            ]
         });
 
         $scope.openConversation = function(conversation) {

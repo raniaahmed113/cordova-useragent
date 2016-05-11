@@ -68,7 +68,10 @@ angular.module('hotvibes.controllers')
     .controller('GuestsCtrl', function($scope, __, Guest) {
         $scope.title = __('Guests');
         $scope.subProperty = 'guest';
-        $scope.users = Guest.query({ include: 'guest.profilePhoto.url(size=w80h80)' });
+        $scope.users = Guest.query({
+            require: 'guest',
+            include: 'guest.profilePhoto.url(size=w80h80)'
+        });
 
         $scope.currUser.cacheCounts.cntNewGuests = 0;
     })
@@ -76,7 +79,10 @@ angular.module('hotvibes.controllers')
     .controller('FriendsCtrl', function($scope, __, Friend) {
         $scope.title = __('Friends');
         $scope.subProperty = 'friend';
-        $scope.users = Friend.query({ include: 'friend.profilePhoto.url(size=w80h80)' });
+        $scope.users = Friend.query({
+            require: 'friend',
+            include: 'friend.profilePhoto.url(size=w80h80)'
+        });
 
         enableUserDeletion($scope);
     })
@@ -84,7 +90,10 @@ angular.module('hotvibes.controllers')
     .controller('BlockedUsersCtrl', function($scope, __, BlockedUser) {
         $scope.title = __('My BlackList');
         $scope.subProperty = 'blockedUser';
-        $scope.users = BlockedUser.query({ include: 'blockedUser.profilePhoto.url(size=w80h80)' });
+        $scope.users = BlockedUser.query({
+            require: 'blockedUser',
+            include: 'blockedUser.profilePhoto.url(size=w80h80)'
+        });
 
         enableUserDeletion($scope);
     });

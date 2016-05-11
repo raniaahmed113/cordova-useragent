@@ -198,7 +198,8 @@ angular.module('hotvibes.controllers')
         $scope.title = __('Who said YES to me');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
-            include: 'voter.profilePhoto.url(size=w80h80)' // FIXME: use 'require' here to exclude deleted accounts
+            require: 'voter',
+            include: 'voter.profilePhoto.url(size=w80h80)'
         });
     })
 
@@ -207,6 +208,7 @@ angular.module('hotvibes.controllers')
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
             matched: true,
-            include: 'voter.profilePhoto.url(size=w80h80)' // FIXME: use 'require' here to exclude deleted accounts
+            require: 'voter',
+            include: 'voter.profilePhoto.url(size=w80h80)'
         });
     });
