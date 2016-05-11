@@ -174,18 +174,18 @@ angular.module('hotvibes.controllers')
         $scope.showAltLoginMethods = function() {
             $ionicActionSheet.show({
                 buttons: [
-                    { text: __('Login with phone number') },
+                    //{ text: __('Login with phone number') },
                     { text: __('Login with username/email') }
                 ],
                 titleText: __('Alternative login methods'),
                 cancelText: __('Cancel'),
                 buttonClicked: function(index) {
                     switch (index) {
-                        case 0: // Phone number
-                            requestInputPhoneNumber();
-                            break;
+                        // case 0: // Phone number
+                        //     requestInputPhoneNumber();
+                        //     break;
 
-                        case 1: // Email
+                        case 0: // Email
                             $scope.loginWithPassword.modal.show();
                             break;
                     }
