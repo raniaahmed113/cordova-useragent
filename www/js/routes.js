@@ -289,5 +289,15 @@ angular.module('hotvibes.routes', [])
                         controller: 'NotificationsCtrl'
                     }
                 }
+            })
+
+            .state('inside.support', {
+                url: "/support",
+                views: {
+                    main: {
+                        templateUrl: "templates/support.html",
+                        controller: 'SupportCtrl'
+                    }
+                }
             });
     });

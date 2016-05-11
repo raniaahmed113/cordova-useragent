@@ -182,6 +182,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return ApiResource('me/friends/:userId');
     })
 
+    .factory('SupportRequest', function(ApiResource) {
+        return ApiResource('supportRequests/:id');
+    })
+
     .factory('Album', function($q, __, ApiResource, MediaFile) {
         var Album = ApiResource('me/albums/:id', { id : '@id' }),
             parentGet = Album.get;

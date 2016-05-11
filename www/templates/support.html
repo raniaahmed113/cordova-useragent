@@ -1,0 +1,19 @@
+<ion-view title="{{'Contact us' | translate}}">
+    <ion-content>
+        <form class="list" ng-submit="supportRequest.submit()" novalidate>
+            <label class="item item-input item-stacked-label">
+                <span class="input-label" translate>Describe the problem/question:</span>
+                <textarea ng-model="supportRequest.text" placeholder="{{'Text' | translate}}" required rows="10"></textarea>
+            </label>
+
+            <div class="padding">
+                <button type="submit"
+                        class="button button-block button-positive"
+                        ng-disabled="!supportRequest.text"
+                        translate>
+                    Send
+                </button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>
