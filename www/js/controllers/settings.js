@@ -289,6 +289,8 @@ angular.module('hotvibes.controllers')
     })
 
     .controller('SettingsCreditsCtrl', function($scope, $ionicLoading, __, gettextCatalog, Config) {
+        $scope.supportContacts = __("skype: xklubas<br />37052344411");
+
         if (window.store) {
             //store.verbosity = store.DEBUG;
             // FIXME: resolve gateway ID properly via device platform

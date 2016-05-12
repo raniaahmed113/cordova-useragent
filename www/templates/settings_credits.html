@@ -8,6 +8,10 @@
         <div ng-if="billingSupported" class="padding center">
             <ion-spinner ng-if="!creditOptions"></ion-spinner>
             <button ng-repeat="option in creditOptions" ng-click="option.buy()" translate="Buy %u credit" translate-plural="Buy %u credits" translate-n="option.amount" class="button button-block button-positive"></button>
+
+            <div translate>Iškilus klausimam ar nesklandumam kreipkitės:</div>
+            <div translate>pagalba@xklubas.lt</div>
+            <div>{{supportContacts}}</div>
         </div>
     </ion-content>
 </ion-view>
