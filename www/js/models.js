@@ -428,7 +428,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
             lookingFor: {
                 male: __('Looking for male'),
-                female: __('Looking for female')
+                female: __('Looking for female'),
+                anything: __('Looking for both')
             },
 
             maritalStatus: {
