@@ -18,7 +18,7 @@ angular.module('hotvibes.controllers')
 
         new CityPicker({
             currentSelection:
-                $scope.currUser.filter.city
+                $scope.currUser.filter && $scope.currUser.filter.city
                     ? {
                         id: $scope.currUser.filter.cityId,
                         label: $scope.currUser.filter.city
