@@ -60,7 +60,7 @@ angular.module('hotvibes.directives', [])
                         case ErrorCode.VIP_REQUIRED:
                             $scope.error = {
                                 icon: 'ion-star',
-                                message: __("Only for VIP members"),
+                                message: __("Only for VIP members")/*,
                                 actions: [
                                     {
                                         label: __("Become a VIP member"),
@@ -69,7 +69,7 @@ angular.module('hotvibes.directives', [])
                                             $state.go('inside.settings-vip');
                                         }
                                     }
-                                ]
+                                ]*/
                             };
                             break;
 
