@@ -108,7 +108,8 @@ angular.module('hotvibes.controllers')
             $ionicScrollDelegate.scrollBottom(true);
         }
 
-        $scope.messages = Message.query(params, function(response) {
+        $scope.messages = Message.query(params);
+        $scope.messages.$promise.then(function(response) {
             $ionicScrollDelegate.scrollBottom(true);
 
             // TODO: load more
