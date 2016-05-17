@@ -20,7 +20,7 @@ function enableUserDeletion($scope) {
 
 angular.module('hotvibes.controllers')
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User, Filter) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User) {
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
@@ -83,7 +83,7 @@ angular.module('hotvibes.controllers')
         });
 
         $scope.users.$promise.then(function(response) {
-            if (!response.resource[response.resource.length-1].guest.id) {
+            if (response.resource.length > 0 && !response.resource[response.resource.length-1].guest.id) {
                 $scope.error = {
                     icon: 'ion-star',
                     message: __("Want to see all of them?"),
