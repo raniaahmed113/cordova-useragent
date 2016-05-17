@@ -120,7 +120,7 @@ angular.module('hotvibes.routes', [])
                 url: "/guests",
                 views: {
                     main: {
-                        templateUrl: "templates/users.html",
+                        templateUrl: "templates/users_guests.html",
                         controller: 'GuestsCtrl'
                     }
                 }

@@ -1,0 +1,19 @@
+<ion-view view-title="{{'Guests' | translate}}">
+    <ion-content>
+        <resource-collection list="users" sub-property="'guest'" on-error="onError">
+            <div class="row row-wrap">
+                <a ng-repeat="user in users" href="{{user.id ? '#/users/' + user.id : ''}}" class="user col col-25">
+                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" ng-class="{hidden: !user.id}" />
+                </a>
+            </div>
+
+            <div class="center padding" ng-if="error">
+                <div class="error-sign">
+                    <span>{{error.message}}</span>
+                    <i class="icon {{error.icon}}"></i>
+                    <button class="button button-block {{action.class || 'button-stable'}}" ng-repeat="action in error.actions" ng-click="action.onClick()">{{action.label}}</button>
+                </div>
+            </div>
+        </resource-collection>
+    </ion-content>
+</ion-view>

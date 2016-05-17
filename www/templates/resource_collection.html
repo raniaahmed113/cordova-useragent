@@ -4,17 +4,19 @@
 
 <ion-infinite-scroll ng-if="list.$metadata.moreAvailable" on-infinite="loadMore()" distance="10%"></ion-infinite-scroll>
 
-<div class="center center-vertical-margin" ng-if="list.length < 1">
+<div class="center center-vertical-margin">
     <div class="error-sign" ng-if="error">
         <span>{{error.message}}</span>
         <i class="icon {{error.icon}}"></i>
         <button class="button button-block {{action.class || 'button-stable'}}" ng-repeat="action in error.actions" ng-click="action.onClick()">{{action.label}}</button>
     </div>
 
-    <ion-spinner ng-show="!error && promise.$$state.status < 1"></ion-spinner>
+    <div ng-if="!error && list.length < 1">
+        <ion-spinner ng-show="promise.$$state.status < 1"></ion-spinner>
 
-    <div class="error-sign" ng-if="!error && promise.$$state.status >= 1">
-        <span translate>Nothing here, so far</span>
-        <i class="icon ion-ios-rainy"></i>
+        <div class="error-sign" ng-if="promise.$$state.status > 0">
+            <span translate>Nothing here, so far</span>
+            <i class="icon ion-ios-rainy"></i>
+        </div>
     </div>
 </div>

@@ -194,16 +194,38 @@ angular.module('hotvibes.controllers')
         };
     })
 
-    .controller('QuickieYesCtrl', function($scope, __, QuickieVote) {
+    .controller('QuickieYesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
         $scope.title = __('Who said YES to me');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
             require: 'voter',
             include: 'voter.profilePhoto.url(size=w80h80)'
         });
+
+        $scope.onError = function(error) {
+            switch (error.data.code) {
+                case ErrorCode.VIP_REQUIRED:
+                    return {
+                        icon: 'ion-star',
+                        message: __("Only for VIP members"),
+                        actions: [
+                            {
+                                label: __("Become a VIP member"),
+                                class: 'button-positive',
+                                onClick: function () {
+                                    $state.go('inside.settings-vip');
+                                }
+                            }
+                        ]
+                    };
+
+                default:
+                    return null;
+            }
+        };
     })
 
-    .controller('QuickieMatchesCtrl', function($scope, __, QuickieVote) {
+    .controller('QuickieMatchesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
         $scope.title = __('My Matches');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
@@ -211,4 +233,26 @@ angular.module('hotvibes.controllers')
             require: 'voter',
             include: 'voter.profilePhoto.url(size=w80h80)'
         });
+
+        $scope.onError = function(error) {
+            switch (error.data.code) {
+                case ErrorCode.VIP_REQUIRED:
+                    return {
+                        icon: 'ion-star',
+                        message: __("Only for VIP members"),
+                        actions: [
+                            {
+                                label: __("Become a VIP member"),
+                                class: 'button-positive',
+                                onClick: function () {
+                                    $state.go('inside.settings-vip');
+                                }
+                            }
+                        ]
+                    };
+
+                default:
+                    return null;
+            }
+        };
     });

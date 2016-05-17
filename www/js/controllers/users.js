@@ -65,12 +65,28 @@ angular.module('hotvibes.controllers')
         loadUsers();
     })
 
-    .controller('GuestsCtrl', function($scope, __, Guest) {
-        $scope.title = __('Guests');
-        $scope.subProperty = 'guest';
+    .controller('GuestsCtrl', function($scope, $state, __, Guest) {
         $scope.users = Guest.query({
             require: 'guest',
             include: 'guest.profilePhoto.url(size=w80h80)'
+        });
+
+        $scope.users.$promise.then(function(response) {
+            if (!response.resource[response.resource.length-1].guest.id) {
+                $scope.error = {
+                    icon: 'ion-star',
+                    message: __("Want to see all of them?"),
+                    actions: [
+                        {
+                            label: __("Become a VIP member"),
+                            class: 'button-positive',
+                            onClick: function () {
+                                $state.go('inside.settings-vip');
+                            }
+                        }
+                    ]
+                };
+            }
         });
 
         $scope.currUser.cacheCounts.cntNewGuests = 0;

@@ -44,11 +44,14 @@ angular.module('hotvibes.directives', [])
             scope: {
                 list: '=',
                 promise: '=',
-                subProperty: '='
+                subProperty: '=',
+                onError: '='
             },
             templateUrl: 'templates/resource_collection.html',
-            controller: function($q, $scope, $state, $resource, $ionicNavBarDelegate, __, ErrorCode) {
+            controller: function($q, $scope, $state, $resource, $ionicNavBarDelegate, __) {
                 function onError(response) {
+                    $scope.list.$metadata = {};
+
                     if (!response.data) {
                         response.data = { code: -1 };
 
@@ -56,38 +59,24 @@ angular.module('hotvibes.directives', [])
                         response.data.code = -1;
                     }
 
-                    switch (response.data.code) {
-                        case ErrorCode.VIP_REQUIRED:
-                            $scope.error = {
-                                icon: 'ion-star',
-                                message: __("Only for VIP members")/*,
-                                actions: [
-                                    {
-                                        label: __("Become a VIP member"),
-                                        class: 'button-positive',
-                                        onClick: function() {
-                                            $state.go('inside.settings-vip');
-                                        }
-                                    }
-                                ]*/
-                            };
-                            break;
+                    var error;
+                    if (angular.isFunction($scope.onError) && (error = $scope.onError(response))) {
+                        $scope.error = error;
 
-                        default:
-                            $scope.error = {
-                                icon: 'ion-close-circled',
-                                message: __("Sorry, some nasty error prevented us from showing you this page"),
-                                actions: [
-                                    {
-                                        label: __("Try again"),
-                                        onClick: function() {
-                                            $scope.error = null;
-                                            $scope.promise = fetch();
-                                        }
+                    } else {
+                        $scope.error = {
+                            icon: 'ion-close-circled',
+                            message: __("Sorry, some nasty error prevented us from showing you this page"),
+                            actions: [
+                                {
+                                    label: __("Try again"),
+                                    onClick: function() {
+                                        $scope.error = null;
+                                        $scope.promise = fetch();
                                     }
-                                ]
-                            };
-                            break;
+                                }
+                            ]
+                        };
                     }
                 }
 
@@ -163,13 +152,13 @@ angular.module('hotvibes.directives', [])
 
                 $scope.loadMore = function() {
                     $scope.currPage++;
-                    fetch().then(function() {
+                    fetch().finally(function() {
                         $scope.$broadcast('scroll.infiniteScrollComplete');
                     });
                 };
 
                 $scope.reload = function() {
-                    fetch().then(function() {
+                    fetch().finally(function() {
                         $scope.$broadcast('scroll.refreshComplete');
                     });
                 };

@@ -1,0 +1,28 @@
+.col.user {
+  position: relative;
+
+  > img {
+    min-height: 78px;
+    background-color: $stable;
+
+    &.hidden {
+      @include blur(4px);
+    }
+  }
+
+  .icon {
+    position: absolute;top: 0;left: 0;
+    width: 100%;height: 100%;
+    font-size: 2.5em;
+    color: $assertive;
+
+    @include display-flex();
+    @include justify-content(center);
+    @include align-items(center);
+    @include transition(0.1s linear all);
+
+    &.ng-hide {
+      opacity: 0;
+    }
+  }
+}
