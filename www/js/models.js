@@ -38,9 +38,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 return deferred.promise;
             };
 
-            var originalQueryFunc = ApiResource.query;
-
-            ApiResource.query = function(params) {
+            function processQueryParams(params) {
                 if (params.include && angular.isArray(params.include)) {
                     params.include = params.include.join(',');
                 }
@@ -49,7 +47,17 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                     params.require = params.require.join(',');
                 }
 
-                return originalQueryFunc(params);
+                return params;
+            }
+
+            var originalGetFunc = ApiResource.get;
+            ApiResource.get = function(params) {
+                return originalGetFunc(processQueryParams(params));
+            };
+
+            var originalQueryFunc = ApiResource.query;
+            ApiResource.query = function(params) {
+                return originalQueryFunc(processQueryParams(params));
             };
 
             return ApiResource;
