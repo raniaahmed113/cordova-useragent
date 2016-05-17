@@ -52,6 +52,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case ErrorCode.USERNAME_ALREADY_TAKEN:
                     return __('User with such login already exists.');
 
+                case ErrorCode.INAPPROPRIATE_CONTENT:
+                    return __('Your message was not sent because it contains inappropriate language or spam');
+
                 default:
                     // TODO: log to analytics: unknown err code
                     return __("We're sorry, but something went wrong. Please try again later.");

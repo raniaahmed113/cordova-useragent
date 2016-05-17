@@ -18,7 +18,8 @@ angular.module('hotvibes', [
         INVALID_INPUT: 110,
         EMAIL_ALREADY_TAKEN: 111,
         USERNAME_ALREADY_TAKEN: 112,
-        NO_SUCH_USER: 113
+        NO_SUCH_USER: 113,
+        INAPPROPRIATE_CONTENT: 114
     })
 
     .constant('Rule', {
