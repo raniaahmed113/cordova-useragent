@@ -490,7 +490,13 @@ angular.module('hotvibes.controllers')
 
                 }).$promise
                     .then(
-                        function(newPhoto) { $scope.photos.push(newPhoto) },
+                        function(newPhoto) {
+                            $scope.photos.push(newPhoto);
+
+                            if (newPhoto.isMain) {
+                                $scope.currUser.profilePhoto = newPhoto;
+                            }
+                        },
                         $scope.onError
                     )
                     .finally(function() {
