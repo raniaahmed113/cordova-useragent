@@ -110,15 +110,16 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
             User.get({
                 id: userId,
-                include: [
-                    'cacheCounts', // FIXME: require these instead of include
+                require: [
+                    'cacheCounts',
                     'profile',
-                    'isVip',
-                    'filter',
+                    'filter'
+                ],
+                include: [
                     'quickieFilter',
+                    'isVip',
                     'profilePhoto.url(size=w50h50)'
-
-                ].join(',')
+                ]
 
             }).$promise.then(
                 function(userData) {
@@ -179,7 +180,15 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('Filter', function(ApiResource) {
-        return ApiResource('me/filters/:type', { type: '@type' });
+        var Filter = ApiResource('me/filters/:type', { type: '@type' }, {
+            save: {
+                method: 'PUT'
+            }
+        });
+
+        Filter.TYPE_MAIN = 'main';
+
+        return Filter;
     })
 
     .factory('Guest', function(ApiResource) {

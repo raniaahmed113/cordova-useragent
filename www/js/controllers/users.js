@@ -20,7 +20,7 @@ function enableUserDeletion($scope) {
 
 angular.module('hotvibes.controllers')
 
-    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User) {
+    .controller('UsersCtrl', function($scope, $ionicSideMenuDelegate, $ionicScrollDelegate, Api, User, Filter) {
         $scope.showFilter = function() {
             $ionicSideMenuDelegate.toggleRight();
         };
@@ -37,6 +37,16 @@ angular.module('hotvibes.controllers')
                 return;
             }
 
+            if (angular.isString(newFilter.ageMin)) {
+                newFilter.ageMin = parseInt(newFilter.ageMin);
+                return;
+            }
+
+            if (angular.isString(newFilter.ageMax)) {
+                newFilter.ageMax = parseInt(newFilter.ageMax);
+                return;
+            }
+
             // Search results filter has changed - re-fetch newly filtered results
             loadUsers();
             $ionicScrollDelegate.scrollTop(true);
@@ -44,6 +54,7 @@ angular.module('hotvibes.controllers')
             // Save the filter to the back-end
             var changes = angular.copy(newFilter);
             delete changes.type;
+
             // TODO: send only the changes and not the entire filter
 
             newFilter.$update(changes);
