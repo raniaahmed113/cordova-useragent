@@ -33,8 +33,8 @@
                 <span class="input-label" translate>Phone number</span>
                 <div>
                     <input type="tel" ng-model="settings.profile.phoneNumber" minlength="5" />
-                    <div ng-if="settings.profile.isPhoneNumberConfirmed" class="positive" translate></div>
-                    <div ng-if="!settings.profile.isPhoneNumberConfirmed && settings.profile.phoneNumber" class="status assertive">
+                    <div ng-if="currUser.profile.isPhoneNumberConfirmed" class="positive" translate></div>
+                    <div ng-if="!currUser.profile.isPhoneNumberConfirmed && currUser.profile.phoneNumber" class="status assertive">
                         <label translate>Your phone number is unconfirmed.</label>
                         <button type="button" ng-click="confirmPhone()" class="button-assertive" translate>
                             Confirm now.
@@ -47,8 +47,8 @@
                 <span class="input-label" translate>Your email</span>
                 <div>
                     <input type="email" ng-model="settings.email" required />
-                    <div ng-if="settings.profile.isEmailConfirmed" class="positive" translate></div>
-                    <div ng-if="!settings.profile.isEmailConfirmed" class="status assertive">
+                    <div ng-if="currUser.profile.isEmailConfirmed" class="positive" translate></div>
+                    <div ng-if="!currUser.profile.isEmailConfirmed && currUser.email" class="status assertive">
                         <label translate>We have previously sent you an e-mail, containing a confirmation link.</label>
                         <label translate translate-values="{name: '<span translate>Resend activation email.</span>'}">
                             If you haven't yet received the letter, please make sure, that the entered e-mail address is correct and then click %s.
