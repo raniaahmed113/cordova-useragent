@@ -51,13 +51,7 @@ angular.module('hotvibes.controllers')
             loadUsers();
             $ionicScrollDelegate.scrollTop(true);
 
-            // Save the filter to the back-end
-            var changes = angular.copy(newFilter);
-            delete changes.type;
-
-            // TODO: send only the changes and not the entire filter
-
-            newFilter.$update(changes);
+            newFilter.$save();
 
         }, true);
 
