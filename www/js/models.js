@@ -28,10 +28,14 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                     return completeUrl;
                 }
 
-                var deferred = $q.defer();
+                var deferred = $q.defer(),
+                    modelInstance = this;
 
                 $http.patch(getCompleteUrl(this), params).then(
-                    deferred.resolve, // FIXME: apply the changes after success update on API side
+                    function(response) {
+                        angular.merge(modelInstance, params);
+                        deferred.resolve(response);
+                    },
                     deferred.reject
                 );
 
