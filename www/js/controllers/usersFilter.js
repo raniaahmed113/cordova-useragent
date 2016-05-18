@@ -12,7 +12,7 @@ angular.module('hotvibes.controllers')
             return input;
         }
 
-        $scope.ages = range(18, 99);
+        $scope.ages = range(16, 99);
         $scope.genders = ['male', 'female'];
         $scope.countries = DataMap.country;
 
