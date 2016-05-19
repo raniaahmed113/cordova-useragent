@@ -13,11 +13,13 @@ angular.module('hotvibes.controllers')
 
             self.$save().then(
                 function() {
+                    $ionicLoading.hide();
+
                     // Show success message
                     $ionicLoading.show({
                         template: __('Thank you, your message has been send. We will replay you with in 48 hours.'),
                         noBackdrop: true,
-                        duration: 3000
+                        duration: 5000
                     });
 
                     // Reset the input field
@@ -27,10 +29,9 @@ angular.module('hotvibes.controllers')
                     $ionicHistory.goBack();
                 },
                 function() {
+                    $ionicLoading.hide();
                     $scope.onError();
                 }
-            ).finally(function() {
-                $ionicLoading.hide();
-            });
+            );
         };
     });
