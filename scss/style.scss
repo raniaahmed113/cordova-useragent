@@ -122,40 +122,9 @@
   }
 }
 
-/*input + .validation {
-  position: absolute;
-  top: 0;
-  left:16px;
-  right:16px;
-  background: #D9141D;
-  color: white;
-  text-align:center;
-  @include border-radius(5px);
+.validation-errors {
+  color: $assertive;
 }
-
-input + .validation span {
-  text-align:center;
-  line-height: 26px;
-  font-size: 15px;
-  font-weight: bold;
-}
-
-input + .validation span::after {
-  width: 0;
-  height: 0;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-
-  border-top: 15px solid #D9141D;
-  content: " ";
-  display:block;
-  position:absolute;
-  top:23px;
-  left:0;
-  right:0;
-  margin-left:auto;
-  margin-right:auto;
-}*/
 
 .item-stacked-label-padded {
   @extend .item-stacked-label;
