@@ -25,7 +25,7 @@ var switchFlavor = function(projectId, appVersion) {
     var cfg = buildVariants[projectId];
 
     if (!appVersion) {
-        appVersion = '3.0.0';
+        appVersion = '3.0.0'; // FIXME
     }
 
     // Compile config file for Angular
@@ -94,8 +94,7 @@ var assembleAndroid = function(appFileName) {
         throw "Failed building Android version of " + appFileName;
     }
 
-    fs.createReadStream('./platforms/android/build/outputs/apk/android-release-unsigned.apk')
-        // TODO: sign the .apk
+    fs.createReadStream('./platforms/android/build/outputs/apk/android-release.apk')
         .pipe(fs.createWriteStream('./tmp/release/android/' + appFileName + '.apk'));
 };
 
