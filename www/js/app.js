@@ -19,7 +19,8 @@ angular.module('hotvibes', [
         EMAIL_ALREADY_TAKEN: 111,
         USERNAME_ALREADY_TAKEN: 112,
         NO_SUCH_USER: 113,
-        INAPPROPRIATE_CONTENT: 114
+        INAPPROPRIATE_CONTENT: 114,
+        LIMIT_REACHED: 115
     })
 
     .constant('Rule', {

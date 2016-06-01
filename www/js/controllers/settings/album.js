@@ -40,9 +40,11 @@ angular.module('hotvibes.controllers')
             var index = $scope.photos.indexOf(photo),
                 photoToDelete = $scope.photos.splice(index, 1)[0];
 
-            photoToDelete.$delete();
-
-            // FIXME: handle, if deleted main photo
+            photoToDelete.$delete().finally(function() {
+                if (photoToDelete.isMain) {
+                    $scope.currUser.refresh();
+                }
+            });
         };
 
         $scope.showOptionsFor = function(photo, $event) {
@@ -103,8 +105,16 @@ angular.module('hotvibes.controllers')
                 }
 
                 var params = {};
-                if (error.data && error.data.code == ErrorCode.ALREADY_DID_THAT) {
-                    params.message = __("This file is already uploaded");
+                if (error.data) {
+                    switch (error.data.code) {
+                        case ErrorCode.ALREADY_DID_THAT:
+                            params.message = __("This file is already uploaded");
+                            break;
+
+                        case ErrorCode.LIMIT_REACHED:
+                            params.message = __("File limit reached");
+                            break;
+                    }
                 }
 
                 $scope.onError(error, params);
