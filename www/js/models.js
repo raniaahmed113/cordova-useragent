@@ -477,7 +477,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             doesSmoke: {
                 no: __('DS'),
                 occasionally: __('Sometimes'),
-                frequently: __('ED')
+                frequently: __('ED'),
+                likeChimney: __('LC')
             },
 
             livesWith: {
