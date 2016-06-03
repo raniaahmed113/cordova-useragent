@@ -25,7 +25,9 @@ angular.module('hotvibes', [
 
     .constant('Rule', {
         MIN_VALUE: 'minValue',
-        NOT_EMPTY: 'notEmpty'
+        NOT_EMPTY: 'notEmpty',
+        IS_EMAIL_VALID: 'isEmail',
+        IS_DATE_VALID: 'date'
     })
 
     .factory('SprintfInterpolator', function() {

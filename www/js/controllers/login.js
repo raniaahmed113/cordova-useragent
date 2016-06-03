@@ -7,7 +7,7 @@ angular.module('hotvibes.controllers')
         $scope.logoVariant = Config.API_CLIENT_ID;
 
         function onError(message) {
-            $ionicPopup.alert({
+            return $ionicPopup.alert({
                 title: __("Something's wrong"),
                 template: message
             });
@@ -16,21 +16,24 @@ angular.module('hotvibes.controllers')
         $scope.prompt = {};
 
         function promptForMoreInfo(fieldName) {
-            var subTitle;
+            var subTitle, inputType;
 
             switch (fieldName) {
                 case 'email':
                     subTitle = __('Please enter valid e-mail') + ':';
+                    inputType = 'email';
                     break;
 
                 case 'birthday':
                     subTitle = __('Please provide your birthday, it is required in order to register.');
+                    inputType = 'date';
                     break;
             }
 
             $ionicPopup.prompt({
                 title: __("Fantastic, you're re nearly there. We just need couple more things"),
                 subTitle: subTitle,
+                inputType: inputType,
                 buttons: [
                     {
                         text: __('Cancel'),
@@ -49,6 +52,8 @@ angular.module('hotvibes.controllers')
                             }
 
                             $scope.prompt[fieldName] = value;
+                            this.hide();
+
                             $scope.loginWithFb();
                         }
                     }
@@ -74,20 +79,28 @@ angular.module('hotvibes.controllers')
                         .then(
                             onLoggedIn,
                             function(error) {
-                                var invalidFieldName = error && error.rule && error.rule.type == Rule.NOT_EMPTY
-                                    ? error.rule.field
-                                    : null;
+                                if (error && error.rule) {
+                                    switch (error.rule.type) {
+                                        case Rule.IS_EMAIL_VALID:
+                                            onError(__("This e-mail address is invalid"))
+                                                .then(function() {
+                                                    promptForMoreInfo(error.rule.field)
+                                                });
+                                            return;
 
-                                switch (invalidFieldName) {
-                                    case 'email':
-                                    case 'birthday':
-                                        promptForMoreInfo(invalidFieldName);
-                                        break;
+                                        case Rule.IS_DATE_VALID:
+                                            onError(__("Incorrect birthday."))
+                                                .then(function() {
+                                                    promptForMoreInfo(error.rule.field)
+                                                });
+                                            return;
+                                    }
 
-                                    default:
-                                        onError(Api.translateErrorCode(error ? error.code : 0));
-                                        break;
+                                    promptForMoreInfo(error.rule.field);
+                                    return;
                                 }
+
+                                onError(Api.translateErrorCode(error ? error.code : 0));
                             }
                         ).finally(function() {
                             $ionicLoading.hide();

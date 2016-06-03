@@ -346,6 +346,10 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             };
 
             if (birthday) {
+                if (birthday instanceof Date) {
+                    birthday = $filter('date')(birthday, 'yyyy-MM-dd');
+                }
+
                 params.birthday = birthday;
             }
 
