@@ -340,10 +340,20 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             });
         };
 
-        this.loginWithFb = function(accessToken) {
-            return login('fb', {
+        this.loginWithFb = function(accessToken, birthday, email) {
+            var params = {
                 accessToken: accessToken
-            });
+            };
+
+            if (birthday) {
+                params.birthday = birthday;
+            }
+
+            if (email) {
+                params.email = email;
+            }
+
+            return login('fb', params);
         };
 
         /**

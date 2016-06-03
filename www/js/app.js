@@ -24,7 +24,8 @@ angular.module('hotvibes', [
     })
 
     .constant('Rule', {
-        MIN_VALUE: 'minValue'
+        MIN_VALUE: 'minValue',
+        NOT_EMPTY: 'notEmpty'
     })
 
     .factory('SprintfInterpolator', function() {

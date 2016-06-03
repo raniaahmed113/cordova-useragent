@@ -2,7 +2,7 @@ angular.module('hotvibes.controllers')
 
     .controller('LoginCtrl', function(
         $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook, $translate,
-        __, AuthService, Config, Api, ErrorCode, DataMap
+        __, AuthService, Config, Api, ErrorCode, DataMap, Rule
     ) {
         $scope.logoVariant = Config.API_CLIENT_ID;
 
@@ -10,6 +10,49 @@ angular.module('hotvibes.controllers')
             $ionicPopup.alert({
                 title: __("Something's wrong"),
                 template: message
+            });
+        }
+
+        $scope.prompt = {};
+
+        function promptForMoreInfo(fieldName) {
+            var subTitle;
+
+            switch (fieldName) {
+                case 'email':
+                    subTitle = __('Please enter valid e-mail') + ':';
+                    break;
+
+                case 'birthday':
+                    subTitle = __('Please provide your birthday, it is required in order to register.');
+                    break;
+            }
+
+            $ionicPopup.prompt({
+                title: __("Fantastic, you're re nearly there. We just need couple more things"),
+                subTitle: subTitle,
+                buttons: [
+                    {
+                        text: __('Cancel'),
+                        type: 'button-default'
+                    },
+                    {
+                        text: __('Continue'),
+                        type: 'button-positive',
+                        onTap: function (e) {
+                            // Do not auto-close the pop-up
+                            e.preventDefault();
+
+                            var value = this.scope.$parent.data.response;
+                            if (!value) {
+                                return;
+                            }
+
+                            $scope.prompt[fieldName] = value;
+                            $scope.loginWithFb();
+                        }
+                    }
+                ]
             });
         }
 
@@ -27,11 +70,24 @@ angular.module('hotvibes.controllers')
                         return;
                     }
 
-                    AuthService.loginWithFb(response.authResponse.accessToken)
+                    AuthService.loginWithFb(response.authResponse.accessToken, $scope.prompt.birthday, $scope.prompt.email)
                         .then(
                             onLoggedIn,
                             function(error) {
-                                onError(Api.translateErrorCode(error ? error.code : 0));
+                                var invalidFieldName = error && error.rule && error.rule.type == Rule.NOT_EMPTY
+                                    ? error.rule.field
+                                    : null;
+
+                                switch (invalidFieldName) {
+                                    case 'email':
+                                    case 'birthday':
+                                        promptForMoreInfo(invalidFieldName);
+                                        break;
+
+                                    default:
+                                        onError(Api.translateErrorCode(error ? error.code : 0));
+                                        break;
+                                }
                             }
                         ).finally(function() {
                             $ionicLoading.hide();
@@ -40,8 +96,8 @@ angular.module('hotvibes.controllers')
                 function(error) {
                     $ionicLoading.hide();
 
-                    if (error.errorCode == '4201') {
-                        // Login cancelled by the user - do nothing
+                    if (error.errorCode == '4201' /* Login cancelled by the user */) {
+                        // Do nothing
                         return;
                     }
 
