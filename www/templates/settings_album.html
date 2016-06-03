@@ -4,7 +4,7 @@
     </ion-nav-title>
 
     <ion-nav-buttons side="right">
-        <button class="button icon ion-android-upload" ng-click="openFilePicker()"></button>&nbsp;
+        <file-upload accept="image/*" on-file-chosen="upload" class="button icon ion-android-upload"></file-upload>&nbsp;
         <button ng-if="album.id > 0" class="button icon ion-trash-b" ng-click="deleteAlbum()"></button>
     </ion-nav-buttons>
 

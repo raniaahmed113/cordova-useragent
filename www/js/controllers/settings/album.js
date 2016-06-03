@@ -60,13 +60,11 @@ angular.module('hotvibes.controllers')
             });
         };
 
-        var filePicker;
-
-        function uploadFile(fileData) {
+        $scope.upload = function(fileData) {
             $ionicLoading.show({ template: __('Uploading') + '..' });
 
             var file = new MediaFile({
-                albumId: $stateParams.albumId,
+                albumId: parseInt($stateParams.albumId),
                 file: fileData
             });
 
@@ -95,55 +93,40 @@ angular.module('hotvibes.controllers')
 
             }, function(error) {
                 // Upload failed
-                if (
-                    error.status == 400
-                    && error.data.rule
-                    && error.data.rule.type == Rule.MIN_VALUE
-                    && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
-                ) {
-                    error.data.code = ErrorCode.IMAGE_SIZE_INVALID
-                }
-
                 var params = {};
-                if (error.data) {
-                    switch (error.data.code) {
-                        case ErrorCode.ALREADY_DID_THAT:
-                            params.message = __("This file is already uploaded");
-                            break;
 
-                        case ErrorCode.LIMIT_REACHED:
-                            params.message = __("File limit reached");
+                switch (error.status) {
+                    case 400: // Bad Request
+                        if (!error.data) {
                             break;
-                    }
+                        }
+
+                        if (error.data.rule
+                            && error.data.rule.type == Rule.MIN_VALUE
+                            && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
+                        ) {
+                            error.data.code = ErrorCode.IMAGE_SIZE_INVALID;
+                            break;
+                        }
+
+                        switch (error.data.code) {
+                            case ErrorCode.ALREADY_DID_THAT:
+                                params.message = __("This file is already uploaded");
+                                break;
+
+                            case ErrorCode.LIMIT_REACHED:
+                                params.message = __("File limit reached");
+                                break;
+                        }
+                        break;
+
+                    case 415: // Unsupported Media Type
+                        params.message = __("Incorrenct file extention");
+                        break;
                 }
 
                 $scope.onError(error, params);
             });
-        }
-
-        $scope.$on('$ionicView.afterEnter', function() {
-            filePicker = document.querySelector('ion-view[nav-view="active"] #file-picker');
-
-            if (filePicker.hasAttribute('ready')) {
-                // Was set-up already
-                return;
-            }
-
-            filePicker.setAttribute('ready', 'true');
-            filePicker.addEventListener('change', function(event) {
-                uploadFile(event.target.files[0]);
-
-                // Let's change the value of file input to null
-                // Otherwise the onChange event wouldn't trigger if we tried uploading the same photo again.
-                // For example, the user would do that if the first attempt failed because of some connectivity error
-                filePicker.value = null;
-            });
-        });
-
-        $scope.openFilePicker = function() {
-            setTimeout(function() {
-                ionic.trigger('click', { target: filePicker });
-            }, 50);
         };
 
         $scope.deleteAlbum = function() {

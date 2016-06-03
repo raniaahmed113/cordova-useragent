@@ -11,6 +11,46 @@ angular.module('hotvibes.directives', [])
         };
     })
 
+    .directive('fileUpload', function() {
+        return {
+            restrict: 'AE',
+            scope: {
+                onFileChosen: '='
+            },
+            link: function(scope, element, attr) {
+                var el = angular.element(element),
+                    fileInput = angular.element('<input type="file" />');
+
+                el.append(fileInput);
+                
+                el.on('click', function() {
+                    setTimeout(function() {
+                        ionic.trigger('click', { target: fileInput[0] });
+                    }, 50);
+                });
+
+                fileInput.on('change', function () {
+                    if (!fileInput[0].files || fileInput[0].files.length < 1) {
+                        return;
+                    }
+
+                    scope.onFileChosen(fileInput[0].files[0]);
+
+                    // Let's change the value of file input to null
+                    // Otherwise the onChange event wouldn't trigger if we tried uploading the same photo again.
+                    // For example, the user would do that if the first attempt failed because of some connectivity error
+                    // fileInput[0].value = null;
+                });
+
+                if ('accept' in attr) {
+                    attr.$observe('accept', function uploadButtonAcceptObserve(value) {
+                        fileInput.attr('accept', value);
+                    });
+                }
+            }
+        };
+    })
+
     .directive('parseUrls', function() {
         return {
             restrict: 'A',
