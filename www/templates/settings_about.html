@@ -4,10 +4,11 @@
             <div class="list list-inset">
                 <div class="item item-divider" translate>My Profile</div>
 
-                <label class="item item-input">
+                <div class="item range range-positive">
                     <span class="input-label" translate>Height</span>
-                    <input type="number" ng-model="aboutMe.height" required />
-                </label>
+                    <input type="range" min="50" max="250" ng-model="aboutMe.height" />
+                    <div>{{aboutMe.height}}cm</div>
+                </div>
 
                 <label ng-repeat="selectable in selectables" class="item item-input item-select">
                     <span class="input-label">{{selectable.label}}</span>
