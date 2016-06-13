@@ -68,7 +68,7 @@ angular.module('hotvibes.controllers')
         $scope.loginWithFb = function() {
             $ionicLoading.show({ template: __("Please wait") + '..'});
 
-            $cordovaFacebook.login([ 'user_birthday', 'user_location' ]).then(
+            $cordovaFacebook.login([ 'email', 'user_birthday', 'user_location' ]).then(
                 function(response) {
                     if (response.status != 'connected') {
                         // Ignore
