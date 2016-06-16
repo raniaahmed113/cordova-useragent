@@ -55,6 +55,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case ErrorCode.INAPPROPRIATE_CONTENT:
                     return __('Your message was not sent because it contains inappropriate language or spam');
 
+                case ErrorCode.PERFORMING_ACTIONS_TOO_FAST:
+                    return __('You are performing actions too fast. Please wait a little and try again.');
+
                 default:
                     // TODO: log to analytics: unknown err code
                     return __("We're sorry, but something went wrong. Please try again later.");

@@ -152,6 +152,7 @@ angular.module('hotvibes.controllers')
                                         requestInputSmsCode(phoneNumber)
                                     },
                                     function(error) {
+                                        // FIXME: handle 429 Too Many Requests
                                         var message;
 
                                         switch (error.code) {
