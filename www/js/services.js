@@ -305,6 +305,12 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             return currentUser != null;
         };
 
+        /**
+         * @param {string} authMethod
+         * @param {object} loginParams
+         *
+         * @returns {Promise}
+         */
         function login(authMethod, loginParams) {
             var deferred = $q.defer(),
                 User = $injector.get('User');
@@ -336,6 +342,12 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             return deferred.promise;
         }
 
+        /**
+         * @param {string} username
+         * @param {string} password
+         *
+         * @returns {Promise}
+         */
         this.loginWithCredentials = function(username, password) {
             return login('login', {
                 username: username,
@@ -343,6 +355,14 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             });
         };
 
+        /**
+         *
+         * @param {string} accessToken
+         * @param {Date|string} birthday
+         * @param {string} email
+         *
+         * @returns {Promise}
+         */
         this.loginWithFb = function(accessToken, birthday, email) {
             var params = {
                 accessToken: accessToken
@@ -366,19 +386,13 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         /**
          * @param {string} phoneNumber
          *
-         * @returns {Promise}
+         * @returns {HttpPromise}
          */
         this.sendConfirmationCode = function(phoneNumber) {
-            var deferred = $q.defer();
-
-            Api.request().post(Config.API_URL_BASE + 'auth/phoneNumber', {
+            return Api.request().post(Config.API_URL_BASE + 'auth/phoneNumber', {
                 clientId: Config.API_CLIENT_ID,
                 number: phoneNumber
             })
-                .success(deferred.resolve)
-                .error(deferred.reject);
-
-            return deferred.promise;
         };
 
         /**
@@ -394,6 +408,11 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             });
         };
 
+        /**
+         *
+         * @param data
+         * @returns {HttpPromise}
+         */
         this.submitRegistration = function(data) {
             // Do a copy so we don't modify binded values
             var params = angular.copy(data);
