@@ -82,10 +82,10 @@ angular.module('hotvibes.directives', [])
             restrict: 'E',
             transclude: true,
             scope: {
-                list: '=',
-                promise: '=',
-                subProperty: '=',
-                onError: '='
+                list: '=list',
+                promise: '=?promise',
+                subProperty: '=?subProperty',
+                onError: '=?onError'
             },
             templateUrl: 'templates/resource_collection.html',
             controller: function($q, $scope, $state, $resource, $ionicNavBarDelegate, __) {
