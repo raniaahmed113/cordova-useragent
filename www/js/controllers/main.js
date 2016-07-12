@@ -8,7 +8,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
 
-            if (AdMob) {
+            if (window.AdMob) {
                 AdMob.removeBanner();
             }
 
@@ -94,7 +94,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             PushNotificationHandler.init();
 
-            if (AdMob && !$scope.currUser.isVip) {
+            if (window.AdMob && !$scope.currUser.isVip) {
                 AdMob.createBanner({
                     adId: "ca-app-pub-0852903784956418/9265490294",
                     position: AdMob.AD_POSITION.BOTTOM_CENTER,
