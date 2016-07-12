@@ -34,7 +34,8 @@
       "id": "cc.fovea.cordova.purchase"
     },
     "cordova-plugin-splashscreen",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-admobpro"
   ],
   "cordovaPlatforms": [
     "ios",
