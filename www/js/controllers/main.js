@@ -7,6 +7,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.logout = function() {
             PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
+
+            if (AdMob) {
+                AdMob.removeBanner();
+            }
+
             $state.go('login').then(function() {
                 $ionicHistory.clearCache();
             });
