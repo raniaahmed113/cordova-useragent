@@ -11,6 +11,18 @@ angular.module('hotvibes.directives', [])
         };
     })
 
+    .directive('castToInt', function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, element, attrs, ngModel) {
+                ngModel.$parsers.push(function (value) {
+                    return parseInt(value);
+                });
+            }
+        };
+    })
+
     .directive('fileUpload', function() {
         return {
             restrict: 'AE',
