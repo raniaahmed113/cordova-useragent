@@ -22,7 +22,6 @@ angular.module('hotvibes.controllers')
             $scope.currUser.$update(changes)
                 .then(
                     function() {
-                        $scope.currUser = angular.merge($scope.currUser, changes);
                         form.$setPristine();
 
                         $ionicLoading.show({
@@ -34,7 +33,7 @@ angular.module('hotvibes.controllers')
                     $scope.onError
 
                 ).finally(function() {
-                $ionicLoading.hide();
-            });
+                    $ionicLoading.hide();
+                });
         };
     });
