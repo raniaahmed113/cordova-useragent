@@ -39,26 +39,26 @@ var switchFlavor = function(projectId, appVersion) {
     );
 
     // Compile config file for Cordova
-    fs.writeFileSync(
-        './config.xml',
-
-        fs.readFileSync('./config.tpl.xml', { encoding: 'utf8' })
-            .replace(/{\$projectId}/, projectId)
-            .replace(/{\$version}/, appVersion)
-            .replace(/{\$appName}/g, cfg.name)
-            .replace(/{\$appDesc}/, cfg.desc)
-            .replace(/{\$emailSupport}/, cfg.author.email)
-            .replace(/{\$url}/, cfg.author.href)
-    );
-
-    // Compile config file for Cordova plugins
-    fs.writeFileSync(
-        './plugins/fetch.json',
-
-        fs.readFileSync('./plugins/fetch.json', { encoding: 'utf8' })
-            .replace(/"APP_ID": "(\d+)"/, '"APP_ID": "' + cfg.fbAppId + '"')
-            .replace(/"APP_NAME": "(.*?)"/, '"APP_NAME": "' + cfg.name + '"')
-    );
+    // fs.writeFileSync(
+    //     './config.xml',
+    //
+    //     fs.readFileSync('./config.tpl.xml', { encoding: 'utf8' })
+    //         .replace(/{\$projectId}/, projectId)
+    //         .replace(/{\$version}/, appVersion)
+    //         .replace(/{\$appName}/g, cfg.name)
+    //         .replace(/{\$appDesc}/, cfg.desc)
+    //         .replace(/{\$emailSupport}/, cfg.author.email)
+    //         .replace(/{\$url}/, cfg.author.href)
+    // );
+    //
+    // // Compile config file for Cordova plugins
+    // fs.writeFileSync(
+    //     './plugins/fetch.json',
+    //
+    //     fs.readFileSync('./plugins/fetch.json', { encoding: 'utf8' })
+    //         .replace(/"APP_ID": "(\d+)"/, '"APP_ID": "' + cfg.fbAppId + '"')
+    //         .replace(/"APP_NAME": "(.*?)"/, '"APP_NAME": "' + cfg.name + '"')
+    // );
 
     // FIXME: change billing key
     // FIXME: change FB appId/key

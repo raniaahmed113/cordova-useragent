@@ -6,11 +6,14 @@
     "ion-autocomplete": "~0.2.3",
     "angular-moment": "~0.10.2",
     "ng-fab-form": "~1.2.11",
-    "angular-translate-custom": "git@git.vertex.lt:bower-packages/angular-translate-custom.git",
+    "angular-translate-custom": "git@git.vertex.lt:bower-packages/angular-translate-custom.git#master",
     "ionic-contrib-tinder-cards": "https://github.com/Bixev/ionic-ion-tinder-cards.git",
     "angular-resource": "~1.4.8",
     "facebook-connect-plugin": "git@git.vertex.lt:bower-packages/facebook-connect-plugin.git",
     "ngCordova": "~0.1.23-alpha"
+  },
+  "resolutions": {
+    "angular": ">=1.5.7 <2.0.0"
   },
   "devDependencies": {}
 }
