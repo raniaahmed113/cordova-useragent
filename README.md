@@ -6,14 +6,14 @@
 sudo npm install -g cordova ionic
 ```
 
-3) Install project tool dependencies from NPM:
+3) Install tool dependencies (bower, gulp, etc):
 ```sh
 npm install
 ```
 
-4) Install project code dependencies from Bower:
+4) Setup the project:
 ```sh
-node_modules/.bin/bower install
+npm run setup
 ```
 
 5) Start local development session:

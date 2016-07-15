@@ -2,6 +2,9 @@
   "name": "Flirtas.lt",
   "version": "1.0.0",
   "description": "Pažintys internete",
+  "scripts": {
+    "setup": "node_modules/.bin/bower install --no-interactive && node_modules/.bin/gulp translate lt env-local"
+  },
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",

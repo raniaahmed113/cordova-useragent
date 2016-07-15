@@ -143,22 +143,6 @@ gulp.task('env-prod', function() {
     switchEnvironment('prod');
 });
 
-gulp.task('setup', function() {
-    // Install nodejs
-    // npm install
-    // bower install
-    // gulp setup
-
-    // TODO
-    // 1. Prompt for API url for local env, Ionic app id &key. Write to environments/local.json file
-
-    // 2. Call task 'lt'
-
-    // 3. Call task 'env-local'
-
-    // 4. Call task 'translate'
-});
-
 gulp.task('assemble', function() {
     var latestGitVersionTag = sh.exec('git describe --abbrev=0', { silent: true }).output,
         versionData = latestGitVersionTag.match(/^v?(\d+)\.(\d+)(?:\.(\d+))?/),
