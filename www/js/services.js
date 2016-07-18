@@ -58,6 +58,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case ErrorCode.PERFORMING_ACTIONS_TOO_FAST:
                     return __('You are performing actions too fast. Please wait a little and try again.');
 
+                case ErrorCode.YOU_ARE_BANNED:
+                    return __("Sorry, but you are banned.");
+
                 default:
                     // TODO: log to analytics: unknown err code
                     return __("We're sorry, but something went wrong. Please try again later.");
