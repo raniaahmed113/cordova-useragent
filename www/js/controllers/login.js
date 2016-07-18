@@ -120,7 +120,7 @@ angular.module('hotvibes.controllers')
         };
 
         function requestInputPhoneNumber() {
-            $ionicPopup.prompt({
+            var dialog = $ionicPopup.prompt({
                 title: __('Login with phone number'),
                 template: __('Enter number'),
                 inputType: 'tel',
@@ -133,35 +133,37 @@ angular.module('hotvibes.controllers')
                     {
                         text: __('Continue'),
                         type: 'button-positive',
-                        onTap: function(e) {
+                        onTap: function (e) {
                             // Do not auto-close the pop-up
                             e.preventDefault();
 
-                            var self = this,
-                                phoneNumber = this.scope.$parent.data.response;
-
+                            var phoneNumber = this.scope.$parent.data.response;
                             if (!phoneNumber) {
                                 return;
+                            }
+
+                            var numberData = phoneNumber.match(/^(?:8|\+?370)(6\d{7})$/);
+                            if (numberData) {
+                                phoneNumber = "370" + numberData[1];
                             }
 
                             $ionicLoading.show({ template: __("Please wait") + '..' });
                             AuthService.sendConfirmationCode(phoneNumber)
                                 .then(
-                                    function() {
-                                        self.hide();
-                                        requestInputSmsCode(phoneNumber)
+                                    function () {
+                                        dialog.close();
+                                        requestInputSmsCode(phoneNumber);
                                     },
-                                    function(error) {
-                                        // FIXME: handle 429 Too Many Requests
+                                    function (error) {
                                         var message;
 
-                                        switch (error.code) {
+                                        switch (error.data.code) {
                                             case ErrorCode.INVALID_INPUT:
                                                 message = __("Incorect phone number.");
                                                 break;
 
                                             default:
-                                                message = Api.translateErrorCode(error? error.code : 0);
+                                                message = Api.translateErrorCode(error.data.code);
                                                 break;
                                         }
 
@@ -178,7 +180,7 @@ angular.module('hotvibes.controllers')
         }
 
         function requestInputSmsCode(phoneNumber) {
-            $ionicPopup.prompt({
+            var dialog = $ionicPopup.prompt({
                 title: __('Confirm your number'),
                 template: __('Confirm code has been sent!'),
                 inputType: 'number',
@@ -195,9 +197,7 @@ angular.module('hotvibes.controllers')
                             // Do not auto-close the pop-up
                             e.preventDefault();
 
-                            var self = this,
-                                smsCode = this.scope.$parent.data.response;
-
+                            var smsCode = this.scope.$parent.data.response;
                             if (!smsCode) {
                                 return;
                             }
@@ -205,34 +205,33 @@ angular.module('hotvibes.controllers')
                             $ionicLoading.show({ template: __("Please wait") + '..'});
                             AuthService.loginWithSmsCode(phoneNumber, smsCode)
                                 .then(
-                                    function() {
-                                        self.hide();
+                                    function () {
+                                        dialog.close();
                                         onLoggedIn();
                                     },
-                                    function(error) {
+                                    function (error) {
                                         var message;
 
-                                        if (error.code == ErrorCode.INVALID_CREDENTIALS) {
-                                            // No account found associated with this phone number: proceed to registration
-                                            self.hide();
-                                            register(phoneNumber, smsCode);
-                                            return;
-                                        }
-
                                         switch (error.code) {
+                                            case ErrorCode.INVALID_CREDENTIALS:
+                                                // No account found associated with this phone number: proceed to registration
+                                                dialog.close();
+                                                register(phoneNumber, smsCode);
+                                                return;
+
                                             case ErrorCode.INVALID_INPUT:
                                                 message = __("Unable to confirm phone");
                                                 break;
 
                                             default:
-                                                message = Api.translateErrorCode(error ? error.code : 0);
+                                                message = Api.translateErrorCode(error.code);
                                                 break;
                                         }
 
                                         onError(message);
                                     }
                                 )
-                                .finally(function() {
+                                .finally(function () {
                                     $ionicLoading.hide();
                                 });
                         }
@@ -244,18 +243,18 @@ angular.module('hotvibes.controllers')
         $scope.showAltLoginMethods = function() {
             $ionicActionSheet.show({
                 buttons: [
-                    //{ text: __('Login with phone number') },
+                    { text: __('Login with phone number') },
                     { text: __('Login with username/email') }
                 ],
                 titleText: __('Alternative login methods'),
                 cancelText: __('Cancel'),
                 buttonClicked: function(index) {
                     switch (index) {
-                        // case 0: // Phone number
-                        //     requestInputPhoneNumber();
-                        //     break;
+                        case 0: // Phone number
+                            requestInputPhoneNumber();
+                            break;
 
-                        case 0: // Email
+                        case 1: // Email
                             $scope.loginWithPassword.modal.show();
                             break;
                     }
@@ -305,14 +304,16 @@ angular.module('hotvibes.controllers')
                         $ionicLoading.hide();
 
                         // Success! Let's login now
-                        $scope.loginData = {
+                        $scope.loginWithPassword.data = {
                             username: $scope.registration.data.nickName,
                             password: $scope.registration.data.password
                         };
+
                         $scope.registration.modal.hide().then(function() {
                             $scope.registration.data = {};
                         });
-                        $scope.login();
+
+                        $scope.loginWithPassword.submit();
 
                     }).error(function(response, status, headers, config) {
                         $ionicLoading.hide();
@@ -361,7 +362,6 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.registration.modal = modal;
-                //modal.show();
             });
 
         $ionicModal
