@@ -23,7 +23,7 @@
                 <span ng-bind-html="message.text | linky | emoticonize" parse-urls></span>
 
                 <div class="attachment" ng-if="message.attachment" ng-switch="message.type">
-                    <a ng-switch-when="image" ng-href="{{message.attachment.url}}" target="_blank">
+                    <a ng-switch-when="image" ng-href="{{message.attachment.url}}" parse-urls>
                         <img ng-src="{{message.attachment.thumbUrl}}" />
                     </a>
                 </div>
