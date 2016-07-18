@@ -83,7 +83,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 object = new User(object);
             }
 
-            if (object.filter && !(object.filter instanceof Filter)) {
+            if (!object.filter || !(object.filter instanceof Filter)) {
+                object.filter.type = Filter.TYPE_MAIN;
                 object.filter = new Filter(object.filter);
             }
 
@@ -116,10 +117,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 id: userId,
                 require: [
                     'cacheCounts',
-                    'profile',
-                    'filter'
+                    'profile'
                 ],
                 include: [
+                    'filter',
                     'quickieFilter',
                     'isVip',
                     'profilePhoto.url(size=w50h50)'

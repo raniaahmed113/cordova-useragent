@@ -7,6 +7,11 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.logout = function() {
             PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
+
+            if (window.AdMob) {
+                AdMob.removeBanner();
+            }
+
             $state.go('login').then(function() {
                 $ionicHistory.clearCache();
             });
@@ -88,6 +93,23 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             }
 
             PushNotificationHandler.init();
+
+            if (window.AdMob && !$scope.currUser.isVip) {
+                AdMob.createBanner({
+                    adId: "ca-app-pub-0852903784956418/9265490294",
+                    position: AdMob.AD_POSITION.BOTTOM_CENTER,
+                    autoShow: true
+                    // ,isTesting: true
+                });
+
+                $scope.$watch("currUser.isVip", function(newValue, oldValue) {
+                    if (newValue === oldValue || newValue !== true) {
+                        return;
+                    }
+
+                    AdMob.removeBanner();
+                }, true);
+            }
         });
 
         $scope.onError = function(response, params) {

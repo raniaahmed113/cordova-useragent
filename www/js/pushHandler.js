@@ -1,6 +1,9 @@
 var __ = require('translate');
 
 function onNotificationReceived(notification) {
+    notification.icon = "ic_stat_main";
+    notification.iconColor = "#F5C73B";
+
     switch (notification.type) {
         case 'newMessage':
             notification.style = 'inbox';

@@ -6,7 +6,7 @@
 
                 <div class="item range range-positive">
                     <span class="input-label" translate>Height</span>
-                    <input type="range" min="50" max="250" ng-model="aboutMe.height" />
+                    <input type="range" min="50" max="250" ng-model="aboutMe.height" cast-to-int="true" />
                     <div>{{aboutMe.height}}cm</div>
                 </div>
 

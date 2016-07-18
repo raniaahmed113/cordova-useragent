@@ -39,26 +39,26 @@ var switchFlavor = function(projectId, appVersion) {
     );
 
     // Compile config file for Cordova
-    fs.writeFileSync(
-        './config.xml',
-
-        fs.readFileSync('./config.tpl.xml', { encoding: 'utf8' })
-            .replace(/{\$projectId}/, projectId)
-            .replace(/{\$version}/, appVersion)
-            .replace(/{\$appName}/g, cfg.name)
-            .replace(/{\$appDesc}/, cfg.desc)
-            .replace(/{\$emailSupport}/, cfg.author.email)
-            .replace(/{\$url}/, cfg.author.href)
-    );
-
-    // Compile config file for Cordova plugins
-    fs.writeFileSync(
-        './plugins/fetch.json',
-
-        fs.readFileSync('./plugins/fetch.json', { encoding: 'utf8' })
-            .replace(/"APP_ID": "(\d+)"/, '"APP_ID": "' + cfg.fbAppId + '"')
-            .replace(/"APP_NAME": "(.*?)"/, '"APP_NAME": "' + cfg.name + '"')
-    );
+    // fs.writeFileSync(
+    //     './config.xml',
+    //
+    //     fs.readFileSync('./config.tpl.xml', { encoding: 'utf8' })
+    //         .replace(/{\$projectId}/, projectId)
+    //         .replace(/{\$version}/, appVersion)
+    //         .replace(/{\$appName}/g, cfg.name)
+    //         .replace(/{\$appDesc}/, cfg.desc)
+    //         .replace(/{\$emailSupport}/, cfg.author.email)
+    //         .replace(/{\$url}/, cfg.author.href)
+    // );
+    //
+    // // Compile config file for Cordova plugins
+    // fs.writeFileSync(
+    //     './plugins/fetch.json',
+    //
+    //     fs.readFileSync('./plugins/fetch.json', { encoding: 'utf8' })
+    //         .replace(/"APP_ID": "(\d+)"/, '"APP_ID": "' + cfg.fbAppId + '"')
+    //         .replace(/"APP_NAME": "(.*?)"/, '"APP_NAME": "' + cfg.name + '"')
+    // );
 
     // FIXME: change billing key
     // FIXME: change FB appId/key
@@ -141,22 +141,6 @@ gulp.task('env-dev', function() {
 
 gulp.task('env-prod', function() {
     switchEnvironment('prod');
-});
-
-gulp.task('setup', function() {
-    // Install nodejs
-    // npm install
-    // bower install
-    // gulp setup
-
-    // TODO
-    // 1. Prompt for API url for local env, Ionic app id &key. Write to environments/local.json file
-
-    // 2. Call task 'lt'
-
-    // 3. Call task 'env-local'
-
-    // 4. Call task 'translate'
 });
 
 gulp.task('assemble', function() {

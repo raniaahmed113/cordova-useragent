@@ -2,6 +2,9 @@
   "name": "Flirtas.lt",
   "version": "1.0.0",
   "description": "Pažintys internete",
+  "scripts": {
+    "setup": "node_modules/.bin/bower install && node_modules/.bin/gulp translate lt"
+  },
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-concat": "^2.2.0",
@@ -34,7 +37,8 @@
       "id": "cc.fovea.cordova.purchase"
     },
     "cordova-plugin-splashscreen",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-admobpro"
   ],
   "cordovaPlatforms": [
     "ios",

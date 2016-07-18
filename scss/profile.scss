@@ -1,16 +1,25 @@
 .profile {
   @include transition(0.25s ease-out all);
-  @include display-flex();
-  @include flex-direction(column);
   overflow: visible;
+
+  & > * {
+    height: 100%;
+    position: relative;
+  }
+
+  > .main {
+    @include display-flex();
+    @include flex-direction(column);
+  }
 
   &.tabs-open {
     @include translate3d(0, -90%, 0);
   }
 
-  .item>span {
+  .item > span {
     font-size:12px;
   }
+
   .thumbs {
     text-align: center;
   }
@@ -19,7 +28,7 @@
     border-color: $assertive;
   }
 
-  > .photos {
+  .photos {
     height: 100%;
     position: relative;
     background-color: #656D7D;
@@ -94,5 +103,6 @@
 
   > .tabs-content {
     height: 90%;
+    position: relative;
   }
 }

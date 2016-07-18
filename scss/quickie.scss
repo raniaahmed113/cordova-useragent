@@ -84,20 +84,20 @@ td-card {
 
   .navigation {
     z-index: 999;
-    position:absolute;
-    bottom:20px;
-    left:0;
-    right:0;
-    margin-left:auto;
-    margin-right:auto;
-    width: 255px;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 290px;
   }
   .navigation button{
-    background:transparent;
+    background: transparent;
     @include border-radius(60px);
-    font-size:50px;
+    font-size: 50px;
     padding: 5px 21px;
-    display:inline-block;
+    display: inline-block;
   }
 
   .navigation button[disabled] {
@@ -111,36 +111,49 @@ td-card {
     pointer-events: none;
   }
 
+  .navigation > * {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
   .navigation span {
-    display:inline-block;
+    display: inline-block;
+    background-color: #E7E7E7;
+    padding: 10px;
+    @include border-radius(50%);
   }
 
   .navigation .small {
-    width:40px;
-    margin:10px 10px;
+    max-width: 50px;
+
+    > span {
+      padding: 5px;
+    }
+
+    button {
+      font-size: 25px;
+      padding: 0 8px;
+
+      &.user {
+        color: $dark;
+        border: 3px solid $dark;
+      }
+
+      &.user:active{
+        background: lighten($dark, 20%);
+      }
+
+      &.sms {
+        color: $positive;
+        border: 3px solid $positive;
+      }
+
+      &.sms:active{
+        background: lighten($positive, 20%);
+      }
+    }
   }
-  .navigation .small button {
-    font-size:25px;
-    padding: 0px 8px;
-  }
-  .navigation .small button.user {
-    position:absolute;
-    top:0;
-    color: $dark;
-    border:3px solid $dark;
-  }
-  .navigation .small button.user:active{
-    background: lighten($dark, 20%);
-  }
-  .navigation .small button.sms {
-    position:absolute;
-    bottom:0;
-    color: $positive;
-    border:3px solid $positive;
-  }
-  .navigation .small button.sms:active{
-    background: lighten($positive, 20%);
-  }
+
   .navigation button.yes{
     color: $energized;
     border:5px solid $energized;

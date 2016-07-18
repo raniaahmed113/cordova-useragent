@@ -20,7 +20,9 @@ angular.module('hotvibes', [
         USERNAME_ALREADY_TAKEN: 112,
         NO_SUCH_USER: 113,
         INAPPROPRIATE_CONTENT: 114,
-        LIMIT_REACHED: 115
+        LIMIT_REACHED: 115,
+        MISSING_INFO: 116,
+        PERFORMING_ACTIONS_TOO_FAST: 117
     })
 
     .constant('Rule', {

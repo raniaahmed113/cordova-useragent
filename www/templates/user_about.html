@@ -6,6 +6,11 @@
                 <i class="online" ng-if="user.isOnline"></i> {{user.nickName}}, {{user.age}}
             </div>
 
+            <div ng-if="!user.isOnline && user.dateLastActive" class="item item-input">
+                <label translate>Last access</label>
+                <span>{{user.dateLastActive*1000 | amCalendar}}</span>
+            </div>
+
             <div class="item item-input">
                 <label translate>About me</label>
                 <span>{{user.profile.about}}</span>

@@ -11,6 +11,18 @@ angular.module('hotvibes.directives', [])
         };
     })
 
+    .directive('castToInt', function() {
+        return {
+            restrict: 'A',
+            require: 'ngModel',
+            link: function(scope, element, attrs, ngModel) {
+                ngModel.$parsers.push(function (value) {
+                    return parseInt(value);
+                });
+            }
+        };
+    })
+
     .directive('fileUpload', function() {
         return {
             restrict: 'AE',
@@ -82,10 +94,10 @@ angular.module('hotvibes.directives', [])
             restrict: 'E',
             transclude: true,
             scope: {
-                list: '=',
-                promise: '=',
-                subProperty: '=',
-                onError: '='
+                list: '=list',
+                promise: '=?promise',
+                subProperty: '=?subProperty',
+                onError: '=?onError'
             },
             templateUrl: 'templates/resource_collection.html',
             controller: function($q, $scope, $state, $resource, $ionicNavBarDelegate, __) {
