@@ -1,6 +1,6 @@
 <ion-view title="{{'Quickie' | translate}}">
     <ion-content scroll="false" class="quickie">
-        <td-cards delegate-handle="members">
+        <td-cards delegate-handle="members" ng-hide="!currUser.profilePhoto">
             <div ng-repeat="user in users">
                 <td-card
                      on-destroy="onCardDestroyed($index)"
@@ -18,13 +18,21 @@
 
             <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
 
-            <div class="error-sign" ng-if="noMore && (firstPhotoLoaded || photosTotal < 1)">
-                <span translate>No more members to display. Try coming back tomorrow.</span>
-                <i class="icon ion-ios-rainy"></i>
+            <div class="center center-vertical-margin" ng-if="error">
+                <div class="error-sign">
+                    <span translate>No more members to display. Try coming back tomorrow.</span>
+                    <i class="icon ion-ios-rainy"></i>
+                </div>
             </div>
         </td-cards>
 
-        <div class="navigation" ng-disabled="!users[0] || !users[0].loadedFully">
+        <div class="center center-vertical-margin error-sign" ng-if="!currUser.profilePhoto">
+            <span translate>no_photo_uploaded</span>
+            <i class="icon ion-images"></i>
+            <a href="#/settings/albums" class="button button-positive" translate>Upload photo</a>
+        </div>
+
+        <div class="navigation" ng-disabled="!currUser.profilePhoto || !users[0] || !users[0].loadedFully">
             <span>
                 <button class="icon ion-close-round no" ng-click="sayNo()"></button>
             </span>
