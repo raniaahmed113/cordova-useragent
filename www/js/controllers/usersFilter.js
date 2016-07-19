@@ -1,18 +1,7 @@
 angular.module('hotvibes.controllers')
 
     .controller('UsersFilterCtrl', function($scope, __, DataMap, CityPicker) {
-        function range(min, max, step) {
-            step = step || 1;
-            var input = [];
-
-            for (var i = min; i <= max; i += step) {
-                input.push(i);
-            }
-
-            return input;
-        }
-
-        $scope.ages = range(16, 99);
+        $scope.ages = range(18, 99);
         $scope.genders = ['male', 'female'];
         $scope.countries = DataMap.country;
 

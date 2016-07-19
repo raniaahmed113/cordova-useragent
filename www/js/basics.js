@@ -52,3 +52,14 @@ var FormUtils = {
         return output;
     }
 };
+
+function range(min, max, step) {
+    step = step || 1;
+    var input = [];
+
+    for (var i = min; i <= max; i += step) {
+        input.push(i);
+    }
+
+    return input;
+}
