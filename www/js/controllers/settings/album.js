@@ -120,6 +120,10 @@ angular.module('hotvibes.controllers')
                         }
                         break;
 
+                    case 413: // Request Entity Too Large
+                        params.message = __("File size exceeds allowed limit.");
+                        break;
+
                     case 415: // Unsupported Media Type
                         params.message = __("Incorrenct file extention");
                         break;
