@@ -25,27 +25,19 @@
         <div class="item item-divider" translate>Age</div>
         <label class="item item-input item-select">
             <span class="input-label" translate>from</span>
-            <select ng-model="currUser.filter.ageMin">
-                <option
-                        ng-repeat="i in ages"
-                        ng-hide="i > currUser.filter.ageMax"
-                        ng-selected="currUser.filter.ageMin == i"
-                        value="{{i}}">
-                    {{i}}
-                </option>
+            <select
+                    ng-model="currUser.filter.ageMin"
+                    ng-options="i disable when (i > currUser.filter.ageMax) for i in ages"
+                    cast-to-int="true">
             </select>
         </label>
 
         <label class="item item-input item-select">
             <span class="input-label" translate>to</span>
-            <select ng-model="currUser.filter.ageMax">
-                <option
-                        ng-repeat="i in ages"
-                        ng-hide="i < currUser.filter.ageMin"
-                        ng-selected="currUser.filter.ageMax == i"
-                        value="{{i}}">
-                    {{i}}
-                </option>
+            <select
+                    ng-model="currUser.filter.ageMax"
+                    ng-options="i disable when (i < currUser.filter.ageMin) for i in ages"
+                    cast-to-int="true">
             </select>
         </label>
 
