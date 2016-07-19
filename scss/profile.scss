@@ -47,7 +47,7 @@
           @include justify-content(center);
           @include align-items(center);
 
-          > img {
+          & > img {
             max-width: 100%;
             max-height: 100%;
           }
