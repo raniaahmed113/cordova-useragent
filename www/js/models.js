@@ -435,7 +435,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 LV: __('Latvia'),
                 PL: __('Poland'),
                 HR: __('Croatia/Hrvatska'),
-                UK: __('United Kingdom')
+                GB: __('United Kingdom')
             },
 
             gender: {
