@@ -4,34 +4,87 @@ angular.module('hotvibes.controllers')
         $state, $scope, $ionicPopup, $q,
         __, Api, User, QuickieVote, TDCardDelegate
     ) {
-        $scope.photosLoaded = $scope.photosTotal = 0;
-        $scope.firstPhotoLoaded = false;
+        $scope.onPhotoLoaded = function(user, $index) {
+            user.loadedFully = true;
+            $scope.photosLoaded++;
 
-        var filter = {
-            notVotedInQuickie: true,
-            loggedInRecently: true,
-            photoSize: 'w330h330'
+            if ($index == 0) {
+                $scope.firstPhotoLoaded = true;
+            }
         };
 
-        // Apply the filter
-        if (!$scope.currUser.quickieFilter) {
-            $scope.currUser.quickieFilter = $scope.currUser.filter
-                ? $scope.currUser.filter
-                : {
-                    gender: $scope.currUser.gender == "male" ? "female" : "male"
-                };
-        } else {
-            $scope.currUser.quickieFilter.gender = $scope.currUser.filter
-                ? $scope.currUser.filter.gender
-                : [ $scope.currUser.gender == "male" ? "female" : "male" ];
-        }
+        $scope.onCardMove = function(progress) {
+            $scope.cardPos = progress;
+        };
 
-        filter = angular.extend(filter, Api.formatFilter($scope.currUser.quickieFilter));
+        $scope.onSnapBack = function() {
+            $scope.cardPos = 0;
+        };
+
+        $scope.onCardDestroyed = onCardDestroyed;
+
+        $scope.sayYes = function() {
+            $scope.cardPos = 1;
+            TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('right');
+        };
+
+        $scope.sayNo = function() {
+            TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('left');
+        };
+
+        $scope.openChat = function() {
+            if (!canPerformAction()) {
+                return;
+            }
+
+            $state.go('inside.conversations-single', { id: $scope.users[0].id });
+        };
+
+        $scope.openProfile = function() {
+            if (!canPerformAction()) {
+                return;
+            }
+
+            $state.go('inside.user', { userId: $scope.users[0].id });
+        };
 
         var limit = 20,
             cardsOnScreen = 5,
             members = null,
-            excludeIds = {};
+            excludeIds = {},
+            baseFilter = {
+                notVotedInQuickie: true,
+                loggedInRecently: true,
+                photoSize: 'w330h330'
+            };
+
+        $scope.$watch('currUser.filter', function(newFilter, oldFilter) {
+            if (newFilter === oldFilter) {
+                // Ignore
+                return;
+            }
+
+            reload(newFilter);
+        }, true);
+
+        reload($scope.currUser.filter);
+
+        function reload(newFilter) {
+            filter = angular.extend(baseFilter, Api.formatFilter(newFilter));
+
+            $scope.cardPos = 0;
+            $scope.photosLoaded = $scope.photosTotal = 0;
+            $scope.firstPhotoLoaded = false;
+
+            loadMore().then(function() {
+                if (members.length < 1) {
+                    return;
+                }
+
+                $scope.users = members.splice(0, cardsOnScreen);
+                $scope.photosTotal += $scope.users.length;
+            });
+        }
 
         function loadMore() {
             var deferred = $q.defer();
@@ -92,40 +145,7 @@ angular.module('hotvibes.controllers')
             return deferred.promise;
         }
 
-        function submitVote(vote) {
-            vote.$save().finally(function() {
-                delete excludeIds[vote.voteForUserId];
-            });
-        }
-
-        loadMore().then(function() {
-            if (members.length < 1) {
-                return;
-            }
-
-            $scope.users = members.splice(0, cardsOnScreen);
-            $scope.photosTotal += $scope.users.length;
-        });
-
-        $scope.onPhotoLoaded = function(user, $index) {
-            user.loadedFully = true;
-            $scope.photosLoaded++;
-
-            if ($index == 0) {
-                $scope.firstPhotoLoaded = true;
-            }
-        };
-
-        $scope.cardPos = 0;
-        $scope.onCardMove = function(progress) {
-            $scope.cardPos = progress;
-        };
-
-        $scope.onSnapBack = function() {
-            $scope.cardPos = 0;
-        };
-
-        $scope.onCardDestroyed = function($index) {
+        function onCardDestroyed($index) {
             var user = $scope.users.splice($index, 1)[0],
                 quickieVote = new QuickieVote({
                     voteForUserId: user.id,
@@ -140,16 +160,13 @@ angular.module('hotvibes.controllers')
                 $scope.users.push(nextMember);
                 $scope.photosTotal++;
             });
-        };
+        }
 
-        $scope.sayYes = function() {
-            $scope.cardPos = 1;
-            TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('right');
-        };
-
-        $scope.sayNo = function() {
-            TDCardDelegate.$getByHandle('members').cardInstances[0].swipe('left');
-        };
+        function submitVote(vote) {
+            vote.$save().finally(function() {
+                delete excludeIds[vote.voteForUserId];
+            });
+        }
 
         function canPerformAction() {
             if ($scope.users.length < 1) {
@@ -176,22 +193,6 @@ angular.module('hotvibes.controllers')
 
             return true;
         }
-
-        $scope.openChat = function() {
-            if (!canPerformAction()) {
-                return;
-            }
-
-            $state.go('inside.conversations-single', { id: $scope.users[0].id });
-        };
-
-        $scope.openProfile = function() {
-            if (!canPerformAction()) {
-                return;
-            }
-
-            $state.go('inside.user', { userId: $scope.users[0].id });
-        };
     })
 
     .controller('QuickieYesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {

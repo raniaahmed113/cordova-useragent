@@ -98,10 +98,6 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 }
             }
 
-            /*if (object.quickieFilter && !(object.quickieFilter instanceof Filter)) {
-                object.quickieFilter = new QuickieFilter(object.quickieFilter);
-            }*/
-
             return object;
         };
 
@@ -121,7 +117,6 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 ],
                 include: [
                     'filter',
-                    'quickieFilter',
                     'isVip',
                     'profilePhoto.url(size=w50h50)'
                 ]
