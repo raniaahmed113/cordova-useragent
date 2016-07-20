@@ -51,7 +51,7 @@ angular.module('hotvibes.directives', [])
                     // Let's change the value of file input to null
                     // Otherwise the onChange event wouldn't trigger if we tried uploading the same photo again.
                     // For example, the user would do that if the first attempt failed because of some connectivity error
-                    // fileInput[0].value = null;
+                    fileInput[0].value = null;
                 });
 
                 if ('accept' in attr) {
