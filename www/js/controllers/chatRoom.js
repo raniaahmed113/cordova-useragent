@@ -141,6 +141,10 @@ angular.module('hotvibes.controllers')
                     var index = $scope.comments.indexOf(comment);
                     $scope.comments.splice(index, 1);
 
+                    // TODO:
+                    // if (error.data.code === ErrorCode.VIP_REQUIRED) ..
+                    // then errorMessage = __("You must either become a VIP member, or a real member and confirm your email address")
+
                     $ionicPopup.alert({
                         title: __("Something's wrong"),
                         template: error.data
