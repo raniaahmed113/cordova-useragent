@@ -32,7 +32,7 @@
             <div class="item item-input item-input-with-action">
                 <span class="input-label" translate>Phone number</span>
                 <div>
-                    <input type="tel" ng-model="settings.profile.phoneNumber" minlength="5" />
+                    <input type="tel" ng-model="settings.profile.phoneNumber" required />
                     <div ng-if="currUser.profile.isPhoneNumberConfirmed" class="positive" translate></div>
                     <div ng-if="!currUser.profile.isPhoneNumberConfirmed && currUser.profile.phoneNumber" class="status assertive">
                         <label translate>Your phone number is unconfirmed.</label>

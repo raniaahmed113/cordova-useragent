@@ -39,7 +39,29 @@ angular.module('hotvibes.controllers')
                     });
                 },
 
-                $scope.onError
+                function (error) {
+                    if (error.status === 400 /* Bad Request */ && error.data.rule) {
+                        // Validation error
+                        switch (error.data.rule.field) {
+                            case "phoneNumber":
+                                $scope.settings.form['settings.profile.phoneNumber'].$setValidity("tel", false);
+
+                                // Cancel invalid state of the field the next time it is edited
+                                var stopWatching = $scope.$watch("settings.profile.phoneNumber", function (oldVal, newVal) {
+                                    if (oldVal === newVal) {
+                                        return;
+                                    }
+
+                                    stopWatching();
+                                    $scope.settings.form['settings.profile.phoneNumber'].$setValidity("tel", true);
+                                });
+
+                                return;
+                        }
+                    }
+
+                    $scope.onError(error);
+                }
 
             ).finally(function() {
                 $ionicLoading.hide();
