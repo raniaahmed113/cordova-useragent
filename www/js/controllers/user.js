@@ -297,46 +297,56 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.user.$promise.then(function() {
-            var properties = ['isFriend', 'isFavorite', 'isBlocked'];
+            var properties = [ 'user.isFriend', 'user.isFavorite', 'user.isBlocked' ];
 
-            for (var i=0; i < properties.length; i++) {
-                $scope.$watch('user.' + properties[i], function(newVal, oldVal) {
-                    if (newVal === oldVal) {
-                        return;
+            $scope.$watchGroup(properties, function(newValues, oldValues) {
+                var relation,
+                    property,
+                    newVal;
+
+                for (var i=0; i<properties.length; i++) {
+                    if (newValues[i] !== oldValues[i]) {
+                        property = properties[i];
+                        newVal = newValues[i];
+                        break;
                     }
+                }
 
-                    var relation;
-                    switch (this.exp) {
-                        case 'user.isFriend':
-                            if (newVal) {
-                                // Do nothing - may not become friends without sending an invite first
-                                return;
-                            }
+                if (!property) {
+                    // Nothing has changed
+                    return;
+                }
 
-                            relation = new Friend({ friendId: $scope.user.id });
-                            break;
-
-                        case 'user.isFavorite':
-                            relation = new Favorite({ favoriteId: $scope.user.id });
-                            break;
-
-                        case 'user.isBlocked':
-                            relation = new BlockedUser({ blockedUserId: $scope.user.id });
-                            break;
-
-                        default:
+                switch (property) {
+                    case 'user.isFriend':
+                        if (newVal) {
+                            // Do nothing - may not become friends without sending an invite first
                             return;
-                    }
+                        }
 
-                    if (newVal) {
-                        relation.$save();
+                        relation = new Friend({ friendId: $scope.user.id });
+                        break;
 
-                    } else {
-                        relation.$delete({ userId: $scope.user.id });
-                    }
+                    case 'user.isFavorite':
+                        relation = new Favorite({ favoriteId: $scope.user.id });
+                        break;
 
-                    $ionicHistory.clearCache(); // FIXME: only clear a single view
-                });
-            }
+                    case 'user.isBlocked':
+                        relation = new BlockedUser({ blockedUserId: $scope.user.id });
+                        break;
+
+                    default:
+                        return;
+                }
+
+                if (newVal) {
+                    relation.$save();
+
+                } else {
+                    relation.$delete({ userId: $scope.user.id });
+                }
+
+                $ionicHistory.clearCache(); // FIXME: only clear a single view
+            });
         });
     });
