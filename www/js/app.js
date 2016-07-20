@@ -221,6 +221,10 @@ angular.module('hotvibes', [
                 $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
             }
 
+            if (window.AppnextTrack) {
+                AppnextTrack.track();
+            }
+
             // TODO: show some message when device goes offline
             /*$ionicPlatform.on('offline', function() {
 
