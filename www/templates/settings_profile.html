@@ -23,7 +23,7 @@
                 <span class="input-label" translate>City</span>
                 <div>
                     <input type="text" ng-model="settings.city" disabled />
-                    <button type="button" ng-click="modal.show()" translate>
+                    <button type="button" class="button button-stable" ng-click="modal.show()" translate>
                         Change
                     </button>
                 </div>
@@ -32,11 +32,11 @@
             <div class="item item-input item-input-with-action">
                 <span class="input-label" translate>Phone number</span>
                 <div>
-                    <input type="tel" ng-model="settings.profile.phoneNumber" minlength="5" />
+                    <input type="tel" ng-model="settings.profile.phoneNumber" required />
                     <div ng-if="currUser.profile.isPhoneNumberConfirmed" class="positive" translate></div>
                     <div ng-if="!currUser.profile.isPhoneNumberConfirmed && currUser.profile.phoneNumber" class="status assertive">
                         <label translate>Your phone number is unconfirmed.</label>
-                        <button type="button" ng-click="confirmPhone()" class="button-assertive" translate>
+                        <button type="button" ng-click="confirmPhone()" class="button button-assertive" translate>
                             Confirm now.
                         </button>
                     </div>
@@ -53,7 +53,7 @@
                         <label translate translate-values="{name: '<span translate>Resend activation email.</span>'}">
                             If you haven't yet received the letter, please make sure, that the entered e-mail address is correct and then click %s.
                         </label>
-                        <button type="button" ng-click="resendConfirmationEmail()" class="button-assertive" translate>
+                        <button type="button" ng-click="resendConfirmationEmail()" class="button button-assertive" translate>
                             Resend activation email.
                         </button>
                     </div>

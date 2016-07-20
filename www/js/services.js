@@ -58,6 +58,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                 case ErrorCode.PERFORMING_ACTIONS_TOO_FAST:
                     return __('You are performing actions too fast. Please wait a little and try again.');
 
+                case ErrorCode.PHONE_NUMBER_ALREADY_TAKEN:
+                    return __("Your phone number is already registered.");
+
                 case ErrorCode.YOU_ARE_BANNED:
                     return __("Sorry, but you are banned.");
 

@@ -1,8 +1,9 @@
-<div ng-messages="field.$error" class="validation" ng-show="attrs.required==''|| attrs.required">
-    <ul class="list-unstyled validation-errors" ng-show="field.$invalid && (field.$touched || field.$dirty || form.$triedSubmit)">
+<div ng-messages="field.$error" class="validation" ng-show="field.$invalid && (field.$touched || field.$dirty || form.$triedSubmit)">
+    <ul class="list-unstyled validation-errors">
         <li ng-message="required"><span translate>This field is required</span></li>
         <li ng-message="ngFabEnsureExpression">Not valid condition</li>
         <li ng-message="password">Please enter a valid password</li>
+        <li ng-message="tel"><span translate>Incorect phone number.</span></li>
         <li ng-message="email"><span translate>This e-mail address is invalid</span></li>
         <li ng-message="pattern">Invalid input format</li>
         <li ng-message="date">Please enter a valid date</li>

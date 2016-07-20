@@ -24,6 +24,7 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "cordovaPlugins": [
+    "com.appnext.appnextsdk",
     "org.apache.cordova.device",
     "org.apache.cordova.console",
     "com.ionic.keyboard",
