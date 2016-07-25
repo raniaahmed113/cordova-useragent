@@ -118,7 +118,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
                 include: [
                     'filter',
                     'isVip',
-                    'profilePhoto.url(size=w50h50)'
+                    'profilePhoto.url(size=w50h50)',
+                    'cacheCounts.cntUnreadMessages'
                 ]
 
             }).$promise.then(
