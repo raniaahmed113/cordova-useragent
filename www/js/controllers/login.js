@@ -326,6 +326,18 @@ angular.module('hotvibes.controllers')
                         $ionicLoading.hide();
 
                         if (
+                            status === 400
+                            && response.code === ErrorCode.INVALID_CREDENTIALS
+                            && $scope.registration.data.phoneNumber
+                        ) {
+                            // Invalid SMS code
+                            // Probably user took to long entering additional info and code has expired
+                            $scope.registration.modal.hide();
+                            requestInputSmsCode($scope.registration.data.phoneNumber);
+                            return;
+                        }
+
+                        if (
                                 status == 400 // Bad Request
                                 && response.rule
                                 && response.rule.field
