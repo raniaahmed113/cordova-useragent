@@ -32,7 +32,7 @@
             <a href="#/settings/albums" class="button button-positive" translate>Upload photo</a>
         </div>
 
-        <div class="navigation" ng-disabled="!currUser.profilePhoto || !users[0] || !users[0].loadedFully">
+        <div class="navigation" ng-hide="!currUser.profilePhoto" ng-disabled="!users[0] || !users[0].loadedFully">
             <span>
                 <button class="icon ion-close-round no" ng-click="sayNo()"></button>
             </span>
