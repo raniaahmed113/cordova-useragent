@@ -343,9 +343,14 @@ angular.module('hotvibes.controllers')
                                 && response.rule.field
                                 && $scope.registration.form['registration.data.' + response.rule.field]
                         ) {
-                            // TODO: handle cases where such email is already registered (ErrorCode.EMAIL_ALREADY_TAKEN) - show password recovery screen or smth
-                            var field = $scope.registration.form['registration.data.' + response.rule.field];
-                            field.errorMessage = response.message;
+                            var field = $scope.registration.form['registration.data.' + response.rule.field],
+                                validationMessage = response.message;
+
+                            if (response.rule.field === "birthday" && response.rule.type === "age") {
+                                validationMessage = __("Incorrect birthday.");
+                            }
+
+                            field.errorMessage = validationMessage;
                             field.$validators.serverError = function() { return true; }; // This will reset 'serverError' when value changes
                             field.$setValidity('serverError', false);
 
