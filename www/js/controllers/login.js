@@ -290,6 +290,13 @@ angular.module('hotvibes.controllers')
         $scope.language = $translate.use();
         $scope.rules = {};
 
+        var today = new Date(),
+            ageMin = 18,
+            ageMax = 99;
+
+        $scope.birthdayDateMin = new Date(today.getFullYear() - ageMax, today.getMonth(), today.getDate());
+        $scope.birthdayDateMax = new Date(today.getFullYear() - ageMin, today.getMonth(), today.getDate());
+
         $scope.registration = {
             data: {
                 clientId: Config.API_CLIENT_ID
