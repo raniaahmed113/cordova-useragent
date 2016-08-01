@@ -211,6 +211,17 @@ angular.module('hotvibes', [
             });
         }
 
+        $ionicPlatform.registerBackButtonAction(function (event) {
+            $ionicPopup.confirm({
+                title: __("Warning!"),
+                template: __("Are you sure you want to exit the application?")
+            }).then(function(res) {
+                if (res) {
+                    ionic.Platform.exitApp();
+                }
+            })
+        }, 100);
+
         $ionicPlatform.ready(function() {
             // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
             if (window.cordova) {
