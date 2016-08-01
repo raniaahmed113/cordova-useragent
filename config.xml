@@ -28,6 +28,7 @@
     <preference name="android-minSdkVersion" value="19" />
 
     <hook type="after_platform_add" src="hooks/after_platform_add/010_android_setup_apk_signing.js" />
+    <hook type="after_platform_add" src="hooks/after_platform_add/011_android_copy_notification_icons.js" />
 
     <icon src="resources/android/icon/drawable-ldpi-icon.png" density="ldpi"/>
     <icon src="resources/android/icon/drawable-mdpi-icon.png" density="mdpi"/>
