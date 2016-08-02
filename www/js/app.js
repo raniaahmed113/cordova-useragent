@@ -154,7 +154,7 @@ angular.module('hotvibes', [
 
     .run(function(
         $injector, $ionicPlatform, $ionicModal, $translate, $rootScope, $cordovaGoogleAnalytics, amMoment,
-        AuthService, Config
+        AuthService, Config, $ionicSideMenuDelegate, $ionicPopup
     ) {
         AuthService.init();
 
@@ -212,6 +212,8 @@ angular.module('hotvibes', [
         }
 
         $ionicPlatform.registerBackButtonAction(function (event) {
+            $ionicSideMenuDelegate.toggleLeft(false);
+
             $ionicPopup.confirm({
                 title: __("Warning!"),
                 template: __("Are you sure you want to exit the application?")
