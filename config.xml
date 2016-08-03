@@ -71,6 +71,9 @@
     <splash src="resources/ios/splash/Default~iphone.png" width="320" height="480"/>
   </platform>
   <icon src="resources/android/icon/drawable-xhdpi-icon.png"/>
+  <plugin name="phonegap-plugin-push">
+    <variable name="SENDER_ID" value="1"/>
+  </plugin>
   <plugin name="cc.fovea.cordova.purchase" spec="~4.0.0">
     <variable name="BILLING_KEY" value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwAiyEkJFV/CQUayJzb5ALeYcGRG5pLcRJCD0SNX/6Zzvkb/JF2qzFlKU6CrVry3XXqxF4h06TTglpB7O5dkEhwD5rpRIZGp4xU6cs9Q/ShMTN0rfUFgIjHamx13fV5Lf9OKhXtcEN0wIIKnGJJb3BgSjnGNQTpSdeTDgU3UN5GFdlUwWm/1QL7tE1sQ9nWzjNEWj2ZWo1FU4N2NHlBvnZrcQ7f7OqKX9pCDaoCh3mc2vQKcmIOpx2oDdeCZwfY3sz4/mdoQJ4BmVqFOsqnhAM+3o/0Wi5yJ7chg6U4wMmxCnfScbivHA0hBHV8qsHSZg+j3uvIN9QLaGmcvTyqn5RQIDAQAB"/>
   </plugin>
