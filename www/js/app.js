@@ -231,7 +231,9 @@ angular.module('hotvibes', [
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
 
-                $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
+                if ($cordovaGoogleAnalytics) {
+                    $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
+                }
             }
 
             if (window.AppnextTrack) {
