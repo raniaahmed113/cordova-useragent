@@ -24,9 +24,11 @@
     "vinyl-source-stream": "^1.1.0"
   },
   "cordovaPlugins": [
-    "com.appnext.appnextsdk",
+    "cordova-plugin-keyboard",
+    "cordova-plugin-console",
+    "cordova-plugin-device",
     {
-      "locator": "git+ssh://git@git.vertex.lt:bower-packages/cordova-appnext-sdk.git",
+      "locator": "http://git.vertex.lt/bower-packages/cordova-appnext-sdk.git",
       "id": "com.appnext.appnextsdk"
     },
     {
