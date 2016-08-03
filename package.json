@@ -28,18 +28,18 @@
     "cordova-plugin-console",
     "cordova-plugin-device",
     {
-      "locator": "http://git.vertex.lt/bower-packages/cordova-appnext-sdk.git",
+      "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-appnext-sdk.git",
       "id": "com.appnext.appnextsdk"
     },
     {
       "variables": {
-          "SENDER_ID": 1
+          "SENDER_ID": 957136533015
       },
       "locator": "phonegap-plugin-push",
       "id": "phonegap-plugin-push"
     },
     {
-        "locator": "http://git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
+        "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
         "variables": {
             "APP_ID": "150080468451846",
             "APP_NAME": "Flirtas.lt"
