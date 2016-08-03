@@ -247,5 +247,12 @@ angular.module('hotvibes', [
                 // org.apache.cordova.statusbar required
                 StatusBar.styleDefault();
             }
+
+            cordova.getAppVersion.getVersionNumber().then(function (version) {
+                window.UserAgent.reset();
+                window.UserAgent.get(function (ua) {
+                    window.UserAgent.set(ua + " FlirtasApp/" + version);
+                })
+            })
         });
     });
