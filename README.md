@@ -11,14 +11,39 @@ sudo npm install -g cordova ionic
 npm install
 ```
 
-4) Setup the project:
+4) Install cordova plugins (optional for local development via `ionic serve`, required for building the app)
+```sh
+ionic state reset
+```
+
+5) Setup the project:
 ```sh
 npm run setup
 ```
 
-5) Start local development session:
+6) Start local development session:
 ```sh
 ionic serve
+```
+
+# Testing on iOS
+0) Download `XCode` app if you don't have it already
+1) Ask `ernestas@vertex.lt` to go to `https://developer.apple.com/account/#/people/62N89448NZ` and add you as a developer
+2) Open `platforms/ios/Flirtas.lt.xcodeproj` in XCode
+3) Enable developer mode in settings of your iOS device, then connect it via USB
+4) Setup project provisioning profile using Vertex team
+5) Build the project:
+```sh
+ionic build ios
+```
+6) Click `Run`
+
+# Testing on Android
+0) Download & setup Java JDK, Android SDK
+1) Enable USB debugging on Android device & connect it to computer via USB or remote adb
+2) Deploy the app:
+```sh
+ionic run android
 ```
 
 # Releasing an update to Google Play Store
