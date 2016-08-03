@@ -33,7 +33,7 @@
     },
     {
       "variables": {
-          "SENDER_ID": 1
+          "SENDER_ID": 957136533015
       },
       "locator": "phonegap-plugin-push",
       "id": "phonegap-plugin-push"
