@@ -25,6 +25,10 @@
   },
   "cordovaPlugins": [
     "com.appnext.appnextsdk",
+    {
+      "locator": "git+ssh://git@git.vertex.lt:bower-packages/cordova-appnext-sdk.git",
+      "id": "com.appnext.appnextsdk"
+    },
     "org.apache.cordova.device",
     "org.apache.cordova.console",
     "com.ionic.keyboard",
