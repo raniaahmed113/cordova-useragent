@@ -248,11 +248,13 @@ angular.module('hotvibes', [
                 StatusBar.styleDefault();
             }
 
-            cordova.getAppVersion.getVersionNumber().then(function (version) {
-                window.UserAgent.reset();
-                window.UserAgent.get(function (ua) {
-                    window.UserAgent.set(ua + " FlirtasApp/" + version);
+            if(window.cordova) {
+                cordova.getAppVersion.getVersionNumber().then(function (version) {
+                    window.UserAgent.reset();
+                    window.UserAgent.get(function (ua) {
+                        window.UserAgent.set(ua + " FlirtasApp/" + version);
+                    })
                 })
-            })
+            }
         });
     });
