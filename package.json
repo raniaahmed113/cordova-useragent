@@ -55,7 +55,12 @@
     },
     "cordova-plugin-splashscreen",
     "cordova-plugin-inappbrowser",
-    "cordova-plugin-admobpro"
+    "cordova-plugin-admobpro",
+    {
+      "locator": "https://github.com/LouisT/cordova-useragent",
+      "id": "im.ltdev.cordova.UserAgent"
+    },
+    "cordova-plugin-app-version"
   ],
   "cordovaPlatforms": [
     "ios",
