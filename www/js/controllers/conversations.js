@@ -104,6 +104,10 @@ angular.module('hotvibes.controllers')
         }
 
         function onNewMessage(event, msg) {
+            if ($scope.conversation.id !== msg.conversationId) {
+                return;
+            }
+
             $scope.messages.push(msg);
             $ionicScrollDelegate.scrollBottom(true);
         }
