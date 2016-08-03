@@ -29,11 +29,21 @@
       "locator": "git+ssh://git@git.vertex.lt:bower-packages/cordova-appnext-sdk.git",
       "id": "com.appnext.appnextsdk"
     },
-    "org.apache.cordova.device",
-    "org.apache.cordova.console",
-    "com.ionic.keyboard",
-    "phonegap-plugin-push",
-    "phonegap-facebook-plugin",
+    {
+      "variables": {
+          "SENDER_ID": 1
+      },
+      "locator": "phonegap-plugin-push",
+      "id": "phonegap-plugin-push"
+    },
+    {
+        "locator": "http://git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
+        "variables": {
+            "APP_ID": "150080468451846",
+            "APP_NAME": "Flirtas.lt"
+        },
+        "id": "cordova-plugin-facebook4"
+    },
     {
       "variables": {
         "BILLING_KEY": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwAiyEkJFV/CQUayJzb5ALeYcGRG5pLcRJCD0SNX/6Zzvkb/JF2qzFlKU6CrVry3XXqxF4h06TTglpB7O5dkEhwD5rpRIZGp4xU6cs9Q/ShMTN0rfUFgIjHamx13fV5Lf9OKhXtcEN0wIIKnGJJb3BgSjnGNQTpSdeTDgU3UN5GFdlUwWm/1QL7tE1sQ9nWzjNEWj2ZWo1FU4N2NHlBvnZrcQ7f7OqKX9pCDaoCh3mc2vQKcmIOpx2oDdeCZwfY3sz4/mdoQJ4BmVqFOsqnhAM+3o/0Wi5yJ7chg6U4wMmxCnfScbivHA0hBHV8qsHSZg+j3uvIN9QLaGmcvTyqn5RQIDAQAB"
