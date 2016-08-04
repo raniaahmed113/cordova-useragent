@@ -2,30 +2,30 @@
 
     <ion-side-menu side="left" edge-drag-threshold="true" class="menu-dark">
         <ion-header-bar class="bar-main-nav bar-dark">
-            <a href="#/settings" menu-toggle>
+            <a href="#/settings" menu-close>
                 <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" /> {{currUser.nickName}} <i class="icon ion-ios-gear"></i>
             </a>
         </ion-header-bar>
         <ion-content class="main-menu">
             <ion-list class="list-dark">
 
-                <ion-item menu-toggle href="#/conversations">
+                <ion-item menu-close href="#/conversations">
                     <i class="icon ion-email"></i>
                     <span translate>Messages</span>
                     <span ng-if="currUser.cacheCounts.cntUnreadMessages > 0" class="badge badge-assertive">{{currUser.cacheCounts.cntUnreadMessages}}</span>
                 </ion-item>
 
-                <ion-item menu-toggle href="#/users"><i class="icon ion-ios-people"></i> <span translate>Members</span></ion-item>
-                <ion-item menu-toggle href="#/quickie"><i class="icon ion-fireball"></i> <span translate>Quickie</span></ion-item>
-                <ion-item menu-toggle href="#/guests">
+                <ion-item menu-close href="#/users"><i class="icon ion-ios-people"></i> <span translate>Members</span></ion-item>
+                <ion-item menu-close href="#/quickie"><i class="icon ion-fireball"></i> <span translate>Quickie</span></ion-item>
+                <ion-item menu-close href="#/guests">
                     <i class="icon ion-eye"></i>
                     <span translate>Guests</span>
                     <span ng-if="currUser.cacheCounts.cntNewGuests > 0" class="badge badge-assertive">{{currUser.cacheCounts.cntNewGuests}}</span>
                 </ion-item>
-                <ion-item menu-toggle href="#/chatRooms/1"><i class="icon ion-chatboxes"></i> <span translate>ShoutBox</span></ion-item>
-                <ion-item menu-toggle href="#/friends"><i class="icon ion-person-add"></i> <span translate>My Friends</span></ion-item>
-                <ion-item menu-toggle href="#/blocklist"><i class="icon ion-minus-circled"></i> <span translate>My BlackList</span></ion-item>
-                <ion-item menu-toggle href="#/support"><i class="icon ion-help-buoy"></i> <span translate>Contact us</span></ion-item>
+                <ion-item menu-close href="#/chatRooms/1"><i class="icon ion-chatboxes"></i> <span translate>ShoutBox</span></ion-item>
+                <ion-item menu-close href="#/friends"><i class="icon ion-person-add"></i> <span translate>My Friends</span></ion-item>
+                <ion-item menu-close href="#/blocklist"><i class="icon ion-minus-circled"></i> <span translate>My BlackList</span></ion-item>
+                <ion-item menu-close href="#/support"><i class="icon ion-help-buoy"></i> <span translate>Contact us</span></ion-item>
 
             </ion-list>
         </ion-content>
