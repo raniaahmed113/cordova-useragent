@@ -74,7 +74,7 @@ angular.module('hotvibes', [
 
     .config(function ($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider,
                       $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/,
-                      $cordovaFacebookProvider, ngFabFormProvider, Config, $window) {
+                      $cordovaFacebookProvider, ngFabFormProvider, Config) {
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
 
@@ -148,7 +148,7 @@ angular.module('hotvibes', [
         });
 
         // Configure FB
-        if (!$window.cordova) {
+        if (!window.cordova) {
             $cordovaFacebookProvider.browserInit(Config.FB_APP_ID);
         }
     })
