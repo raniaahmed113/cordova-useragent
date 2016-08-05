@@ -58,7 +58,7 @@
     "cordova-plugin-inappbrowser",
     "com.google.playservices",
     "cordova-plugin-whitelist",
-    "cordova-plugin-google-analytics"
+    "cordova-plugin-google-analytics",
     "cordova-plugin-admobpro",
     {
       "locator": "https://github.com/LouisT/cordova-useragent",
