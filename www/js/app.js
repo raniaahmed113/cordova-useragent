@@ -254,6 +254,15 @@ angular.module('hotvibes', [
                 }
             }
 
+            if (window.cordova) {
+                cordova.getAppVersion.getVersionNumber().then(function (version) {
+                    window.UserAgent.reset();
+                    window.UserAgent.get(function (ua) {
+                        window.UserAgent.set(ua + " FlirtasApp/" + version);
+                    })
+                })
+            }
+
             // listen for Offline event
             $rootScope.$on('$cordovaNetwork:offline', function(){
                 if (!internetConnected) return;
