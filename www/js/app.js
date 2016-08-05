@@ -34,15 +34,16 @@ angular.module('hotvibes', [
         IS_DATE_VALID: 'date'
     })
 
-    .factory('SprintfInterpolator', function() {
+    .factory('SprintfInterpolator', function () {
         return {
-            setLocale: function(locale) {},
+            setLocale: function (locale) {
+            },
 
-            getInterpolationIdentifier: function() {
+            getInterpolationIdentifier: function () {
                 return 'sprintf';
             },
 
-            interpolate: function(string, interpolateParams) {
+            interpolate: function (string, interpolateParams) {
                 if (!interpolateParams || interpolateParams.length < 1) {
                     return string;
                 }
@@ -60,7 +61,7 @@ angular.module('hotvibes', [
                     suffix = interpolateParams._after;
                 }
 
-                return string.replace(/%u|%s/g, function() {
+                return string.replace(/%u|%s/g, function () {
                     var value = keys.length > i && !angular.isUndefined(interpolateParams[keys[i]])
                         ? interpolateParams[keys[i++]]
                         : '';
@@ -71,17 +72,17 @@ angular.module('hotvibes', [
         };
     })
 
-    .config(function(
-        $stateProvider, $translateProvider, $urlRouterProvider, $httpProvider,
-        $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/,
-        $cordovaFacebookProvider, ngFabFormProvider, Config
-    ) {
+    .config(function ($stateProvider, $translateProvider, $urlRouterProvider, $httpProvider,
+                      $ionicConfigProvider, $resourceProvider/*, $cacheFactoryProvider*/,
+                      $cordovaFacebookProvider, ngFabFormProvider, Config) {
         // Add HTTP interceptor so we could read/write headers on each request
         $httpProvider.interceptors.push('HttpInterceptor');
 
         // Dirty hack to annotate the keyword to be picked-up by the translation extractor
         // Since we can't use services at configuration stage
-        var __ = function(i) { return i; };
+        var __ = function (i) {
+            return i;
+        };
         $ionicConfigProvider.backButton.text('<span translate>' + __('Back') + '</span>');
 
         $translateProvider.useSanitizeValueStrategy(null);
@@ -91,31 +92,31 @@ angular.module('hotvibes', [
             suffix: '.json'
         });
         $translateProvider.pluralForms({
-            en: function(n) {
+            en: function (n) {
                 return n != 1 ? 1 : 0;
             },
-            lt: function(n) {
-                return n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2;
+            lt: function (n) {
+                return n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
             },
-            lv: function(n) {
-                return n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2;
+            lv: function (n) {
+                return n % 10 == 1 && n % 100 != 11 ? 0 : n != 0 ? 1 : 2;
             },
-            pl: function(n) {
-                return n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
+            pl: function (n) {
+                return n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
             },
-            ru: function(n) {
-                return n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
+            ru: function (n) {
+                return n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
             },
-            hr: function(n) {
-                return n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;
+            hr: function (n) {
+                return n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
             }
         });
 
         /*var cache = $cacheFactoryProvider.$get()('resourceCache', { capacity: 100 });
-        $resourceProvider.defaults.actions.get.cache = cache;*/
+         $resourceProvider.defaults.actions.get.cache = cache;*/
 
         $resourceProvider.defaults.actions.query.interceptor = {
-            response: function(response) {
+            response: function (response) {
                 response.resource.$metadata = {
                     moreAvailable: (response.headers('X-Limit-MoreAvailable') ? true : false)
                 };
@@ -136,7 +137,7 @@ angular.module('hotvibes', [
             validationsTemplate: 'templates/validation-messages.html'
         });
 
-        ngFabFormProvider.setInsertErrorTplFn(function(compiledAlert, el, attrs) {
+        ngFabFormProvider.setInsertErrorTplFn(function (compiledAlert, el, attrs) {
             var label = el.parent()[0].getElementsByClassName('input-label');
             if (label[0]) {
                 label[0].appendChild(compiledAlert);
@@ -152,13 +153,13 @@ angular.module('hotvibes', [
         }
     })
 
-    .run(function(
-        $injector, $ionicPlatform, $ionicModal, $translate, $rootScope, $cordovaGoogleAnalytics, amMoment,
-        AuthService, Config, $ionicSideMenuDelegate, $ionicPopup
-    ) {
+    .run(function ($injector, $ionicPlatform, $ionicModal, $translate, $rootScope, $cordovaGoogleAnalytics, amMoment,
+                   AuthService, Config, $ionicSideMenuDelegate, $ionicPopup, __, $ionicHistory, $window) {
         AuthService.init();
 
-        var setLanguage = function(lang) {
+        var internetConnected = true;
+
+        var setLanguage = function (lang) {
             $translate.use(lang);
 
             if (lang == 'en') {
@@ -168,7 +169,7 @@ angular.module('hotvibes', [
             var script = document.createElement('script');
             script.setAttribute('type', 'text/javascript');
             script.setAttribute('src', 'lib/moment/locale/' + lang + '.js');
-            script.onload = function() {
+            script.onload = function () {
                 amMoment.changeLocale(lang);
             };
             document.getElementsByTagName("head")[0].appendChild(script);
@@ -181,16 +182,16 @@ angular.module('hotvibes', [
             setLanguage(localStorage['selectedLocale']);
 
         } else {
-            $translate.onReady(function() {
+            $translate.onReady(function () {
                 var modalScope = $rootScope.$new();
 
-                modalScope.changeLang = function(localeId) {
+                modalScope.changeLang = function (localeId) {
                     localStorage['selectedLocale'] = localeId;
                     setLanguage(localeId);
                     modalScope.modal.hide();
                 };
 
-                modalScope.languages = Config.LANGUAGES.map(function(lang) {
+                modalScope.languages = Config.LANGUAGES.map(function (lang) {
                     var DataMap = $injector.get('DataMap');
 
                     return {
@@ -204,50 +205,73 @@ angular.module('hotvibes', [
                         scope: modalScope,
                         animation: 'slide-in-up'
                     })
-                    .then(function(modal) {
+                    .then(function (modal) {
                         modalScope.modal = modal;
                         modal.show();
                     });
             });
         }
 
-        $ionicPlatform.registerBackButtonAction(function (event) {
-            $ionicSideMenuDelegate.toggleLeft(false);
+        $ionicPlatform.registerBackButtonAction(function () {
+            if ($ionicHistory.backView()) {
+                $ionicHistory.backView().go();
+            } else {
+                $ionicSideMenuDelegate.toggleLeft(true);
 
-            $ionicPopup.confirm({
-                title: __("Warning!"),
-                template: __("Are you sure you want to exit the application?")
-            }).then(function(res) {
-                if (res) {
-                    ionic.Platform.exitApp();
-                }
-            })
+                $ionicPopup.confirm({
+                    title: __("Warning!"),
+                    template: __("Are you sure you want to exit the application?")
+                }).then(function (res) {
+                    if (res) {
+                        ionic.Platform.exitApp();
+                    }
+                });
+            }
         }, 100);
 
-        $ionicPlatform.ready(function() {
-            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
-            if (window.cordova) {
-                if (window.cordova.plugins.Keyboard) {
+        $ionicPlatform.ready(function () {
+            if ($window.cordova) {
+                // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
+                if (cordova.plugins && cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+                }
+
+                if ($window.StatusBar) {
+                    // org.apache.cordova.statusbar required
+                    StatusBar.styleDefault();
+                }
+
+                if ($window.AppnextTrack) {
+                    AppnextTrack.track();
                 }
 
                 if ($cordovaGoogleAnalytics) {
                     $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
                 }
+
+                if ($window.facebookConnectPlugin && facebookConnectPlugin.getDeferredApplink) {
+                    facebookConnectPlugin.getDeferredApplink();
+                }
             }
 
-            if (window.AppnextTrack) {
-                AppnextTrack.track();
-            }
+            // listen for Offline event
+            $rootScope.$on('$cordovaNetwork:offline', function(){
+                if (!internetConnected) return;
+                internetConnected = false;
 
-            // TODO: show some message when device goes offline
-            /*$ionicPlatform.on('offline', function() {
+                $ionicPopup.confirm({
+                    title: __("No internet connection."),
+                    content: __("Sorry, no internet connectivity detected. Please reconnect and try again.")
+                }).then(function (ok) {
+                    if (!ok) {
+                        ionic.Platform.exitApp();
+                    }
+                })
+            });
 
-            });*/
-
-            if (window.StatusBar) {
-                // org.apache.cordova.statusbar required
-                StatusBar.styleDefault();
-            }
+            $rootScope.$on('$cordovaNetwork:online', function(){
+                if (internetConnected) return;
+                internetConnected = true;
+            });
         });
     });

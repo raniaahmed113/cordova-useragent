@@ -30,7 +30,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         function onStateChanged(state) {
             $scope.rightMenuEnabled = state.views && state.views.rightMenu ? true : false;
 
-            if (window.cordova) {
+            if (window.cordova && $cordovaGoogleAnalytics) {
                 $cordovaGoogleAnalytics.trackView(state.name);
             }
         }
@@ -49,7 +49,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.currUser = AuthService.getCurrentUser();
 
         // Enable GA UserID tracking
-        if (window.cordova) {
+        if (window.cordova && $cordovaGoogleAnalytics) {
             // The following method accepts string as an argument, so let's cast our int value
             var userId = $scope.currUser.id + "";
             $cordovaGoogleAnalytics.setUserId(userId);
