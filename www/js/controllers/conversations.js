@@ -144,15 +144,14 @@ angular.module('hotvibes.controllers')
                     sendTime: new Date().getTime() // FIXME: check, if this is correct (maybe we should set seconds here, instead of millis)
                 });
 
-                $rootScope.$broadcast('newMessage.sent', msg);
-
                 // Clear message input after sending
                 $scope.msgText = '';
             }
 
             msg.$save(params, function() {
-                msg.dateSent = Math.round(Date.now() / 1000);
+                $rootScope.$broadcast('newMessage.sent', msg);
 
+                msg.dateSent = Math.round(Date.now() / 1000);
             }, function(error) {
                 var allowTryAgain = error.status == 0 || error.status == 500;
 

@@ -98,6 +98,17 @@ angular.module('hotvibes.controllers')
         enableUserDeletion($scope);
     })
 
+    .controller('FavoritesCtrl', function($scope, __, Favorite) {
+        $scope.title = __('My Favorites');
+        $scope.subProperty = 'favoriteUser';
+        $scope.users = Favorite.query({
+            require: 'favoriteUser',
+            include: 'favoriteUser.profilePhoto.url(size=w80h80)'
+        });
+
+        enableUserDeletion($scope);
+    })
+
     .controller('BlockedUsersCtrl', function($scope, __, BlockedUser) {
         $scope.title = __('My BlackList');
         $scope.subProperty = 'blockedUser';
