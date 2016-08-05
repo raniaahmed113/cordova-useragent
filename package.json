@@ -57,9 +57,14 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-inappbrowser",
     "com.google.playservices",
-    "cordova-plugin-admobpro",
     "cordova-plugin-whitelist",
     "cordova-plugin-google-analytics"
+    "cordova-plugin-admobpro",
+    {
+      "locator": "https://github.com/LouisT/cordova-useragent",
+      "id": "im.ltdev.cordova.UserAgent"
+    },
+    "cordova-plugin-app-version"
   ],
   "cordovaPlatforms": [
     "ios",
