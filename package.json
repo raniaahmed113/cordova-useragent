@@ -40,12 +40,12 @@
       "id": "phonegap-plugin-push"
     },
     {
-        "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
-        "variables": {
-            "APP_ID": "150080468451846",
-            "APP_NAME": "Flirtas.lt"
-        },
-        "id": "cordova-plugin-facebook4"
+      "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
+      "variables": {
+        "APP_ID": "150080468451846",
+        "APP_NAME": "Flirtas.lt"
+      },
+      "id": "cordova-plugin-facebook4"
     },
     {
       "variables": {
@@ -56,7 +56,10 @@
     },
     "cordova-plugin-splashscreen",
     "cordova-plugin-inappbrowser",
-    "cordova-plugin-admobpro"
+    "com.google.playservices",
+    "cordova-plugin-admobpro",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-google-analytics"
   ],
   "cordovaPlatforms": [
     "ios",

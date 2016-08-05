@@ -230,22 +230,28 @@ angular.module('hotvibes', [
         }, 100);
 
         $ionicPlatform.ready(function () {
-            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
-            if ($window.cordova && $window.cordova.plugins) {
-                if ($window.cordova.plugins.Keyboard) {
+            if ($window.cordova) {
+                // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard for form inputs)
+                if (cordova.plugins && cordova.plugins.Keyboard) {
                     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
                 }
+
+                if ($window.StatusBar) {
+                    // org.apache.cordova.statusbar required
+                    StatusBar.styleDefault();
+                }
+
+                if ($window.AppnextTrack) {
+                    AppnextTrack.track();
+                }
+
                 if ($cordovaGoogleAnalytics) {
                     $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
                 }
-            }
 
-            if ($window.facebookConnectPlugin) {
-                facebookConnectPlugin.getDeferredApplink();
-            }
-
-            if ($window.AppnextTrack) {
-                AppnextTrack.track();
+                if ($window.facebookConnectPlugin && facebookConnectPlugin.getDeferredApplink) {
+                    facebookConnectPlugin.getDeferredApplink();
+                }
             }
 
             // listen for Offline event
@@ -267,10 +273,5 @@ angular.module('hotvibes', [
                 if (internetConnected) return;
                 internetConnected = true;
             });
-
-            if ($window.StatusBar) {
-                // org.apache.cordova.statusbar required
-                StatusBar.styleDefault();
-            }
         });
     });
