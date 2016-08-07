@@ -157,8 +157,6 @@ angular.module('hotvibes', [
                    AuthService, Config, $ionicSideMenuDelegate, $ionicPopup, __, $ionicHistory, $window) {
         AuthService.init();
 
-        var internetConnected = true;
-
         var setLanguage = function (lang) {
             $translate.use(lang);
 
@@ -247,26 +245,6 @@ angular.module('hotvibes', [
             if ($window.AppnextTrack) {
                 AppnextTrack.track();
             }
-
-            // listen for Offline event
-            $rootScope.$on('$cordovaNetwork:offline', function(){
-                if (!internetConnected) return;
-                internetConnected = false;
-
-                $ionicPopup.confirm({
-                    title: __("No internet connection."),
-                    content: __("Sorry, no internet connectivity detected. Please reconnect and try again.")
-                }).then(function (ok) {
-                    if (!ok) {
-                        ionic.Platform.exitApp();
-                    }
-                })
-            });
-
-            $rootScope.$on('$cordovaNetwork:online', function(){
-                if (internetConnected) return;
-                internetConnected = true;
-            });
 
             if ($window.StatusBar) {
                 // org.apache.cordova.statusbar required
