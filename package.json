@@ -29,7 +29,7 @@
     "cordova-plugin-device",
     "cordova-plugin-network-information",
     {
-      "locator": "http://git.vertex.lt/bower-packages/cordova-appnext-sdk.git",
+      "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-appnext-sdk.git",
       "id": "com.appnext.appnextsdk"
     },
     {
@@ -40,7 +40,7 @@
       "id": "phonegap-plugin-push"
     },
     {
-      "locator": "http://git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
+      "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
       "variables": {
         "APP_ID": "150080468451846",
         "APP_NAME": "Flirtas.lt"
@@ -56,7 +56,15 @@
     },
     "cordova-plugin-splashscreen",
     "cordova-plugin-inappbrowser",
-    "cordova-plugin-admobpro"
+    "com.google.playservices",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-google-analytics",
+    "cordova-plugin-admobpro",
+    {
+      "locator": "https://github.com/LouisT/cordova-useragent",
+      "id": "im.ltdev.cordova.UserAgent"
+    },
+    "cordova-plugin-app-version"
   ],
   "cordovaPlatforms": [
     "ios",

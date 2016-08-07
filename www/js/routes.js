@@ -136,6 +136,16 @@ angular.module('hotvibes.routes', [])
                 }
             })
 
+            .state('inside.favorites', {
+                url: "/favorites",
+                views: {
+                    main: {
+                        templateUrl: "templates/users.html",
+                        controller: 'FavoritesCtrl'
+                    }
+                }
+            })
+
             .state('inside.blockedUsers', {
                 url: "/blocklist",
                 views: {
