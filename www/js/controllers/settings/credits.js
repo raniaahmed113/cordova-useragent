@@ -5,7 +5,7 @@ angular.module('hotvibes.controllers')
 
         if (window.store) {
             //store.verbosity = store.DEBUG;
-            // FIXME: resolve gateway ID properly via device platform
+            // FIXME: resolve gateway ID properly via device platform: window.cordova.platformId
             store.validator = Config.API_URL_BASE + "paymentGateways/google/payments?u=" + $scope.currUser.id;
 
             store.register({

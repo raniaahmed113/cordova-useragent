@@ -147,6 +147,8 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         }
 
         function onClickedNotification(notification) {
+            // TODO: test, if push.finish(); is required here
+
             switch (notification.additionalData._type) {
                 case 'newMessage.received':
                     $state.go('inside.conversations-single', { id: notification.additionalData.payload.conversationId });

@@ -1,7 +1,7 @@
 # Setup
 1) Download & install node.js locally: https://nodejs.org/en/download/
 
-2) Install ionic & cordova globally:
+2) Install (or update) ionic & cordova globally:
 ```sh
 sudo npm install -g cordova ionic
 ```
