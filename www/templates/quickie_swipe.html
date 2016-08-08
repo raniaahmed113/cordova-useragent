@@ -1,13 +1,12 @@
 <ion-view title="{{'Quickie' | translate}}">
     <ion-content scroll="false" class="quickie">
         <td-cards delegate-handle="members" ng-hide="!currUser.profilePhoto">
-            <div ng-repeat="user in users">
+            <div ng-if="!error" ng-repeat="user in users">
                 <td-card
                      on-destroy="onCardDestroyed($index)"
                      on-partial-swipe="onCardMove(amt)"
                      on-snap-back="onSnapBack($index)"
                      ng-hide="!firstPhotoLoaded || !user.loadedFully">
-
                     <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
                     <span ng-if="$index == 0">
                         <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
@@ -16,12 +15,17 @@
                 </td-card>
             </div>
 
-            <ion-spinner ng-show="!noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
+            <ion-spinner ng-show="!error && !noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
+            <div ng-if="!error && user.length <= 0" class="error-sign">
+                <span translate>No more members to display. Try coming back tomorrow.</span>
+                <i class="icon ion-ios-rainy"></i>
+            </div>
 
-            <div class="center center-vertical-margin" ng-if="error">
+            <div class="center" ng-if="error">
                 <div class="error-sign">
-                    <span translate>No more members to display. Try coming back tomorrow.</span>
-                    <i class="icon ion-ios-rainy"></i>
+                    <span>{{error.message}}</span>
+                    <i class="icon {{error.icon}}"></i>
+                    <button class="button button-block {{action.class || 'button-stable'}}" ng-repeat="action in error.actions" ng-click="action.onClick()">{{action.label}}</button>
                 </div>
             </div>
         </td-cards>

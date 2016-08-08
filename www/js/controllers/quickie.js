@@ -51,7 +51,7 @@ angular.module('hotvibes.controllers')
         var limit = 20,
             cardsOnScreen = 5,
             members = null,
-            excludeIds = {},
+            excludeUsers = {},
             baseFilter = {
                 notVotedInQuickie: true,
                 loggedInRecently: true,
@@ -98,7 +98,7 @@ angular.module('hotvibes.controllers')
                 filter,
                 {
                     limit: limit,
-                    exclude: Object.keys(excludeIds).join(',')
+                    exclude: Object.keys(excludeUsers).join(',')
                 }
             ));
 
@@ -109,14 +109,26 @@ angular.module('hotvibes.controllers')
                     }
 
                     response.resource.forEach(function(user) {
-                        excludeIds[user.id] = true;
+                        excludeUsers[user.id] = user;
                     });
 
                     deferred.resolve(response.resource);
                 },
                 function(error) {
                     // Failed to load the initial batch of members
-                    $scope.error = true;
+                    $scope.error = {
+                        icon: 'ion-close-circled',
+                        message: __("Sorry, some nasty error prevented us from showing you this page"),
+                        actions: [
+                            {
+                                label: __("Try again"),
+                                onClick: function() {
+                                    $scope.error = null;
+                                    loadMore();
+                                }
+                            }
+                        ]
+                    };
                 }
             );
 
@@ -156,16 +168,21 @@ angular.module('hotvibes.controllers')
             submitVote(quickieVote);
 
             getNext().then(function(nextMember) {
-                excludeIds[nextMember.id] = true;
+                excludeUsers[nextMember.id] = nextMember;
                 $scope.users.push(nextMember);
                 $scope.photosTotal++;
             });
         }
 
         function submitVote(vote) {
-            vote.$save().finally(function() {
-                delete excludeIds[vote.voteForUserId];
-            });
+            vote.$save().then(
+                function () {
+                    delete excludeUsers[vote.voteForUserId];
+                },
+                function (error) {
+                    $scope.users.unshift(excludeUsers[vote.voteForUserId]);
+                    $scope.photosLoaded--;
+                });
         }
 
         function canPerformAction() {
