@@ -239,10 +239,6 @@ angular.module('hotvibes', [
                     StatusBar.styleDefault();
                 }
 
-                if ($window.AppnextTrack) {
-                    AppnextTrack.track();
-                }
-
                 if ($cordovaGoogleAnalytics) {
                     $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
                 }
