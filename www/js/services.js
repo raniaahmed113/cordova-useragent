@@ -159,25 +159,23 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             deviceId = localStorage['deviceId'];
 
             push = PushNotification.init({
-                android: {
-                    senderID: "957136533015" // FIXME: move to config
-                }/*,
-                 ios: {
-                 alert: true,
-                 badge: true,
-                 sound: true,
-                 categories: {
-                 newMessage: {
-                 yes: {
-                 title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
-                 },
-                 no: {
-                 title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
-                 }
-                 }
-                 }
-                 },
-                 windows: {}*/
+                // android: {},
+                // ios: {
+                //     alert: true,
+                //     badge: true,
+                //     sound: true,
+                //     categories: {
+                //         newMessage: {
+                //             yes: {
+                //                 title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
+                //             },
+                //             no: {
+                //                 title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
+                //             }
+                //         }
+                //     }
+                // },
+                // windows: {}
             });
 
             push.on('registration', onDeviceRegistered);
@@ -202,9 +200,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
 
                 onReceivedNotification(notification);
             });
-            /*push.on('error', function(e) {
-             // e.message
-             });*/
+            // push.on('error', function (e) {
+            //     console.error(e);
+            // });
         };
 
         this.getToken = function() {
