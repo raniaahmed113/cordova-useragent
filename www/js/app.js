@@ -250,20 +250,15 @@ angular.module('hotvibes', [
                 if ($window.facebookConnectPlugin && facebookConnectPlugin.getDeferredApplink) {
                     facebookConnectPlugin.getDeferredApplink();
                 }
-            }
 
-            if (window.cordova) {
-                cordova.getAppVersion.getVersionNumber().then(function (version) {
-                    window.UserAgent.reset();
-                    window.UserAgent.get(function (ua) {
-                        window.UserAgent.set(ua + " FlirtasApp/" + version);
+                if (cordova.getAppVersion && $window.UserAgent) {
+                    cordova.getAppVersion.getVersionNumber().then(function (version) {
+                        UserAgent.reset();
+                        UserAgent.get(function (ua) {
+                            UserAgent.set(ua + " FlirtasApp/" + version);
+                        })
                     })
-                })
-            }
-
-            if ($window.StatusBar) {
-                // org.apache.cordova.statusbar required
-                StatusBar.styleDefault();
+                }
             }
         });
     });
