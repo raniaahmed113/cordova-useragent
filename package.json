@@ -56,7 +56,6 @@
     },
     "cordova-plugin-splashscreen",
     "cordova-plugin-inappbrowser",
-    "com.google.playservices",
     "cordova-plugin-whitelist",
     "cordova-plugin-google-analytics",
     "cordova-plugin-admobpro",
@@ -68,6 +67,10 @@
   ],
   "cordovaPlatforms": [
     "ios",
-    "android"
+    {
+      "platform": "android",
+      "version": "5.0.0",
+      "locator": "android@5.0.0"
+    }
   ]
 }
