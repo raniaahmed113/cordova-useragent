@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Pažintys internete",
   "scripts": {
-    "setup": "node_modules/.bin/bower install && node_modules/.bin/gulp translate lt"
+    "setup": "node_modules/.bin/bower install && node_modules/.bin/gulp translate lt env-dev"
   },
   "dependencies": {
     "gulp": "^3.5.6",

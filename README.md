@@ -6,17 +6,18 @@
 sudo npm install -g cordova ionic
 ```
 
-3) Install tool dependencies (bower, gulp, etc):
+3) Install node dependencies (tools: bower, gulp, etc):
 ```sh
 npm install
 ```
 
-4) Install cordova plugins (optional for local development via `ionic serve`, required for building the app)
+4) [Optional*] Install cordova plugins
 ```sh
 ionic state reset
 ```
+* (optional for local development via `ionic serve`, required for building the app)
 
-5) Setup the project:
+5) Setup the project (install bower dependencies):
 ```sh
 npm run setup
 ```
@@ -47,7 +48,7 @@ ionic run android
 ```
 
 # Testing local API on a real device
-1) Make your local API project available through outside:
+1) Make your local API project available online:
 ```sh
 vagrant share --name my-api
 ```
