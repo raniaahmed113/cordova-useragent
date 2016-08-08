@@ -21,3 +21,5 @@ function onNotificationReceived(notification) {
 
     return true;
 }
+
+module.exports = onNotificationReceived;
