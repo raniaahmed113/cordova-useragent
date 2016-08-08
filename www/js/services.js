@@ -159,7 +159,9 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             deviceId = localStorage['deviceId'];
 
             push = PushNotification.init({
-                android: {},
+                android: {
+                    senderID: 957136533015
+                },
                 ios: {
                     alert: true,
                     badge: true,
