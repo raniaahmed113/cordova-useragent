@@ -46,6 +46,14 @@ ionic build ios
 ionic run android
 ```
 
+# Testing local API on a real device
+1) Make your local API project available through outside:
+```sh
+vagrant share --name my-api
+```
+
+2) Insert the generated URL into `www/js/config.js`
+
 # Releasing an update to Google Play Store
 1) Increment version in `config.xml`
 
