@@ -1,10 +1,8 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function(
-        $rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading, $cordovaGoogleAnalytics,
-        __, AuthService, Config, Api, PushNotificationHandler
-    ) {
-        $scope.logout = function() {
+    .controller('AppCtrl', function ($rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading, $cordovaGoogleAnalytics,
+                                     __, AuthService, Config, Api, PushNotificationHandler, $cordovaNetwork) {
+        $scope.logout = function () {
             PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
 
@@ -137,4 +135,23 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
                 template: errMessage
             });
         };
+
+        $scope.internetConnected = true;
+
+        document.addEventListener("deviceready", function () {
+            $scope.internetConnected = !(navigator.connection.type == Connection.NONE);
+
+            // listen for Online event
+            $rootScope.$on('$cordovaNetwork:online', function(){
+                if ($scope.internetConnected) return;
+                $scope.internetConnected = true;
+            });
+
+            // listen for Offline event
+            $rootScope.$on('$cordovaNetwork:offline', function(){
+                if (!$scope.internetConnected) return;
+                $scope.internetConnected = false;
+            })
+
+        }, false);
     });

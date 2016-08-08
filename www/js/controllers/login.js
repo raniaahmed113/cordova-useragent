@@ -1,9 +1,7 @@
 angular.module('hotvibes.controllers')
 
-    .controller('LoginCtrl', function(
-        $window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook, $translate,
-        __, AuthService, Config, Api, ErrorCode, DataMap, Rule
-    ) {
+    .controller('LoginCtrl', function ($window, $scope, $state, $ionicActionSheet, $ionicModal, $ionicLoading, $ionicPopup, $cordovaFacebook, $translate,
+                                       __, AuthService, Config, Api, ErrorCode, DataMap, Rule, $rootScope, $cordovaNetwork) {
         $scope.logoVariant = Config.API_CLIENT_ID;
 
         function onError(message) {
@@ -393,7 +391,26 @@ angular.module('hotvibes.controllers')
                 scope: $scope,
                 animation: 'slide-in-left'
             })
-            .then(function(modal) {
+            .then(function (modal) {
                 $scope.rules.modal = modal;
             });
+
+        $scope.internetConnected = true;
+
+        document.addEventListener("deviceready", function () {
+            $scope.internetConnected = !(navigator.connection.type == Connection.NONE);
+
+            // listen for Online event
+            $rootScope.$on('$cordovaNetwork:online', function(){
+                if ($scope.internetConnected) return;
+                $scope.internetConnected = true;
+            });
+
+            // listen for Offline event
+            $rootScope.$on('$cordovaNetwork:offline', function(){
+                if (!$scope.internetConnected) return;
+                $scope.internetConnected = false;
+            })
+
+        }, false);
     });

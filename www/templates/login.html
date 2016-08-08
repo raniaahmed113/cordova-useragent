@@ -1,6 +1,9 @@
 <ion-view>
     <ion-content scroll="false" class="landing center">
 
+        <div class="bar connection-status" ng-class="{'bar-header': !internetConnected}" ng-show="!internetConnected">
+            <span translate>Apologies, trouble connecting to the internet. Please check your connection.</span>
+        </div>
         <div class="intro content center-vertical">
             <div>
                 <img ng-src="img/logos/{{logoVariant}}.svg" class="logo" alt="" />

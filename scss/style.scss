@@ -463,6 +463,12 @@ ion-header-bar .buttons .avatar {
   width: auto;
 }
 
+.connection-status {
+  background: $assertive;
+  color: $light;
+  text-align: center;
+}
+
 @import "wall.scss";
 @import "landing.scss";
 @import "settings.scss";
