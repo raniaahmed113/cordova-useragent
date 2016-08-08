@@ -40,12 +40,12 @@
       "id": "phonegap-plugin-push"
     },
     {
-      "locator": "git+ssh://git@git.vertex.lt/bower-packages/cordova-facebook-plugin.git",
+      "id": "cordova-plugin-facebook4",
+      "locator": "cordova-plugin-facebook4",
       "variables": {
         "APP_ID": "150080468451846",
         "APP_NAME": "Flirtas.lt"
-      },
-      "id": "cordova-plugin-facebook4"
+      }
     },
     {
       "variables": {
