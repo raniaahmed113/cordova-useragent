@@ -159,23 +159,23 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
             deviceId = localStorage['deviceId'];
 
             push = PushNotification.init({
-                // android: {},
-                // ios: {
-                //     alert: true,
-                //     badge: true,
-                //     sound: true,
-                //     categories: {
-                //         newMessage: {
-                //             yes: {
-                //                 title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
-                //             },
-                //             no: {
-                //                 title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
-                //             }
-                //         }
-                //     }
-                // },
-                // windows: {}
+                android: {},
+                ios: {
+                    alert: true,
+                    badge: true,
+                    sound: true,
+                    categories: {
+                        newMessage: {
+                            yes: {
+                                title: __('Reply'), callback: 'message.reply', destructive: false, foreground: false
+                            },
+                            no: {
+                                title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
+                            }
+                        }
+                    }
+                },
+                windows: {}
             });
 
             push.on('registration', onDeviceRegistered);
