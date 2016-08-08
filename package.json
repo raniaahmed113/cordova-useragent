@@ -34,9 +34,9 @@
     },
     {
       "variables": {
-        "SENDER_ID": 957136533015
+        "SENDER_ID": "957136533015"
       },
-      "locator": "phonegap-plugin-push",
+      "locator": "git+ssh://git@git.vertex.lt/bower-packages/phonegap-plugin-push.git",
       "id": "phonegap-plugin-push"
     },
     {
