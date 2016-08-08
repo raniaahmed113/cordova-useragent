@@ -109,7 +109,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
-    .service('PushNotificationHandler', function($rootScope, $state, AuthService) {
+    .service('PushNotificationHandler', function($rootScope, $state, AuthService, __) {
 
         var push = null,
             deviceId = null,
