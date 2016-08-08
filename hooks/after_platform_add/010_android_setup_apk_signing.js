@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
+function androidPlatforms(item) {
+    return item.match(/^android/);
+}
+
 module.exports = function (context) {
     // make sure android platform is part of build
-    if (context.opts.platforms.indexOf('android') < 0) {
+    if (context.opts.platforms.filter(androidPlatforms).length < 1) {
         return;
     }
 
