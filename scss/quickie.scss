@@ -1,25 +1,14 @@
 td-cards {
   height: 100%;
+  margin: 15px;
 
   .td-cards {
-    height: 90%;
+    height: 100%;
     position: relative;
-
-    ion-spinner {
-      top: 40%;
-      left: 95%;
-    }
 
     & > * {
       position: absolute;
-      top: 0;
-      bottom: 100%;
-      left: 50%;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-      height: auto;
-      max-width: 750px;
+      top: 35%;left: 50%;
       @include translate(-50%, -50%);
 
       z-index: 0;
@@ -54,6 +43,7 @@ td-cards {
 td-card {
   min-width: 315px;
   overflow: hidden;
+  @include border-radius(15px);
   @include transition(0.15s linear opacity);
 
   &.ng-hide {
@@ -92,94 +82,27 @@ td-card {
     right: 0;
   }
 
-  .navigation-wrap {
+  .navigation {
     z-index: 999;
     position: absolute;
+    bottom: 20px;
     left: 0;
     right: 0;
-    bottom: 2px;
-    width: 100%;
-    height: 16%;
-    background-color: white;
+    margin-left: auto;
+    margin-right: auto;
+    width: 290px;
   }
-  .navigation-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-
-    .small {
-
-      .left, .right {
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-      }
-      .left {
-        left: 10%;
-      }
-      .right {
-        left: 90%;
-      }
-
-      button {
-        width: 40px;
-        height: 40px;
-        @include border-radius(50%);
-        border: 2px $blue solid;
-        background-color: $light;
-        color: $calm;
-        font-size: 20px;
-
-        @media screen and (min-width: 360px) {
-          width: 50px;
-          height: 50px;
-          font-size: 30px;
-        }
-        @media screen and (min-width: 401px) {
-          width: 60px;
-          height: 60px;
-          font-size: 40px;
-        }
-        @media screen and (min-width: 501px) {
-          width: 70px;
-          height: 70px;
-          font-size: 50px;
-        }
-        @media screen and (min-width: 701px) {
-          width: 90px;
-          height: 90px;
-          font-size: 60px;
-        }
-      }
-    }
-  }
-  .navigation {
-    position: absolute;
-    top: -55px;
-    width: 100%;
-    text-align: center;
-
-    button {
-      background: white;
-      @include border-radius(60px);
-      font-size: 55px;
-      width: 70px;
-      height: 70px;
-      line-height: 0;
-      display: inline-block;
-      margin: 12px;
-
-      @media screen and (min-width: 701px) {
-        width: 100px;
-        height: 100px;
-        font-size: 80px;
-      }
-    }
+  .navigation button{
+    background: transparent;
+    @include border-radius(60px);
+    font-size: 50px;
+    padding: 5px 21px;
+    display: inline-block;
   }
 
   .navigation button[disabled] {
-    border-color: $stable !important;
-    background-color: $stable !important;
+    color: $gray !important;
+    border-color: $gray !important;
     opacity: 0.8;
   }
 
@@ -195,7 +118,8 @@ td-card {
 
   .navigation span {
     display: inline-block;
-    background-color: $light;
+    background-color: #E7E7E7;
+    padding: 10px;
     @include border-radius(50%);
   }
 
@@ -231,50 +155,17 @@ td-card {
   }
 
   .navigation button.yes{
-    color: $light;
-    background-color: $energized;
+    color: $energized;
     border:5px solid $energized;
-    width: 85px;
-    height: 85px;
-
-    @media screen and (min-width: 701px) {
-      width: 120px;
-      height: 120px;
-    }
   }
   .navigation button.yes:active{
     background: lighten($energized, 20%);
   }
   .navigation button.no{
-    color: $light;
-    background-color: $gray;
-    border:5px solid $gray;
+    color: $assertive;
+    border:5px solid $assertive;
   }
   .navigation button.no:active{
     background: lighten($assertive, 20%);
   }
-}
-
-.tabs {
-  padding-top: 0;
-}
-.tabs-light>.tabs {
-  color: $calm;
-  border: none;
-  -webkit-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
-  -moz-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
-  box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
-}
-.tabs-striped.tabs-light .tab-item {
-  color: $blue;
-}
-.tabs-striped.tabs-light .tab-item.tab-item-active {
-  color: $calm;
-  border-color: $calm;
-}
-.tab-item.tab-item-active {
-  border-top: 1px $calm solid;
-}
-.tab-item:not(.tab-item-active) {
-  border-top: 1px $light solid;
 }

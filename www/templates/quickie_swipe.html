@@ -36,21 +36,17 @@
             <a href="#/settings/albums" class="button button-positive" translate>Upload photo</a>
         </div>
 
-        <div class="navigation-wrap">
-            <div class="navigation-container">
-                <div class="navigation" ng-hide="!currUser.profilePhoto" ng-disabled="!users[0] || !users[0].loadedFully">
-                    <span>
-                        <button class="icon ion-close-round no" ng-click="sayNo()"></button>
-                    </span>
-                    <span>
-                        <button class="icon ion-ios-heart yes" ng-click="sayYes()"></button>
-                    </span>
-                </div>
-                <div class="small">
-                    <span class="left"><button class="icon ion-person user" ng-click="openProfile()"></button></span>
-                    <span class="right"><button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button></span>
-                </div>
+        <div class="navigation" ng-hide="!currUser.profilePhoto" ng-disabled="!users[0] || !users[0].loadedFully">
+            <span>
+                <button class="icon ion-close-round no" ng-click="sayNo()"></button>
+            </span>
+            <div class="small">
+                <span><button class="icon ion-person user" ng-click="openProfile()"></button></span>
+                <span><button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button></span>
             </div>
+            <span>
+                <button class="icon ion-heart yes" ng-click="sayYes()"></button>
+            </span>
         </div>
     </ion-content>
 </ion-view>
