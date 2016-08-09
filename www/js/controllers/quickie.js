@@ -273,4 +273,44 @@ angular.module('hotvibes.controllers')
                     return null;
             }
         };
+    })
+
+    .controller('QuickieISaidYesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
+        $scope.title = __('I said YES');
+        $scope.votes = QuickieVote.query({
+            ISaidYes: true,
+            require: 'votedForUser',
+            include: 'votedForUser.profilePhoto.url(size=w80h80)'
+        });
+
+        $scope.votes.$promise.then(
+            function () {
+                Object.keys($scope.votes).map(
+                    function (value) {
+                        $scope.votes[value].voter = $scope.votes[value].votedForUser;
+                    })
+            }
+        );
+
+        $scope.onError = function(error) {
+            switch (error.data.code) {
+                case ErrorCode.VIP_REQUIRED:
+                    return {
+                        icon: 'ion-star',
+                        message: __("Only for VIP members"),
+                        actions: [
+                            {
+                                label: __("Become a VIP member"),
+                                class: 'button-positive',
+                                onClick: function () {
+                                    $state.go('inside.settings-vip');
+                                }
+                            }
+                        ]
+                    };
+
+                default:
+                    return null;
+            }
+        };
     });
