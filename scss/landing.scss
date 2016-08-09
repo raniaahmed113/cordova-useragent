@@ -1,5 +1,13 @@
+ion-header-bar.bar.bar-light {
+  background: none;
+
+  .button {
+    border: none;
+  }
+}
+
 .landing {
-  color: white;
+  color: $text;
   background-color: $blue;
   @include display-flex();
   @include flex-direction(column);
@@ -9,8 +17,13 @@
     padding-right: 10%;
     color: white;
 
-    h1, h2, h3, h4, h5 {
-      color: white;
+    .button {
+      @include border-radius(30px);
+
+      &.alternative-login {
+        background: $blue-medium;
+        color: $light;
+      }
     }
   }
 
@@ -21,6 +34,38 @@
   .footer {
     background: white;
     color: $dark;
+
+    .button {
+      @include border-radius(0);
+      text-align: left;
+      margin: 0;
+      padding: 10px;
+
+      div {
+        display: inline;
+        line-height: 40px;
+        font-size: 38px;
+        position: relative;
+        border-radius: 50%;
+        padding: 0 8px;
+        color: #fff;
+
+        &.phone {
+          background: $positive;
+        }
+
+        &.email {
+          background: $balanced;
+        }
+      }
+
+      span {
+        padding: 0 15px;
+        font-weight: 400;
+        font-size: 18px;
+        color: $text;
+      }
+    }
   }
 
   label.item {
@@ -43,5 +88,169 @@
     height: 2px;
     margin-top: 30px;
     background-color: white;
+  }
+
+  .login-circles {
+    width: 250px;
+    height: 200px;
+    margin-left: auto;
+    position: relative;
+    margin-right: auto;
+
+    .circle-wrapper {
+      position: absolute;
+      width: 75px;
+      height: 75px;
+      display: inline;
+      border: 2px solid $stable;
+      @include border-radius(50%);
+      background: $blue-medium;
+      margin-top: auto;
+      margin-bottom: auto;
+      top: 0;
+      bottom: 0;
+
+      i {
+        @include border-radius(50%);
+        font-size: 50px;
+        display: inline;
+        line-height: 75px;
+      }
+
+      &.left {
+        left: 0;
+      }
+
+      &.right {
+        right: 0;
+      }
+    }
+
+    .image-wrapper {
+      width: 130px;
+      height: 130px;
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+      @include border-radius(50%);
+      border: 4px solid white;
+      overflow: hidden;
+      z-index: 1;
+      position: absolute;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.action-sheet {
+  width: 100%;
+  z-index: 11;
+  overflow: hidden;
+  margin: 0;
+
+  .action-sheet-group {
+    @include border-radius(0);
+    padding: 10px;
+    margin: 0;
+    background: $light;
+
+    .button {
+      border: none;
+      text-align: left;
+      padding: 10px 0;
+
+      .icon {
+        position: static;
+        display: inline;
+      }
+    }
+
+    .button {
+      div {
+        display: inline;
+        line-height: 40px;
+        font-size: 38px;
+        position: relative;
+        border-radius: 50%;
+        padding: 0 8px;
+        color: #fff;
+        margin: 0 10px;
+
+        &.phone {
+          background: $positive;
+        }
+
+        &.email {
+          background: $balanced;
+        }
+      }
+
+      font-weight: 400;
+      font-size: 18px;
+      color: $text;
+    }
+  }
+}
+
+.login-option-wrapper {
+  .landing {
+    background: $light;
+
+    .list {
+      color: $text;
+
+      .item {
+        border: none;
+        padding: 0;
+        margin: 10px 0;
+
+        label {
+          color: $blue;
+          font-size: 16px;
+        }
+
+        input {
+          border-bottom: 3px solid $blue;
+          padding: 0;
+          margin: 5px 0;
+          color: $text;
+          font-weight: bold;
+        }
+      }
+
+      .actions {
+        a {
+          color: $text;
+          text-decoration: none;
+        }
+
+        .button {
+          @include border-radius(30px);
+
+          &.submit {
+            margin: 30px 0;
+          }
+
+          &.alternative-login {
+            background: $blue-medium;
+          }
+        }
+      }
+    }
+  }
+
+  &.option-password, &.option-phone {
+    .button.facebook {
+      background: $blue-light;
+      color: $blue;
+    }
   }
 }

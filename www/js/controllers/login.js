@@ -241,15 +241,13 @@ angular.module('hotvibes.controllers')
         $scope.showAltLoginMethods = function() {
             $ionicActionSheet.show({
                 buttons: [
-                    { text: __('Login with phone number') },
-                    { text: __('Login with username/email') }
+                    { text: "<div class='icon icon-heart_3 phone'></div>" +  __('Login with phone number') },
+                    { text: "<div class='icon icon-heart_4 email'></div>" +  __('Login with email') }
                 ],
-                titleText: __('Alternative login methods'),
-                cancelText: __('Cancel'),
                 buttonClicked: function(index) {
                     switch (index) {
                         case 0: // Phone number
-                            requestInputPhoneNumber();
+                            $scope.loginWithPhone.modal.show();
                             break;
 
                         case 1: // Email
@@ -279,6 +277,48 @@ angular.module('hotvibes.controllers')
                             onError(Api.translateErrorCode(error ? error.code : 0));
                         }
                     ).finally(function() {
+                        $ionicLoading.hide();
+                    });
+            }
+        };
+
+        $scope.loginWithPhone = {
+            data: {},
+            submit: function() {
+                var phoneNumber = $scope.loginWithPhone.data.phoneNumber;
+                if (!phoneNumber) {
+                    return;
+                }
+
+                var numberData = phoneNumber.match(/^(?:8|\+?370)(6\d{7})$/);
+                if (numberData) {
+                    phoneNumber = "370" + numberData[1];
+                }
+
+                $ionicLoading.show({ template: __("Please wait") + '..' });
+                AuthService.sendConfirmationCode(phoneNumber)
+                    .then(
+                        function () {
+                            console.log("Now request sms code");
+                            requestInputSmsCode(phoneNumber);
+                        },
+                        function (error) {
+                            var message;
+
+                            switch (error.data.code) {
+                                case ErrorCode.INVALID_INPUT:
+                                    message = __("Incorect phone number.");
+                                    break;
+
+                                default:
+                                    message = Api.translateErrorCode(error.data.code);
+                                    break;
+                            }
+
+                            onError(message);
+                        }
+                    )
+                    .finally(function () {
                         $ionicLoading.hide();
                     });
             }
@@ -375,6 +415,15 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.loginWithPassword.modal = modal;
+            });
+
+        $ionicModal
+            .fromTemplateUrl('templates/login_phone.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.loginWithPhone.modal = modal;
             });
 
         $ionicModal
