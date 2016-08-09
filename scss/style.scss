@@ -528,6 +528,30 @@ img.img-circle {
   color:$light;
 }
 
+.tabs {
+  padding-top: 0;
+}
+.tabs-light>.tabs {
+  color: $calm;
+  border: none;
+  -webkit-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+}
+.tabs-striped.tabs-light .tab-item {
+  color: $blue;
+}
+.tabs-striped.tabs-light .tab-item.tab-item-active {
+  color: $calm;
+  border-color: $calm;
+}
+.tab-item.tab-item-active {
+  border-top: 1px $calm solid;
+}
+.tab-item:not(.tab-item-active) {
+  border-top: 1px $light solid;
+}
+
 
 @import "wall.scss";
 @import "landing.scss";
