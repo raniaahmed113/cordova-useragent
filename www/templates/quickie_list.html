@@ -2,7 +2,7 @@
     <ion-content>
         <resource-collection list="votes" on-error="onError">
             <ion-list>
-                <ion-item ng-repeat="vote in votes" class="item item-avatar" ng-disabled="!vote.voter" ng-href="#/users/{{vote.voterId}}">
+                <ion-item ng-repeat="vote in votes" class="item item-avatar" ng-disabled="!vote.voter" ng-href="#/users/{{vote.voter.id}}">
                     <img ng-src="{{vote.voter.profilePhoto | profilePhotoUrl:vote.voter.gender}}">
                     <h2>
                         {{vote.voter.nickName}}
