@@ -1,43 +1,45 @@
 <ion-side-menus enable-menu-with-back-views="false">
 
-    <ion-side-menu side="left" edge-drag-threshold="true" class="menu-dark">
-        <ion-header-bar class="bar-main-nav bar-dark">
+    <ion-side-menu side="left" edge-drag-threshold="true" class="menu-brand">
+        <ion-header-bar class="bar-main-nav bar-brand">
             <a href="#/settings" menu-close>
-                <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" /> {{currUser.nickName}} <i class="icon ion-ios-gear"></i>
+                <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" class="img-circle"/>
+                {{currUser.nickName}}
+                <i class="icon ion-ios-gear"></i>
             </a>
         </ion-header-bar>
         <ion-content class="main-menu">
             <ion-list class="list-dark">
 
-                <ion-item menu-close href="#/conversations">
-                    <i class="icon ion-email"></i>
+                <ion-item menu-close href="#/conversations" ng-class="{active: isItemActive('/conversations')}">
+                    <i class="icon icon-mail"></i>
                     <span translate>Messages</span>
-                    <span ng-if="currUser.cacheCounts.cntUnreadMessages > 0" class="badge badge-assertive">{{currUser.cacheCounts.cntUnreadMessages}}</span>
+                    <span ng-if="currUser.cacheCounts.cntUnreadMessages > 0" class="badge badge-brand">{{currUser.cacheCounts.cntUnreadMessages}}</span>
                 </ion-item>
 
-                <ion-item menu-close href="#/users"><i class="icon ion-ios-people"></i> <span translate>Members</span></ion-item>
-                <ion-item menu-close href="#/quickie"><i class="icon ion-fireball"></i> <span translate>Quickie</span></ion-item>
-                <ion-item menu-close href="#/guests">
-                    <i class="icon ion-eye"></i>
+                <ion-item menu-close href="#/users" ng-class="{active: isItemActive('/users')}"><i class="icon icon-members"></i> <span translate>Members</span></ion-item>
+                <ion-item menu-close href="#/quickie" ng-class="{active: isItemActive('/quickie')}"><i class="icon icon-heart"></i> <span translate>Quickie</span></ion-item>
+                <ion-item menu-close href="#/guests" ng-class="{active: isItemActive('/guests')}">
+                    <i class="icon icon-view"></i>
                     <span translate>Guests</span>
-                    <span ng-if="currUser.cacheCounts.cntNewGuests > 0" class="badge badge-assertive">{{currUser.cacheCounts.cntNewGuests}}</span>
+                    <span ng-if="currUser.cacheCounts.cntNewGuests > 0" class="badge badge-brand">{{currUser.cacheCounts.cntNewGuests}}</span>
                 </ion-item>
-                <ion-item menu-close href="#/chatRooms/1"><i class="icon ion-chatboxes"></i> <span translate>ShoutBox</span></ion-item>
-                <ion-item menu-close href="#/friends"><i class="icon ion-person-add"></i> <span translate>My Friends</span></ion-item>
-                <ion-item menu-close href="#/favorites"><i class="icon ion-ios-star"></i> <span translate>My Favorites</span></ion-item>
-                <ion-item menu-close href="#/blocklist"><i class="icon ion-minus-circled"></i> <span translate>My BlackList</span></ion-item>
-                <ion-item menu-close href="#/support"><i class="icon ion-help-buoy"></i> <span translate>Contact us</span></ion-item>
+                <ion-item menu-close href="#/chatRooms/1" ng-class="{active: isItemActive('/chatRooms')}"><i class="icon icon-chat"></i> <span translate>ShoutBox</span></ion-item>
+                <ion-item menu-close href="#/friends" ng-class="{active: isItemActive('/friends')}"><i class="icon icon-addperson"></i> <span translate>My Friends</span></ion-item>
+                <ion-item menu-close href="#/favorites" ng-class="{active: isItemActive('/favorites')}"><i class="icon icon-favorite"></i> <span translate>My Favorites</span></ion-item>
+                <ion-item menu-close href="#/blocklist" ng-class="{active: isItemActive('/blocklist')}"><i class="icon icon-block"></i> <span translate>My BlackList</span></ion-item>
+                <ion-item menu-close href="#/support" ng-class="{active: isItemActive('/support')}"><i class="icon icon-help"></i> <span translate>Contact us</span></ion-item>
 
             </ion-list>
         </ion-content>
     </ion-side-menu>
 
     <ion-side-menu-content>
-        <ion-nav-bar class="bar-stable" align-title="center">
+        <ion-nav-bar class="bar-brand" align-title="center">
             <ion-nav-back-button></ion-nav-back-button>
             <ion-nav-buttons side="left">
                 <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
-                    <span ng-if="cntUnseenEvents > 0" class="badge badge-assertive">{{cntUnseenEvents}}</span>
+                    <span ng-if="cntUnseenEvents > 0" class="badge badge-brand">{{cntUnseenEvents}}</span>
                 </button>
             </ion-nav-buttons>
         </ion-nav-bar>
@@ -47,7 +49,7 @@
         <ion-nav-view name="main"></ion-nav-view>
     </ion-side-menu-content>
 
-    <ion-side-menu side="right" is-enabled="rightMenuEnabled" class="menu-dark">
+    <ion-side-menu side="right" is-enabled="rightMenuEnabled" class="menu-brand">
         <ion-nav-view name="rightMenu"></ion-nav-view>
     </ion-side-menu>
 

@@ -1,5 +1,7 @@
 .col.user {
   position: relative;
+  color:$brand;
+  text-decoration: none;
 
   > img {
     min-height: 78px;
@@ -25,4 +27,39 @@
       opacity: 0;
     }
   }
+  p {
+    text-align: center;
+    font-weight:500;
+    font-size: 12px;
+    @include ellipsis(17px, 1);
+    white-space:nowrap;
+  }
+  .img-badge {
+    position: absolute;
+    top:0;
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+    @include border-radius(50%);
+    color: $light;
+    margin: 10px;
+    border: 2px solid $light;
+
+    @include display-flex();
+    @include justify-content(center);
+    @include align-items(center);
+    @include transition(0.1s linear all);
+    &.vip {
+      background: #f05b2f;
+      right:0;
+    }
+    &.rm {
+      background: #197fe1;
+      left:0;
+    }
+  }
+}
+
+.col-33.user {
+  padding:10px;
 }
