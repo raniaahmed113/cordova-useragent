@@ -5,11 +5,6 @@ td-cards {
     height: 90%;
     position: relative;
 
-    ion-spinner {
-      top: 40%;
-      left: 95%;
-    }
-
     & > * {
       position: absolute;
       top: 0;
@@ -113,6 +108,10 @@ td-card {
         position: absolute;
         top: 50%;
         transform: translate(-50%, -50%);
+        -moz-box-shadow: 0 0 3px #ccc;
+        -webkit-box-shadow: 0 0 3px #ccc;
+        box-shadow: 0 0 3px #ccc;
+        @include border-radius(50%);
       }
       .left {
         left: 10%;
@@ -125,7 +124,7 @@ td-card {
         width: 40px;
         height: 40px;
         @include border-radius(50%);
-        border: 2px $blue solid;
+        border: none;
         background-color: $light;
         color: $calm;
         font-size: 20px;
@@ -158,6 +157,12 @@ td-card {
     top: -55px;
     width: 100%;
     text-align: center;
+    span {
+      -moz-box-shadow: 0 0 3px #ccc;
+      -webkit-box-shadow: 0 0 3px #ccc;
+      box-shadow: 0 0 3px #ccc;
+      margin: 5px;
+    }
 
     button {
       background: white;
