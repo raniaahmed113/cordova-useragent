@@ -291,6 +291,16 @@ angular.module('hotvibes.routes', [])
                 }
             })
 
+            .state('inside.quickie.listISaidYes', {
+            url: "/quickie/iSaidYes",
+            views: {
+                quickieISaidYes: {
+                    templateUrl: "templates/quickie_list.html",
+                    controller: 'QuickieISaidYesCtrl'
+                }
+            }
+        })
+
             .state('inside.notifications', {
                 url: "/notifications",
                 views: {

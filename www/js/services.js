@@ -194,10 +194,7 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
                     return;
                 }
 
-                // If 'notification.additionalData.coldstart' property is present (not undefined)..
-                // ..it means, that we got this event because user has clicked on the notification..
-                // ..so we need to handle this differently..
-                if (typeof notification.additionalData.coldstart !== 'undefined') {
+                if (notification.additionalData.coldstart && !notification.additionalData.foreground) {
                     onClickedNotification(notification);
                     return;
                 }
