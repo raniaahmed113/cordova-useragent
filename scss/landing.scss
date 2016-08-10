@@ -1,5 +1,9 @@
-ion-header-bar.bar.bar-light {
-  background: none;
+ion-header-bar.bar.bar-header {
+  background: $brand;
+
+  .title {
+    color: $light;
+  }
 
   .buttons {
     position: relative;
@@ -7,9 +11,23 @@ ion-header-bar.bar.bar-light {
     margin-bottom: auto;
     top: 0;
     bottom: 0;
+    left: 16px;
 
     .button {
       border: none;
+      color: $light;
+    }
+  }
+
+  &.bar-light {
+    background: none;
+
+    .buttons {
+      left: 10%;
+
+      .button, .title {
+        color: $text;
+      }
     }
   }
 }
