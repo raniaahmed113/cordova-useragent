@@ -211,8 +211,10 @@ angular.module('hotvibes', [
         }
 
         $ionicPlatform.registerBackButtonAction(function () {
-            if ($ionicHistory.backView()) {
-                $ionicHistory.backView().go();
+            var previousPage = $ionicHistory.backView();
+
+            if (previousPage) {
+                previousPage.go();
             } else {
                 $ionicSideMenuDelegate.toggleLeft();
 
