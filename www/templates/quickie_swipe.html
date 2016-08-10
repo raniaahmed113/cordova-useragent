@@ -40,15 +40,17 @@
             <div class="navigation-container">
                 <div class="navigation" ng-hide="!currUser.profilePhoto" ng-disabled="!users[0] || !users[0].loadedFully">
                     <span>
-                        <button class="icon ion-close-round no" ng-click="sayNo()"></button>
+                        <button class="icon icon-cancel no" ng-click="sayNo()"></button>
                     </span>
                     <span>
-                        <button class="icon ion-ios-heart yes" ng-click="sayYes()"></button>
+                        <button class="icon icon-heart yes" ng-click="sayYes()">
+                            <!--<i class="icon icon-heart"></i>-->
+                        </button>
                     </span>
                 </div>
                 <div class="small">
-                    <span class="left"><button class="icon ion-person user" ng-click="openProfile()"></button></span>
-                    <span class="right"><button class="icon ion-ios-chatbubble sms" ng-click="openChat()"></button></span>
+                    <span class="left"><button ng-disabled="!users[0] || !users[0].loadedFully" class="icon icon-gochat sms" ng-click="openChat()"></button></span>
+                    <span class="right"><button ng-disabled="!users[0] || !users[0].loadedFully" class="icon icon-profile user" ng-click="openProfile()"></button></span>
                 </div>
             </div>
         </div>
