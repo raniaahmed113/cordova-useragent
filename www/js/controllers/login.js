@@ -402,13 +402,11 @@ angular.module('hotvibes.controllers')
 
             // listen for Online event
             $rootScope.$on('$cordovaNetwork:online', function(){
-                if ($scope.internetConnected) return;
                 $scope.internetConnected = true;
             });
 
             // listen for Offline event
             $rootScope.$on('$cordovaNetwork:offline', function(){
-                if (!$scope.internetConnected) return;
                 $scope.internetConnected = false;
             })
 
