@@ -1,12 +1,27 @@
 angular.module('hotvibes.controllers')
 
-    .controller('SettingsCreditsCtrl', function($scope, $ionicPopup, $ionicLoading, __, gettextCatalog, Config) {
+    .controller('SettingsCreditsCtrl', function($window, $scope, $ionicPopup, $ionicLoading, __, gettextCatalog, Config) {
         $scope.supportContacts = __("skype: xklubas<br />37052344411");
 
-        if (window.store) {
+        if ($window.store) {
+            var store = $window.store,
+                gateway;
+
+            switch ($window.cordova.platformId) {
+                case "android":
+                    gateway = "google";
+                    break;
+
+                case "ios":
+                    gateway = "apple";
+                    break;
+
+                default:
+                    throw "Unsupported payment platform: " + $window.cordova.platformId;
+            }
+
             //store.verbosity = store.DEBUG;
-            // FIXME: resolve gateway ID properly via device platform: window.cordova.platformId
-            store.validator = Config.API_URL_BASE + "paymentGateways/google/payments?u=" + $scope.currUser.id;
+            store.validator = Config.API_URL_BASE + "paymentGateways/" + gateway + "/payments?u=" + $scope.currUser.id;
 
             store.register({
                 id: "lt.vertex.flirtas.purchase.credits200",
@@ -19,12 +34,6 @@ angular.module('hotvibes.controllers')
                 alias: "500 credits",
                 type: store.CONSUMABLE
             });
-
-            /*store.register({
-             id: "lt.vertex.flirtas.purchase.vip",
-             alias: "vip",
-             type: store.PAID_SUBSCRIPTION
-             });*/
 
             store.when("product").approved(function(product) {
                 $ionicLoading.show({ template: __("Please wait") + '..'});

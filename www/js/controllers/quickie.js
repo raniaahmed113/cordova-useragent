@@ -278,7 +278,7 @@ angular.module('hotvibes.controllers')
     .controller('QuickieISaidYesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
         $scope.title = __('I said YES');
         $scope.votes = QuickieVote.query({
-            ISaidYes: true,
+            iSaidYes: true,
             require: 'votedForUser',
             include: 'votedForUser.profilePhoto.url(size=w80h80)'
         });

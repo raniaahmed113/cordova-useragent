@@ -76,7 +76,7 @@ angular.module('hotvibes.controllers')
     })
 
     .controller('ConversationCtrl', function(
-        $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup,
+        $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup, $ionicLoading,
         __, Conversation, Message, User, Api, Report
     ) {
         var params = {
