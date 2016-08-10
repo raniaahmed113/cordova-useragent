@@ -88,7 +88,8 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.msgText = '';
-        $scope.conversation = Conversation.get(params, null, null, function(err) { // TODO: get from cache
+        $scope.conversation = Conversation.get(params);
+        $scope.conversation.$promise.catch(function(err) { // TODO: get from cache
             if (err.status == 404 /* Not Found */) {
                 // There is no conversation created yet
                 $scope.conversation.id = params.withUserId;
@@ -152,10 +153,11 @@ angular.module('hotvibes.controllers')
                 $scope.msgText = '';
             }
 
-            msg.$save(params, function() {
-                $rootScope.$broadcast('newMessage.sent', msg);
+            $rootScope.$broadcast('newMessage.sent', msg);
 
+            msg.$save(params, function() {
                 msg.dateSent = Math.round(Date.now() / 1000);
+
             }, function(error) {
                 var allowTryAgain = error.status == 0 || error.status == 500;
 
