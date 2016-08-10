@@ -1,8 +1,16 @@
 ion-header-bar.bar.bar-light {
   background: none;
 
-  .button {
-    border: none;
+  .buttons {
+    position: relative;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    bottom: 0;
+
+    .button {
+      border: none;
+    }
   }
 }
 
@@ -112,9 +120,9 @@ ion-header-bar.bar.bar-light {
 
       i {
         @include border-radius(50%);
-        font-size: 50px;
+        font-size: 40px;
         display: inline;
-        line-height: 75px;
+        line-height: 70px;
       }
 
       &.left {
@@ -158,14 +166,14 @@ ion-header-bar.bar.bar-light {
 
   .action-sheet-group {
     @include border-radius(0);
-    padding: 10px;
+    padding: 10px 0;
     margin: 0;
     background: $light;
 
     .button {
       border: none;
       text-align: left;
-      padding: 10px 0;
+      padding: 5px 10px;
 
       .icon {
         position: static;
@@ -177,7 +185,7 @@ ion-header-bar.bar.bar-light {
       div {
         display: inline;
         line-height: 40px;
-        font-size: 38px;
+        font-size: 34px;
         position: relative;
         border-radius: 50%;
         padding: 0 8px;
@@ -190,6 +198,10 @@ ion-header-bar.bar.bar-light {
 
         &.email {
           background: $balanced;
+        }
+
+        &.icon:before {
+          font-size: 18px;
         }
       }
 
@@ -251,6 +263,63 @@ ion-header-bar.bar.bar-light {
     .button.facebook {
       background: $blue-light;
       color: $blue;
+    }
+  }
+}
+
+.register-wrapper {
+  ion-header-bar.bar.bar-light {
+    background: $brand;
+
+    .title {
+      color: $light;
+    }
+  }
+
+  h4, input, select, .radio-content {
+    color: $text;
+  }
+
+  .validation-errors > ul > li {
+    span {
+      color: $assertive;
+    }
+  }
+
+  .item {
+    &.item-divider {
+      color: $brand;
+      background: $brand-light;
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    &.item-input {
+      height: 80px;
+
+      span.input-label {
+        color: $brand;
+        font-weight: 400;
+        font-size: 14px;
+      }
+
+      .input {
+        font-weight: 500;
+      }
+    }
+
+    &.item-radio {
+      .radio-content {
+        font-weight: 500;
+        font-size: 14px;
+        color: $brand;
+      }
+    }
+
+    &.item-select {
+      &:after {
+        color: $brand-light;
+      }
     }
   }
 }

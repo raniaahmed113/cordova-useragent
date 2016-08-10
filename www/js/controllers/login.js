@@ -241,13 +241,13 @@ angular.module('hotvibes.controllers')
         $scope.showAltLoginMethods = function() {
             $ionicActionSheet.show({
                 buttons: [
-                    { text: "<div class='icon icon-heart_3 phone'></div>" +  __('Login with phone number') },
-                    { text: "<div class='icon icon-heart_4 email'></div>" +  __('Login with email') }
+                    { text: "<div class='icon icon-device phone'></div>" +  __('Login with phone number') },
+                    { text: "<div class='icon icon-mail email'></div>" +  __('Login with email') }
                 ],
                 buttonClicked: function(index) {
                     switch (index) {
                         case 0: // Phone number
-                            $scope.loginWithPhone.modal.show();
+                            $scope.registration.modal.show();
                             break;
 
                         case 1: // Email
@@ -299,8 +299,7 @@ angular.module('hotvibes.controllers')
                 AuthService.sendConfirmationCode(phoneNumber)
                     .then(
                         function () {
-                            console.log("Now request sms code");
-                            requestInputSmsCode(phoneNumber);
+                            $scope.enterCode.modal.show();
                         },
                         function (error) {
                             var message;
@@ -323,6 +322,48 @@ angular.module('hotvibes.controllers')
                     });
             }
         };
+
+        $scope.enterCode = {
+            data: {},
+            submit: function() {
+                var smsCode = $scope.enterCode.data.smsCode;
+                var phoneNumber = $scope.loginWithPhone.data.phoneNumber;
+                if (!smsCode) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: __("Please wait") + '..'});
+                AuthService.loginWithSmsCode(phoneNumber, smsCode)
+                    .then(
+                        function () {
+                            onLoggedIn();
+                        },
+                        function (error) {
+                            var message;
+
+                            switch (error.code) {
+                                case ErrorCode.INVALID_CREDENTIALS:
+                                    // No account found associated with this phone number: proceed to registration
+                                    register(phoneNumber, smsCode);
+                                    return;
+
+                                case ErrorCode.INVALID_INPUT:
+                                    message = __("Unable to confirm phone");
+                                    break;
+
+                                default:
+                                    message = Api.translateErrorCode(error.code);
+                                    break;
+                            }
+
+                            onError(message);
+                        }
+                    )
+                    .finally(function () {
+                        $ionicLoading.hide();
+                    });
+            }
+        }
 
         $scope.countries = DataMap.country;
         $scope.language = $translate.use();
@@ -424,6 +465,15 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.loginWithPhone.modal = modal;
+            });
+
+        $ionicModal
+            .fromTemplateUrl('templates/login_phone_code.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.enterCode.modal = modal;
             });
 
         $ionicModal

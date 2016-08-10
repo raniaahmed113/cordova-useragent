@@ -6,6 +6,15 @@
   font-weight: bold;
 }
 
+span {
+  &.text {
+    color: $text;
+  }
+
+  &.text-dark {
+    color: $text-dark;
+  }
+}
 .pane, .view {
   background-color:$light;
 }
@@ -456,6 +465,15 @@ ul.chat {
     border-color: #111;
     background: rgba(0, 0, 0, 0.5);
     color: $light;
+  }
+
+  &.button-close {
+    background: none;
+    color: $light;
+
+    &.activated {
+      background: none;
+    }
   }
 }
 
