@@ -214,16 +214,16 @@ angular.module('hotvibes', [
             if ($ionicHistory.backView()) {
                 $ionicHistory.backView().go();
             } else {
-                $ionicSideMenuDelegate.toggleLeft(true);
+                $ionicSideMenuDelegate.toggleLeft();
 
-                $ionicPopup.confirm({
-                    title: __("Warning!"),
-                    template: __("Are you sure you want to exit the application?")
-                }).then(function (res) {
-                    if (res) {
-                        ionic.Platform.exitApp();
-                    }
-                });
+                // $ionicPopup.confirm({
+                //     title: __("Warning!"),
+                //     template: __("Are you sure you want to exit the application?")
+                // }).then(function (res) {
+                //     if (res) {
+                //         ionic.Platform.exitApp();
+                //     }
+                // });
             }
         }, 100);
 
