@@ -77,6 +77,10 @@ angular.module('hotvibes.directives', [])
                         target = event.currentTarget;
                     }
 
+                    if (!target) {
+                        return;
+                    }
+
                     var href = target.getAttribute('href');
                     if (!href) {
                         return;
