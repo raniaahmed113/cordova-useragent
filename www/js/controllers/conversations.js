@@ -76,7 +76,11 @@ angular.module('hotvibes.controllers')
 
         function onConversationDataChanged(updatedConversation) {
             var conversation = findConversationById(updatedConversation.id);
-            conversation = angular.merge(conversation, updatedConversation);
+            if (!conversation) {
+                return;
+            }
+
+            angular.merge(conversation, updatedConversation);
         }
 
         $rootScope.$on('newMessage.sent', onNewMessage);
