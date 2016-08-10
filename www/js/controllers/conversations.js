@@ -27,18 +27,21 @@ angular.module('hotvibes.controllers')
             $scope.conversations.splice(index, 1);
         };
 
+        function findConversationById(conversationId) {
+            for (var i=0; i<$scope.conversations.length; i++) {
+                // Find the right conversation in the list
+                if ($scope.conversations[i].id == conversationId) {
+                    return $scope.conversations[i];
+                }
+            }
+
+            return null;
+        }
+
         function onNewMessage(event, message) {
             $scope.conversations.$promise.then(function() {
                 var conversationId = message['conversationId'],
-                    conversation = null;
-
-                for (var i=0; i<$scope.conversations.length; i++) {
-                    // Find the right conversation in the list
-                    if ($scope.conversations[i].id == conversationId) {
-                        conversation = $scope.conversations[i];
-                        break;
-                    }
-                }
+                    conversation = findConversationById(conversationId);
 
                 if (conversation != null) {
                     // Such conversation already exists, update the list
@@ -71,8 +74,14 @@ angular.module('hotvibes.controllers')
             });
         }
 
+        function onConversationDataChanged(updatedConversation) {
+            var conversation = findConversationById(updatedConversation.id);
+            conversation = angular.merge(conversation, updatedConversation);
+        }
+
         $rootScope.$on('newMessage.sent', onNewMessage);
         $rootScope.$on('newMessage.received', onNewMessage);
+        $rootScope.$on('conversation.changed', onConversationDataChanged);
     })
 
     .controller('ConversationCtrl', function(
@@ -176,6 +185,10 @@ angular.module('hotvibes.controllers')
                     for (var i=$scope.messages.length-1; i >= 0; i--) {
                         if ($scope.messages[i].sendTime == msg.sendTime) {
                             $scope.messages.splice(i, 1);
+                            $rootScope.$broadcast('conversation.changed', {
+                                id: $scope.conversation.id,
+                                lastMessage: $scope.messages[$scope.messages.length]
+                            });
                             break;
                         }
                     }
