@@ -532,24 +532,25 @@ img.img-circle {
   padding-top: 0;
 }
 .tabs-light>.tabs {
-  color: $calm;
+  color: $brand;
   border: none;
   -webkit-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
   -moz-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
   box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
 }
 .tabs-striped.tabs-light .tab-item {
-  color: $blue;
+  color: $brand-light;
 }
 .tabs-striped.tabs-light .tab-item.tab-item-active {
-  color: $calm;
-  border-color: $calm;
+  color: $brand;
+  border-color: $brand;
 }
 .tab-item.tab-item-active {
-  border-top: 1px $calm solid;
+  border-top: 1px $brand solid;
 }
 .tab-item:not(.tab-item-active) {
   border-top: 1px $light solid;
+  opacity: .5;
 }
 
 
