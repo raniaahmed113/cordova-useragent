@@ -211,19 +211,21 @@ angular.module('hotvibes', [
         }
 
         $ionicPlatform.registerBackButtonAction(function () {
-            if ($ionicHistory.backView()) {
-                $ionicHistory.backView().go();
-            } else {
-                $ionicSideMenuDelegate.toggleLeft(true);
+            var previousPage = $ionicHistory.backView();
 
-                $ionicPopup.confirm({
-                    title: __("Warning!"),
-                    template: __("Are you sure you want to exit the application?")
-                }).then(function (res) {
-                    if (res) {
-                        ionic.Platform.exitApp();
-                    }
-                });
+            if (previousPage) {
+                previousPage.go();
+            } else {
+                $ionicSideMenuDelegate.toggleLeft();
+
+                // $ionicPopup.confirm({
+                //     title: __("Warning!"),
+                //     template: __("Are you sure you want to exit the application?")
+                // }).then(function (res) {
+                //     if (res) {
+                //         ionic.Platform.exitApp();
+                //     }
+                // });
             }
         }, 100);
 
