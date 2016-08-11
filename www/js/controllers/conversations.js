@@ -74,7 +74,7 @@ angular.module('hotvibes.controllers')
             });
         }
 
-        function onConversationDataChanged(updatedConversation) {
+        function onConversationDataChanged($event, updatedConversation) {
             var conversation = findConversationById(updatedConversation.id);
             if (!conversation) {
                 return;
