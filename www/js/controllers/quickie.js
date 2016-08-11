@@ -212,7 +212,33 @@ angular.module('hotvibes.controllers')
         }
     })
 
-    .controller('QuickieYesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
+    .service('QuickieListErrorHandler', function ($state, ErrorCode, __) {
+        return {
+            handleError: function (error) {
+                switch (error.data.code) {
+                    case ErrorCode.VIP_REQUIRED:
+                        return {
+                            icon: 'ion-star',
+                            message: __("Only for VIP members"),
+                            actions: [
+                                {
+                                    label: __("Become a VIP member"),
+                                    class: 'button-positive',
+                                    onClick: function () {
+                                        $state.go('inside.settings-vip');
+                                    }
+                                }
+                            ]
+                        };
+
+                    default:
+                        return null;
+                }
+            }
+        };
+    })
+
+    .controller('QuickieYesCtrl', function($scope, __, QuickieVote, QuickieListErrorHandler) {
         $scope.title = __('Who said YES to me');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
@@ -220,30 +246,10 @@ angular.module('hotvibes.controllers')
             include: 'voter.profilePhoto.url(size=w80h80)'
         });
 
-        $scope.onError = function(error) {
-            switch (error.data.code) {
-                case ErrorCode.VIP_REQUIRED:
-                    return {
-                        icon: 'ion-star',
-                        message: __("Only for VIP members"),
-                        actions: [
-                            {
-                                label: __("Become a VIP member"),
-                                class: 'button-positive',
-                                onClick: function () {
-                                    $state.go('inside.settings-vip');
-                                }
-                            }
-                        ]
-                    };
-
-                default:
-                    return null;
-            }
-        };
+        $scope.onError = QuickieListErrorHandler.handleError;
     })
 
-    .controller('QuickieMatchesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
+    .controller('QuickieMatchesCtrl', function($scope,  __, QuickieVote, QuickieListErrorHandler) {
         $scope.title = __('My Matches');
         $scope.votes = QuickieVote.query({
             votedYesForMe: true,
@@ -252,30 +258,10 @@ angular.module('hotvibes.controllers')
             include: 'voter.profilePhoto.url(size=w80h80)'
         });
 
-        $scope.onError = function(error) {
-            switch (error.data.code) {
-                case ErrorCode.VIP_REQUIRED:
-                    return {
-                        icon: 'ion-star',
-                        message: __("Only for VIP members"),
-                        actions: [
-                            {
-                                label: __("Become a VIP member"),
-                                class: 'button-positive',
-                                onClick: function () {
-                                    $state.go('inside.settings-vip');
-                                }
-                            }
-                        ]
-                    };
-
-                default:
-                    return null;
-            }
-        };
+        $scope.onError = QuickieListErrorHandler.handleError;
     })
 
-    .controller('QuickieISaidYesCtrl', function($scope, $state, __, QuickieVote, ErrorCode) {
+    .controller('QuickieISaidYesCtrl', function($scope, __, QuickieVote, QuickieListErrorHandler) {
         $scope.title = __('I said YES');
         $scope.votes = QuickieVote.query({
             iSaidYes: true,
@@ -283,34 +269,5 @@ angular.module('hotvibes.controllers')
             include: 'votedForUser.profilePhoto.url(size=w80h80)'
         });
 
-        $scope.votes.$promise.then(
-            function () {
-                Object.keys($scope.votes).map(
-                    function (value) {
-                        $scope.votes[value].voter = $scope.votes[value].votedForUser;
-                    })
-            }
-        );
-
-        $scope.onError = function(error) {
-            switch (error.data.code) {
-                case ErrorCode.VIP_REQUIRED:
-                    return {
-                        icon: 'ion-star',
-                        message: __("Only for VIP members"),
-                        actions: [
-                            {
-                                label: __("Become a VIP member"),
-                                class: 'button-positive',
-                                onClick: function () {
-                                    $state.go('inside.settings-vip');
-                                }
-                            }
-                        ]
-                    };
-
-                default:
-                    return null;
-            }
-        };
+        $scope.onError = QuickieListErrorHandler.handleError;
     });

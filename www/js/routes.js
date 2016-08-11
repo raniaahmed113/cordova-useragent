@@ -295,7 +295,7 @@ angular.module('hotvibes.routes', [])
             url: "/quickie/iSaidYes",
             views: {
                 quickieISaidYes: {
-                    templateUrl: "templates/quickie_list.html",
+                    templateUrl: "templates/quickie_list_said_yes.html",
                     controller: 'QuickieISaidYesCtrl'
                 }
             }
