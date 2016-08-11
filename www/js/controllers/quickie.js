@@ -175,12 +175,14 @@ angular.module('hotvibes.controllers')
         }
 
         function submitVote(vote) {
+            var votedForUserId = vote.voteForUserId;
+
             vote.$save().then(
                 function () {
-                    delete excludeUsers[vote.voteForUserId];
+                    delete excludeUsers[votedForUserId];
                 },
                 function (error) {
-                    $scope.users.unshift(excludeUsers[vote.voteForUserId]);
+                    $scope.users.unshift(excludeUsers[votedForUserId]);
                     $scope.photosLoaded--;
                 });
         }
