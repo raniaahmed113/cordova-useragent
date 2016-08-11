@@ -1,7 +1,7 @@
 angular.module('hotvibes.controllers')
 
     .controller('QuickieSwipeCtrl', function(
-        $state, $scope, $ionicPopup, $q,
+        $state, $rootScope, $scope, $ionicPopup, $q,
         __, Api, User, QuickieVote, TDCardDelegate
     ) {
         $scope.onPhotoLoaded = function(user, $index) {
@@ -161,8 +161,14 @@ angular.module('hotvibes.controllers')
             var user = $scope.users.splice($index, 1)[0],
                 quickieVote = new QuickieVote({
                     voteForUserId: user.id,
-                    vote: $scope.cardPos > 0 ? 'yes' : 'no'
+                    vote: $scope.cardPos > 0 ? QuickieVote.YES : QuickieVote.NO
                 });
+
+            $rootScope.$broadcast('quickie.voted', {
+                vote: quickieVote.vote,
+                dateCreated: new Date().getTime()/1000,
+                votedForUser: user
+            });
 
             $scope.cardPos = 0;
             submitVote(quickieVote);
@@ -263,7 +269,7 @@ angular.module('hotvibes.controllers')
         $scope.onError = QuickieListErrorHandler.handleError;
     })
 
-    .controller('QuickieISaidYesCtrl', function($scope, __, QuickieVote, QuickieListErrorHandler) {
+    .controller('QuickieISaidYesCtrl', function($rootScope, $scope, __, QuickieVote, QuickieListErrorHandler) {
         $scope.title = __('I said YES');
         $scope.votes = QuickieVote.query({
             iSaidYes: true,
@@ -272,4 +278,12 @@ angular.module('hotvibes.controllers')
         });
 
         $scope.onError = QuickieListErrorHandler.handleError;
+
+        $rootScope.$on('quickie.voted', function ($event, vote) {
+            if (vote.vote !== QuickieVote.YES) {
+                return;
+            }
+
+            $scope.votes.unshift(vote);
+        });
     });

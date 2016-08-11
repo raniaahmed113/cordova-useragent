@@ -177,7 +177,12 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('QuickieVote', function(ApiResource) {
-        return ApiResource('me/quickieVotes');
+        var QuickieVote = new ApiResource('me/quickieVotes');
+
+        QuickieVote.YES = 'yes';
+        QuickieVote.NO = 'no';
+
+        return QuickieVote;
     })
 
     .factory('Filter', function(ApiResource) {
