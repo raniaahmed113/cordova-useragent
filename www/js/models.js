@@ -333,6 +333,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         return ApiResource('users/:userId/duelInvites', { userId: '@userId' });
     })
 
+    .factory('Payment', function(ApiResource) {
+        return ApiResource('paymentGateways/:gateway/payments', { gateway: '@gateway' });
+    })
+
     .factory('__', function($translate) {
         return $translate.instant;
     })
