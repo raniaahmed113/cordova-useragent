@@ -53,7 +53,6 @@ angular.module('hotvibes.controllers')
                         $scope.currUser.isVip = true;
                         $scope.currUser.vipTill = dateNewVipExpires.format("YYYY-MM-DD HH:mm:ss");
 
-                        $ionicLoading.hide();
                         $ionicPopup.alert({
                             title: __("Payment successful"),
                             template: __("Done - Thanks for buying VIP membership."),
@@ -62,7 +61,15 @@ angular.module('hotvibes.controllers')
                             ]
                         });
                     },
-                    $scope.onError
-                );
+                    function (error) {
+                        if (error.code && error.code === Billing.ERROR_PURCHASE_CANCELLED) {
+                            // Ignore
+                            return;
+                        }
+
+                        $scope.onError(error);
+                    }
+                )
+                .finally($ionicLoading.hide);
         };
     });

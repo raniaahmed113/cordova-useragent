@@ -7,8 +7,11 @@ angular.module('hotvibes.services')
         this.PRODUCT_SUBSCRIPTION_VIP_MONTHLY = 'lt.vertex.flirtas.purchase.vipmontly';
         this.PRODUCT_SUBSCRIPTION_VIP_3_MONTHS = 'lt.vertex.flirtas.purchase.vip3months';
 
+        this.ERROR_PURCHASE_CANCELLED = -5;
         this.ERROR_PRODUCT_ALREADY_OWNED = -9;
         this.ERROR_UNABLE_TO_CONSUME_ALREADY_OWNED = -9000;
+
+        this.PRODUCT_TYPE_CONSUMABLE = "inapp";
 
         this.isSupported = function () {
             return !!$window.inAppPurchase;
@@ -73,6 +76,11 @@ angular.module('hotvibes.services')
         store.ready = store.getProducts(productIds);
 
         function consumePurchase(purchase) {
+            if (purchase.productType !== Billing.PRODUCT_TYPE_CONSUMABLE) {
+                // Let's not attempt to consume subscriptions
+                return $q.resolve(purchase);
+            }
+
             return store.consume(purchase.productType, purchase.receipt, purchase.signature)
                 .then(function () {
                     return purchase;

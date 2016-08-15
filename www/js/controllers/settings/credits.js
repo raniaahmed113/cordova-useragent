@@ -38,7 +38,6 @@ angular.module('hotvibes.controllers')
 
                         $scope.currUser.credits += numCredits;
 
-                        $ionicLoading.hide();
                         $ionicPopup.alert({
                             title: __("Payment successful"),
                             template: gettextCatalog.getPlural(numCredits, "You have received %u credit", "You have received %u credits"),
@@ -50,7 +49,15 @@ angular.module('hotvibes.controllers')
                             ]
                         });
                     },
-                    $scope.onError
-                );
+                    function (error) {
+                        if (error.code && error.code === Billing.ERROR_PURCHASE_CANCELLED) {
+                            // Ignore
+                            return;
+                        }
+
+                        $scope.onError(error);
+                    }
+                )
+                .finally($ionicLoading.hide);
         };
     });
