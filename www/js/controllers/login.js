@@ -92,10 +92,11 @@ angular.module('hotvibes.controllers')
                                                     promptForMoreInfo(error.rule.field)
                                                 });
                                             return;
-                                    }
 
-                                    promptForMoreInfo(error.rule.field);
-                                    return;
+                                        case Rule.NOT_EMPTY:
+                                            promptForMoreInfo(error.rule.field);
+                                            return;
+                                    }
                                 }
 
                                 onError(Api.translateErrorCode(error ? error.code : 0));
