@@ -84,8 +84,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             }
 
             if (!object.filter || !(object.filter instanceof Filter)) {
-                object.filter.type = Filter.TYPE_MAIN;
                 object.filter = new Filter(object.filter);
+                object.filter.type = Filter.TYPE_MAIN;
             }
 
             if (object.cacheCounts) {
