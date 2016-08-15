@@ -22,34 +22,35 @@ angular.module('hotvibes.controllers')
             $ionicLoading.show({ template: __("Please wait") + '..'});
 
             Billing.purchase(productId)
-                .then(function () {
-                    var numCredits;
+                .then(
+                    function () {
+                        var numCredits;
 
-                    switch (productId) {
-                        case 'lt.vertex.flirtas.purchase.credits200':
-                            numCredits = 200;
-                            break;
+                        switch (productId) {
+                            case 'lt.vertex.flirtas.purchase.credits200':
+                                numCredits = 200;
+                                break;
 
-                        case 'lt.vertex.flirtas.purchase.credits500':
-                            numCredits = 500;
-                            break;
-                    }
+                            case 'lt.vertex.flirtas.purchase.credits500':
+                                numCredits = 500;
+                                break;
+                        }
 
-                    $scope.currUser.credits += numCredits;
+                        $scope.currUser.credits += numCredits;
 
-                    $ionicPopup.alert({
-                        title: __("Payment successful"),
-                        template: gettextCatalog.getPlural(numCredits, "You have received %u credit", "You have received %u credits"),
-                        buttons: [
-                            {
-                                text: __("Cool, thanks!"),
-                                type: 'button-positive'
-                            }
-                        ]
-                    });
-                })
-                .finally(function () {
-                    $ionicLoading.hide();
-                });
+                        $ionicLoading.hide();
+                        $ionicPopup.alert({
+                            title: __("Payment successful"),
+                            template: gettextCatalog.getPlural(numCredits, "You have received %u credit", "You have received %u credits"),
+                            buttons: [
+                                {
+                                    text: __("Cool, thanks!"),
+                                    type: 'button-positive'
+                                }
+                            ]
+                        });
+                    },
+                    $scope.onError
+                );
         };
     });

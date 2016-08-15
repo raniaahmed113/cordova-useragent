@@ -32,34 +32,37 @@ angular.module('hotvibes.controllers')
             $ionicLoading.show({ template: __("Please wait") + '..'});
 
             Billing.purchase(productId)
-                .then(function() {
-                    var dateNewVipExpires;
+                .then(
+                    function() {
+                        var dateNewVipExpires;
 
-                    switch (productId) {
-                        case 'lt.vertex.flirtas.purchase.vipweekly':
-                            dateNewVipExpires = moment().add(1, 'weeks');
-                            break;
+                        switch (productId) {
+                            case 'lt.vertex.flirtas.purchase.vipweekly':
+                                dateNewVipExpires = moment().add(1, 'weeks');
+                                break;
 
-                        case 'lt.vertex.flirtas.purchase.vipmontly':
-                            dateNewVipExpires = moment().add(1, 'months');
-                            break;
+                            case 'lt.vertex.flirtas.purchase.vipmontly':
+                                dateNewVipExpires = moment().add(1, 'months');
+                                break;
 
-                        case 'lt.vertex.flirtas.purchase.vip3months':
-                            dateNewVipExpires = moment().add(3, 'months');
-                            break;
-                    }
+                            case 'lt.vertex.flirtas.purchase.vip3months':
+                                dateNewVipExpires = moment().add(3, 'months');
+                                break;
+                        }
 
-                    $scope.currUser.isVip = true;
-                    $scope.currUser.vipTill = dateNewVipExpires.format("YYYY-MM-DD HH:mm:ss");
+                        $scope.currUser.isVip = true;
+                        $scope.currUser.vipTill = dateNewVipExpires.format("YYYY-MM-DD HH:mm:ss");
 
-                    $ionicPopup.alert({
-                        title: __("Payment successful"),
-                        template: __("Done - Thanks for buying VIP membership."),
-                        buttons: [
-                            { text: __("Cool, thanks!") }
-                        ]
-                    });
-                })
-                .finally($ionicLoading.hide);
+                        $ionicLoading.hide();
+                        $ionicPopup.alert({
+                            title: __("Payment successful"),
+                            template: __("Done - Thanks for buying VIP membership."),
+                            buttons: [
+                                { text: __("Cool, thanks!") }
+                            ]
+                        });
+                    },
+                    $scope.onError
+                );
         };
     });
