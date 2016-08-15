@@ -190,7 +190,7 @@ angular.module('hotvibes.routes', [])
                 views: {
                     main: {
                         templateUrl: "templates/settings_credits.html",
-                         controller: 'SettingsCreditsCtrl'
+                        controller: 'SettingsCreditsCtrl'
                     }
                 }
             })
