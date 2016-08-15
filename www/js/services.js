@@ -233,6 +233,154 @@ angular.module('hotvibes.services', ['ionic', 'hotvibes.config'])
         };
     })
 
+    .service('Billing', function ($window, $rootScope, $ionicLoading, $ionicPopup, __, Config, AuthService) {
+        if (!$window.store) {
+            return;
+        }
+
+        var store = $window.store,
+            gateway;
+
+        /**
+         * @param {string} productId
+         * @returns {Promise}
+         */
+        this.purchase = function (productId) {
+            $ionicLoading.show({ template: __("Please wait") + '..'});
+
+            store.ready(function () {
+                store.order(productId);
+            });
+        };
+
+        this.refresh = store.refresh;
+
+        switch ($window.cordova.platformId) {
+            case "android":
+                gateway = "google";
+                break;
+
+            case "ios":
+                gateway = "apple";
+                break;
+
+            default:
+                throw "Unsupported payment platform: " + $window.cordova.platformId;
+        }
+
+        //store.verbosity = store.DEBUG;
+        store.validator = Config.API_URL_BASE + "paymentGateways/" + gateway + "/payments?u=" + AuthService.getCurrentUser().id;
+
+        store.register({
+            id: "lt.vertex.flirtas.purchase.credits200",
+            alias: "200 credits",
+            type: store.CONSUMABLE
+        });
+
+        store.register({
+            id: "lt.vertex.flirtas.purchase.credits500",
+            alias: "500 credits",
+            type: store.CONSUMABLE
+        });
+
+        store.register({
+            id: "lt.vertex.flirtas.purchase.vipweekly",
+            alias: "vip7",
+            type: store.PAID_SUBSCRIPTION
+        });
+
+        store.register({
+            id: "lt.vertex.flirtas.purchase.vipmontly",
+            alias: "vip30",
+            type: store.PAID_SUBSCRIPTION
+        });
+
+        store.register({
+            id: "lt.vertex.flirtas.purchase.vip3months",
+            alias: "vip90",
+            type: store.PAID_SUBSCRIPTION
+        });
+
+        store.when("product").approved(function (product) {
+            if (product.owned && product.valid) {
+                // Subscription purchases will trigger 'approved' event after every Billing.refresh()
+                // Let's ignore those
+                return;
+            }
+
+            $ionicLoading.show({ template: __("Please wait") + '..'});
+            product.verify().error(function (error) {
+                console.log(error);
+            });
+        });
+
+        // FIXME: handle AlreadyDidThat exception
+
+        store.when("product").verified(function (product) {
+            product.finish();
+            $ionicLoading.hide();
+
+            switch (product.alias) {
+                case '200 credits':
+                    onPurchasedCredits(200);
+                    break;
+
+                case '500 credits':
+                    onPurchasedCredits(500);
+                    break;
+
+                case 'vip7':
+                    onPurchasedVip(moment().add(1, 'weeks'));
+                    break;
+
+                case 'vip30':
+                    onPurchasedVip(moment().add(1, 'months'));
+                    break;
+
+                case 'vip90':
+                    onPurchasedVip(moment().add(3, 'months'));
+                    break;
+
+                default:
+                    throw "Unknown product: " + product.alias;
+            }
+        });
+
+        function onPurchasedCredits(numCredits) {
+            $rootScope.$apply(function () {
+                AuthService.getCurrentUser().credits += numCredits;
+            });
+
+            $ionicPopup.alert({
+                title: __("Payment successful"),
+                template: gettextCatalog.getPlural(numCredits, "You have received %u credit", "You have received %u credits"),
+                buttons: [
+                    {
+                        text: __("Cool, thanks!"),
+                        type: 'button-positive'
+                    }
+                ]
+            });
+        }
+
+        function onPurchasedVip(dateNewVipExpires) {
+            var currentUser = AuthService.getCurrentUser();
+
+            $rootScope.$apply(function () {
+                currentUser.isVip = true;
+                currentUser.vipTill = dateNewVipExpires.format("YYYY-MM-DD HH:mm:ss");
+            });
+
+            $ionicPopup.alert({
+                title: __("Payment successful"),
+                template: __("Done - Thanks for buying VIP membership."),
+                buttons: [
+                    { text: __("Cool, thanks!") }
+                ]
+            });
+        }
+    })
+
     .service('AuthService', function($q, $window, $rootScope, $filter, $injector, Config, Api) {
         var currentUser = null,
             accToken = null,

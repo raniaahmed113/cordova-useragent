@@ -11,10 +11,8 @@
             <p ng-if="!billingSupported" class="padding" parse-urls>Norėdami tapti VIP nariu - apsilankykite <a href="http://www.flirtas.lt">flirtas.lt</a></p>
 
             <div ng-if="billingSupported" class="padding center">
-                <ion-spinner ng-if="!purchaseOptions"></ion-spinner>
-
-                <div ng-if="purchaseOptions" ng-repeat="option in purchaseOptions">
-                    <button ng-click="option.buy()" class="button button-block button-positive" translate>{{option.label}}</button>
+                <div ng-repeat="option in purchaseOptions">
+                    <button ng-click="purchase(option.id)" class="button button-block button-positive" translate>{{option.label}}</button>
                     <p translate="Subscription costs %s for %s days. It is renewed automatically." translate-values="{cost: option.cost, days: option.numDays}"></p>
                 </div>
 
