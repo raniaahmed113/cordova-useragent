@@ -1,3 +1,5 @@
+angular.module('hotvibes.services', ['ionic', 'hotvibes.config']);
+
 angular.module('hotvibes', [
     'ionic', 'ngCordova',
     'ion-autocomplete', 'angularMoment', 'ngFabForm', 'ionic.contrib.ui.tinderCards', 'pascalprecht.translate',

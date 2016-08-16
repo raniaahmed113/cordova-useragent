@@ -1,18 +1,18 @@
 angular.module('hotvibes.controllers')
 
-    .controller('SettingsAlbumsCtrl', function($scope, $ionicPopover, $ionicPopup, $ionicLoading, __, Album) {
+    .controller('SettingsAlbumsCtrl', function($rootScope, $scope, $ionicPopover, $ionicPopup, $ionicLoading, __, Album) {
         $scope.albums = Album.query({ include: 'mainPhoto.url(size=w80h80)' });
 
         $scope.promptCreateAlbum = {
             albumName: null
         };
 
-        $scope.$on('albumDeleted', function(albumId) {
+        $rootScope.$on('album.deleted', function($event, albumId) {
             var $index = -1;
 
             for (var i=0; i<$scope.albums.length; i++) {
                 if ($scope.albums[i].id == albumId) {
-                    $index = index;
+                    $index = i;
                     break;
                 }
             }

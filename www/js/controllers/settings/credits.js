@@ -1,91 +1,63 @@
 angular.module('hotvibes.controllers')
 
-    .controller('SettingsCreditsCtrl', function($window, $scope, $ionicPopup, $ionicLoading, __, gettextCatalog, Config) {
-        $scope.supportContacts = __("skype: xklubas<br />37052344411");
-
-        if ($window.store) {
-            var store = $window.store,
-                gateway;
-
-            switch ($window.cordova.platformId) {
-                case "android":
-                    gateway = "google";
-                    break;
-
-                case "ios":
-                    gateway = "apple";
-                    break;
-
-                default:
-                    throw "Unsupported payment platform: " + $window.cordova.platformId;
-            }
-
-            //store.verbosity = store.DEBUG;
-            store.validator = Config.API_URL_BASE + "paymentGateways/" + gateway + "/payments?u=" + $scope.currUser.id;
-
-            store.register({
-                id: "lt.vertex.flirtas.purchase.credits200",
-                alias: "200 credits",
-                type: store.CONSUMABLE
-            });
-
-            store.register({
-                id: "lt.vertex.flirtas.purchase.credits500",
-                alias: "500 credits",
-                type: store.CONSUMABLE
-            });
-
-            store.when("product").approved(function(product) {
-                $ionicLoading.show({ template: __("Please wait") + '..'});
-                product.verify();
-            });
-
-            store.when("product").verified(function(product) {
-                var numCredits;
-
-                switch (product.alias) {
-                    case '200 credits':
-                        numCredits = 200;
-                        break;
-
-                    case '500 credits':
-                        numCredits = 500;
-                        break;
-
-                    default:
-                        throw "Unknown product: " + product.alias;
-                }
-
-                $scope.$apply(function() {
-                    $scope.currUser.credits += numCredits;
-                });
-
-                $ionicLoading.hide();
-                product.finish();
-
-                $ionicPopup.alert({
-                    title: __("Payment successful"),
-                    template: gettextCatalog.getPlural(numCredits, "You have received %u credit", "You have received %u credits"),
-                    buttons: [
-                        {
-                            text: __("Cool, thanks!"),
-                            type: 'button-positive'
-                        }
-                    ]
-                });
-            });
-
-            $scope.billingSupported = true;
-
-            store.ready(function() {
-                $scope.$apply(function() {
-                    $scope.creditOptions = [
-                        { amount: 200, buy: function() { store.order("200 credits"); } },
-                        { amount: 500, buy: function() { store.order("500 credits"); } }
-                    ];
-                });
-            });
-
-            store.refresh();
+    .controller('SettingsCreditsCtrl', function($scope, $ionicPopup, $ionicLoading, __, gettextCatalog, Billing) {
+        if (!Billing.isSupported()) {
+            return;
         }
+
+        $scope.billingSupported = true;
+        $scope.supportContacts = __("skype: xklubas<br />37052344411");
+        $scope.purchaseOptions = [
+            {
+                id: 'lt.vertex.flirtas.purchase.credits200',
+                amount: 200
+            },
+            {
+                id: 'lt.vertex.flirtas.purchase.credits500',
+                amount: 500
+            }
+        ];
+
+        $scope.purchase = function (productId) {
+            $ionicLoading.show({ template: __("Please wait") + '..'});
+
+            Billing.purchase(productId)
+                .then(
+                    function () {
+                        var numCredits;
+
+                        switch (productId) {
+                            case 'lt.vertex.flirtas.purchase.credits200':
+                                numCredits = 200;
+                                break;
+
+                            case 'lt.vertex.flirtas.purchase.credits500':
+                                numCredits = 500;
+                                break;
+                        }
+
+                        $scope.currUser.credits += numCredits;
+
+                        $ionicPopup.alert({
+                            title: __("Payment successful"),
+                            template: gettextCatalog.getPlural(numCredits, "You have received %u credit", "You have received %u credits"),
+                            buttons: [
+                                {
+                                    text: __("Cool, thanks!"),
+                                    type: 'button-positive'
+                                }
+                            ]
+                        });
+                    },
+                    function (error) {
+                        if (error.code && error.code === Billing.ERROR_PURCHASE_CANCELLED) {
+                            // Ignore
+                            return;
+                        }
+
+                        $scope.onError(error);
+                    }
+                )
+                .finally($ionicLoading.hide);
+        };
     });
