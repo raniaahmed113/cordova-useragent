@@ -547,10 +547,18 @@ img.img-circle {
 }
 .tab-item.tab-item-active {
   border-top: 1px $brand solid;
+  i {
+    font-size: 24px;
+    line-height: 40px;
+  }
 }
 .tab-item:not(.tab-item-active) {
   border-top: 1px $light solid;
   opacity: .5;
+  i {
+    font-size: 24px;
+    line-height: 40px;
+  }
 }
 
 
