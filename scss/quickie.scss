@@ -156,6 +156,10 @@ td-card {
         }
       }
 
+      button:active {
+        background: $stable;
+      }
+
       button[disabled] {
         color: $stable;
       }
