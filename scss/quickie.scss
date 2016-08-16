@@ -269,6 +269,6 @@ td-card {
     border:5px solid $gray;
   }
   .navigation button.no:active{
-    background: lighten($assertive, 20%);
+    background: lighten($gray, 20%);
   }
 }
