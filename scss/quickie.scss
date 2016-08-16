@@ -1,14 +1,28 @@
 td-cards {
   height: 100%;
-  margin: 15px;
 
   .td-cards {
-    height: 100%;
+    height: 90%;
     position: relative;
+
+    ion-spinner {
+      width: 0;
+      top: 50%;
+      left: 46%;
+      bottom: 0;
+      transform: none;
+    }
 
     & > * {
       position: absolute;
-      top: 35%;left: 50%;
+      top: 0;
+      bottom: 100%;
+      left: 50%;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+      height: auto;
+      max-width: 750px;
       @include translate(-50%, -50%);
 
       z-index: 0;
@@ -43,7 +57,6 @@ td-cards {
 td-card {
   min-width: 315px;
   overflow: hidden;
-  @include border-radius(15px);
   @include transition(0.15s linear opacity);
 
   &.ng-hide {
@@ -82,27 +95,103 @@ td-card {
     right: 0;
   }
 
-  .navigation {
+  .navigation-wrap {
     z-index: 999;
     position: absolute;
-    bottom: 20px;
     left: 0;
     right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    width: 290px;
+    bottom: 2px;
+    width: 100%;
+    height: 16%;
+    background-color: $light;
   }
-  .navigation button{
-    background: transparent;
-    @include border-radius(60px);
-    font-size: 50px;
-    padding: 5px 21px;
-    display: inline-block;
+  .navigation-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    .small {
+      .left, .right {
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        @include box-shadow(0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23));
+        @include border-radius(50%);
+      }
+      .left {
+        left: 10%;
+      }
+      .right {
+        left: 90%;
+      }
+
+      button {
+        width: 40px;
+        height: 40px;
+        @include border-radius(50%);
+        border: none;
+        background-color: $light;
+        color: $brand;
+        font-size: 12px;
+
+        @media screen and (min-width: 360px) {
+          width: 50px;
+          height: 50px;
+          font-size: 18px;
+        }
+        @media screen and (min-width: 401px) {
+          width: 60px;
+          height: 60px;
+          font-size: 22px;
+        }
+        @media screen and (min-width: 501px) {
+          width: 70px;
+          height: 70px;
+          font-size: 32px;
+        }
+        @media screen and (min-width: 701px) {
+          width: 90px;
+          height: 90px;
+          font-size: 42px;
+        }
+      }
+
+      button[disabled] {
+        color: $stable;
+      }
+    }
+  }
+  .navigation {
+    position: absolute;
+    top: -55px;
+    width: 100%;
+    text-align: center;
+    span {
+      @include box-shadow(0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23));
+      margin: 5px;
+    }
+
+    button {
+      background-color: $light;
+      @include border-radius(50%);
+      font-size: 30px;
+      width: 80px;
+      height: 80px;
+      line-height: 0;
+      display: inline-block;
+      //margin: 12px;
+
+      @media screen and (min-width: 701px) {
+        width: 110px;
+        height: 110px;
+        font-size: 45px;
+      }
+    }
   }
 
   .navigation button[disabled] {
-    color: $gray !important;
-    border-color: $gray !important;
+    border-color: $stable !important;
+    background-color: $stable !important;
     opacity: 0.8;
   }
 
@@ -118,8 +207,7 @@ td-card {
 
   .navigation span {
     display: inline-block;
-    background-color: #E7E7E7;
-    padding: 10px;
+    background-color: $light;
     @include border-radius(50%);
   }
 
@@ -155,15 +243,26 @@ td-card {
   }
 
   .navigation button.yes{
-    color: $energized;
+    color: $light;
+    background-color: $energized;
     border:5px solid $energized;
+    width: 95px;
+    height: 95px;
+    font-size: 54px;
+
+    @media screen and (min-width: 701px) {
+      width: 130px;
+      height: 130px;
+      font-size: 80px;
+    }
   }
   .navigation button.yes:active{
     background: lighten($energized, 20%);
   }
   .navigation button.no{
-    color: $assertive;
-    border:5px solid $assertive;
+    color: $light;
+    background-color: $gray;
+    border:5px solid $gray;
   }
   .navigation button.no:active{
     background: lighten($assertive, 20%);

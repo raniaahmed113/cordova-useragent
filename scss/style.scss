@@ -570,6 +570,42 @@ img.img-circle {
   color:$light;
 }
 
+.tabs {
+  padding-top: 0;
+}
+.tab-title {
+  text-transform: uppercase;
+}
+.tabs-light>.tabs {
+  color: $brand;
+  border: none;
+  -webkit-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+}
+.tabs-striped.tabs-light .tab-item {
+  color: $brand-light;
+}
+.tabs-striped.tabs-light .tab-item.tab-item-active {
+  color: $brand;
+  border-color: $brand;
+}
+.tab-item.tab-item-active {
+  border-top: 1px $brand solid;
+  i {
+    font-size: 24px;
+    line-height: 40px;
+  }
+}
+.tab-item:not(.tab-item-active) {
+  border-top: 1px $light solid;
+  opacity: .5;
+  i {
+    font-size: 24px;
+    line-height: 40px;
+  }
+}
+
 
 @import "wall.scss";
 @import "landing.scss";
