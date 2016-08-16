@@ -2,8 +2,21 @@
   text-align: center;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+span {
+  &.text {
+    color: $text;
+  }
+
+  &.text-dark {
+    color: $text-dark;
+  }
+}
 .pane, .view {
-  background-color:#E7E7E7;
+  background-color:$light;
 }
 
 .logo {
@@ -42,6 +55,9 @@ file-upload {
   border-bottom-left-radius: 0;
   line-height: 16px;
 }
+.item-brand {
+  background:$brand;
+}
 
 .center-vertical {
   @include display-flex();
@@ -68,27 +84,43 @@ file-upload {
   }
 }
 
-.menu .bar-header {
-  border-bottom: 2px solid #373737;
+
+.menu {
+  .scroll-content {
+    top:70px;
+  }
 }
 
-.menu.menu-dark {
+.menu.menu-brand {
   &, .input-label, .item, .item-content, select {
-    color: $light;
-    border-color: darken($dark, 3%) !important;
+    color: $brand-light;
+    font-weight:500;
   }
 
   &, select, > .view-container > .pane {
-    background-color: $dark;
+    background-color: $brand;
   }
 
   ion-list, .list {
     .item, .item-content {
-      @extend .item-dark;
+      @extend .item-brand;
+      border:none;
+      a {
+        padding-left: 25px;
+      }
+    }
+    .item.active > a {
+      background: $brand-dark;
+      color: $light;
+      padding-left: 20px;
+    }
+    .item.active {
+      border-left: 5px solid $light;
     }
 
     .item.item-divider {
-      background-color: darken($dark, 3%);
+      background-color: $brand-dark;
+      color: $light;
     }
   }
 }
@@ -379,15 +411,20 @@ ul.chat {
 }*/
 
 .bar-main-nav {
+  height:70px;
+
   > a {
     width: 100%;
     color: white;
     text-decoration: initial;
     position: relative;
+    margin:10px;
+    font-size: 16px;
+    font-weight:600;
 
     > img {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       vertical-align: middle;
       margin-right: 5px;
     }
@@ -398,6 +435,7 @@ ul.chat {
       top: 50%;
       transform: translate(0, -50%);
       margin-right: 5px;
+      font-size: 25px;
     }
   }
 }
@@ -427,6 +465,16 @@ ul.chat {
     border-color: #111;
     background: rgba(0, 0, 0, 0.5);
     color: $light;
+  }
+
+  &.button-close {
+    background: none;
+    color: $light;
+    padding: 0;
+
+    &.activated {
+      background: none;
+    }
   }
 }
 
@@ -467,7 +515,46 @@ ion-header-bar .buttons .avatar {
   background: $assertive;
   color: $light;
   text-align: center;
+
+  span {
+    width: 100%;
+  }
 }
+
+img.img-circle {
+  @include border-radius(50%);
+}
+
+.bar.bar-brand {
+  background:$brand;
+  border: 1px solid $brand-dark;
+
+  .title {
+    color:$light;
+  }
+  .button-clear {
+    color:$light;
+  }
+  .button {
+    background:$brand;
+    border:none;
+    color:$light;
+  }
+}
+.badge.badge-brand {
+  background: $light;
+  color:$brand;
+  right:20px;
+}
+
+.checkbox input:checked+.checkbox-icon:before, .checkbox input:checked:before {
+  background: $brand-light;
+  border-color: $brand-light;
+}
+.item-select:after {
+  color:$light;
+}
+
 
 @import "wall.scss";
 @import "landing.scss";

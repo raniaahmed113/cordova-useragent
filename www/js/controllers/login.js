@@ -117,66 +117,6 @@ angular.module('hotvibes.controllers')
             );
         };
 
-        function requestInputPhoneNumber() {
-            var dialog = $ionicPopup.prompt({
-                title: __('Login with phone number'),
-                template: __('Enter number'),
-                inputType: 'tel',
-                inputPlaceholder: __('Phone number'),
-                buttons: [
-                    {
-                        text: __('Cancel'),
-                        type: 'button-default'
-                    },
-                    {
-                        text: __('Continue'),
-                        type: 'button-positive',
-                        onTap: function (e) {
-                            // Do not auto-close the pop-up
-                            e.preventDefault();
-
-                            var phoneNumber = this.scope.$parent.data.response;
-                            if (!phoneNumber) {
-                                return;
-                            }
-
-                            var numberData = phoneNumber.match(/^(?:8|\+?370)(6\d{7})$/);
-                            if (numberData) {
-                                phoneNumber = "370" + numberData[1];
-                            }
-
-                            $ionicLoading.show({ template: __("Please wait") + '..' });
-                            AuthService.sendConfirmationCode(phoneNumber)
-                                .then(
-                                    function () {
-                                        dialog.close();
-                                        requestInputSmsCode(phoneNumber);
-                                    },
-                                    function (error) {
-                                        var message;
-
-                                        switch (error.data.code) {
-                                            case ErrorCode.INVALID_INPUT:
-                                                message = __("Incorect phone number.");
-                                                break;
-
-                                            default:
-                                                message = Api.translateErrorCode(error.data.code);
-                                                break;
-                                        }
-
-                                        onError(message);
-                                    }
-                                )
-                                .finally(function () {
-                                    $ionicLoading.hide();
-                                });
-                        }
-                    }
-                ]
-            });
-        }
-
         function requestInputSmsCode(phoneNumber) {
             var dialog = $ionicPopup.prompt({
                 title: __('Confirm your number'),
@@ -241,15 +181,13 @@ angular.module('hotvibes.controllers')
         $scope.showAltLoginMethods = function() {
             $ionicActionSheet.show({
                 buttons: [
-                    { text: __('Login with phone number') },
-                    { text: __('Login with username/email') }
+                    { text: "<div class='icon icon-device phone'></div>" +  __('Login with phone number') },
+                    { text: "<div class='icon icon-mail email'></div>" +  __('Login with email') }
                 ],
-                titleText: __('Alternative login methods'),
-                cancelText: __('Cancel'),
                 buttonClicked: function(index) {
                     switch (index) {
                         case 0: // Phone number
-                            requestInputPhoneNumber();
+                            $scope.loginWithPhone.modal.show();
                             break;
 
                         case 1: // Email
@@ -283,6 +221,89 @@ angular.module('hotvibes.controllers')
                     });
             }
         };
+
+        $scope.loginWithPhone = {
+            data: {},
+            submit: function() {
+                var phoneNumber = $scope.loginWithPhone.data.phoneNumber;
+                if (!phoneNumber) {
+                    return;
+                }
+
+                var numberData = phoneNumber.match(/^(?:8|\+?370)(6\d{7})$/);
+                if (numberData) {
+                    phoneNumber = "370" + numberData[1];
+                }
+
+                $ionicLoading.show({ template: __("Please wait") + '..' });
+                AuthService.sendConfirmationCode(phoneNumber)
+                    .then(
+                        function () {
+                            $scope.enterCode.modal.show();
+                        },
+                        function (error) {
+                            var message;
+
+                            switch (error.data.code) {
+                                case ErrorCode.INVALID_INPUT:
+                                    message = __("Incorect phone number.");
+                                    break;
+
+                                default:
+                                    message = Api.translateErrorCode(error.data.code);
+                                    break;
+                            }
+
+                            onError(message);
+                        }
+                    )
+                    .finally(function () {
+                        $ionicLoading.hide();
+                    });
+            }
+        };
+
+        $scope.enterCode = {
+            data: {},
+            submit: function() {
+                var smsCode = $scope.enterCode.data.smsCode;
+                var phoneNumber = $scope.loginWithPhone.data.phoneNumber;
+                if (!smsCode) {
+                    return;
+                }
+
+                $ionicLoading.show({ template: __("Please wait") + '..'});
+                AuthService.loginWithSmsCode(phoneNumber, smsCode)
+                    .then(
+                        function () {
+                            onLoggedIn();
+                        },
+                        function (error) {
+                            var message;
+
+                            switch (error.code) {
+                                case ErrorCode.INVALID_CREDENTIALS:
+                                    // No account found associated with this phone number: proceed to registration
+                                    register(phoneNumber, smsCode);
+                                    return;
+
+                                case ErrorCode.INVALID_INPUT:
+                                    message = __("Unable to confirm phone");
+                                    break;
+
+                                default:
+                                    message = Api.translateErrorCode(error.code);
+                                    break;
+                            }
+
+                            onError(message);
+                        }
+                    )
+                    .finally(function () {
+                        $ionicLoading.hide();
+                    });
+            }
+        }
 
         $scope.countries = DataMap.country;
         $scope.language = $translate.use();
@@ -375,6 +396,24 @@ angular.module('hotvibes.controllers')
             })
             .then(function(modal) {
                 $scope.loginWithPassword.modal = modal;
+            });
+
+        $ionicModal
+            .fromTemplateUrl('templates/login_phone.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.loginWithPhone.modal = modal;
+            });
+
+        $ionicModal
+            .fromTemplateUrl('templates/login_phone_code.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            })
+            .then(function(modal) {
+                $scope.enterCode.modal = modal;
             });
 
         $ionicModal

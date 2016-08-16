@@ -8,30 +8,31 @@
             <div>
                 <img ng-src="img/logos/{{logoVariant}}.svg" class="logo" alt="" />
 
-                <h3 class="all-caps" translate>title_page_seo_keyword</h3>
-                <h4 translate>homepage_intro_section_short</h4>
+                <h4 class="light" translate>title_page_seo_keyword</h4>
+                <h5 class="stable" translate>homepage_intro_section_short</h5>
 
-                <p class="icons">
-                    <i class="icon-heart_1"></i>
-                    <i class="icon-heart_2"></i>
-                    <i class="icon-heart_3"></i>
-                    <i class="icon-heart_4"></i>
-                </p>
-
-                <div class="center">
-                    <div class="separator"></div>
+                <div class="login-circles">
+                    <div class="circle-wrapper left">
+                        <i class="icon-crown"></i>
+                    </div>
+                    <div class="image-wrapper">
+                        <img src="https://cdn.hotvibes.com/7725940_2733723_images_w203h203_c12a11938e20b3ff2b9f12239e1bd4d6.jpg" alt="happy-users">
+                    </div>
+                    <div class="circle-wrapper right">
+                        <i class="icon-members"></i>
+                    </div>
                 </div>
+
+                <h5 class="light" translate>Register or login with:</h5>
+                <button class="button button-block button-calm facebook" ng-click="loginWithFb()">
+                    Facebook
+                </button>
+                <button class="button button-block alternative-login" ng-click="showAltLoginMethods()">
+                    Alternative login methods
+                </button>
+
+                <span translate>We never post to FB!</span>
             </div>
         </div>
-
-        <div class="footer center padding">
-            <h4 translate>Register or login with:</h4>
-            <button class="button button-block button-calm" ng-click="loginWithFb()">
-                <i class="icon ion-social-facebook"></i> Facebook
-            </button>
-
-            <button class="button button-block button-stable" ng-click="showAltLoginMethods()" translate>Alternative login methods</button>
-        </div>
-
     </ion-content>
 </ion-view>
