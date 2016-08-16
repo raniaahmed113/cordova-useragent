@@ -4,12 +4,12 @@
         {{conversation.withUser.nickName}}
     </ion-nav-title>
 
-    <!--<ion-nav-buttons side="right">
-        <button class="button button-stable" ng-if="conversation.withUser" ng-click="report()"><i class="icon ion-alert-circled"></i></button>
+    <ion-nav-buttons side="right">
+        <!--<button class="button button-stable" ng-if="conversation.withUser" ng-click="report()"><i class="icon ion-alert-circled"></i></button>-->
         <a href="#/users/{{conversation.withUser.id}}" ng-if="conversation.withUser">
             <img class="avatar" ng-src="{{conversation.withUser.profilePhoto | profilePhotoUrl:conversation.withUser.gender}}" />
         </a>
-    </ion-nav-buttons>-->
+    </ion-nav-buttons>
 
     <ion-content>
 

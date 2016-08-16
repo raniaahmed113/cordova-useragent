@@ -1,13 +1,15 @@
 angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
-    .controller('AppCtrl', function ($rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading, $cordovaGoogleAnalytics,
-                                     __, AuthService, Config, Api, PushNotificationHandler, $cordovaNetwork, $location) {
+    .controller('AppCtrl', function (
+        $window, $rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading, $cordovaGoogleAnalytics,
+         __, AuthService, Config, Api, PushNotificationHandler, $cordovaNetwork, $location
+    ) {
         $scope.logout = function () {
             PushNotificationHandler.unregister();
             AuthService.setCurrentUser(null);
 
-            if (window.AdMob) {
-                AdMob.removeBanner();
+            if ($window.AdMob) {
+                $window.AdMob.removeBanner();
             }
 
             $state.go('login').then(function() {
@@ -32,7 +34,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         function onStateChanged(state) {
             $scope.rightMenuEnabled = state.views && state.views.rightMenu ? true : false;
 
-            if (window.cordova && $cordovaGoogleAnalytics) {
+            if ($window.cordova && $cordovaGoogleAnalytics) {
                 $cordovaGoogleAnalytics.trackView(state.name);
             }
         }
@@ -51,7 +53,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.currUser = AuthService.getCurrentUser();
 
         // Enable GA UserID tracking
-        if (window.cordova && $cordovaGoogleAnalytics) {
+        if ($window.cordova && $cordovaGoogleAnalytics) {
             // The following method accepts string as an argument, so let's cast our int value
             var userId = $scope.currUser.id + "";
             $cordovaGoogleAnalytics.setUserId(userId);
@@ -96,14 +98,16 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
         // Start listening for push notifications
         $ionicPlatform.ready(function() {
-            if (!window.cordova) {
+            if (!$window.cordova) {
                 // Do nothing if app is running in a browser rather than as an app on an actual device
                 return;
             }
 
             PushNotificationHandler.init();
 
-            if (window.AdMob && !$scope.currUser.isVip) {
+            if ($window.AdMob && !$scope.currUser.isVip) {
+                var AdMob = $window.AdMob;
+
                 AdMob.createBanner({
                     adId: "ca-app-pub-0852903784956418/9265490294",
                     position: AdMob.AD_POSITION.BOTTOM_CENTER,
@@ -122,6 +126,8 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         });
 
         $scope.onError = function(response, params) {
+            // FIXME: log error
+
             var errMessage;
             if (params && params.message) {
                 errMessage = params.message;
@@ -143,17 +149,13 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         $scope.internetConnected = true;
 
         document.addEventListener("deviceready", function () {
-            $scope.internetConnected = !(navigator.connection.type == Connection.NONE);
+            $scope.internetConnected = (navigator.connection.type !== Connection.NONE);
 
-            // listen for Online event
-            $rootScope.$on('$cordovaNetwork:online', function(){
-                if ($scope.internetConnected) return;
+            $rootScope.$on('$cordovaNetwork:online', function() {
                 $scope.internetConnected = true;
             });
 
-            // listen for Offline event
-            $rootScope.$on('$cordovaNetwork:offline', function(){
-                if (!$scope.internetConnected) return;
+            $rootScope.$on('$cordovaNetwork:offline', function() {
                 $scope.internetConnected = false;
             })
 

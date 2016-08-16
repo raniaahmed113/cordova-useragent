@@ -27,18 +27,21 @@ angular.module('hotvibes.controllers')
             $scope.conversations.splice(index, 1);
         };
 
+        function findConversationById(conversationId) {
+            for (var i=0; i<$scope.conversations.length; i++) {
+                // Find the right conversation in the list
+                if ($scope.conversations[i].id == conversationId) {
+                    return $scope.conversations[i];
+                }
+            }
+
+            return null;
+        }
+
         function onNewMessage(event, message) {
             $scope.conversations.$promise.then(function() {
                 var conversationId = message['conversationId'],
-                    conversation = null;
-
-                for (var i=0; i<$scope.conversations.length; i++) {
-                    // Find the right conversation in the list
-                    if ($scope.conversations[i].id == conversationId) {
-                        conversation = $scope.conversations[i];
-                        break;
-                    }
-                }
+                    conversation = findConversationById(conversationId);
 
                 if (conversation != null) {
                     // Such conversation already exists, update the list
@@ -71,12 +74,22 @@ angular.module('hotvibes.controllers')
             });
         }
 
+        function onConversationDataChanged($event, updatedConversation) {
+            var conversation = findConversationById(updatedConversation.id);
+            if (!conversation) {
+                return;
+            }
+
+            angular.merge(conversation, updatedConversation);
+        }
+
         $rootScope.$on('newMessage.sent', onNewMessage);
         $rootScope.$on('newMessage.received', onNewMessage);
+        $rootScope.$on('conversation.changed', onConversationDataChanged);
     })
 
     .controller('ConversationCtrl', function(
-        $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup,
+        $rootScope, $scope, $stateParams, $ionicScrollDelegate, $ionicPopup, $ionicLoading,
         __, Conversation, Message, User, Api, Report
     ) {
         var params = {
@@ -88,7 +101,8 @@ angular.module('hotvibes.controllers')
         };
 
         $scope.msgText = '';
-        $scope.conversation = Conversation.get(params, null, null, function(err) { // TODO: get from cache
+        $scope.conversation = Conversation.get(params);
+        $scope.conversation.$promise.catch(function(err) { // TODO: get from cache
             if (err.status == 404 /* Not Found */) {
                 // There is no conversation created yet
                 $scope.conversation.id = params.withUserId;
@@ -152,10 +166,11 @@ angular.module('hotvibes.controllers')
                 $scope.msgText = '';
             }
 
-            msg.$save(params, function() {
-                $rootScope.$broadcast('newMessage.sent', msg);
+            $rootScope.$broadcast('newMessage.sent', msg);
 
+            msg.$save(params, function() {
                 msg.dateSent = Math.round(Date.now() / 1000);
+
             }, function(error) {
                 var allowTryAgain = error.status == 0 || error.status == 500;
 
@@ -174,6 +189,10 @@ angular.module('hotvibes.controllers')
                     for (var i=$scope.messages.length-1; i >= 0; i--) {
                         if ($scope.messages[i].sendTime == msg.sendTime) {
                             $scope.messages.splice(i, 1);
+                            $rootScope.$broadcast('conversation.changed', {
+                                id: $scope.conversation.id,
+                                lastMessage: $scope.messages[$scope.messages.length]
+                            });
                             break;
                         }
                     }

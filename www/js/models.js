@@ -84,8 +84,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             }
 
             if (!object.filter || !(object.filter instanceof Filter)) {
-                object.filter.type = Filter.TYPE_MAIN;
                 object.filter = new Filter(object.filter);
+                object.filter.type = Filter.TYPE_MAIN;
             }
 
             if (object.cacheCounts) {
@@ -177,7 +177,12 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
     })
 
     .factory('QuickieVote', function(ApiResource) {
-        return ApiResource('me/quickieVotes');
+        var QuickieVote = new ApiResource('me/quickieVotes');
+
+        QuickieVote.YES = 'yes';
+        QuickieVote.NO = 'no';
+
+        return QuickieVote;
     })
 
     .factory('Filter', function(ApiResource) {
@@ -326,6 +331,10 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
 
     .factory('DuelInvite', function(ApiResource) {
         return ApiResource('users/:userId/duelInvites', { userId: '@userId' });
+    })
+
+    .factory('Payment', function(ApiResource) {
+        return ApiResource('paymentGateways/:gateway/payments', { gateway: '@gateway' });
     })
 
     .factory('__', function($translate) {

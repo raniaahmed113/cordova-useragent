@@ -190,7 +190,7 @@ angular.module('hotvibes.routes', [])
                 views: {
                     main: {
                         templateUrl: "templates/settings_credits.html",
-                         controller: 'SettingsCreditsCtrl'
+                        controller: 'SettingsCreditsCtrl'
                     }
                 }
             })
@@ -295,7 +295,7 @@ angular.module('hotvibes.routes', [])
             url: "/quickie/iSaidYes",
             views: {
                 quickieISaidYes: {
-                    templateUrl: "templates/quickie_list.html",
+                    templateUrl: "templates/quickie_list_said_yes.html",
                     controller: 'QuickieISaidYesCtrl'
                 }
             }
