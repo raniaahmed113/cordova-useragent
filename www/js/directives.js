@@ -23,42 +23,28 @@ angular.module('hotvibes.directives', [])
         };
     })
 
-    .directive('fileUpload', function() {
+    .directive('onFileChosen', function () {
         return {
-            restrict: 'AE',
-            scope: {
-                onFileChosen: '='
-            },
-            link: function(scope, element, attr) {
-                var el = angular.element(element),
-                    fileInput = angular.element('<input type="file" />');
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                element.bind('change', function () {
+                    var input = this;
 
-                el.append(fileInput);
-                
-                el.on('click', function() {
-                    setTimeout(function() {
-                        ionic.trigger('click', { target: fileInput[0] });
-                    }, 50);
-                });
-
-                fileInput.on('change', function () {
-                    if (!fileInput[0].files || fileInput[0].files.length < 1) {
+                    if (!input.files) {
                         return;
                     }
 
-                    scope.onFileChosen(fileInput[0].files[0]);
+                    var onFileChosen = scope.$eval(attrs.onFileChosen);
 
-                    // Let's change the value of file input to null
-                    // Otherwise the onChange event wouldn't trigger if we tried uploading the same photo again.
-                    // For example, the user would do that if the first attempt failed because of some connectivity error
-                    fileInput[0].value = null;
-                });
+                    scope.$apply(function () {
+                        onFileChosen(input.files[0]);
 
-                if ('accept' in attr) {
-                    attr.$observe('accept', function uploadButtonAcceptObserve(value) {
-                        fileInput.attr('accept', value);
+                        // Let's change the value of file input to null
+                        // Otherwise the onChange event wouldn't trigger if we tried uploading the same photo again.
+                        // For example, the user would do that if the first attempt failed because of some connectivity error
+                        input.value = null;
                     });
-                }
+                });
             }
         };
     })
@@ -75,6 +61,10 @@ angular.module('hotvibes.directives', [])
 
                     } else if (event.currentTarget instanceof HTMLAnchorElement) {
                         target = event.currentTarget;
+                    }
+
+                    if (!target) {
+                        return;
                     }
 
                     var href = target.getAttribute('href');

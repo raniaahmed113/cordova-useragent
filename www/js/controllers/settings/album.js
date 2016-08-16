@@ -135,7 +135,7 @@ angular.module('hotvibes.controllers')
 
         $scope.deleteAlbum = function() {
             $scope.album.$delete();
-            $rootScope.$broadcast('albumDeleted', $scope.album.id);
+            $rootScope.$broadcast('album.deleted', $scope.album.id);
             $ionicHistory.goBack();
         };
     });
