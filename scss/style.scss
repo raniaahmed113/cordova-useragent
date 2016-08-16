@@ -531,6 +531,9 @@ img.img-circle {
 .tabs {
   padding-top: 0;
 }
+.tab-title {
+  text-transform: uppercase;
+}
 .tabs-light>.tabs {
   color: $brand;
   border: none;
