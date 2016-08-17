@@ -11,7 +11,8 @@ angular.module('hotvibes.controllers')
 
             return $ionicPopup.alert({
                 title: __("Something's wrong"),
-                template: message
+                template: message,
+                cssClass: "on-error"
             });
         }
 

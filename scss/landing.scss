@@ -23,7 +23,7 @@ ion-header-bar.bar.bar-header {
     background: none;
 
     .buttons {
-      left: 10%;
+      left: 5%;
 
       .button, .title {
         color: $text;
@@ -39,8 +39,8 @@ ion-header-bar.bar.bar-header {
   @include flex-direction(column);
 
   .content {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
     color: white;
 
     .button {
@@ -339,6 +339,27 @@ ion-header-bar.bar.bar-header {
       &:after {
         color: $brand-light;
       }
+    }
+  }
+}
+
+.popup-container.on-error {
+  .popup-head > h3 {
+    color: $text-dark;
+  }
+
+  .popup-body {
+    text-align: center;
+    color: $text;
+  }
+
+  .popup-buttons > button {
+    color: $brand;
+    background: none;
+
+    &.activated {
+      border: none;
+      background: $royal;
     }
   }
 }
