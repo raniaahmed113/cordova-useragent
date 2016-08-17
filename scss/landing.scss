@@ -72,7 +72,7 @@ ion-header-bar.bar.bar-header {
         line-height: 40px;
         font-size: 38px;
         position: relative;
-        border-radius: 50%;
+        @include border-radius(50%);
         padding: 0 8px;
         color: #fff;
 
@@ -160,10 +160,7 @@ ion-header-bar.bar.bar-header {
       top: 0;
       left: 0;
       right: 0;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: auto;
-      margin-bottom: auto;
+      margin: auto;
       @include border-radius(50%);
       border: 4px solid white;
       overflow: hidden;
@@ -206,7 +203,7 @@ ion-header-bar.bar.bar-header {
         line-height: 40px;
         font-size: 34px;
         position: relative;
-        border-radius: 50%;
+        @include border-radius(50%);
         padding: 0 8px;
         color: #fff;
         margin: 0 10px;
