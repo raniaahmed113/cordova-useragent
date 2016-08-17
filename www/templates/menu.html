@@ -2,7 +2,7 @@
 
     <ion-side-menu side="left" edge-drag-threshold="true" class="menu-brand">
         <ion-header-bar class="bar-main-nav bar-brand">
-            <a href="#/settings" menu-toggle>
+            <a href="#/settings" menu-close>
                 <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" class="img-circle"/>
                 {{currUser.nickName}}
                 <i class="icon ion-ios-gear"></i>
@@ -11,24 +11,24 @@
         <ion-content class="main-menu">
             <ion-list class="list-dark">
 
-                <ion-item menu-toggle href="#/conversations" ng-class="{active: isItemActive('/conversations')}">
+                <ion-item menu-close href="#/conversations" ng-class="{active: isItemActive('/conversations')}">
                     <i class="icon ion-email"></i>
                     <span translate>Messages</span>
                     <span ng-if="currUser.cacheCounts.cntUnreadMessages > 0" class="badge badge-brand">{{currUser.cacheCounts.cntUnreadMessages}}</span>
                 </ion-item>
 
-                <ion-item menu-toggle href="#/users" ng-class="{active: isItemActive('/users')}"><i class="icon icon-members"></i> <span translate>Members</span></ion-item>
-                <ion-item menu-toggle href="#/quickie" ng-class="{active: isItemActive('/quickie')}"><i class="icon icon-heart"></i> <span translate>Quickie</span></ion-item>
-                <ion-item menu-toggle href="#/guests" ng-class="{active: isItemActive('/guests')}">
+                <ion-item menu-close href="#/users" ng-class="{active: isItemActive('/users')}"><i class="icon icon-members"></i> <span translate>Members</span></ion-item>
+                <ion-item menu-close href="#/quickie" ng-class="{active: isItemActive('/quickie')}"><i class="icon icon-heart"></i> <span translate>Quickie</span></ion-item>
+                <ion-item menu-close href="#/guests" ng-class="{active: isItemActive('/guests')}">
                     <i class="icon icon-view"></i>
                     <span translate>Guests</span>
                     <span ng-if="currUser.cacheCounts.cntNewGuests > 0" class="badge badge-brand">{{currUser.cacheCounts.cntNewGuests}}</span>
                 </ion-item>
-                <ion-item menu-toggle href="#/chatRooms/1" ng-class="{active: isItemActive('/chatRooms')}"><i class="icon icon-chat"></i> <span translate>ShoutBox</span></ion-item>
-                <ion-item menu-toggle href="#/friends" ng-class="{active: isItemActive('/friends')}"><i class="icon icon-addperson"></i> <span translate>My Friends</span></ion-item>
-                <ion-item menu-toggle href="#/favorites" ng-class="{active: isItemActive('/favorites')}"><i class="icon icon-favorite"></i> <span translate>My Favorites</span></ion-item>
-                <ion-item menu-toggle href="#/blocklist" ng-class="{active: isItemActive('/blocklist')}"><i class="icon icon-block"></i> <span translate>My BlackList</span></ion-item>
-                <ion-item menu-toggle href="#/support" ng-class="{active: isItemActive('/support')}"><i class="icon icon-help"></i> <span translate>Contact us</span></ion-item>
+                <ion-item menu-close href="#/chatRooms/1" ng-class="{active: isItemActive('/chatRooms')}"><i class="icon icon-chat"></i> <span translate>ShoutBox</span></ion-item>
+                <ion-item menu-close href="#/friends" ng-class="{active: isItemActive('/friends')}"><i class="icon icon-addperson"></i> <span translate>My Friends</span></ion-item>
+                <ion-item menu-close href="#/favorites" ng-class="{active: isItemActive('/favorites')}"><i class="icon icon-favorite"></i> <span translate>My Favorites</span></ion-item>
+                <ion-item menu-close href="#/blocklist" ng-class="{active: isItemActive('/blocklist')}"><i class="icon icon-block"></i> <span translate>My BlackList</span></ion-item>
+                <ion-item menu-close href="#/support" ng-class="{active: isItemActive('/support')}"><i class="icon icon-help"></i> <span translate>Contact us</span></ion-item>
 
             </ion-list>
         </ion-content>
