@@ -235,7 +235,8 @@ angular.module('hotvibes.controllers')
                     return;
                 }
 
-                var numberData = phoneNumber.match(/^(?:8|\+?370)(6\d{7})$/);
+                var numberData = /^(?:8|\+?370)(6\d{7})$/.exec(phoneNumber);
+
                 if (numberData) {
                     phoneNumber = "370" + numberData[1];
                 }
