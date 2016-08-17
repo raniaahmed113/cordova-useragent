@@ -384,7 +384,7 @@ ul.chat {
     }
 
     &.mine {
-      @extend .item.item-light;
+      @extend .item.item-stable;
       text-align: right;
       float: right;
 
