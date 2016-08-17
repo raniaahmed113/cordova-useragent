@@ -1,5 +1,6 @@
 ion-header-bar.bar.bar-header {
   background: $brand;
+  padding: 0;
 
   .title {
     color: $light;
@@ -7,7 +8,7 @@ ion-header-bar.bar.bar-header {
 
   .buttons {
     position: relative;
-    left: 16px;
+    left: 5%;
 
     .button {
       border: none;
@@ -19,8 +20,6 @@ ion-header-bar.bar.bar-header {
     background: none;
 
     .buttons {
-      left: 5%;
-
       .button, .title {
         color: $text;
       }
