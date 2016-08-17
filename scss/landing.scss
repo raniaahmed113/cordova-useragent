@@ -6,23 +6,18 @@ ion-header-bar.bar.bar-header {
     color: $light;
   }
 
-  .buttons {
+  .button.button-close {
+    border: none;
     position: relative;
     left: 5%;
-
-    .button {
-      border: none;
-      color: $light;
-    }
+    color: $light;
   }
 
   &.bar-light {
     background: none;
 
-    .buttons {
-      .button, .title {
-        color: $text;
-      }
+    .button.button-close, .title {
+      color: $text;
     }
   }
 }
