@@ -9,9 +9,9 @@
     <ion-content scroll="false" class="landing has-header">
         <form class="content" ng-submit="enterCode.submit()">
             <div class="list">
-                <label class="item item-input item-stacked-label">
+                <label class="item item-input item-stacked-label center">
                     <label translate>Confirm code has been sent!</label>
-                    <input type="text" required ng-model="enterCode.data.smsCode" class="input" placeholder="{{'SMS Code' | translate}}">
+                    <input type="number" required ng-model="enterCode.data.smsCode" class="input" placeholder="{{'SMS Code' | translate}}">
                 </label>
 
                 <div class="actions center">
