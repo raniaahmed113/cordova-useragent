@@ -92,6 +92,10 @@ file-upload {
 }
 
 .menu.menu-brand {
+  .item-select:after {
+    color: $brand-dark;
+  }
+
   &, .input-label, .item, .item-content, select {
     color: $brand-light;
     font-weight:500;
@@ -565,9 +569,6 @@ img.img-circle {
 .checkbox input:checked+.checkbox-icon:before, .checkbox input:checked:before {
   background: $brand-light;
   border-color: $brand-light;
-}
-.item-select:after {
-  color:$dark;
 }
 
 .tabs {
