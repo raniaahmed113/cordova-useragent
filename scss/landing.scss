@@ -1,6 +1,5 @@
 ion-header-bar.bar.bar-header {
   background: $brand;
-  padding: 0;
 
   .title {
     color: $light;
@@ -219,6 +218,10 @@ ion-header-bar.bar.bar-header {
 }
 
 .login-option-wrapper {
+  ion-header-bar {
+    padding: 0;
+  }
+
   .landing {
     background: $light;
 
