@@ -84,13 +84,6 @@ file-upload {
   }
 }
 
-
-.menu {
-  .scroll-content {
-    top:70px;
-  }
-}
-
 .menu.menu-brand {
   .item-select:after {
     color: $brand-dark;
@@ -429,9 +422,15 @@ ul.chat {
   padding: 5px;
 }*/
 
-.bar-main-nav {
-  height:70px;
+.bar.bar-large {
+  height: 70px;
 
+  + .has-header {
+    top: 70px;
+  }
+}
+
+.bar-main-nav {
   > a {
     width: 100%;
     color: white;
