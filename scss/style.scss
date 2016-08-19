@@ -84,14 +84,11 @@ file-upload {
   }
 }
 
-
-.menu {
-  .scroll-content {
-    top:70px;
-  }
-}
-
 .menu.menu-brand {
+  .item-select:after {
+    color: $brand-dark;
+  }
+
   &, .input-label, .item, .item-content, select {
     color: $brand-light;
     font-weight:500;
@@ -425,15 +422,21 @@ ul.chat {
   padding: 5px;
 }*/
 
-.bar-main-nav {
-  height:70px;
+.bar.bar-large {
+  height: 70px;
 
+  + .has-header {
+    top: 70px;
+  }
+}
+
+.bar-main-nav {
   > a {
     width: 100%;
     color: white;
     text-decoration: initial;
     position: relative;
-    margin:10px;
+    padding: 10px;
     font-size: 16px;
     font-weight:600;
 
@@ -565,9 +568,6 @@ img.img-circle {
 .checkbox input:checked+.checkbox-icon:before, .checkbox input:checked:before {
   background: $brand-light;
   border-color: $brand-light;
-}
-.item-select:after {
-  color:$dark;
 }
 
 .tabs {

@@ -135,8 +135,9 @@ angular.module('hotvibes.controllers')
         }
 
         function onLoggedIn() {
-            $scope.loginWithPhone.modal.hide();
             $scope.loginWithPassword.modal.hide();
+            $scope.loginWithPhone.modal.hide();
+            $scope.enterCode.modal.hide();
             $state.go('inside.users');
         }
 
@@ -181,10 +182,8 @@ angular.module('hotvibes.controllers')
             };
 
             $ionicLoading.hide();
-
-            $scope.loginWithPhone.modal.hide().then(function () {
-                $scope.enterCode.modal.show();
-            })
+            $scope.enterCode.modal.show();
+            $scope.loginWithPhone.modal.hide();
         }
 
         function onSmsCodeLoginFailed(error) {
