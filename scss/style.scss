@@ -2,12 +2,25 @@
   text-align: center;
 }
 
+.bold {
+  font-weight: bold;
+}
+
+span {
+  &.text {
+    color: $text;
+  }
+
+  &.text-dark {
+    color: $text-dark;
+  }
+}
 .pane, .view {
-  background-color:#E7E7E7;
+  background-color:$light;
 }
 
 .logo {
-  height: 50px;
+  width: 200px;
 }
 
 option[disabled] {
@@ -42,6 +55,9 @@ file-upload {
   border-bottom-left-radius: 0;
   line-height: 16px;
 }
+.item-brand {
+  background:$brand;
+}
 
 .center-vertical {
   @include display-flex();
@@ -68,27 +84,40 @@ file-upload {
   }
 }
 
-.menu .bar-header {
-  border-bottom: 2px solid #373737;
-}
+.menu.menu-brand {
+  .item-select:after {
+    color: $brand-dark;
+  }
 
-.menu.menu-dark {
   &, .input-label, .item, .item-content, select {
-    color: $light;
-    border-color: darken($dark, 3%) !important;
+    color: $brand-light;
+    font-weight:500;
   }
 
   &, select, > .view-container > .pane {
-    background-color: $dark;
+    background-color: $brand;
   }
 
   ion-list, .list {
     .item, .item-content {
-      @extend .item-dark;
+      @extend .item-brand;
+      border:none;
+      a {
+        padding-left: 25px;
+      }
+    }
+    .item.active > a {
+      background: $brand-dark;
+      color: $light;
+      padding-left: 20px;
+    }
+    .item.active {
+      border-left: 5px solid $light;
     }
 
     .item.item-divider {
-      background-color: darken($dark, 3%);
+      background-color: $brand-dark;
+      color: $light;
     }
   }
 }
@@ -352,7 +381,7 @@ ul.chat {
     }
 
     &.mine {
-      @extend .item.item-light;
+      @extend .item.item-stable;
       text-align: right;
       float: right;
 
@@ -393,16 +422,27 @@ ul.chat {
   padding: 5px;
 }*/
 
+.bar.bar-large {
+  height: 70px;
+
+  + .has-header {
+    top: 70px;
+  }
+}
+
 .bar-main-nav {
   > a {
     width: 100%;
     color: white;
     text-decoration: initial;
     position: relative;
+    padding: 10px;
+    font-size: 16px;
+    font-weight:600;
 
     > img {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       vertical-align: middle;
       margin-right: 5px;
     }
@@ -413,6 +453,7 @@ ul.chat {
       top: 50%;
       transform: translate(0, -50%);
       margin-right: 5px;
+      font-size: 25px;
     }
   }
 }
@@ -442,6 +483,16 @@ ul.chat {
     border-color: #111;
     background: rgba(0, 0, 0, 0.5);
     color: $light;
+  }
+
+  &.button-close {
+    background: none;
+    color: $light;
+    padding: 0;
+
+    &.activated {
+      background: none;
+    }
   }
 }
 
@@ -482,7 +533,79 @@ ion-header-bar .buttons .avatar {
   background: $assertive;
   color: $light;
   text-align: center;
+
+  span {
+    width: 100%;
+  }
 }
+
+img.img-circle {
+  @include border-radius(50%);
+}
+
+.bar.bar-brand {
+  background:$brand;
+  border: 1px solid $brand-dark;
+
+  .title {
+    color:$light;
+  }
+  .button-clear {
+    color:$light;
+  }
+  .button {
+    background:$brand;
+    border:none;
+    color:$light;
+  }
+}
+.badge.badge-brand {
+  background: $light;
+  color:$brand;
+  right:20px;
+}
+
+.checkbox input:checked+.checkbox-icon:before, .checkbox input:checked:before {
+  background: $brand-light;
+  border-color: $brand-light;
+}
+
+.tabs {
+  padding-top: 0;
+}
+.tab-title {
+  text-transform: uppercase;
+}
+.tabs-light>.tabs {
+  color: $brand;
+  border: none;
+  -webkit-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px -5px 10px 0px rgba(0,0,0,0.1);
+}
+.tabs-striped.tabs-light .tab-item {
+  color: $brand-light;
+}
+.tabs-striped.tabs-light .tab-item.tab-item-active {
+  color: $brand;
+  border-color: $brand;
+}
+.tab-item.tab-item-active {
+  border-top: 1px $brand solid;
+  i {
+    font-size: 24px;
+    line-height: 40px;
+  }
+}
+.tab-item:not(.tab-item-active) {
+  border-top: 1px $light solid;
+  opacity: .5;
+  i {
+    font-size: 24px;
+    line-height: 40px;
+  }
+}
+
 
 @import "wall.scss";
 @import "landing.scss";

@@ -47,7 +47,8 @@ angular.module('hotvibes.controllers')
 
         var loadUsers = function() {
             var params = {
-                photoSize: 'w80h80' /* include: 'profilePhoto.url(size=w80h80)' */
+                photoSize: 'w80h80', /* include: 'profilePhoto.url(size=w80h80)' */
+                include: 'profile'
             };
 
             if ($scope.currUser.filter) {

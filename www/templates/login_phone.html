@@ -1,0 +1,37 @@
+<ion-modal-view class="login-option-wrapper option-phone">
+
+    <ion-header-bar class="bar-light">
+        <button class="button button-close" ng-click="loginWithPhone.modal.hide()"><i class="icon icon-arrowleft"></i></button>
+    </ion-header-bar>
+
+    <ion-content scroll="false" class="landing has-header">
+        <form class="content" ng-submit="loginWithPhone.submit()">
+            <div class="list">
+                <label class="item item-input item-stacked-label">
+                    <label translate>Please enter your Phone numer</label>
+                    <input type="tel" required ng-model="loginWithPhone.data.phoneNumber" class="input" placeholder="{{'Phone number' | translate}}">
+                </label>
+
+                <div class="actions center">
+
+                    <button type="submit"
+                            class="button button-positive button-block submit"
+                            ng-disabled="!loginWithPhone.data.phoneNumber"
+                            translate>
+                        Send activation code
+                    </button>
+
+                    <span class="bold" translate>Register or login with:</span>
+                    <button type="button" class="button button-block facebook" ng-click="loginWithFb()">
+                        Facebook
+                    </button>
+
+                    <span translate>We never post to FB!</span>
+                </div>
+
+
+            </div>
+        </form>
+    </ion-content>
+
+</ion-modal-view>

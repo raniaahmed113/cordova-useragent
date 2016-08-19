@@ -1,0 +1,29 @@
+<ion-modal-view class="login-option-wrapper option-phone">
+
+    <ion-header-bar class="bar-light">
+        <button class="button button-close" ng-click="enterCode.modal.hide()"><i class="icon icon-arrowleft"></i></button>
+    </ion-header-bar>
+
+    <ion-content scroll="false" class="landing has-header">
+        <form class="content" ng-submit="enterCode.submit()">
+            <div class="list">
+                <label class="item item-input item-stacked-label center">
+                    <label translate>Confirm code has been sent!</label>
+                    <input type="number" required ng-model="enterCode.data.smsCode" class="input" placeholder="{{'Code' | translate}}">
+                </label>
+
+                <div class="actions center">
+
+                    <button type="submit"
+                            class="button button-positive button-block submit"
+                            ng-disabled="!enterCode.data.smsCode"
+                            translate>
+                        Login
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </ion-content>
+
+</ion-modal-view>

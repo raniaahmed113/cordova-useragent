@@ -2,7 +2,7 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
     .controller('AppCtrl', function (
         $window, $rootScope, $scope, $state, $ionicPlatform, $ionicHistory, $ionicPopup, $ionicLoading, $cordovaGoogleAnalytics,
-         __, AuthService, Config, Api, PushNotificationHandler, $cordovaNetwork
+         __, AuthService, Config, Api, PushNotificationHandler, $cordovaNetwork, $location
     ) {
         $scope.logout = function () {
             PushNotificationHandler.unregister();
@@ -15,6 +15,10 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
             $state.go('login').then(function() {
                 $ionicHistory.clearCache();
             });
+        };
+
+        $scope.isItemActive = function(item) {
+            return $location.path().indexOf(item) > -1;
         };
 
         $scope.$on('authTokenExpired', function() {

@@ -1,9 +1,11 @@
 angular.module('hotvibes.services')
 
-    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, Config, Api) {
+    .service('AuthService', function($q, $window, $rootScope, $filter, $injector, $cordovaFacebook, Config, Api) {
         var currentUser = null,
             accToken = null,
-            self = this;
+            AuthService = this;
+
+        this.ERROR_LOGIN_CANCELLED = 4201;
 
         this.init = function() {
             accToken = localStorage['accToken'];
@@ -98,7 +100,7 @@ angular.module('hotvibes.services')
                     User.getInstanceForStorage(response['user_id']).then(
                         function(user) {
                             try {
-                                self.setCurrentUser(user);
+                                AuthService.setCurrentUser(user);
                                 deferred.resolve(user);
 
                             } catch(e) {
@@ -129,30 +131,36 @@ angular.module('hotvibes.services')
 
         /**
          *
-         * @param {string} accessToken
          * @param {Date|string} birthday
          * @param {string} email
          *
          * @returns {Promise}
          */
-        this.loginWithFb = function(accessToken, birthday, email) {
-            var params = {
-                accessToken: accessToken
-            };
+        this.loginWithFb = function(birthday, email) {
+            return $cordovaFacebook.login([ 'email', 'user_birthday', 'user_location' ])
+                .then(function(response) {
+                    if (response.status != 'connected') {
+                        return $q.reject(response.status);
+                    }
 
-            if (birthday) {
-                if (birthday instanceof Date) {
-                    birthday = $filter('date')(birthday, 'yyyy-MM-dd');
-                }
+                    var params = {
+                        accessToken: response.authResponse.accessToken
+                    };
 
-                params.birthday = birthday;
-            }
+                    if (birthday) {
+                        if (birthday instanceof Date) {
+                            birthday = $filter('date')(birthday, 'yyyy-MM-dd');
+                        }
 
-            if (email) {
-                params.email = email;
-            }
+                        params.birthday = birthday;
+                    }
 
-            return login('fb', params);
+                    if (email) {
+                        params.email = email;
+                    }
+
+                    return login('fb', params);
+                });
         };
 
         /**
@@ -164,6 +172,8 @@ angular.module('hotvibes.services')
             return Api.request().post(Config.API_URL_BASE + 'auth/phoneNumber', {
                 clientId: Config.API_CLIENT_ID,
                 number: phoneNumber
+            }).then(function () {
+                return phoneNumber;
             })
         };
 

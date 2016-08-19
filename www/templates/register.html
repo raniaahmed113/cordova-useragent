@@ -1,9 +1,9 @@
-<ion-modal-view>
+<ion-modal-view class="login-option-wrapper register-wrapper">
 
-    <ion-header-bar class="bar-dark">
+    <ion-header-bar class="bar" align-title="center">
         <h1 class="title" translate>Registration</h1>
         <div class="buttons">
-            <button class="button" ng-click="registration.modal.hide()"><i class="icon ion-android-close"></i></button>
+            <button class="button button-close" ng-click="registration.modal.hide()"><i class="icon ion-android-close"></i></button>
         </div>
     </ion-header-bar>
 
@@ -63,7 +63,7 @@
             </label>
 
             <div class="center padding">
-                <span translate>By registering you accept our</span>
+                <span class="text-dark" translate>By registering you accept our</span>
                 <a href="#" ng-click="rules.modal.show()" translate>rules and regulations</a>
             </div>
 

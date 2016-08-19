@@ -1,16 +1,48 @@
+ion-header-bar.bar.bar-header {
+  background: $brand;
+
+  .title {
+    color: $light;
+  }
+
+  .button.button-close {
+    border: none;
+    position: relative;
+    left: 5%;
+    color: $light;
+  }
+
+  &.bar-light {
+    background: none;
+
+    .button.button-close, .title {
+      color: $text;
+    }
+  }
+}
+
 .landing {
-  color: white;
+  color: $text;
   background-color: $blue;
   @include display-flex();
   @include flex-direction(column);
 
   .content {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
     color: white;
 
-    h1, h2, h3, h4, h5 {
-      color: white;
+    .button {
+      @include border-radius(30px);
+
+      &.alternative-login {
+        background: $blue-medium;
+        color: $light;
+      }
+    }
+
+    h6 {
+      padding: 5px 20px;
     }
   }
 
@@ -21,10 +53,43 @@
   .footer {
     background: white;
     color: $dark;
+
+    .button {
+      @include border-radius(0);
+      text-align: left;
+      margin: 0;
+      padding: 10px;
+
+      div {
+        display: inline;
+        line-height: 40px;
+        font-size: 38px;
+        position: relative;
+        @include border-radius(50%);
+        padding: 0 8px;
+        color: #fff;
+
+        &.phone {
+          background: $positive;
+        }
+
+        &.email {
+          background: $balanced;
+        }
+      }
+
+      span {
+        padding: 0 15px;
+        font-weight: 400;
+        font-size: 18px;
+        color: $text;
+      }
+    }
   }
 
   label.item {
     background-color: white;
+    white-space: normal;
   }
 
   .icons {
@@ -43,5 +108,252 @@
     height: 2px;
     margin-top: 30px;
     background-color: white;
+  }
+
+  .login-circles {
+    width: 250px;
+    height: 200px;
+    margin-left: auto;
+    position: relative;
+    margin-right: auto;
+
+    .circle-wrapper {
+      position: absolute;
+      width: 75px;
+      height: 75px;
+      display: inline;
+      border: 2px solid $stable;
+      @include border-radius(50%);
+      background: $blue-medium;
+      margin-top: auto;
+      margin-bottom: auto;
+      top: 0;
+      bottom: 0;
+
+      i {
+        @include border-radius(50%);
+        font-size: 40px;
+        display: inline;
+        line-height: 70px;
+      }
+
+      &.left {
+        left: 0;
+      }
+
+      &.right {
+        right: 0;
+      }
+    }
+
+    .image-wrapper {
+      width: 130px;
+      height: 130px;
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: auto;
+      @include border-radius(50%);
+      border: 4px solid white;
+      overflow: hidden;
+      z-index: 1;
+      position: absolute;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.action-sheet {
+  width: 100%;
+  z-index: 11;
+  overflow: hidden;
+  margin: 0;
+
+  .action-sheet-group {
+    @include border-radius(0);
+    padding: 10px 0;
+    margin: 0;
+    background: $light;
+
+    .button {
+      border: none;
+      text-align: left;
+      padding: 5px 10px;
+
+      .icon {
+        position: static;
+        display: inline;
+      }
+    }
+
+    .button {
+      div {
+        display: inline;
+        line-height: 40px;
+        font-size: 34px;
+        position: relative;
+        @include border-radius(50%);
+        padding: 0 8px;
+        color: #fff;
+        margin: 0 10px;
+
+        &.phone {
+          background: $positive;
+        }
+
+        &.email {
+          background: $balanced;
+        }
+
+        &.icon:before {
+          font-size: 18px;
+        }
+      }
+
+      font-weight: 400;
+      font-size: 18px;
+      color: $text;
+    }
+  }
+}
+
+.login-option-wrapper {
+  ion-header-bar {
+    padding: 0;
+  }
+
+  .landing {
+    background: $light;
+
+    .list {
+      color: $text;
+
+      .item {
+        border: none;
+        padding: 0;
+        margin: 10px 0;
+
+        label {
+          color: $blue;
+          font-size: 16px;
+        }
+
+        input {
+          border-bottom: 3px solid $blue;
+          padding: 0;
+          margin: 5px 0;
+          color: $text;
+          font-weight: bold;
+        }
+      }
+
+      .actions {
+        a {
+          color: $text;
+          text-decoration: none;
+        }
+
+        .button {
+          @include border-radius(30px);
+
+          &.submit {
+            margin: 30px 0;
+          }
+
+          &.alternative-login {
+            background: $blue-medium;
+          }
+        }
+      }
+    }
+  }
+
+  &.option-password, &.option-phone {
+    .button.facebook {
+      background: $blue-light;
+      color: $blue;
+    }
+  }
+}
+
+.register-wrapper {
+  ion-header-bar.bar.bar-light {
+    background: $brand;
+
+    .title {
+      color: $light;
+    }
+  }
+
+  h4, input, select, .radio-content {
+    color: $text;
+  }
+
+  .validation-errors > ul > li {
+    span {
+      color: $assertive;
+    }
+  }
+
+  .item {
+    &.item-divider {
+      color: $brand;
+      background: $brand-light;
+      font-weight: 400;
+      font-size: 14px;
+    }
+
+    &.item-input {
+      height: 80px;
+
+      span.input-label {
+        color: $brand;
+        font-weight: 400;
+        font-size: 14px;
+      }
+
+      .input {
+        font-weight: 500;
+      }
+    }
+
+    &.item-radio {
+      .radio-content {
+        font-weight: 500;
+        font-size: 14px;
+        color: $brand;
+      }
+    }
+
+    &.item-select {
+      &:after {
+        color: $brand-light;
+      }
+    }
+  }
+}
+
+.popup-container.on-error {
+  .popup-head > h3 {
+    color: $text-dark;
+  }
+
+  .popup-body {
+    text-align: center;
+    color: $text;
+  }
+
+  .popup-buttons > button {
+    color: $brand;
+    background: none;
+
+    &.activated {
+      border: none;
+      background: $royal;
+    }
   }
 }

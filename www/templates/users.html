@@ -1,14 +1,20 @@
 <ion-view view-title="{{title || ('Members' | translate)}}">
     <ion-nav-buttons side="right">
-        <button class="button icon ion-search" ng-if="showFilter" ng-click="showFilter()"></button>
-        <button class="button icon ion-trash-b" ng-class="{'active': deleteMode}" ng-if="deleteMode !== undefined" ng-click="toggleDeleteMode()"></button>
+        <button class="button icon button-clear ion-search" ng-if="showFilter" ng-click="showFilter()"></button>
+        <button class="button-clear icon ion-trash-b" ng-class="{'active': deleteMode}" ng-if="deleteMode !== undefined" ng-click="toggleDeleteMode()"></button>
     </ion-nav-buttons>
     <ion-content>
         <resource-collection list="users" sub-property="subProperty">
             <div class="row row-wrap">
-                <a ng-repeat="user in users" href="#/users/{{user.id}}" ng-click="deleteMode ? delete($event, $index) : true" class="user col col-25">
-                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}">
+                <a ng-repeat="user in users" href="#/users/{{user.id}}" ng-click="deleteMode ? delete($event, $index) : true" class="user col col-33">
+                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" class="img-circle">
                     <i class="icon ion-close-circled" ng-show="deleteMode"></i>
+                    <i class="img-badge vip icon-crown" ng-show="user.isVip"></i>
+                    <i class="img-badge rm icon-check" ng-show="user.profile.isRealMember"></i>
+                    <p>
+                        <i class="online" ng-show="user.isOnline"></i>
+                        {{user.nickName}}
+                    </p>
                 </a>
             </div>
         </resource-collection>
