@@ -137,7 +137,7 @@ angular.module('hotvibes.services')
          * @returns {Promise}
          */
         this.loginWithFb = function(birthday, email) {
-            return $cordovaFacebook.login([ 'email', 'user_birthday', 'user_location' ])
+            return $cordovaFacebook.login([ 'email', 'user_birthday', 'user_location', 'user_photos' ])
                 .then(function(response) {
                     if (response.status != 'connected') {
                         return $q.reject(response.status);
