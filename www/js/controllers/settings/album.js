@@ -105,7 +105,7 @@ angular.module('hotvibes.controllers')
                             && error.data.rule.type == Rule.MIN_VALUE
                             && (error.data.rule.field == 'width' || error.data.rule.field == 'height')
                         ) {
-                            error.data.code = ErrorCode.IMAGE_SIZE_INVALID;
+                            params.message = __('Incorrenct image dimensions');
                             break;
                         }
 

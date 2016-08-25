@@ -43,9 +43,6 @@ angular.module('hotvibes.services')
                 case ErrorCode.TEXT_TOO_SHORT:
                     return __("Please enter some text first.");
 
-                case ErrorCode.IMAGE_SIZE_INVALID:
-                    return __('Incorrenct image dimensions');
-
                 case ErrorCode.EMAIL_ALREADY_TAKEN:
                     return __('Tokiu emailu vartotojas jau egzistuoja');
 
