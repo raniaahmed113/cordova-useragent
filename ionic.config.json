@@ -6,7 +6,8 @@
   ],
   "watchPatterns": [
     "www/**/*",
-    "!www/lib/**/*"
+    "!www/lib/**/*",
+    "scss/*"
   ],
   "app_id": "b0637dc2"
 }
