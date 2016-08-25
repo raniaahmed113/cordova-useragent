@@ -25,8 +25,7 @@ angular.module('hotvibes', [
         LIMIT_REACHED: 115,
         MISSING_INFO: 116,
         PERFORMING_ACTIONS_TOO_FAST: 117,
-        PHONE_NUMBER_ALREADY_TAKEN: 118,
-        YOU_ARE_BANNED: 119
+        PHONE_NUMBER_ALREADY_TAKEN: 118
     })
 
     .constant('Rule', {

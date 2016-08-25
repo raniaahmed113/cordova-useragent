@@ -58,9 +58,6 @@ angular.module('hotvibes.services')
                 case ErrorCode.PHONE_NUMBER_ALREADY_TAKEN:
                     return __("Your phone number is already registered.");
 
-                case ErrorCode.YOU_ARE_BANNED:
-                    return __("Sorry, but you are banned.");
-
                 default:
                     // TODO: log to analytics: unknown err code
                     return __("We're sorry, but something went wrong. Please try again later.");
