@@ -70,10 +70,7 @@ angular.module('hotvibes.controllers')
                         $scope.loginWithPassword.modal.hide();
                         delete $scope.loginWithPassword.data.password;
                     },
-
-                    function (error) {
-                        onError(Api.translateErrorCode(error ? error.code : 0));
-                    }
+                    onPasswordLoginFailed
                 ).finally($ionicLoading.hide);
         }
 
@@ -151,22 +148,6 @@ angular.module('hotvibes.controllers')
             });
         }
 
-        function onFailedToSendCode(error) {
-            var message;
-
-            switch (error.data.code) {
-                case ErrorCode.INVALID_INPUT:
-                    message = __("Incorect phone number.");
-                    break;
-
-                default:
-                    message = Api.translateErrorCode(error.data.code);
-                    break;
-            }
-
-            onError(message);
-        }
-
         function requestInputSmsCode(phoneNumber) {
             $scope.enterCode.submit = function () {
                 var smsCode = $scope.enterCode.data.smsCode;
@@ -186,8 +167,52 @@ angular.module('hotvibes.controllers')
             $scope.loginWithPhone.modal.hide();
         }
 
+        function onFailedToSendCode(error) {
+            var message;
+
+            if (!error) {
+                error = { code: -1 };
+            }
+
+            switch (error.data.code) {
+                case ErrorCode.INVALID_INPUT:
+                    message = __("Incorect phone number.");
+                    break;
+
+                default:
+                    message = Api.translateErrorCode(error.data.code);
+                    break;
+            }
+
+            onError(message);
+        }
+
+        function onPasswordLoginFailed(error) {
+            var message;
+
+            if (!error) {
+                error = { code: -1 };
+            }
+
+            switch (error.code) {
+                case ErrorCode.BANNED_TEMPORARILY:
+                    message = __("suspend_login_info");
+                    break;
+
+                default:
+                    message = Api.translateErrorCode(error.code);
+                    break;
+            }
+
+            onError(message);
+        }
+
         function onSmsCodeLoginFailed(error) {
             var message;
+
+            if (!error) {
+                error = { code: -1 };
+            }
 
             switch (error.code) {
                 case ErrorCode.INVALID_CREDENTIALS:
