@@ -2,6 +2,7 @@ angular.module('hotvibes.controllers')
 
     .controller('SettingsVipCtrl', function($scope, $ionicLoading, $ionicPopup, __, moment, Billing) {
         if (!Billing.isSupported()) {
+            $scope.fallbackVipPurchaseUrl = Billing.getFallbackPurchaseUrl();
             return;
         }
 

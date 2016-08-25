@@ -1,6 +1,6 @@
 angular.module('hotvibes.services')
 
-    .service('Billing', function ($q, $window, AuthService, Payment) {
+    .service('Billing', function ($q, $window, AuthService, Payment, Config) {
         this.PRODUCT_CREDITS_200 = 'lt.vertex.flirtas.purchase.credits200';
         this.PRODUCT_CREDITS_500 = 'lt.vertex.flirtas.purchase.credits500';
         this.PRODUCT_SUBSCRIPTION_VIP_WEEKLY = 'lt.vertex.flirtas.purchase.vipweekly';
@@ -15,6 +15,16 @@ angular.module('hotvibes.services')
 
         this.isSupported = function () {
             return !!$window.inAppPurchase;
+        };
+
+        /**
+         * @returns {string}
+         */
+        this.getFallbackPurchaseUrl = function () {
+            switch (Config.API_CLIENT_ID) {
+                default:
+                    return '<a href="http://www.flirtas.lt">flirtas.lt</a>';
+            }
         };
 
         if (!this.isSupported()) {

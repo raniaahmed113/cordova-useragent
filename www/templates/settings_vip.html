@@ -8,11 +8,11 @@
         <div ng-if="!currUser.isVip" class="center padding">
             <img src="img/buy-vip.png" alt="" />
 
-            <p ng-if="!billingSupported" class="padding" parse-urls>Norėdami tapti VIP nariu - apsilankykite <a href="http://www.flirtas.lt">flirtas.lt</a></p>
+            <p ng-if="!billingSupported" translate="If you want to become a VIP member - please visit us at %s" translate-values="{url: fallbackVipPurchaseUrl}" class="padding" parse-urls></p>
 
             <div ng-if="billingSupported" class="padding center">
                 <div ng-repeat="option in purchaseOptions">
-                    <button ng-click="purchase(option.id)" class="button button-block button-positive" translate>{{option.label}}</button>
+                    <button ng-click="purchase(option.id)" class="button button-block button-positive">{{option.label}}</button>
                     <p translate="Subscription costs %s for %s days. It is renewed automatically." translate-values="{cost: option.cost, days: option.numDays}"></p>
                 </div>
 
