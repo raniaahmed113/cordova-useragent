@@ -248,9 +248,10 @@ resource-collection {
   min-height:120px;
 }
 
-.button-upload {
+.button.button-upload {
   position: relative;
   overflow: hidden;
+  @include border-radius(0);
 
   input[type="file"] {
     position: absolute;
@@ -261,6 +262,12 @@ resource-collection {
     opacity: 0;
     z-index: 999;
   }
+}
+
+.button.button-brand {
+  border-color: transparent;
+  background-color: $brand;
+  color: white;
 }
 
 .row-wrap {
@@ -321,7 +328,6 @@ a.embed {
   position: relative;
   width: 82px;
   height: 82px;
-  padding: 5px;
 
   > img {
     min-height: 100%;
