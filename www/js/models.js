@@ -68,7 +68,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         };
     })
 
-    .factory('User', function($q, ApiResource, Filter, Device) {
+    .factory('User', function($q, $window, ApiResource, Filter, Device) {
         var User = ApiResource('users/:id', { id: '@id' });
 
         User.valueOf = function(object) {
@@ -148,7 +148,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         User.prototype.registerDevice = function(token) {
             return new Device({
                 token: token,
-                type: 'android' // FIXME: unhardcode this
+                type: $window.cordova.platformId
             }).$save();
         };
 
