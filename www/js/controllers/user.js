@@ -100,7 +100,7 @@ angular.module('hotvibes.controllers')
                 }
 
                 var request = new Request({
-                    type: 'file',
+                    type: 'photo',
                     nodeId: $scope.user.photos[$index].id,
                     toUserId: $scope.user.id,
                     message: message
