@@ -6,8 +6,8 @@
                 <button ng-click="user.isFriend ? user.isFriend = false : sendFriendInvite()" ng-disabled="user.isInvitedToFriends">
                     <i class="icon ion-person-add"></i>
                     <span ng-if="user.isFriend" translate>Remove from friends</span>
-                    <span ng-if="!user.isFriend" translate>Add friend</span>
-                    <span ng-if="user.isInvitedToFriends" class="royal" translate>Invite sent</span>
+                    <span ng-if="!user.isFriend && !user.isInvitedToFriends" translate>Add friend</span>
+                    <span ng-if="user.isInvitedToFriends" translate>Invite sent</span>
                 </button>
             </div>
 

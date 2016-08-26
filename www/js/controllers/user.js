@@ -288,6 +288,7 @@ angular.module('hotvibes.controllers')
                 });
                 invite.$save();
 
+                $scope.user.isInvitedToFriends = true;
                 $ionicLoading.show({
                     template: __('Invite sent'),
                     noBackdrop: true,
