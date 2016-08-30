@@ -180,7 +180,8 @@ angular.module('hotvibes.routes', [])
                 url: "/settings",
                 views: {
                     main: {
-                        templateUrl: "templates/settings.html"
+                        templateUrl: "templates/settings.html",
+                        controller: 'SettingsIndexCtrl'
                     }
                 }
             })
