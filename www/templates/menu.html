@@ -43,7 +43,7 @@
                 </button>
             </ion-nav-buttons>
         </ion-nav-bar>
-        <div class="bar connection-status" ng-class="{'bar-subheader': !internetConnected}" ng-show="!internetConnected">
+        <div class="bar connection-status" ng-if="internetConnected === false">
             <span translate>Apologies, trouble connecting to the internet. Please check your connection.</span>
         </div>
         <ion-nav-view name="main"></ion-nav-view>

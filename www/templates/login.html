@@ -1,7 +1,7 @@
 <ion-view>
     <ion-content scroll="false" class="landing center">
 
-        <div class="bar connection-status" ng-class="{'bar-header': !internetConnected}" ng-show="!internetConnected">
+        <div class="bar connection-status" ng-if="internetConnected === false">
             <span translate>Apologies, trouble connecting to the internet. Please check your connection.</span>
         </div>
         <div class="intro content center-vertical">
