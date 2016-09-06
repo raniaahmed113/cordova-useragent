@@ -436,6 +436,14 @@ ul.chat {
   }
 }
 
+.platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader).bar-large {
+  height: 90px;
+
+  + .has-header {
+    top: 90px;
+  }
+}
+
 .bar-main-nav {
   > a {
     width: 100%;
