@@ -52,13 +52,6 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
         // Load the currently-logged-in user instance from the localStorage
         $scope.currUser = AuthService.getCurrentUser();
 
-        // Enable GA UserID tracking
-        if ($window.cordova && $cordovaGoogleAnalytics) {
-            // The following method accepts string as an argument, so let's cast our int value
-            var userId = $scope.currUser.id + "";
-            $cordovaGoogleAnalytics.setUserId(userId);
-        }
-
         // Start listening for changes to currUser instance: update localStorage on every change
         $scope.$watch('currUser', function(newUser, oldUser) {
             if (newUser === oldUser) {
@@ -105,7 +98,17 @@ angular.module('hotvibes.controllers', ['hotvibes.services', 'hotvibes.models'])
 
             PushNotificationHandler.init();
 
-            if ($window.AdMob && !$scope.currUser.isVip) {
+            // Enable GA UserID tracking
+            if ($window.cordova && $cordovaGoogleAnalytics) {
+                // The following method accepts string as an argument, so let's cast our int value
+                var userId = $scope.currUser.id + "";
+                $cordovaGoogleAnalytics.setUserId(userId);
+            }
+
+            if ($window.AdMob
+                && !$scope.currUser.isVip
+                && $window.cordova.platformId !== "ios" // FIXME: re-enable, when conversation view bottom nav bar issues are fixed
+            ) {
                 var AdMob = $window.AdMob;
 
                 AdMob.createBanner({
