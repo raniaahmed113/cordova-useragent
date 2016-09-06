@@ -218,15 +218,6 @@ angular.module('hotvibes', [
                 previousPage.go();
             } else {
                 $ionicSideMenuDelegate.toggleLeft();
-
-                // $ionicPopup.confirm({
-                //     title: __("Warning!"),
-                //     template: __("Are you sure you want to exit the application?")
-                // }).then(function (res) {
-                //     if (res) {
-                //         ionic.Platform.exitApp();
-                //     }
-                // });
             }
         }, 100);
 
