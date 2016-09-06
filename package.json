@@ -54,7 +54,11 @@
     },
     "cordova-plugin-app-version",
     "cordova-plugin-inapppurchase",
-    "cordova-plugin-crosswalk-webview"
+    "cordova-plugin-crosswalk-webview",
+    {
+      "locator": "https://github.com/driftyco/cordova-plugin-wkwebview-engine.git",
+      "id": "cordova-plugin-wkwebview-engine"
+    }
   ],
   "cordovaPlatforms": [
     "ios",
