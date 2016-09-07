@@ -1,19 +1,19 @@
 <ion-view title="{{'Quickie' | translate}}">
     <ion-content scroll="false" class="quickie">
         <td-cards delegate-handle="members" ng-hide="!currUser.profilePhoto">
-            <div ng-if="!error" ng-repeat="user in users">
-                <td-card
-                     on-destroy="onCardDestroyed($index)"
-                     on-partial-swipe="onCardMove(amt)"
-                     on-snap-back="onSnapBack($index)"
-                     ng-hide="!firstPhotoLoaded || !user.loadedFully">
-                    <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
-                    <span ng-if="$index == 0">
-                        <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
-                        <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
-                    </span>
-                </td-card>
-            </div>
+            <td-card
+                 ng-repeat="user in users"
+                 ng-hide="!firstPhotoLoaded || !user.loadedFully"
+                 on-destroy="onCardDestroyed($index)"
+                 on-partial-swipe="onCardMove(amt)"
+                 on-snap-back="onSnapBack($index)"
+            >
+                <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" imgonload="onPhotoLoaded(user, $index)" alt="" />
+                <span ng-if="$index == 0">
+                    <label class="quickie-yes" ng-style="{opacity: cardPos > 0 ? cardPos : 0}" translate>Yes</label>
+                    <label class="quickie-no" ng-style="{opacity: cardPos < 0 ? cardPos*-1 : 0}" translate>No</label>
+                </span>
+            </td-card>
 
             <ion-spinner ng-show="!error && !noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
             <div ng-if="!error && users.length <= 0" class="error-sign">
@@ -39,18 +39,16 @@
         <div class="navigation-wrap">
             <div class="navigation-container">
                 <div class="navigation" ng-hide="!currUser.profilePhoto" ng-disabled="!users[0] || !users[0].loadedFully">
-                    <span>
-                        <button class="icon icon-cancel no" ng-click="sayNo()"></button>
-                    </span>
-                    <span>
-                        <button class="icon icon-heart yes" ng-click="sayYes()">
-                            <!--<i class="icon icon-heart"></i>-->
-                        </button>
-                    </span>
+                    <button class="icon icon-cancel no" ng-click="sayNo()"></button>
+                    <button class="icon icon-heart yes" ng-click="sayYes()"></button>
                 </div>
                 <div class="small">
-                    <span class="left"><button ng-disabled="!users[0] || !users[0].loadedFully" class="icon icon-gochat sms" ng-click="openChat()"></button></span>
-                    <span class="right"><button ng-disabled="!users[0] || !users[0].loadedFully" class="icon icon-profile user" ng-click="openProfile()"></button></span>
+                    <span class="left">
+                        <button ng-disabled="!users[0] || !users[0].loadedFully" class="icon icon-gochat sms" ng-click="openChat()"></button>
+                    </span>
+                    <span class="right">
+                        <button ng-disabled="!users[0] || !users[0].loadedFully" class="icon icon-profile user" ng-click="openProfile()"></button>
+                    </span>
                 </div>
             </div>
         </div>

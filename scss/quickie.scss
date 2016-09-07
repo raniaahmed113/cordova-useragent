@@ -15,17 +15,15 @@ td-cards {
 
     & > * {
       position: absolute;
-      top: 0;
-      bottom: 100%;
-      left: 50%;
-      margin-left: auto;
-      margin-right: auto;
       width: 100%;
-      height: auto;
-      max-width: 750px;
-      @include translate(-50%, -50%);
-
+      height: 100%;
+      overflow: hidden;
       z-index: 0;
+
+      @include display-flex();
+      @include justify-content(center);
+      @include align-items(center);
+      @include transition(0.15s linear opacity);
 
       &:nth-child(1) {
         z-index: 100;
@@ -50,23 +48,21 @@ td-cards {
       &:nth-child(6) {
         z-index: 95;
       }
+
+      &.ng-hide {
+        display: block !important;
+        opacity: 0;
+      }
+
+      .td-card {
+        position: relative;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
-  }
-}
-
-td-card {
-  min-width: 315px;
-  overflow: hidden;
-  @include transition(0.15s linear opacity);
-
-  &.ng-hide {
-    display: block !important;
-    opacity: 0;
-  }
-
-  img {
-    width: 100%;
-    height: 100%;
   }
 }
 
