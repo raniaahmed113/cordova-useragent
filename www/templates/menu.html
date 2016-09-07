@@ -1,6 +1,6 @@
 <ion-side-menus enable-menu-with-back-views="false">
 
-    <ion-side-menu side="left" edge-drag-threshold="true" class="menu-brand">
+    <ion-side-menu side="left" class="menu-brand">
         <ion-header-bar class="bar-main-nav bar-brand bar-large">
             <a href="#/settings" menu-close>
                 <img ng-src="{{currUser.profilePhoto | profilePhotoUrl:currUser.gender}}" class="img-circle"/>
@@ -34,7 +34,7 @@
         </ion-content>
     </ion-side-menu>
 
-    <ion-side-menu-content>
+    <ion-side-menu-content edge-drag-threshold="true">
         <ion-nav-bar class="bar-brand" align-title="center">
             <ion-nav-back-button></ion-nav-back-button>
             <ion-nav-buttons side="left">
