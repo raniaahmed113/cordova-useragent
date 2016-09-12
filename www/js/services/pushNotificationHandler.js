@@ -7,7 +7,7 @@ angular.module('hotvibes.services')
             token = null;
 
         function onDeviceRegistered(data) {
-            if (data.registrationId == token) {
+            if (deviceId && data.registrationId == token) {
                 return;
             }
 
