@@ -1,8 +1,9 @@
 angular.module('hotvibes.services')
 
-    .service('PushNotificationHandler', function($rootScope, $state, AuthService, __) {
+    .service('PushNotificationHandler', function($window, $rootScope, $state, AuthService, __) {
 
-        var push = null,
+        var PushNotification = null,
+            push = null,
             deviceId = null,
             token = null;
 
@@ -14,11 +15,13 @@ angular.module('hotvibes.services')
             token = data.registrationId;
             localStorage['deviceToken'] = token;
 
+            var currentUser = AuthService.getCurrentUser();
+
             if (deviceId) {
-                AuthService.getCurrentUser().unregisterDevice(deviceId);
+                currentUser.unregisterDevice(deviceId);
             }
 
-            AuthService.getCurrentUser().registerDevice(token).then(function(device) {
+            currentUser.registerDevice(token).then(function(device) {
                 deviceId = device.id;
                 localStorage['deviceId'] = deviceId;
             });
@@ -48,6 +51,8 @@ angular.module('hotvibes.services')
         }
 
         this.init = function() {
+            PushNotification = $window.PushNotification;
+
             token = localStorage['deviceToken'];
             deviceId = localStorage['deviceId'];
 
@@ -92,9 +97,6 @@ angular.module('hotvibes.services')
 
                 onReceivedNotification(notification);
             });
-            // push.on('error', function (e) {
-            //     console.error(e);
-            // });
         };
 
         this.getToken = function() {
