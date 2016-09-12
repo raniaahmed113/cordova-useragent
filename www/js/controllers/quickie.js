@@ -77,10 +77,6 @@ angular.module('hotvibes.controllers')
             $scope.firstPhotoLoaded = false;
 
             loadMore().then(function() {
-                if (members.length < 1) {
-                    return;
-                }
-
                 $scope.users = members.splice(0, cardsOnScreen);
                 $scope.photosTotal += $scope.users.length;
             });

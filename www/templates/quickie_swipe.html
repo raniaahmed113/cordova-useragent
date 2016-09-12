@@ -16,13 +16,16 @@
             </td-card>
 
             <ion-spinner ng-show="!error && !noMore && (!firstPhotoLoaded || photosTotal > photosLoaded)"></ion-spinner>
-            <div ng-if="!error && users.length <= 0" class="error-sign">
-                <span translate>No more members to display. Try coming back tomorrow.</span>
-                <i class="icon ion-ios-rainy"></i>
+
+            <div class="center" ng-if="!error && users.length <= 0">
+                <div class="center-vertical-margin error-sign">
+                    <span translate>No more members to display. Try coming back tomorrow.</span>
+                    <i class="icon ion-ios-rainy"></i>
+                </div>
             </div>
 
             <div class="center" ng-if="error">
-                <div class="error-sign">
+                <div class="center center-vertical-margin error-sign">
                     <span>{{error.message}}</span>
                     <i class="icon {{error.icon}}"></i>
                     <button class="button button-block {{action.class || 'button-stable'}}" ng-repeat="action in error.actions" ng-click="action.onClick()">{{action.label}}</button>
@@ -30,15 +33,15 @@
             </div>
         </td-cards>
 
-        <div class="center center-vertical-margin error-sign" ng-if="!currUser.profilePhoto">
+        <div ng-if="!currUser.profilePhoto" class="center center-vertical-margin error-sign">
             <span translate>no_photo_uploaded</span>
             <i class="icon ion-images"></i>
             <a href="#/settings/albums" class="button button-positive" translate>Upload photo</a>
         </div>
 
-        <div class="navigation-wrap">
+        <div class="navigation-wrap" ng-if="currUser.profilePhoto">
             <div class="navigation-container">
-                <div class="navigation" ng-hide="!currUser.profilePhoto" ng-disabled="!users[0] || !users[0].loadedFully">
+                <div class="navigation" ng-disabled="!users[0] || !users[0].loadedFully">
                     <button class="icon icon-cancel no" ng-click="sayNo()"></button>
                     <button class="icon icon-heart yes" ng-click="sayYes()"></button>
                 </div>
