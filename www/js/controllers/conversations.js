@@ -110,6 +110,10 @@ angular.module('hotvibes.controllers')
             }
         });
 
+        function scrollToBottom() {
+            $ionicScrollDelegate.$getByHandle('chat').scrollBottom(true);
+        }
+
         function markAllMessagesAsRead() {
             $scope.conversation.cntUnreadMessages = 0;
             $scope.conversation.$update({
@@ -123,12 +127,12 @@ angular.module('hotvibes.controllers')
             }
 
             $scope.messages.push(msg);
-            $ionicScrollDelegate.scrollBottom(true);
+            scrollToBottom();
         }
 
         $scope.messages = Message.query(params);
         $scope.messages.$promise.then(function(response) {
-            $ionicScrollDelegate.scrollBottom(true);
+            scrollToBottom();
 
             // TODO: load more
             // TODO: support for attachments
