@@ -14,7 +14,7 @@
                     <i class="icon ion-plus"></i>
                     <span translate>Upload File</span>
                     <input type="file" accept="image/*" on-file-chosen="upload" />
-                </button>&nbsp;
+                </button>
                 <span class="thumb"
                     ng-repeat="photo in photos | orderBy:'isMain':true"
                     ng-click="showOptionsFor(photo, $event)">
