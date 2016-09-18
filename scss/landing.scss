@@ -1,26 +1,3 @@
-ion-header-bar.bar.bar-header {
-  background: $brand;
-
-  .title {
-    color: $light;
-  }
-
-  .button.button-close {
-    border: none;
-    position: relative;
-    left: 5%;
-    color: $light;
-  }
-
-  &.bar-light {
-    background: none;
-
-    .button.button-close, .title {
-      color: $text;
-    }
-  }
-}
-
 .landing {
   color: $text;
   background-color: $blue;
