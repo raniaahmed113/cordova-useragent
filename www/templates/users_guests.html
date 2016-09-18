@@ -2,7 +2,7 @@
     <ion-content>
         <resource-collection list="users" sub-property="'guest'" on-error="onError">
             <div class="row row-wrap">
-                <a ng-repeat="user in users" href="{{user.id ? '#/users/' + user.id : ''}}" class="user col col-33">
+                <a ng-repeat="user in users" href="{{user.id ? '#/users/' + user.id : '#/settings/vip'}}" class="user col col-33">
                     <img ng-src="{{user.profilePhoto | profilePhotoUrl:user.gender}}" ng-class="{hidden: !user.id}" class="img-circle"/>
                     <p>
                         <i class="online" ng-show="user.isOnline"></i>
