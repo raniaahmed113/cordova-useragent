@@ -8,6 +8,13 @@
                 <i class="icon ion-ios-gear"></i>
             </a>
         </ion-header-bar>
+
+        <ion-header-bar class="bar-subheader bar-brand" ng-if="!currUser.isVip">
+            <a href="#/settings/vip" menu-close class="button button-full button-positive">
+                <i class="icon icon-vip"></i> <span translate>Become a VIP member</span>
+            </a>
+        </ion-header-bar>
+
         <ion-content class="main-menu">
             <ion-list class="list-dark">
 

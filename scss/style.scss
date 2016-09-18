@@ -432,20 +432,51 @@ ul.chat {
 .bar.bar-large {
   height: 70px;
 
-  + .has-header {
-    top: 70px;
+  + .bar-subheader {
+    top: 60px;
   }
+
+  + .has-header {
+    top: 71px;
+  }
+
+  + .bar-subheader + .has-header {
+    top: 115px;
+  }
+}
+
+.main-menu {
+  border-top: 1px solid $brand-dark;
+}
+
+.bar-subheader .button.button-full {
+  @include flex(1);
+  margin: 0;
 }
 
 .platform-ios.platform-cordova:not(.fullscreen) .bar-header:not(.bar-subheader).bar-large {
   height: 90px;
 
+  + .bar-subheader {
+    top: 80px;
+  }
+
   + .has-header {
-    top: 90px;
+    top: 91px;
+  }
+
+  + .bar-subheader + .has-header {
+    top: 135px;
   }
 }
 
 .bar-main-nav {
+  + .bar-subheader {
+    > .button-full {
+      margin: 0 10px;
+    }
+  }
+
   > a {
     width: 100%;
     color: white;
@@ -467,7 +498,7 @@ ul.chat {
       right: 0;
       top: 50%;
       transform: translate(0, -50%);
-      margin-right: 5px;
+      margin-right: 10px;
       font-size: 25px;
     }
   }
@@ -559,20 +590,21 @@ img.img-circle {
 }
 
 .bar.bar-brand {
-  background:$brand;
-  border: 1px solid $brand-dark;
+  background: $brand;
 
   .title {
-    color:$light;
+    color: $light;
   }
-  .button-clear {
-    color:$light;
+
+  .button.button-clear {
+    color: $light;
+    border: none;
   }
-  .button {
-    background:$brand;
-    border:none;
-    color:$light;
-  }
+  //.button {
+  //  background:$brand;
+  //
+  //  color:$light;
+  //}
 }
 .badge.badge-brand {
   background: $light;
