@@ -237,6 +237,11 @@ angular.module('hotvibes', [
                     $cordovaGoogleAnalytics.startTrackerWithId('UA-6627879-18'); // TODO: unhardcode, move to config.js
                 }
 
+                if ($window.ga) {
+                    $window.ga.setAllowIDFACollection(true);
+                    $window.ga.enableUncaughtExceptionReporting(true);
+                }
+
                 if ($window.facebookConnectPlugin && facebookConnectPlugin.getDeferredApplink) {
                     facebookConnectPlugin.getDeferredApplink();
                 }
