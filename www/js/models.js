@@ -68,7 +68,7 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
         };
     })
 
-    .factory('User', function($q, $window, ApiResource, Filter, Device) {
+    .factory('User', function($q, $window, ApiResource, Filter, Device, ErrorCode) {
         var User = ApiResource('users/:id', { id: '@id' });
 
         User.valueOf = function(object) {
@@ -146,10 +146,25 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
          * @returns {Promise}
          */
         User.prototype.registerDevice = function(token) {
-            return new Device({
+            var device = new Device({
                 token: token,
                 type: $window.cordova.platformId
-            }).$save();
+            });
+
+            return device.$save()
+                .catch(function (error) {
+                    if (error
+                        && error.status === 400 /* Bad Request*/
+                        && error.data
+                        && error.data.code === ErrorCode.ALREADY_DID_THAT
+                        && error.data.deviceId
+                    ) {
+                        device.id = error.data.deviceId;
+                        return $q.resolve(device);
+                    }
+
+                    return $q.reject(error);
+                });
         };
 
         /**
