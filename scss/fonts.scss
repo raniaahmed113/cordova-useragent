@@ -24,6 +24,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-vip:before {
+  content: "\e918";
+}
+.icon-arrowleft:before {
+  content: "\e917";
+}
 .icon-coins:before {
   content: "\e915";
 }
@@ -92,8 +98,5 @@
 }
 .icon-view:before {
   content: "\e914";
-}
-.icon-arrowleft:before {
-  content: "\e917";
 }
 

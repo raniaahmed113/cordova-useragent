@@ -85,6 +85,10 @@ file-upload {
 }
 
 .menu.menu-brand {
+  .bar {
+    border-bottom: none;
+  }
+
   .item-select:after {
     color: $brand-dark;
   }
