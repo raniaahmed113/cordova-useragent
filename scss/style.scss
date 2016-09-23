@@ -85,10 +85,6 @@ file-upload {
 }
 
 .menu.menu-brand {
-  .bar {
-    border-bottom: none;
-  }
-
   .item-select:after {
     color: $brand-dark;
   }
@@ -438,19 +434,17 @@ ul.chat {
 
   + .bar-subheader {
     top: 60px;
+    height: 55px;
+    padding-bottom: 15px;
   }
 
   + .has-header {
-    top: 71px;
+    top: 70px;
   }
 
   + .bar-subheader + .has-header {
-    top: 115px;
+    top: 114px;
   }
-}
-
-.main-menu {
-  border-top: 1px solid $brand-dark;
 }
 
 .bar-subheader .button.button-full {
@@ -466,11 +460,11 @@ ul.chat {
   }
 
   + .has-header {
-    top: 91px;
+    top: 90px;
   }
 
   + .bar-subheader + .has-header {
-    top: 135px;
+    top: 134px;
   }
 }
 
@@ -595,6 +589,8 @@ img.img-circle {
 
 .bar.bar-brand {
   background: $brand;
+  border-color: $brand-dark;
+  color: $light;
 
   .title {
     color: $light;
