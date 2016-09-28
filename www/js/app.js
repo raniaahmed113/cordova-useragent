@@ -256,8 +256,8 @@ angular.module('hotvibes', [
                 }
             }
 
-            if (navigator && navigator.splashscreen) {
-                navigator.splashscreen.hide();
-            }
+            // if (navigator && navigator.splashscreen) {
+            //     navigator.splashscreen.hide();
+            // }
         });
     });
