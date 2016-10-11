@@ -12,10 +12,14 @@ angular.module('hotvibes.services')
                 return;
             }
 
+            var currentUser = AuthService.getCurrentUser();
+            if (!currentUser) {
+                // This might happen if GCM registration happens after user disconnect (eg.: if accessToken is invalidated)
+                return;
+            }
+
             token = data.registrationId;
             localStorage['deviceToken'] = token;
-
-            var currentUser = AuthService.getCurrentUser();
 
             if (deviceId) {
                 currentUser.unregisterDevice(deviceId);
