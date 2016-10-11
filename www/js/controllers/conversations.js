@@ -122,8 +122,16 @@ angular.module('hotvibes.controllers')
         }
 
         function onNewMessage(event, msg) {
+            if ($scope.conversation.id !== msg.conversationId) {
+                return;
+            }
+
             $scope.messages.push(msg);
             scrollToBottom();
+
+            if (msg.id != $scope.currUser.id) {
+                markAllMessagesAsRead();
+            }
         }
 
         $scope.messages = Message.query(params);
@@ -145,16 +153,7 @@ angular.module('hotvibes.controllers')
         });
 
         $scope.$on('newMessage.sent', onNewMessage);
-        $scope.$on('newMessage.received', function(event, msg) {
-            if ($scope.conversation.id !== msg.conversationId) {
-                return;
-            }
-
-            onNewMessage(event, msg);
-
-            // TODO: call the following only after some user activity
-            markAllMessagesAsRead();
-        });
+        $scope.$on('newMessage.received', onNewMessage);
 
         $scope.sendMessage = function(msg) {
             if (!msg) {
