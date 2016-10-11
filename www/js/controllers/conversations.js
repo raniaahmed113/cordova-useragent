@@ -162,7 +162,7 @@ angular.module('hotvibes.controllers')
                     text: $scope.msgText,
                     dateSent: null,
                     conversationId: $scope.conversation.id,
-                    sendTime: new Date().getTime() // FIXME: check, if this is correct (maybe we should set seconds here, instead of millis)
+                    sendTime: Date.now()
                 });
 
                 // Clear message input after sending
