@@ -492,7 +492,8 @@ angular.module('hotvibes.models', ['ngResource', 'hotvibes.config'])
             doesDrink: {
                 no: __('DD'),
                 occasionally: __('Ocasionly'),
-                frequently: __('Often')
+                frequently: __('Often'),
+                heavyDrinker: __('HD')
             },
 
             doesSmoke: {
