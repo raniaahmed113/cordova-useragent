@@ -121,7 +121,9 @@ angular.module('hotvibes.services')
                 localStorage.removeItem('deviceId');
                 localStorage.removeItem('deviceToken');
 
-                push.unregister();
+                push.unregister(function () {
+                    // Push plugin quirk: requires a callback function even if it does nothing
+                });
             }
         };
     });
