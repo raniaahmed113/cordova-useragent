@@ -123,11 +123,11 @@ angular.module('hotvibes.services')
 
         this.unregister = function(deviceToBeUnregisteredId) {
             if (!deviceToBeUnregisteredId) {
-                if (!deviceId) {
+                deviceToBeUnregisteredId = deviceId;
+
+                if (!deviceToBeUnregisteredId) {
                     return;
                 }
-
-                deviceToBeUnregisteredId = deviceId;
             }
 
             AuthService.getCurrentUser().unregisterDevice(deviceToBeUnregisteredId);
