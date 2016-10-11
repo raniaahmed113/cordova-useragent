@@ -63,7 +63,7 @@ angular.module('hotvibes.services')
                 ios: {
                     alert: true,
                     badge: true,
-                    sound: true,
+                    sound: true/*,
                     categories: {
                         newMessage: {
                             yes: {
@@ -73,7 +73,7 @@ angular.module('hotvibes.services')
                                 title: __('Mark as read'), callback: 'message.markAsRead', destructive: false, foreground: false
                             }
                         }
-                    }
+                    }*/
                 },
                 windows: {}
             });
