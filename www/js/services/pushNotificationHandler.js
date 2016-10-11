@@ -1,14 +1,28 @@
 angular.module('hotvibes.services')
 
-    .service('PushNotificationHandler', function($window, $rootScope, $state, AuthService, __) {
+    .service('PushNotificationHandler', function($window, $rootScope, $state, AuthService, Device) {
 
-        var PushNotification = null,
+        var PushNotificationHandler = this,
+            PushNotification = null,
             push = null,
             deviceId = null,
             token = null;
 
+        function checkCurrentRegistration() {
+            Device.get({ id: deviceId }).$promise
+                .catch(function(error) {
+                    if (error.status == 404 /* Not Found */) {
+                        // Get a new device token and re-register this device with the API
+                        deviceId = null;
+                        localStorage.removeItem('deviceId');
+                        push.unregister(PushNotificationHandler.init);
+                    }
+                });
+        }
+
         function onDeviceRegistered(data) {
             if (deviceId && data.registrationId == token) {
+                checkCurrentRegistration();
                 return;
             }
 
