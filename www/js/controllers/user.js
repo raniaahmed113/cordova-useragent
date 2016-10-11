@@ -200,13 +200,16 @@ angular.module('hotvibes.controllers')
         $scope.sendGift = function(gift) {
             var giftSent = new UserGift({ giftId: gift.id, userId: $scope.user.id });
 
+            $scope.currUser.credits -= gift.price;
+
             giftSent.$save().then(
                 function() {
                     // FIXME: these kinds of profile changes should come via server-->client event stream
-                    $scope.currUser.credits -= gift.price;
+
                 },
                 function() {
                     // FIXME: handle error, like not enough credits
+                    $scope.currUser.credits += gift.price;
                 }
             );
 
